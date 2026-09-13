@@ -6,128 +6,161 @@
 <title>Tengaged Reborn</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   font-family:Arial,sans-serif;
   margin:0;
   background:#eaf5fb;
-  color:#285274
+  color:#285274;
 }
 
 .wrap{
   max-width:1000px;
   margin:auto;
-  padding:18px
+  padding:18px;
 }
 
-.head,.card{
+.head,
+.card{
   background:#fff;
   border:1px solid #bfd8e8;
-  border-radius:7px
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
 .head{
-  padding:16px;
   display:flex;
   justify-content:space-between;
-  align-items:center
+  align-items:center;
+  gap:15px;
 }
 
 .logo{
-  font-size:30px;
-  font-weight:800
+  font-size:28px;
+  font-weight:bold;
+  color:#24658d;
+}
+
+.logo span{
+  font-weight:normal;
 }
 
 .logo b{
-  color:#df2038
+  color:#ef8b2c;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:14px;
-  margin-top:14px
-}
-
-.title{
-  background:#d82036;
-  color:#fff;
-  padding:11px;
-  font-weight:bold
-}
-
-.body{
-  padding:15px
-}
-
-input{
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  padding:10px;
-  margin:8px 0;
-  border:1px solid #bfd8e8;
-  border-radius:5px
-}
-
-button{
-  padding:10px 14px;
-  border:0;
-  border-radius:5px;
-  background:#d82036;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-  margin:4px 4px 4px 0
-}
-
-.secondary{
-  background:#eaf2f7;
-  color:#285274
-}
-
-.players{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px
-}
-
-.p{
-  padding:12px;
-  background:#f2f9fd;
-  border:1px solid #cce0ec;
-  text-align:center;
-  border-radius:5px
-}
-
-.user-box{
-  background:#f2f9fd;
-  border:1px solid #cce0ec;
-  padding:12px;
-  border-radius:5px
+.user-area{
+  text-align:right;
 }
 
 .user-name{
-  font-size:20px;
   font-weight:bold;
-  margin-bottom:8px
+  color:#24658d;
 }
 
 .hidden{
-  display:none
+  display:none !important;
 }
 
-#msg{
-  min-height:20px;
-  font-weight:bold
+h1,h2,h3{
+  margin-top:0;
+}
+
+button{
+  border:0;
+  border-radius:8px;
+  padding:10px 16px;
+  background:#287bb1;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+  margin:4px;
+}
+
+button:hover{
+  background:#1f638f;
+}
+
+button.secondary{
+  background:#7c98aa;
+}
+
+button.danger{
+  background:#c94c4c;
+}
+
+input{
+  width:100%;
+  padding:11px;
+  margin:6px 0;
+  border:1px solid #bfd8e8;
+  border-radius:7px;
+  font-size:15px;
+}
+
+.cast{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:15px 0;
+}
+
+.player{
+  background:#f3f9fc;
+  border:1px solid #c9dfe9;
+  border-radius:8px;
+  padding:12px;
+  text-align:center;
+}
+
+.avatar{
+  font-size:25px;
+  margin-bottom:5px;
+}
+
+.msg{
+  margin-top:10px;
+  padding:10px;
+  border-radius:7px;
+  background:#eef7fb;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+
+.activity{
+  background:#f7fbfd;
+  border-left:4px solid #287bb1;
+  padding:12px;
+  margin-top:10px;
 }
 
 @media(max-width:700px){
-  .grid{
-    grid-template-columns:1fr
+  .head{
+    flex-direction:column;
+    align-items:flex-start;
   }
 
-  .players{
-    grid-template-columns:repeat(2,1fr)
+  .user-area{
+    text-align:left;
+  }
+
+  .cast{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:450px){
+  .cast{
+    grid-template-columns:1fr;
   }
 }
 </style>
@@ -137,237 +170,263 @@ button{
 
 <div class="wrap">
 
-<header class="head">
+  <header class="head">
 
-  <div class="logo">
-    tengaged<b>.es</b> reborn
-  </div>
+    <div class="logo">
+      tengaged<span><b>.es</b> reborn</span>
+    </div>
 
-  <div id="who">
-    Invitado
-  </div>
+    <!-- USUARIO NO LOGUEADO -->
+    <div id="guestBox" class="user-area">
+      <div>Invitado</div>
+      <button onclick="showLogin()">Entrar</button>
+      <button onclick="showRegister()">Crear cuenta</button>
+    </div>
 
-</header>
+    <!-- USUARIO LOGUEADO -->
+    <div id="userBox" class="user-area hidden">
+      <div>Conectado como</div>
+      <div id="loggedUsername" class="user-name"></div>
 
+      <div class="actions">
+        <button onclick="showProfile()">Mi perfil</button>
+        <button class="danger" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </div>
 
-<div class="grid">
-
-<main>
-
-<div class="card">
-
-<div class="title">
-🎮 Castings
-</div>
-
-<div class="body">
-
-<h2>Casting #1</h2>
-
-<p>
-Únete a la primera partida de Tengaged Reborn.
-</p>
-
-<div class="players" id="players"></div>
-
-<br>
-
-<button id="joinBtn" type="button">
-Entrar al Casting
-</button>
-
-</div>
-
-</div>
+  </header>
 
 
-<div class="card" style="margin-top:14px">
+  <!-- CUENTA -->
 
-<div class="title">
-Actividad
-</div>
+  <section id="accountBox" class="card">
 
-<div class="body" id="activity">
-Tengaged Reborn está online.
-</div>
+    <h2>Cuenta</h2>
 
-</div>
+    <div id="loginPanel">
 
-</main>
+      <h3>Iniciar sesión</h3>
 
+      <input
+        id="loginUsername"
+        type="text"
+        placeholder="Usuario"
+        autocomplete="username"
+      >
 
-<aside>
+      <input
+        id="loginPassword"
+        type="password"
+        placeholder="Contraseña"
+        autocomplete="current-password"
+      >
 
-<!-- CUENTA INVITADO -->
+      <button onclick="login()">Entrar</button>
+      <button class="secondary" onclick="showRegister()">Crear cuenta</button>
 
-<div class="card" id="loginBox">
+      <div id="loginMsg" class="msg"></div>
 
-<div class="title">
-Cuenta
-</div>
-
-<div class="body">
-
-<label>Usuario</label>
-
-<input
-id="username"
-autocomplete="username"
-placeholder="Usuario"
->
-
-<label>Email</label>
-
-<input
-id="email"
-type="email"
-autocomplete="email"
-placeholder="Email"
->
-
-<label>Contraseña</label>
-
-<input
-id="password"
-type="password"
-autocomplete="current-password"
-placeholder="Mínimo 8 caracteres"
->
-
-<div>
-
-<button id="registerBtn" type="button">
-Registrarme
-</button>
-
-<button id="loginBtn" class="secondary" type="button">
-Entrar
-</button>
-
-</div>
-
-<p id="msg"></p>
-
-</div>
-
-</div>
+    </div>
 
 
-<!-- CUENTA LOGUEADA -->
+    <div id="registerPanel" class="hidden">
 
-<div class="card hidden" id="userBox">
+      <h3>Crear cuenta</h3>
 
-<div class="title">
-👤 Mi cuenta
-</div>
+      <input
+        id="registerUsername"
+        type="text"
+        placeholder="Usuario"
+        autocomplete="username"
+      >
 
-<div class="body">
+      <input
+        id="registerEmail"
+        type="email"
+        placeholder="Email"
+        autocomplete="email"
+      >
 
-<div class="user-box">
+      <input
+        id="registerPassword"
+        type="password"
+        placeholder="Contraseña (8+ caracteres)"
+        autocomplete="new-password"
+      >
 
-<div class="user-name" id="loggedUser">
-Usuario
-</div>
+      <button onclick="register()">Registrarme</button>
+      <button class="secondary" onclick="showLogin()">Ya tengo cuenta</button>
 
-<p>
-Bienvenido a Tengaged Reborn.
-</p>
+      <div id="registerMsg" class="msg"></div>
 
-<button id="profileBtn" type="button">
-Mi perfil
-</button>
+    </div>
 
-<button id="logoutBtn" class="secondary" type="button">
-Cerrar sesión
-</button>
+  </section>
 
-</div>
 
-</div>
+  <!-- PERFIL -->
 
-</div>
+  <section id="profileBox" class="card hidden">
 
-</aside>
+    <h2>Mi perfil</h2>
 
-</div>
+    <p>
+      Usuario:
+      <strong id="profileUsername"></strong>
+    </p>
+
+    <div class="activity">
+      🎮 Tu actividad aparecerá aquí.
+    </div>
+
+  </section>
+
+
+  <!-- CASTING -->
+
+  <section class="card">
+
+    <h2>🎮 Castings</h2>
+
+    <h3>Casting #1</h3>
+
+    <p>
+      Únete a la primera partida de Tengaged Reborn.
+    </p>
+
+    <div class="cast">
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        Lauu
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        Alex99
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        Saray
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        Rubenito
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        Nerea
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        Yaihiaaa
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        javix
+      </div>
+
+      <div class="player">
+        <div class="avatar">🙂</div>
+        ana95
+      </div>
+
+    </div>
+
+    <button onclick="joinCasting()">
+      Entrar al Casting
+    </button>
+
+    <div id="castingMsg" class="msg"></div>
+
+  </section>
+
+
+  <!-- ACTIVIDAD -->
+
+  <section class="card">
+
+    <h2>📢 Actividad</h2>
+
+    <div class="activity">
+      🎮 Bienvenido a Tengaged Reborn.
+    </div>
+
+    <div class="activity">
+      🏆 El primer casting está abierto.
+    </div>
+
+    <div id="userActivity" class="activity hidden"></div>
+
+  </section>
 
 </div>
 
 
 <script>
 
-const $ = id => document.getElementById(id);
+const guestBox = document.getElementById("guestBox");
+const userBox = document.getElementById("userBox");
 
-const names = [
-  'Lauu',
-  'Alex99',
-  'Saray',
-  'Rubenito',
-  'Nerea',
-  'Yaihiaaa',
-  'javix',
-  'ana95'
-];
+const accountBox = document.getElementById("accountBox");
+const loginPanel = document.getElementById("loginPanel");
+const registerPanel = document.getElementById("registerPanel");
 
-let joined = false;
-let currentUser = null;
+const loginMsg = document.getElementById("loginMsg");
+const registerMsg = document.getElementById("registerMsg");
+
+const profileBox = document.getElementById("profileBox");
+const loggedUsername = document.getElementById("loggedUsername");
+const profileUsername = document.getElementById("profileUsername");
+
+const castingMsg = document.getElementById("castingMsg");
+const userActivity = document.getElementById("userActivity");
 
 
 /* =========================
-   CASTING
+   MOSTRAR LOGIN
 ========================= */
 
-function render(){
+function showLogin(){
 
-  const list = joined
-    ? [...names, currentUser || 'randomize']
-    : names;
+  accountBox.classList.remove("hidden");
 
-  $('players').innerHTML =
-    list.map(x => `
-      <div class="p">
-        🙂<br>
-        <b>${x}</b>
-      </div>
-    `).join('');
+  loginPanel.classList.remove("hidden");
+  registerPanel.classList.add("hidden");
+
+  loginMsg.textContent="";
+  registerMsg.textContent="";
+
+  window.scrollTo({
+    top:accountBox.offsetTop - 20,
+    behavior:"smooth"
+  });
 }
 
 
 /* =========================
-   API
+   MOSTRAR REGISTRO
 ========================= */
 
-async function api(path,data){
+function showRegister(){
 
-  const r = await fetch(path,{
-    method:'POST',
-    credentials:'same-origin',
-    headers:{
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify(data)
+  accountBox.classList.remove("hidden");
+
+  loginPanel.classList.add("hidden");
+  registerPanel.classList.remove("hidden");
+
+  loginMsg.textContent="";
+  registerMsg.textContent="";
+
+  window.scrollTo({
+    top:accountBox.offsetTop - 20,
+    behavior:"smooth"
   });
-
-  const text = await r.text();
-
-  let j;
-
-  try{
-    j = JSON.parse(text);
-  }
-  catch{
-    throw new Error(
-      'El servidor no devolvió JSON (HTTP '+r.status+')'
-    );
-  }
-
-  if(!r.ok){
-    throw new Error(
-      j.error || 'Error HTTP '+r.status
-    );
-  }
-
-  return j;
 }
 
 
@@ -377,20 +436,100 @@ async function api(path,data){
 
 function showLoggedUser(username){
 
-  currentUser = username;
+  if(!username){
+    return;
+  }
 
-  $('who').textContent = username;
+  guestBox.classList.add("hidden");
+  userBox.classList.remove("hidden");
 
-  $('loggedUser').textContent = username;
+  loggedUsername.textContent=username;
+  profileUsername.textContent=username;
 
-  $('loginBox').classList.add('hidden');
+  accountBox.classList.add("hidden");
 
-  $('userBox').classList.remove('hidden');
+  userActivity.classList.remove("hidden");
 
-  $('activity').textContent =
-    'Bienvenido, '+username+'. Has iniciado sesión correctamente.';
+  userActivity.textContent=
+    "👋 Bienvenido, " +
+    username +
+    ". Has iniciado sesión correctamente.";
+}
 
-  render();
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+  const username =
+    document.getElementById("loginUsername").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  loginMsg.textContent="Iniciando sesión...";
+
+  if(!username || !password){
+
+    loginMsg.textContent=
+      "⚠️ Introduce usuario y contraseña.";
+
+    return;
+  }
+
+  try{
+
+    const response = await fetch("/api/login",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      credentials:"include",
+
+      body:JSON.stringify({
+        username:username,
+        password:password
+      })
+
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+
+      loginMsg.textContent =
+        "❌ " +
+        (data.message || "No se pudo iniciar sesión.");
+
+      return;
+    }
+
+    if(data.user){
+
+      localStorage.setItem(
+        "tengaged_user",
+        data.user.username
+      );
+
+      showLoggedUser(data.user.username);
+
+      loginMsg.textContent="";
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    loginMsg.textContent=
+      "❌ Error de conexión con el servidor.";
+
+  }
+
 }
 
 
@@ -398,194 +537,175 @@ function showLoggedUser(username){
    REGISTRO
 ========================= */
 
-$('registerBtn').onclick = async () => {
+async function register(){
 
-  $('msg').textContent = 'Registrando...';
+  const username =
+    document.getElementById("registerUsername").value.trim();
+
+  const email =
+    document.getElementById("registerEmail").value.trim();
+
+  const password =
+    document.getElementById("registerPassword").value;
+
+  registerMsg.textContent="Creando cuenta...";
+
+  if(!username || !email || !password){
+
+    registerMsg.textContent=
+      "⚠️ Completa todos los campos.";
+
+    return;
+  }
+
+  if(password.length < 8){
+
+    registerMsg.textContent=
+      "⚠️ La contraseña debe tener al menos 8 caracteres.";
+
+    return;
+  }
 
   try{
 
-    const j = await api('/api/register',{
-      username:$('username').value.trim(),
-      email:$('email').value.trim(),
-      password:$('password').value
+    const response = await fetch("/api/register",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      credentials:"include",
+
+      body:JSON.stringify({
+        username:username,
+        email:email,
+        password:password
+      })
+
     });
 
-    if(j.username){
+    const data = await response.json();
 
-      showLoggedUser(j.username);
+    if(!response.ok){
 
-      localStorage.setItem(
-        'tengaged_user',
-        j.username
-      );
-
-      $('msg').textContent =
-        'Cuenta creada correctamente.';
-
-    }else{
-
-      $('msg').textContent =
-        j.error || 'No se pudo crear la cuenta.';
-
-    }
-
-  }
-  catch(e){
-
-    $('msg').textContent =
-      e.message;
-
-  }
-
-};
-
-
-/* =========================
-   LOGIN
-========================= */
-
-$('loginBtn').onclick = async () => {
-
-  $('msg').textContent = 'Entrando...';
-
-  try{
-
-    const j = await api('/api/login',{
-      username:$('username').value.trim(),
-      password:$('password').value
-    });
-
-    if(!j.user){
-
-      $('msg').textContent =
-        'El servidor no devolvió el usuario.';
+      registerMsg.textContent =
+        "❌ " +
+        (data.message || "No se pudo crear la cuenta.");
 
       return;
     }
 
-    localStorage.setItem(
-      'tengaged_user',
-      j.user.username
-    );
+    registerMsg.textContent =
+      "✅ Cuenta creada correctamente. Ahora puedes iniciar sesión.";
 
-    showLoggedUser(
-      j.user.username
-    );
+    document.getElementById("registerUsername").value="";
+    document.getElementById("registerEmail").value="";
+    document.getElementById("registerPassword").value="";
 
-    $('msg').textContent =
-      'Sesión iniciada correctamente.';
+  }catch(error){
 
-  }
-  catch(e){
+    console.error(error);
 
-    $('msg').textContent =
-      e.message;
+    registerMsg.textContent=
+      "❌ Error de conexión con el servidor.";
 
   }
 
-};
+}
 
 
 /* =========================
-   LOGOUT
+   CERRAR SESIÓN
 ========================= */
 
-$('logoutBtn').onclick = () => {
+function logout(){
 
-  currentUser = null;
+  localStorage.removeItem("tengaged_user");
 
-  localStorage.removeItem(
-    'tengaged_user'
-  );
+  guestBox.classList.remove("hidden");
+  userBox.classList.add("hidden");
 
-  $('who').textContent =
-    'Invitado';
+  profileBox.classList.add("hidden");
 
-  $('loginBox').classList.remove(
-    'hidden'
-  );
+  accountBox.classList.remove("hidden");
 
-  $('userBox').classList.add(
-    'hidden'
-  );
+  showLogin();
 
-  $('username').style.display =
-    'block';
+  castingMsg.textContent="";
 
-  $('email').style.display =
-    'block';
-
-  $('password').style.display =
-    'block';
-
-  $('registerBtn').style.display =
-    'inline-block';
-
-  $('loginBtn').style.display =
-    'inline-block';
-
-  $('activity').textContent =
-    'Tengaged Reborn está online.';
-
-  $('msg').textContent = '';
-
-  joined = false;
-
-  render();
-
-};
+  userActivity.classList.add("hidden");
+}
 
 
 /* =========================
    PERFIL
 ========================= */
 
-$('profileBtn').onclick = () => {
+function showProfile(){
 
-  $('activity').textContent =
-    'Perfil de '+currentUser+' próximamente.';
+  const username =
+    localStorage.getItem("tengaged_user");
 
-};
+  if(!username){
+    showLogin();
+    return;
+  }
+
+  profileUsername.textContent=username;
+
+  profileBox.classList.remove("hidden");
+
+  window.scrollTo({
+    top:profileBox.offsetTop - 20,
+    behavior:"smooth"
+  });
+
+}
 
 
 /* =========================
    ENTRAR AL CASTING
 ========================= */
 
-$('joinBtn').onclick = () => {
+function joinCasting(){
 
-  if(!currentUser){
+  const username =
+    localStorage.getItem("tengaged_user");
 
-    $('activity').textContent =
-      'Debes iniciar sesión para entrar al Casting.';
+  if(!username){
+
+    castingMsg.textContent=
+      "🔒 Debes iniciar sesión para entrar al casting.";
+
+    showLogin();
 
     return;
   }
 
-  joined = true;
+  castingMsg.textContent=
+    "🎮 " +
+    username +
+    ", te has unido al Casting #1.";
 
-  $('activity').textContent =
-    currentUser+' se ha unido al Casting.';
-
-  render();
-
-};
+}
 
 
 /* =========================
    RESTAURAR SESIÓN VISUAL
 ========================= */
 
-const savedUser =
-  localStorage.getItem(
-    'tengaged_user'
-  );
+function restoreUser(){
 
-if(savedUser){
+  const username =
+    localStorage.getItem("tengaged_user");
 
-  showLoggedUser(
-    savedUser
-  );
+  if(username){
+
+    showLoggedUser(username);
+
+  }
 
 }
 
@@ -594,6 +714,9 @@ if(savedUser){
    INICIO
 ========================= */
 
-render();
+restoreUser();
 
 </script>
+
+</body>
+</html>
