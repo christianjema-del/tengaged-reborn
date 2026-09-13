@@ -364,16 +364,37 @@ Ya tengo cuenta
 
 <section id="profileBox" class="card hidden">
 
-<h2>Mi perfil</h2>
+<h2>👤 Mi perfil</h2>
 
 <p>
-Usuario:
-<strong id="profileUsername"></strong>
+  Usuario:
+  <strong id="profileUsername"></strong>
 </p>
 
-<div class="activity">
-🎮 Tu actividad aparecerá aquí.
+<div class="casting-info">
+
+  <div>
+    <div>🎮 Partidas jugadas</div>
+    <div id="profileGames" class="counter">0</div>
+  </div>
+
+  <div>
+    <div>🏆 Victorias</div>
+    <div id="profileWins" class="counter">0</div>
+  </div>
+
+  <div>
+    <div>⭐ Puntos</div>
+    <div id="profilePoints" class="counter">0</div>
+  </div>
+
 </div>
+
+<div id="profileCreated" class="activity">
+  📅 Perfil creado: -
+</div>
+
+<div id="profileMsg" class="msg"></div>
 
 </section>
 
