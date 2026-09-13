@@ -170,226 +170,290 @@ input{
 
 <div class="wrap">
 
-  <header class="head">
+<header class="head">
 
-    <div class="logo">
-      tengaged<span><b>.es</b> reborn</span>
-    </div>
+  <div class="logo">
+    tengaged<span><b>.es</b> reborn</span>
+  </div>
 
-    <!-- USUARIO NO LOGUEADO -->
-    <div id="guestBox" class="user-area">
-      <div>Invitado</div>
-      <button onclick="showLogin()">Entrar</button>
-      <button onclick="showRegister()">Crear cuenta</button>
-    </div>
+  <div id="guestBox" class="user-area">
 
-    <!-- USUARIO LOGUEADO -->
-    <div id="userBox" class="user-area hidden">
-      <div>Conectado como</div>
-      <div id="loggedUsername" class="user-name"></div>
+    <div>Invitado</div>
 
-      <div class="actions">
-        <button onclick="showProfile()">Mi perfil</button>
-        <button class="danger" onclick="logout()">Cerrar sesión</button>
-      </div>
-    </div>
-
-  </header>
-
-
-  <!-- CUENTA -->
-
-  <section id="accountBox" class="card">
-
-    <h2>Cuenta</h2>
-
-    <div id="loginPanel">
-
-      <h3>Iniciar sesión</h3>
-
-      <input
-        id="loginUsername"
-        type="text"
-        placeholder="Usuario"
-        autocomplete="username"
-      >
-
-      <input
-        id="loginPassword"
-        type="password"
-        placeholder="Contraseña"
-        autocomplete="current-password"
-      >
-
-      <button onclick="login()">Entrar</button>
-      <button class="secondary" onclick="showRegister()">Crear cuenta</button>
-
-      <div id="loginMsg" class="msg"></div>
-
-    </div>
-
-
-    <div id="registerPanel" class="hidden">
-
-      <h3>Crear cuenta</h3>
-
-      <input
-        id="registerUsername"
-        type="text"
-        placeholder="Usuario"
-        autocomplete="username"
-      >
-
-      <input
-        id="registerEmail"
-        type="email"
-        placeholder="Email"
-        autocomplete="email"
-      >
-
-      <input
-        id="registerPassword"
-        type="password"
-        placeholder="Contraseña (8+ caracteres)"
-        autocomplete="new-password"
-      >
-
-      <button onclick="register()">Registrarme</button>
-      <button class="secondary" onclick="showLogin()">Ya tengo cuenta</button>
-
-      <div id="registerMsg" class="msg"></div>
-
-    </div>
-
-  </section>
-
-
-  <!-- PERFIL -->
-
-  <section id="profileBox" class="card hidden">
-
-    <h2>Mi perfil</h2>
-
-    <p>
-      Usuario:
-      <strong id="profileUsername"></strong>
-    </p>
-
-    <div class="activity">
-      🎮 Tu actividad aparecerá aquí.
-    </div>
-
-  </section>
-
-
-  <!-- CASTING -->
-
-  <section class="card">
-
-    <h2>🎮 Castings</h2>
-
-    <h3>Casting #1</h3>
-
-    <p>
-      Únete a la primera partida de Tengaged Reborn.
-    </p>
-
-    <div class="cast">
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        Lauu
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        Alex99
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        Saray
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        Rubenito
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        Nerea
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        Yaihiaaa
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        javix
-      </div>
-
-      <div class="player">
-        <div class="avatar">🙂</div>
-        ana95
-      </div>
-
-    </div>
-
-    <button onclick="joinCasting()">
-      Entrar al Casting
+    <button onclick="showLogin()">
+      Entrar
     </button>
 
-    <div id="castingMsg" class="msg"></div>
+    <button onclick="showRegister()">
+      Crear cuenta
+    </button>
 
-  </section>
+  </div>
 
 
-  <!-- ACTIVIDAD -->
+  <div id="userBox" class="user-area hidden">
 
-  <section class="card">
+    <div>Conectado como</div>
 
-    <h2>📢 Actividad</h2>
+    <div id="loggedUsername" class="user-name"></div>
 
-    <div class="activity">
-      🎮 Bienvenido a Tengaged Reborn.
+    <div class="actions">
+
+      <button onclick="showProfile()">
+        Mi perfil
+      </button>
+
+      <button class="danger" onclick="logout()">
+        Cerrar sesión
+      </button>
+
     </div>
 
-    <div class="activity">
-      🏆 El primer casting está abierto.
-    </div>
+  </div>
 
-    <div id="userActivity" class="activity hidden"></div>
+</header>
 
-  </section>
+
+<!-- CUENTA -->
+
+<section id="accountBox" class="card">
+
+<h2>Cuenta</h2>
+
+
+<div id="loginPanel">
+
+<h3>Iniciar sesión</h3>
+
+<input
+id="loginUsername"
+type="text"
+placeholder="Usuario"
+autocomplete="username"
+>
+
+<input
+id="loginPassword"
+type="password"
+placeholder="Contraseña"
+autocomplete="current-password"
+>
+
+<button onclick="login()">
+Entrar
+</button>
+
+<button
+class="secondary"
+onclick="showRegister()"
+>
+Crear cuenta
+</button>
+
+<div id="loginMsg" class="msg"></div>
+
+</div>
+
+
+<div id="registerPanel" class="hidden">
+
+<h3>Crear cuenta</h3>
+
+<input
+id="registerUsername"
+type="text"
+placeholder="Usuario"
+autocomplete="username"
+>
+
+<input
+id="registerEmail"
+type="email"
+placeholder="Email"
+autocomplete="email"
+>
+
+<input
+id="registerPassword"
+type="password"
+placeholder="Contraseña (8+ caracteres)"
+autocomplete="new-password"
+>
+
+<button onclick="register()">
+Registrarme
+</button>
+
+<button
+class="secondary"
+onclick="showLogin()"
+>
+Ya tengo cuenta
+</button>
+
+<div id="registerMsg" class="msg"></div>
+
+</div>
+
+</section>
+
+
+<!-- PERFIL -->
+
+<section id="profileBox" class="card hidden">
+
+<h2>Mi perfil</h2>
+
+<p>
+Usuario:
+<strong id="profileUsername"></strong>
+</p>
+
+<div class="activity">
+🎮 Tu actividad aparecerá aquí.
+</div>
+
+</section>
+
+
+<!-- CASTING -->
+
+<section class="card">
+
+<h2>🎮 Castings</h2>
+
+<h3>Casting #1</h3>
+
+<p>
+Únete a la primera partida de Tengaged Reborn.
+</p>
+
+<div id="castingPlayers" class="cast"></div>
+
+<button onclick="joinCasting()">
+Entrar al Casting
+</button>
+
+<div id="castingMsg" class="msg"></div>
+
+</section>
+
+
+<!-- ACTIVIDAD -->
+
+<section class="card">
+
+<h2>📢 Actividad</h2>
+
+<div class="activity">
+🎮 Bienvenido a Tengaged Reborn.
+</div>
+
+<div class="activity">
+🏆 El primer casting está abierto.
+</div>
+
+<div id="userActivity" class="activity hidden"></div>
+
+</section>
 
 </div>
 
 
 <script>
 
-const guestBox = document.getElementById("guestBox");
-const userBox = document.getElementById("userBox");
+/* =========================
+   ELEMENTOS
+========================= */
 
-const accountBox = document.getElementById("accountBox");
-const loginPanel = document.getElementById("loginPanel");
-const registerPanel = document.getElementById("registerPanel");
+const guestBox =
+document.getElementById("guestBox");
 
-const loginMsg = document.getElementById("loginMsg");
-const registerMsg = document.getElementById("registerMsg");
+const userBox =
+document.getElementById("userBox");
 
-const profileBox = document.getElementById("profileBox");
-const loggedUsername = document.getElementById("loggedUsername");
-const profileUsername = document.getElementById("profileUsername");
+const accountBox =
+document.getElementById("accountBox");
 
-const castingMsg = document.getElementById("castingMsg");
-const userActivity = document.getElementById("userActivity");
+const loginPanel =
+document.getElementById("loginPanel");
+
+const registerPanel =
+document.getElementById("registerPanel");
+
+const loginMsg =
+document.getElementById("loginMsg");
+
+const registerMsg =
+document.getElementById("registerMsg");
+
+const profileBox =
+document.getElementById("profileBox");
+
+const loggedUsername =
+document.getElementById("loggedUsername");
+
+const profileUsername =
+document.getElementById("profileUsername");
+
+const castingMsg =
+document.getElementById("castingMsg");
+
+const castingPlayers =
+document.getElementById("castingPlayers");
+
+const userActivity =
+document.getElementById("userActivity");
 
 
 /* =========================
-   MOSTRAR LOGIN
+   JUGADORES DEL CASTING
+========================= */
+
+let castingPlayersList = [
+
+"Lauu",
+"Alex99",
+"Saray",
+"Rubenito",
+"Nerea",
+"Yaihiaaa",
+"javix",
+"ana95"
+
+];
+
+
+/* =========================
+   MOSTRAR JUGADORES
+========================= */
+
+function renderCasting(){
+
+  castingPlayers.innerHTML = "";
+
+  castingPlayersList.forEach(function(username){
+
+    const player =
+    document.createElement("div");
+
+    player.className="player";
+
+    player.innerHTML =
+      '<div class="avatar">🙂</div>' +
+      '<b>' +
+      username +
+      '</b>';
+
+    castingPlayers.appendChild(player);
+
+  });
+
+}
+
+
+/* =========================
+   LOGIN
 ========================= */
 
 function showLogin(){
@@ -397,20 +461,23 @@ function showLogin(){
   accountBox.classList.remove("hidden");
 
   loginPanel.classList.remove("hidden");
+
   registerPanel.classList.add("hidden");
 
   loginMsg.textContent="";
+
   registerMsg.textContent="";
 
   window.scrollTo({
     top:accountBox.offsetTop - 20,
     behavior:"smooth"
   });
+
 }
 
 
 /* =========================
-   MOSTRAR REGISTRO
+   REGISTRO
 ========================= */
 
 function showRegister(){
@@ -418,15 +485,18 @@ function showRegister(){
   accountBox.classList.remove("hidden");
 
   loginPanel.classList.add("hidden");
+
   registerPanel.classList.remove("hidden");
 
   loginMsg.textContent="";
+
   registerMsg.textContent="";
 
   window.scrollTo({
     top:accountBox.offsetTop - 20,
     behavior:"smooth"
   });
+
 }
 
 
@@ -441,19 +511,22 @@ function showLoggedUser(username){
   }
 
   guestBox.classList.add("hidden");
+
   userBox.classList.remove("hidden");
 
   loggedUsername.textContent=username;
+
   profileUsername.textContent=username;
 
   accountBox.classList.add("hidden");
 
   userActivity.classList.remove("hidden");
 
-  userActivity.textContent=
+  userActivity.textContent =
     "👋 Bienvenido, " +
     username +
     ". Has iniciado sesión correctamente.";
+
 }
 
 
@@ -464,24 +537,34 @@ function showLoggedUser(username){
 async function login(){
 
   const username =
-    document.getElementById("loginUsername").value.trim();
+    document
+    .getElementById("loginUsername")
+    .value
+    .trim();
 
   const password =
-    document.getElementById("loginPassword").value;
+    document
+    .getElementById("loginPassword")
+    .value;
 
-  loginMsg.textContent="Iniciando sesión...";
+  loginMsg.textContent =
+    "Iniciando sesión...";
+
 
   if(!username || !password){
 
-    loginMsg.textContent=
+    loginMsg.textContent =
       "⚠️ Introduce usuario y contraseña.";
 
     return;
+
   }
+
 
   try{
 
-    const response = await fetch("/api/login",{
+    const response =
+    await fetch("/api/login",{
 
       method:"POST",
 
@@ -492,22 +575,33 @@ async function login(){
       credentials:"include",
 
       body:JSON.stringify({
+
         username:username,
         password:password
+
       })
 
     });
 
-    const data = await response.json();
+
+    const data =
+    await response.json();
+
 
     if(!response.ok){
 
       loginMsg.textContent =
         "❌ " +
-        (data.message || "No se pudo iniciar sesión.");
+        (
+          data.error ||
+          data.message ||
+          "No se pudo iniciar sesión."
+        );
 
       return;
+
     }
+
 
     if(data.user){
 
@@ -516,16 +610,20 @@ async function login(){
         data.user.username
       );
 
-      showLoggedUser(data.user.username);
+      showLoggedUser(
+        data.user.username
+      );
 
       loginMsg.textContent="";
+
     }
+
 
   }catch(error){
 
     console.error(error);
 
-    loginMsg.textContent=
+    loginMsg.textContent =
       "❌ Error de conexión con el servidor.";
 
   }
@@ -540,35 +638,51 @@ async function login(){
 async function register(){
 
   const username =
-    document.getElementById("registerUsername").value.trim();
+    document
+    .getElementById("registerUsername")
+    .value
+    .trim();
 
   const email =
-    document.getElementById("registerEmail").value.trim();
+    document
+    .getElementById("registerEmail")
+    .value
+    .trim();
 
   const password =
-    document.getElementById("registerPassword").value;
+    document
+    .getElementById("registerPassword")
+    .value;
 
-  registerMsg.textContent="Creando cuenta...";
+
+  registerMsg.textContent =
+    "Creando cuenta...";
+
 
   if(!username || !email || !password){
 
-    registerMsg.textContent=
+    registerMsg.textContent =
       "⚠️ Completa todos los campos.";
 
     return;
+
   }
+
 
   if(password.length < 8){
 
-    registerMsg.textContent=
+    registerMsg.textContent =
       "⚠️ La contraseña debe tener al menos 8 caracteres.";
 
     return;
+
   }
+
 
   try{
 
-    const response = await fetch("/api/register",{
+    const response =
+    await fetch("/api/register",{
 
       method:"POST",
 
@@ -579,36 +693,59 @@ async function register(){
       credentials:"include",
 
       body:JSON.stringify({
+
         username:username,
         email:email,
         password:password
+
       })
 
     });
 
-    const data = await response.json();
+
+    const data =
+    await response.json();
+
 
     if(!response.ok){
 
       registerMsg.textContent =
         "❌ " +
-        (data.message || "No se pudo crear la cuenta.");
+        (
+          data.error ||
+          data.message ||
+          "No se pudo crear la cuenta."
+        );
 
       return;
+
     }
+
 
     registerMsg.textContent =
       "✅ Cuenta creada correctamente. Ahora puedes iniciar sesión.";
 
-    document.getElementById("registerUsername").value="";
-    document.getElementById("registerEmail").value="";
-    document.getElementById("registerPassword").value="";
+
+    document.getElementById(
+      "registerUsername"
+    ).value="";
+
+
+    document.getElementById(
+      "registerEmail"
+    ).value="";
+
+
+    document.getElementById(
+      "registerPassword"
+    ).value="";
+
 
   }catch(error){
 
     console.error(error);
 
-    registerMsg.textContent=
+    registerMsg.textContent =
       "❌ Error de conexión con el servidor.";
 
   }
@@ -622,20 +759,24 @@ async function register(){
 
 function logout(){
 
-  localStorage.removeItem("tengaged_user");
+  localStorage.removeItem(
+    "tengaged_user"
+  );
 
   guestBox.classList.remove("hidden");
+
   userBox.classList.add("hidden");
 
   profileBox.classList.add("hidden");
 
   accountBox.classList.remove("hidden");
 
-  showLogin();
-
   castingMsg.textContent="";
 
   userActivity.classList.add("hidden");
+
+  showLogin();
+
 }
 
 
@@ -646,20 +787,35 @@ function logout(){
 function showProfile(){
 
   const username =
-    localStorage.getItem("tengaged_user");
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
 
   if(!username){
+
     showLogin();
+
     return;
+
   }
 
-  profileUsername.textContent=username;
 
-  profileBox.classList.remove("hidden");
+  profileUsername.textContent =
+    username;
+
+  profileBox.classList.remove(
+    "hidden"
+  );
+
 
   window.scrollTo({
-    top:profileBox.offsetTop - 20,
+
+    top:
+      profileBox.offsetTop - 20,
+
     behavior:"smooth"
+
   });
 
 }
@@ -672,38 +828,79 @@ function showProfile(){
 function joinCasting(){
 
   const username =
-    localStorage.getItem("tengaged_user");
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
 
   if(!username){
 
-    castingMsg.textContent=
+    castingMsg.textContent =
       "🔒 Debes iniciar sesión para entrar al casting.";
 
     showLogin();
 
     return;
+
   }
 
-  castingMsg.textContent=
+
+  /* Evitar jugadores duplicados */
+
+  if(
+    !castingPlayersList.includes(
+      username
+    )
+  ){
+
+    castingPlayersList.push(
+      username
+    );
+
+  }
+
+
+  /* Actualizar lista */
+
+  renderCasting();
+
+
+  castingMsg.textContent =
     "🎮 " +
     username +
     ", te has unido al Casting #1.";
+
+
+  userActivity.classList.remove(
+    "hidden"
+  );
+
+
+  userActivity.textContent =
+    "🎮 " +
+    username +
+    " se ha unido al Casting #1.";
 
 }
 
 
 /* =========================
-   RESTAURAR SESIÓN VISUAL
+   RESTAURAR SESIÓN
 ========================= */
 
 function restoreUser(){
 
   const username =
-    localStorage.getItem("tengaged_user");
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
 
   if(username){
 
-    showLoggedUser(username);
+    showLoggedUser(
+      username
+    );
 
   }
 
@@ -713,6 +910,8 @@ function restoreUser(){
 /* =========================
    INICIO
 ========================= */
+
+renderCasting();
 
 restoreUser();
 
