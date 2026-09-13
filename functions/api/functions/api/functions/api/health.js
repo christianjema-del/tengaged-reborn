@@ -1,10 +1,14 @@
-export async function onRequestGet({ env }) {
-  const row = await env.DB.prepare(
-    'SELECT COUNT(*) AS users FROM users'
-  ).first();
-
-  return Response.json({
-    ok: true,
-    users: row?.users ?? 0
-  });
+export async function onRequest(context) {
+  return new Response(
+    JSON.stringify({
+      ok: true,
+      message: "Tengaged Reborn API funcionando"
+    }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
 }
