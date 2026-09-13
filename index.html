@@ -144,6 +144,7 @@ input{
 }
 
 @media(max-width:700px){
+
   .head{
     flex-direction:column;
     align-items:flex-start;
@@ -156,12 +157,15 @@ input{
   .cast{
     grid-template-columns:repeat(2,1fr);
   }
+
 }
 
 @media(max-width:450px){
+
   .cast{
     grid-template-columns:1fr;
   }
+
 }
 </style>
 </head>
@@ -189,7 +193,6 @@ input{
     </button>
 
   </div>
-
 
   <div id="userBox" class="user-area hidden">
 
@@ -219,7 +222,6 @@ input{
 <section id="accountBox" class="card">
 
 <h2>Cuenta</h2>
-
 
 <div id="loginPanel">
 
@@ -410,16 +412,23 @@ document.getElementById("userActivity");
    JUGADORES DEL CASTING
 ========================= */
 
+/*
+   Estos 8 jugadores son solamente
+   un respaldo visual.
+
+   La lista real se carga desde D1.
+*/
+
 let castingPlayersList = [
 
-"Lauu",
-"Alex99",
-"Saray",
-"Rubenito",
-"Nerea",
-"Yaihiaaa",
-"javix",
-"ana95"
+  "Lauu",
+  "Alex99",
+  "Saray",
+  "Rubenito",
+  "Nerea",
+  "Yaihiaaa",
+  "javix",
+  "ana95"
 
 ];
 
@@ -437,13 +446,26 @@ function renderCasting(){
     const player =
     document.createElement("div");
 
-    player.className="player";
+    player.className = "player";
 
-    player.innerHTML =
-      '<div class="avatar">🙂</div>' +
-      '<b>' +
-      username +
-      '</b>';
+
+    const avatar =
+    document.createElement("div");
+
+    avatar.className = "avatar";
+
+    avatar.textContent = "🙂";
+
+
+    const name =
+    document.createElement("b");
+
+    name.textContent = username;
+
+
+    player.appendChild(avatar);
+
+    player.appendChild(name);
 
     castingPlayers.appendChild(player);
 
@@ -453,7 +475,55 @@ function renderCasting(){
 
 
 /* =========================
-   LOGIN
+   CARGAR CASTING DESDE D1
+========================= */
+
+async function loadCasting(){
+
+  try{
+
+    const response =
+    await fetch("/api/casting");
+
+    const data =
+    await response.json();
+
+
+    if(data.ok && Array.isArray(data.players)){
+
+      castingPlayersList =
+      data.players.map(function(player){
+
+        return player.username;
+
+      });
+
+      renderCasting();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "No se pudo cargar el casting:",
+      error
+    );
+
+    /*
+       Si la API falla,
+       mantenemos los jugadores
+       de respaldo.
+    */
+
+    renderCasting();
+
+  }
+
+}
+
+
+/* =========================
+   MOSTRAR LOGIN
 ========================= */
 
 function showLogin(){
@@ -469,15 +539,19 @@ function showLogin(){
   registerMsg.textContent="";
 
   window.scrollTo({
-    top:accountBox.offsetTop - 20,
+
+    top:
+      accountBox.offsetTop - 20,
+
     behavior:"smooth"
+
   });
 
 }
 
 
 /* =========================
-   REGISTRO
+   MOSTRAR REGISTRO
 ========================= */
 
 function showRegister(){
@@ -493,8 +567,12 @@ function showRegister(){
   registerMsg.textContent="";
 
   window.scrollTo({
-    top:accountBox.offsetTop - 20,
+
+    top:
+      accountBox.offsetTop - 20,
+
     behavior:"smooth"
+
   });
 
 }
@@ -507,16 +585,21 @@ function showRegister(){
 function showLoggedUser(username){
 
   if(!username){
+
     return;
+
   }
+
 
   guestBox.classList.add("hidden");
 
   userBox.classList.remove("hidden");
 
-  loggedUsername.textContent=username;
+  loggedUsername.textContent =
+    username;
 
-  profileUsername.textContent=username;
+  profileUsername.textContent =
+    username;
 
   accountBox.classList.add("hidden");
 
@@ -546,6 +629,7 @@ async function login(){
     document
     .getElementById("loginPassword")
     .value;
+
 
   loginMsg.textContent =
     "Iniciando sesión...";
@@ -825,10 +909,13 @@ function showProfile(){
    ENTRAR AL CASTING
 ========================= */
 
-function joinCasting(){
+async function joinCasting(){
 
   const username =
-    localStorage.getItem("tengaged_user");
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
 
   if(!username){
 
@@ -841,63 +928,94 @@ function joinCasting(){
 
   }
 
-  /* Recuperar jugadores guardados */
-
-  let savedPlayers =
-    JSON.parse(
-      localStorage.getItem("casting_players") || "[]"
-    );
-
-  /* Si todavía no hay jugadores guardados,
-     cargar los 8 iniciales */
-
-  if(savedPlayers.length === 0){
-
-    savedPlayers = [
-      "Lauu",
-      "Alex99",
-      "Saray",
-      "Rubenito",
-      "Nerea",
-      "Yaihiaaa",
-      "javix",
-      "ana95"
-    ];
-
-  }
-
-  /* Añadir al usuario */
-
-  if(!savedPlayers.includes(username)){
-
-    savedPlayers.push(username);
-
-  }
-
-  /* Guardar */
-
-  localStorage.setItem(
-    "casting_players",
-    JSON.stringify(savedPlayers)
-  );
-
-  /* Actualizar la lista */
-
-  castingPlayersList = savedPlayers;
-
-  renderCasting();
 
   castingMsg.textContent =
-    "🎮 " +
-    username +
-    ", te has unido al Casting #1.";
+    "🎮 Entrando al casting...";
 
-  userActivity.classList.remove("hidden");
 
-  userActivity.textContent =
-    "🎮 " +
-    username +
-    " se ha unido al Casting #1.";
+  try{
+
+    const response =
+    await fetch("/api/casting",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        username:username
+
+      })
+
+    });
+
+
+    const data =
+    await response.json();
+
+
+    if(!response.ok || !data.ok){
+
+      castingMsg.textContent =
+        "❌ " +
+        (
+          data.message ||
+          "No se pudo entrar al casting."
+        );
+
+      return;
+
+    }
+
+
+    /*
+       Actualizar la lista con
+       la respuesta real de D1.
+    */
+
+    if(Array.isArray(data.players)){
+
+      castingPlayersList =
+      data.players.map(function(player){
+
+        return player.username;
+
+      });
+
+    }
+
+
+    renderCasting();
+
+
+    castingMsg.textContent =
+      "🎮 " +
+      username +
+      ", te has unido al Casting #1.";
+
+
+    userActivity.classList.remove(
+      "hidden"
+    );
+
+
+    userActivity.textContent =
+      "🎮 " +
+      username +
+      " se ha unido al Casting #1.";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    castingMsg.textContent =
+      "❌ Error de conexión con el servidor.";
+
+  }
 
 }
 
@@ -932,6 +1050,8 @@ function restoreUser(){
 renderCasting();
 
 restoreUser();
+
+loadCasting();
 
 </script>
 
