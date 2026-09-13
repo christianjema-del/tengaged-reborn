@@ -1,1 +1,270 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tengaged Reborn</title><style>body{font:15px Arial;margin:0;background:#eaf5fb;color:#285274}.wrap{max-width:1000px;margin:auto;padding:18px}.head,.card{background:white;border:1px solid #bfd8e8;border-radius:7px}.head{padding:16px;display:flex;justify-content:space-between}.logo{font-size:30px;font-weight:800}.logo b{color:#df2038}.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}.title{background:#d82036;color:#fff;padding:11px;font-weight:bold}.body{padding:15px}input{display:block;width:100%;box-sizing:border-box;padding:10px;margin:8px 0;border:1px solid #bfd8e8;border-radius:5px}button{padding:10px 14px;border:0;border-radius:5px;background:#d82036;color:#fff;font-weight:bold;cursor:pointer;margin-right:5px}.secondary{background:#eaf2f7;color:#285274}.players{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.p{padding:12px;background:#f2f9fd;border:1px solid #cce0ec;text-align:center;border-radius:5px}@media(max-width:700px){.grid{grid-template-columns:1fr}.players{grid-template-columns:repeat(2,1fr)}}</style></head><body><div class="wrap"><header class="head"><div class="logo">tengaged<span><b>.es</b> reborn</span></div><div id="who">Invitado</div></header><div class="grid"><main><div class="card"><div class="title">🎮 Castings</div><div class="body"><h2>Casting #1</h2><p>Únete a la primera partida de Tengaged Reborn.</p><div class="players" id="players"></div><br><button onclick="join()">Entrar al Casting</button></div></div><div class="card" style="margin-top:14px"><div class="title">Actividad</div><div class="body" id="activity">Tengaged Reborn está online.</div></div></main><aside><div class="card"><div class="title">Cuenta</div><div class="body"><input id="u" placeholder="Usuario"><input id="e" placeholder="Email"><input id="p" type="password" placeholder="Contraseña (8+ caracteres)"><button onclick="register()">Registrarme</button><button class="secondary" onclick="login()">Entrar</button><p id="msg"></p></div></div></aside></div></div><script>const names=['Lauu','Alex99','Saray','Rubenito','Nerea','Yaihiaaa','javix','ana95'];let joined=false;function render(){let a=[...names];if(joined)a.push('randomize');document.querySelector('#players').innerHTML=a.map(x=>`<div class=p>🙂<br><b>${x}</b></div>`).join('')}async function register(){let r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u.value,email:e.value,password:p.value})});let j=await r.json();msg.textContent=j.error||'Cuenta creada correctamente.'}async function login(){let r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u.value,password:p.value})});let j=await r.json();msg.textContent=j.error||'Has iniciado sesión.';if(j.user)who.textContent=j.user.username}function join(){if(!joined){joined=true;activity.textContent='randomize se ha unido al Casting.';render()}}render()</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tengaged Reborn</title>
+
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#eaf5fb;color:#285274}
+.wrap{max-width:1000px;margin:auto;padding:18px}
+.head,.card{background:#fff;border:1px solid #bfd8e8;border-radius:7px}
+.head{padding:16px;display:flex;justify-content:space-between}
+.logo{font-size:30px;font-weight:800}
+.logo b{color:#df2038}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}
+.title{background:#d82036;color:#fff;padding:11px;font-weight:bold}
+.body{padding:15px}
+input{display:block;width:100%;box-sizing:border-box;padding:10px;margin:8px 0;border:1px solid #bfd8e8;border-radius:5px}
+button{padding:10px 14px;border:0;border-radius:5px;background:#d82036;color:#fff;font-weight:bold;cursor:pointer;margin:4px 4px 4px 0}
+.secondary{background:#eaf2f7;color:#285274}
+.players{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.p{padding:12px;background:#f2f9fd;border:1px solid #cce0ec;text-align:center;border-radius:5px}
+@media(max-width:700px){
+.grid{grid-template-columns:1fr}
+.players{grid-template-columns:repeat(2,1fr)}
+}
+#msg{min-height:20px;font-weight:bold}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header class="head">
+<div class="logo">tengaged<b>.es</b> reborn</div>
+<div id="who">Invitado</div>
+</header>
+
+<div class="grid">
+
+<main>
+
+<div class="card">
+<div class="title">🎮 Castings</div>
+
+<div class="body">
+
+<h2>Casting #1</h2>
+
+<p>Únete a la primera partida de Tengaged Reborn.</p>
+
+<div class="players" id="players"></div>
+
+<br>
+
+<button id="joinBtn" type="button">
+Entrar al Casting
+</button>
+
+</div>
+</div>
+
+<div class="card" style="margin-top:14px">
+
+<div class="title">Actividad</div>
+
+<div class="body" id="activity">
+Tengaged Reborn está online.
+</div>
+
+</div>
+
+</main>
+
+<aside>
+
+<div class="card">
+
+<div class="title">Cuenta</div>
+
+<div class="body">
+
+<label>Usuario</label>
+
+<input
+id="username"
+autocomplete="username"
+placeholder="Usuario"
+>
+
+<label>Email</label>
+
+<input
+id="email"
+type="email"
+autocomplete="email"
+placeholder="Email"
+>
+
+<label>Contraseña</label>
+
+<input
+id="password"
+type="password"
+autocomplete="new-password"
+placeholder="Mínimo 8 caracteres"
+>
+
+<div>
+
+<button id="registerBtn" type="button">
+Registrarme
+</button>
+
+<button id="loginBtn" class="secondary" type="button">
+Entrar
+</button>
+
+</div>
+
+<p id="msg"></p>
+
+</div>
+</div>
+
+</aside>
+
+</div>
+</div>
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+const names = [
+'Lauu',
+'Alex99',
+'Saray',
+'Rubenito',
+'Nerea',
+'Yaihiaaa',
+'javix',
+'ana95'
+];
+
+let joined = false;
+
+function render(){
+
+const list = joined
+? [...names,'randomize']
+: names;
+
+$('players').innerHTML =
+list.map(x =>
+`<div class="p">
+🙂<br>
+<b>${x}</b>
+</div>`
+).join('');
+
+}
+
+async function api(path,data){
+
+const r = await fetch(path,{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify(data)
+});
+
+const text = await r.text();
+
+let j;
+
+try{
+j = JSON.parse(text);
+}
+catch{
+throw new Error(
+'El servidor no devolvió JSON (HTTP '+r.status+')'
+);
+}
+
+if(!r.ok){
+throw new Error(
+j.error || 'Error HTTP '+r.status
+);
+}
+
+return j;
+
+}
+
+$('registerBtn').onclick = async () => {
+
+$('msg').textContent = 'Registrando...';
+
+try{
+
+const j = await api('/api/register',{
+username:$('username').value,
+email:$('email').value,
+password:$('password').value
+});
+
+$('msg').textContent =
+'Cuenta creada: '+j.username;
+
+$('who').textContent =
+j.username;
+
+}
+catch(e){
+
+$('msg').textContent =
+e.message;
+
+}
+
+};
+
+$('loginBtn').onclick = async () => {
+
+$('msg').textContent =
+'Entrando...';
+
+try{
+
+const j = await api('/api/login',{
+username:$('username').value,
+password:$('password').value
+});
+
+$('msg').textContent =
+'Sesión iniciada';
+
+$('who').textContent =
+j.user.username;
+
+}
+catch(e){
+
+$('msg').textContent =
+e.message;
+
+}
+
+};
+
+$('joinBtn').onclick = () => {
+
+joined = true;
+
+$('activity').textContent =
+'randomize se ha unido al Casting.';
+
+render();
+
+};
+
+render();
+
+</script>
+
+</body>
+</html>
