@@ -94,6 +94,15 @@ button.danger{
   background:#c94c4c;
 }
 
+button.success{
+  background:#3b9b68;
+}
+
+button.disabled{
+  background:#9aaeb9;
+  cursor:not-allowed;
+}
+
 input{
   width:100%;
   padding:11px;
@@ -118,9 +127,53 @@ input{
   text-align:center;
 }
 
+.player.me{
+  background:#e4f7ec;
+  border:2px solid #3b9b68;
+}
+
 .avatar{
   font-size:25px;
   margin-bottom:5px;
+}
+
+.me-label{
+  display:block;
+  color:#3b9b68;
+  font-size:12px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.casting-info{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  background:#f3f9fc;
+  border:1px solid #c9dfe9;
+  border-radius:8px;
+  padding:12px;
+  margin:12px 0;
+}
+
+.counter{
+  font-size:20px;
+  font-weight:bold;
+  color:#24658d;
+}
+
+.status{
+  font-weight:bold;
+}
+
+.status.open{
+  color:#3b9b68;
+}
+
+.status.full{
+  color:#c94c4c;
 }
 
 .msg{
@@ -141,6 +194,13 @@ input{
   border-left:4px solid #287bb1;
   padding:12px;
   margin-top:10px;
+}
+
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:20px;
+  color:#78909c;
 }
 
 @media(max-width:700px){
@@ -330,13 +390,50 @@ Usuario:
 Únete a la primera partida de Tengaged Reborn.
 </p>
 
-<div id="castingPlayers" class="cast"></div>
 
-<button onclick="joinCasting()">
+<div class="casting-info">
+
+  <div>
+    <div>Plazas del casting</div>
+
+    <div
+      id="castingCounter"
+      class="counter"
+    >
+      0/16
+    </div>
+  </div>
+
+
+  <div
+    id="castingStatus"
+    class="status open"
+  >
+    🟢 Casting abierto
+  </div>
+
+</div>
+
+
+<div
+  id="castingPlayers"
+  class="cast"
+></div>
+
+
+<button
+  id="joinCastingButton"
+  class="success"
+  onclick="joinCasting()"
+>
 Entrar al Casting
 </button>
 
-<div id="castingMsg" class="msg"></div>
+
+<div
+  id="castingMsg"
+  class="msg"
+></div>
 
 </section>
 
@@ -355,7 +452,10 @@ Entrar al Casting
 🏆 El primer casting está abierto.
 </div>
 
-<div id="userActivity" class="activity hidden"></div>
+<div
+  id="userActivity"
+  class="activity hidden"
+></div>
 
 </section>
 
@@ -404,20 +504,22 @@ document.getElementById("castingMsg");
 const castingPlayers =
 document.getElementById("castingPlayers");
 
+const castingCounter =
+document.getElementById("castingCounter");
+
+const castingStatus =
+document.getElementById("castingStatus");
+
+const joinCastingButton =
+document.getElementById("joinCastingButton");
+
 const userActivity =
 document.getElementById("userActivity");
 
 
 /* =========================
-   JUGADORES DEL CASTING
+   DATOS DEL CASTING
 ========================= */
-
-/*
-   Estos 8 jugadores son solamente
-   un respaldo visual.
-
-   La lista real se carga desde D1.
-*/
 
 let castingPlayersList = [
 
@@ -432,6 +534,8 @@ let castingPlayersList = [
 
 ];
 
+let castingMaxPlayers = 16;
+
 
 /* =========================
    MOSTRAR JUGADORES
@@ -441,16 +545,47 @@ function renderCasting(){
 
   castingPlayers.innerHTML = "";
 
+
+  const currentUser =
+    localStorage.getItem("tengaged_user");
+
+
+  if(castingPlayersList.length === 0){
+
+    const empty =
+      document.createElement("div");
+
+    empty.className = "empty";
+
+    empty.textContent =
+      "Todavía no hay jugadores.";
+
+    castingPlayers.appendChild(empty);
+
+  }
+
+
   castingPlayersList.forEach(function(username){
 
     const player =
-    document.createElement("div");
+      document.createElement("div");
 
     player.className = "player";
 
 
+    if(
+      currentUser &&
+      username.toLowerCase() ===
+      currentUser.toLowerCase()
+    ){
+
+      player.classList.add("me");
+
+    }
+
+
     const avatar =
-    document.createElement("div");
+      document.createElement("div");
 
     avatar.className = "avatar";
 
@@ -458,7 +593,7 @@ function renderCasting(){
 
 
     const name =
-    document.createElement("b");
+      document.createElement("b");
 
     name.textContent = username;
 
@@ -467,9 +602,142 @@ function renderCasting(){
 
     player.appendChild(name);
 
+
+    if(
+      currentUser &&
+      username.toLowerCase() ===
+      currentUser.toLowerCase()
+    ){
+
+      const meLabel =
+        document.createElement("span");
+
+      meLabel.className =
+        "me-label";
+
+      meLabel.textContent =
+        "TÚ";
+
+      player.appendChild(meLabel);
+
+    }
+
+
     castingPlayers.appendChild(player);
 
   });
+
+
+  updateCastingInterface();
+
+}
+
+
+/* =========================
+   ACTUALIZAR INTERFAZ
+========================= */
+
+function updateCastingInterface(){
+
+  const total =
+    castingPlayersList.length;
+
+
+  castingCounter.textContent =
+    total + "/" + castingMaxPlayers;
+
+
+  if(total >= castingMaxPlayers){
+
+    castingStatus.textContent =
+      "🔴 Casting completo";
+
+    castingStatus.className =
+      "status full";
+
+    joinCastingButton.textContent =
+      "Casting completo";
+
+    joinCastingButton.classList.remove(
+      "success"
+    );
+
+    joinCastingButton.classList.add(
+      "disabled"
+    );
+
+    joinCastingButton.disabled =
+      true;
+
+    return;
+
+  }
+
+
+  castingStatus.textContent =
+    "🟢 Casting abierto";
+
+  castingStatus.className =
+    "status open";
+
+
+  const currentUser =
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
+
+  let alreadyJoined = false;
+
+
+  if(currentUser){
+
+    alreadyJoined =
+      castingPlayersList.some(
+        function(username){
+
+          return username.toLowerCase() ===
+                 currentUser.toLowerCase();
+
+        }
+      );
+
+  }
+
+
+  if(alreadyJoined){
+
+    joinCastingButton.textContent =
+      "Ya estás dentro";
+
+    joinCastingButton.classList.remove(
+      "success"
+    );
+
+    joinCastingButton.classList.add(
+      "disabled"
+    );
+
+    joinCastingButton.disabled =
+      true;
+
+  }else{
+
+    joinCastingButton.textContent =
+      "Entrar al Casting";
+
+    joinCastingButton.classList.remove(
+      "disabled"
+    );
+
+    joinCastingButton.classList.add(
+      "success"
+    );
+
+    joinCastingButton.disabled =
+      false;
+
+  }
 
 }
 
@@ -483,20 +751,35 @@ async function loadCasting(){
   try{
 
     const response =
-    await fetch("/api/casting");
+      await fetch("/api/casting");
+
 
     const data =
-    await response.json();
+      await response.json();
 
 
-    if(data.ok && Array.isArray(data.players)){
+    if(
+      data.ok &&
+      Array.isArray(data.players)
+    ){
 
       castingPlayersList =
-      data.players.map(function(player){
+        data.players.map(
+          function(player){
 
-        return player.username;
+            return player.username;
 
-      });
+          }
+        );
+
+
+      if(data.maxPlayers){
+
+        castingMaxPlayers =
+          data.maxPlayers;
+
+      }
+
 
       renderCasting();
 
@@ -508,12 +791,6 @@ async function loadCasting(){
       "No se pudo cargar el casting:",
       error
     );
-
-    /*
-       Si la API falla,
-       mantenemos los jugadores
-       de respaldo.
-    */
 
     renderCasting();
 
@@ -528,15 +805,22 @@ async function loadCasting(){
 
 function showLogin(){
 
-  accountBox.classList.remove("hidden");
+  accountBox.classList.remove(
+    "hidden"
+  );
 
-  loginPanel.classList.remove("hidden");
+  loginPanel.classList.remove(
+    "hidden"
+  );
 
-  registerPanel.classList.add("hidden");
+  registerPanel.classList.add(
+    "hidden"
+  );
 
-  loginMsg.textContent="";
+  loginMsg.textContent = "";
 
-  registerMsg.textContent="";
+  registerMsg.textContent = "";
+
 
   window.scrollTo({
 
@@ -556,15 +840,22 @@ function showLogin(){
 
 function showRegister(){
 
-  accountBox.classList.remove("hidden");
+  accountBox.classList.remove(
+    "hidden"
+  );
 
-  loginPanel.classList.add("hidden");
+  loginPanel.classList.add(
+    "hidden"
+  );
 
-  registerPanel.classList.remove("hidden");
+  registerPanel.classList.remove(
+    "hidden"
+  );
 
-  loginMsg.textContent="";
+  loginMsg.textContent = "";
 
-  registerMsg.textContent="";
+  registerMsg.textContent = "";
+
 
   window.scrollTo({
 
@@ -591,24 +882,42 @@ function showLoggedUser(username){
   }
 
 
-  guestBox.classList.add("hidden");
+  guestBox.classList.add(
+    "hidden"
+  );
 
-  userBox.classList.remove("hidden");
+  userBox.classList.remove(
+    "hidden"
+  );
+
 
   loggedUsername.textContent =
     username;
 
+
   profileUsername.textContent =
     username;
 
-  accountBox.classList.add("hidden");
 
-  userActivity.classList.remove("hidden");
+  accountBox.classList.add(
+    "hidden"
+  );
+
+
+  userActivity.classList.remove(
+    "hidden"
+  );
+
 
   userActivity.textContent =
     "👋 Bienvenido, " +
     username +
     ". Has iniciado sesión correctamente.";
+
+
+  updateCastingInterface();
+
+  renderCasting();
 
 }
 
@@ -621,14 +930,15 @@ async function login(){
 
   const username =
     document
-    .getElementById("loginUsername")
-    .value
-    .trim();
+      .getElementById("loginUsername")
+      .value
+      .trim();
+
 
   const password =
     document
-    .getElementById("loginPassword")
-    .value;
+      .getElementById("loginPassword")
+      .value;
 
 
   loginMsg.textContent =
@@ -648,28 +958,32 @@ async function login(){
   try{
 
     const response =
-    await fetch("/api/login",{
+      await fetch(
+        "/api/login",
+        {
 
-      method:"POST",
+          method:"POST",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-      credentials:"include",
+          credentials:"include",
 
-      body:JSON.stringify({
+          body:JSON.stringify({
 
-        username:username,
-        password:password
+            username:username,
+            password:password
 
-      })
+          })
 
-    });
+        }
+      );
 
 
     const data =
-    await response.json();
+      await response.json();
 
 
     if(!response.ok){
@@ -694,11 +1008,13 @@ async function login(){
         data.user.username
       );
 
+
       showLoggedUser(
         data.user.username
       );
 
-      loginMsg.textContent="";
+
+      loginMsg.textContent = "";
 
     }
 
@@ -723,27 +1039,33 @@ async function register(){
 
   const username =
     document
-    .getElementById("registerUsername")
-    .value
-    .trim();
+      .getElementById("registerUsername")
+      .value
+      .trim();
+
 
   const email =
     document
-    .getElementById("registerEmail")
-    .value
-    .trim();
+      .getElementById("registerEmail")
+      .value
+      .trim();
+
 
   const password =
     document
-    .getElementById("registerPassword")
-    .value;
+      .getElementById("registerPassword")
+      .value;
 
 
   registerMsg.textContent =
     "Creando cuenta...";
 
 
-  if(!username || !email || !password){
+  if(
+    !username ||
+    !email ||
+    !password
+  ){
 
     registerMsg.textContent =
       "⚠️ Completa todos los campos.";
@@ -766,29 +1088,33 @@ async function register(){
   try{
 
     const response =
-    await fetch("/api/register",{
+      await fetch(
+        "/api/register",
+        {
 
-      method:"POST",
+          method:"POST",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-      credentials:"include",
+          credentials:"include",
 
-      body:JSON.stringify({
+          body:JSON.stringify({
 
-        username:username,
-        email:email,
-        password:password
+            username:username,
+            email:email,
+            password:password
 
-      })
+          })
 
-    });
+        }
+      );
 
 
     const data =
-    await response.json();
+      await response.json();
 
 
     if(!response.ok){
@@ -812,17 +1138,17 @@ async function register(){
 
     document.getElementById(
       "registerUsername"
-    ).value="";
+    ).value = "";
 
 
     document.getElementById(
       "registerEmail"
-    ).value="";
+    ).value = "";
 
 
     document.getElementById(
       "registerPassword"
-    ).value="";
+    ).value = "";
 
 
   }catch(error){
@@ -847,17 +1173,35 @@ function logout(){
     "tengaged_user"
   );
 
-  guestBox.classList.remove("hidden");
 
-  userBox.classList.add("hidden");
+  guestBox.classList.remove(
+    "hidden"
+  );
 
-  profileBox.classList.add("hidden");
 
-  accountBox.classList.remove("hidden");
+  userBox.classList.add(
+    "hidden"
+  );
 
-  castingMsg.textContent="";
 
-  userActivity.classList.add("hidden");
+  profileBox.classList.add(
+    "hidden"
+  );
+
+
+  accountBox.classList.remove(
+    "hidden"
+  );
+
+
+  castingMsg.textContent = "";
+
+  userActivity.classList.add(
+    "hidden"
+  );
+
+
+  renderCasting();
 
   showLogin();
 
@@ -887,6 +1231,7 @@ function showProfile(){
 
   profileUsername.textContent =
     username;
+
 
   profileBox.classList.remove(
     "hidden"
@@ -929,35 +1274,138 @@ async function joinCasting(){
   }
 
 
+  /*
+     Comprobación visual antes
+     de llamar a la API.
+  */
+
+  const alreadyJoined =
+    castingPlayersList.some(
+      function(player){
+
+        return player.toLowerCase() ===
+               username.toLowerCase();
+
+      }
+    );
+
+
+  if(alreadyJoined){
+
+    castingMsg.textContent =
+      "ℹ️ Ya estás dentro del Casting #1.";
+
+    updateCastingInterface();
+
+    return;
+
+  }
+
+
+  if(
+    castingPlayersList.length >=
+    castingMaxPlayers
+  ){
+
+    castingMsg.textContent =
+      "🔒 El Casting #1 está completo.";
+
+    updateCastingInterface();
+
+    return;
+
+  }
+
+
   castingMsg.textContent =
     "🎮 Entrando al casting...";
+
+
+  joinCastingButton.disabled =
+    true;
 
 
   try{
 
     const response =
-    await fetch("/api/casting",{
+      await fetch(
+        "/api/casting",
+        {
 
-      method:"POST",
+          method:"POST",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-      body:JSON.stringify({
+          body:JSON.stringify({
 
-        username:username
+            username:username
 
-      })
+          })
 
-    });
+        }
+      );
 
 
     const data =
-    await response.json();
+      await response.json();
 
 
-    if(!response.ok || !data.ok){
+    /*
+       Si el casting está lleno
+    */
+
+    if(
+      response.status === 409 ||
+      data.full
+    ){
+
+      castingPlayersList =
+        Array.isArray(data.players)
+          ? data.players.map(
+              function(player){
+
+                return player.username;
+
+              }
+            )
+          : castingPlayersList;
+
+
+      if(data.maxPlayers){
+
+        castingMaxPlayers =
+          data.maxPlayers;
+
+      }
+
+
+      renderCasting();
+
+
+      castingMsg.textContent =
+        "🔒 " +
+        (
+          data.message ||
+          "El casting está completo."
+        );
+
+
+      return;
+
+    }
+
+
+    /*
+       Error normal
+    */
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
 
       castingMsg.textContent =
         "❌ " +
@@ -972,18 +1420,29 @@ async function joinCasting(){
 
 
     /*
-       Actualizar la lista con
-       la respuesta real de D1.
+       Actualizar desde D1
     */
 
-    if(Array.isArray(data.players)){
+    if(
+      Array.isArray(data.players)
+    ){
 
       castingPlayersList =
-      data.players.map(function(player){
+        data.players.map(
+          function(player){
 
-        return player.username;
+            return player.username;
 
-      });
+          }
+        );
+
+    }
+
+
+    if(data.maxPlayers){
+
+      castingMaxPlayers =
+        data.maxPlayers;
 
     }
 
@@ -991,21 +1450,31 @@ async function joinCasting(){
     renderCasting();
 
 
-    castingMsg.textContent =
-      "🎮 " +
-      username +
-      ", te has unido al Casting #1.";
+    if(data.alreadyJoined){
+
+      castingMsg.textContent =
+        "ℹ️ " +
+        username +
+        ", ya estabas dentro del Casting #1.";
+
+    }else{
+
+      castingMsg.textContent =
+        "🎮 " +
+        username +
+        ", te has unido al Casting #1.";
+
+      userActivity.classList.remove(
+        "hidden"
+      );
 
 
-    userActivity.classList.remove(
-      "hidden"
-    );
+      userActivity.textContent =
+        "🎮 " +
+        username +
+        " se ha unido al Casting #1.";
 
-
-    userActivity.textContent =
-      "🎮 " +
-      username +
-      " se ha unido al Casting #1.";
+    }
 
 
   }catch(error){
@@ -1016,6 +1485,9 @@ async function joinCasting(){
       "❌ Error de conexión con el servidor.";
 
   }
+
+
+  updateCastingInterface();
 
 }
 
