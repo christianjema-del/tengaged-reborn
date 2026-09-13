@@ -828,10 +828,7 @@ function showProfile(){
 function joinCasting(){
 
   const username =
-    localStorage.getItem(
-      "tengaged_user"
-    );
-
+    localStorage.getItem("tengaged_user");
 
   if(!username){
 
@@ -844,37 +841,58 @@ function joinCasting(){
 
   }
 
+  /* Recuperar jugadores guardados */
 
-  /* Evitar jugadores duplicados */
-
-  if(
-    !castingPlayersList.includes(
-      username
-    )
-  ){
-
-    castingPlayersList.push(
-      username
+  let savedPlayers =
+    JSON.parse(
+      localStorage.getItem("casting_players") || "[]"
     );
+
+  /* Si todavía no hay jugadores guardados,
+     cargar los 8 iniciales */
+
+  if(savedPlayers.length === 0){
+
+    savedPlayers = [
+      "Lauu",
+      "Alex99",
+      "Saray",
+      "Rubenito",
+      "Nerea",
+      "Yaihiaaa",
+      "javix",
+      "ana95"
+    ];
 
   }
 
+  /* Añadir al usuario */
 
-  /* Actualizar lista */
+  if(!savedPlayers.includes(username)){
+
+    savedPlayers.push(username);
+
+  }
+
+  /* Guardar */
+
+  localStorage.setItem(
+    "casting_players",
+    JSON.stringify(savedPlayers)
+  );
+
+  /* Actualizar la lista */
+
+  castingPlayersList = savedPlayers;
 
   renderCasting();
-
 
   castingMsg.textContent =
     "🎮 " +
     username +
     ", te has unido al Casting #1.";
 
-
-  userActivity.classList.remove(
-    "hidden"
-  );
-
+  userActivity.classList.remove("hidden");
 
   userActivity.textContent =
     "🎮 " +
