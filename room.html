@@ -1,350 +1,754 @@
-¡export async function onRequest(context) {
+<!doctype html>
+<html lang="es">
 
-  const request = context.request;
-  const db = context.env.DB;
+<head>
 
-  const ADMIN_USERNAME = "admin1";
+<meta charset="utf-8">
 
-  try {
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
-    /* =========================
-       GET — VER ESTADO DE LA SALA
-    ========================= */
+<title>Sala del Casting #1</title>
 
-    if (request.method === "GET") {
+<style>
 
-      const room = await db.prepare(
-        `
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
-        FROM casting_rooms
-        WHERE casting_id = 1
-        LIMIT 1
-        `
-      ).first();
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#eaf5fb;
+  color:#285274;
+}
 
-      if (!room) {
+.wrap{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
 
-        return Response.json(
-          {
-            ok: false,
-            message: "La sala todavía no existe."
-          },
-          { status: 404 }
-        );
+.head{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+  margin-bottom:20px;
+}
 
-      }
+h1{
+  margin-top:0;
+}
 
-      const players = await db.prepare(
-        `
-        SELECT
-          username,
-          joined_at
-        FROM casting_players
-        WHERE casting_id = 1
-        ORDER BY id ASC
-        `
-      ).all();
+.status{
+  display:inline-block;
+  padding:10px 15px;
+  border-radius:10px;
+  background:#e8f7e8;
+  margin-top:10px;
+  font-weight:bold;
+}
 
-      return Response.json({
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-top:18px;
+}
 
-        ok: true,
+.stat{
+  background:#f5faff;
+  border-radius:12px;
+  padding:15px;
+}
 
-        room: room,
+.card{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+  margin-bottom:20px;
+}
 
-        players: players.results,
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 18px;
+  background:#24658d;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
+  margin-right:8px;
+  margin-top:8px;
+}
 
-        maxPlayers: 16,
+button:hover{
+  opacity:.9;
+}
 
-        playerCount: players.results.length
+button.start{
+  background:#16803c;
+}
 
-      });
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.players{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+
+.player{
+  background:#f5faff;
+  border-radius:12px;
+  padding:15px;
+  font-weight:bold;
+}
+
+.message{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#f5faff;
+}
+
+.back{
+  display:inline-block;
+  margin-top:15px;
+  color:#24658d;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.hidden{
+  display:none;
+}
+
+.started{
+  background:#ffe8e8;
+  color:#a40000;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+
+  <div class="head">
+
+    <h1>
+      🎮 Sala del Casting #1
+    </h1>
+
+    <div
+      id="roomStatus"
+      class="status"
+    >
+      ⏳ Cargando sala...
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <strong>
+          Jugadores
+        </strong>
+
+        <div id="playerCount">
+          -
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong>
+          Máximo
+        </strong>
+
+        <div>
+          16
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong>
+          Casting
+        </strong>
+
+        <div>
+          #1
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div>
+
+      <button
+        onclick="enterRoom()"
+      >
+        🚪 Entrar en la sala
+      </button>
+
+
+      <button
+        onclick="loadRoom()"
+      >
+        🔄 Actualizar
+      </button>
+
+
+      <button
+        id="startGameButton"
+        class="start hidden"
+        onclick="startGame()"
+      >
+        ▶️ Iniciar partida
+      </button>
+
+    </div>
+
+
+    <div
+      id="roomMessage"
+      class="message hidden"
+    ></div>
+
+
+    <a
+      href="/"
+      class="back"
+    >
+      ← Volver a la página principal
+    </a>
+
+  </div>
+
+
+
+  <div
+    id="myRoomCard"
+    class="card hidden"
+  >
+
+    <h2>
+      👤 Mi sala
+    </h2>
+
+    <p id="myRoomText"></p>
+
+  </div>
+
+
+
+  <div class="card">
+
+    <h2>
+      👥 Jugadores
+    </h2>
+
+    <div
+      id="players"
+      class="players"
+    >
+      Cargando jugadores...
+    </div>
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+const roomStatus =
+  document.getElementById(
+    "roomStatus"
+  );
+
+const playerCount =
+  document.getElementById(
+    "playerCount"
+  );
+
+const playersContainer =
+  document.getElementById(
+    "players"
+  );
+
+const roomMessage =
+  document.getElementById(
+    "roomMessage"
+  );
+
+const startGameButton =
+  document.getElementById(
+    "startGameButton"
+  );
+
+const myRoomCard =
+  document.getElementById(
+    "myRoomCard"
+  );
+
+const myRoomText =
+  document.getElementById(
+    "myRoomText"
+  );
+
+
+/* =========================
+   ESCAPAR HTML
+========================= */
+
+function escapeHtml(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+
+/* =========================
+   MOSTRAR MENSAJE
+========================= */
+
+function showMessage(message){
+
+  roomMessage.textContent =
+    message;
+
+  roomMessage.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================
+   CARGAR SALA
+========================= */
+
+async function loadRoom(){
+
+  try{
+
+    const response =
+      await fetch("/api/room");
+
+    const data =
+      await response.json();
+
+
+    if(!data.ok){
+
+      showMessage(
+        data.message ||
+        "No se pudo cargar la sala."
+      );
+
+      return;
 
     }
 
 
     /* =========================
-       POST — ENTRAR EN LA SALA
+       CONTADORES
     ========================= */
 
-    if (request.method === "POST") {
+    playerCount.textContent =
+      data.playerCount +
+      " / " +
+      data.maxPlayers;
 
-      const data = await request.json();
 
-      const username =
-        String(data.username || "").trim();
+    /* =========================
+       ESTADO
+    ========================= */
 
-      if (!username) {
+    if(
+      data.room.status ===
+      "started"
+    ){
 
-        return Response.json(
-          {
-            ok: false,
-            message: "Falta el nombre de usuario."
-          },
-          { status: 400 }
-        );
+      roomStatus.textContent =
+        "🔴 Partida iniciada";
 
-      }
+      roomStatus.classList.add(
+        "started"
+      );
 
-      const player = await db.prepare(
-        `
-        SELECT
-          username
-        FROM casting_players
-        WHERE casting_id = 1
-        AND LOWER(username) = LOWER(?)
-        LIMIT 1
-        `
-      )
-      .bind(username)
-      .first();
+    }else{
 
-      if (!player) {
+      roomStatus.textContent =
+        "🟢 Esperando jugadores";
 
-        return Response.json(
-          {
-            ok: false,
-            message: "Primero debes apuntarte al Casting #1."
-          },
-          { status: 403 }
-        );
-
-      }
-
-      let room = await db.prepare(
-        `
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
-        FROM casting_rooms
-        WHERE casting_id = 1
-        LIMIT 1
-        `
-      ).first();
-
-      if (!room) {
-
-        await db.prepare(
-          `
-          INSERT INTO casting_rooms
-          (casting_id, status)
-          VALUES
-          (1, 'waiting')
-          `
-        ).run();
-
-        room = await db.prepare(
-          `
-          SELECT
-            id,
-            casting_id,
-            status,
-            created_at,
-            started_at
-          FROM casting_rooms
-          WHERE casting_id = 1
-          LIMIT 1
-          `
-        ).first();
-
-      }
-
-      return Response.json({
-
-        ok: true,
-
-        message: "Has entrado en la sala del Casting #1.",
-
-        room: room,
-
-        username: player.username
-
-      });
+      roomStatus.classList.remove(
+        "started"
+      );
 
     }
 
 
     /* =========================
-       PUT — INICIAR PARTIDA
+       JUGADORES
     ========================= */
 
-    if (request.method === "PUT") {
+    playersContainer.innerHTML =
+      "";
 
-      const data = await request.json();
 
-      const username =
-        String(data.username || "").trim();
+    data.players.forEach(
+      function(player){
 
-      if (!username) {
+        const div =
+          document.createElement(
+            "div"
+          );
 
-        return Response.json(
-          {
-            ok: false,
-            message: "Falta el nombre de usuario."
-          },
-          { status: 400 }
+        div.className =
+          "player";
+
+        div.innerHTML =
+          "🙂 " +
+          escapeHtml(
+            player.username
+          );
+
+        playersContainer.appendChild(
+          div
         );
 
       }
-
-      /* SOLO ADMIN1 */
-
-      if (
-        username.toLowerCase() !==
-        ADMIN_USERNAME.toLowerCase()
-      ) {
-
-        return Response.json(
-          {
-            ok: false,
-            message: "No tienes permisos para iniciar la partida."
-          },
-          { status: 403 }
-        );
-
-      }
-
-      /* BUSCAR SALA */
-
-      const room = await db.prepare(
-        `
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
-        FROM casting_rooms
-        WHERE casting_id = 1
-        LIMIT 1
-        `
-      ).first();
-
-      if (!room) {
-
-        return Response.json(
-          {
-            ok: false,
-            message: "La sala todavía no existe."
-          },
-          { status: 404 }
-        );
-
-      }
-
-      /* SI YA ESTÁ INICIADA */
-
-      if (room.status === "started") {
-
-        return Response.json({
-
-          ok: true,
-
-          message: "La partida ya está iniciada.",
-
-          room: room
-
-        });
-
-      }
-
-      /* CONTAR JUGADORES */
-
-      const players = await db.prepare(
-        `
-        SELECT COUNT(*) AS total
-        FROM casting_players
-        WHERE casting_id = 1
-        `
-      ).first();
-
-      const playerCount =
-        Number(players.total || 0);
-
-      if (playerCount < 2) {
-
-        return Response.json(
-          {
-            ok: false,
-            message: "Necesitas al menos 2 jugadores para iniciar la partida.",
-            playerCount: playerCount
-          },
-          { status: 400 }
-        );
-
-      }
-
-      /* INICIAR PARTIDA */
-
-      await db.prepare(
-        `
-        UPDATE casting_rooms
-        SET
-          status = 'started',
-          started_at = CURRENT_TIMESTAMP
-        WHERE casting_id = 1
-        `
-      ).run();
-
-      const updatedRoom = await db.prepare(
-        `
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
-        FROM casting_rooms
-        WHERE casting_id = 1
-        LIMIT 1
-        `
-      ).first();
-
-      return Response.json({
-
-        ok: true,
-
-        message: "La partida ha comenzado.",
-
-        room: updatedRoom,
-
-        playerCount: playerCount
-
-      });
-
-    }
-
-
-    /* =========================
-       MÉTODO NO PERMITIDO
-    ========================= */
-
-    return Response.json(
-      {
-        ok: false,
-        message: "Método no permitido."
-      },
-      { status: 405 }
     );
 
-  } catch (error) {
 
-    return Response.json(
-      {
-        ok: false,
-        message: "Error del servidor.",
-        error: error.message
-      },
-      { status: 500 }
+    /* =========================
+       ADMIN
+    ========================= */
+
+    const username =
+      localStorage.getItem(
+        "tengaged_user"
+      );
+
+
+    if(
+      username &&
+      username.toLowerCase() ===
+      "admin1"
+    ){
+
+      if(
+        data.room.status ===
+        "waiting"
+      ){
+
+        startGameButton.classList.remove(
+          "hidden"
+        );
+
+      }else{
+
+        startGameButton.classList.add(
+          "hidden"
+        );
+
+      }
+
+    }else{
+
+      startGameButton.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /* =========================
+       MI SALA
+    ========================= */
+
+    if(username){
+
+      myRoomCard.classList.remove(
+        "hidden"
+      );
+
+      myRoomText.textContent =
+        "Has entrado como " +
+        username +
+        ".";
+
+    }
+
+  }catch(error){
+
+    showMessage(
+      "Error al conectar con la sala."
     );
+
+    console.error(error);
 
   }
 
 }
+
+
+/* =========================
+   ENTRAR EN LA SALA
+========================= */
+
+async function enterRoom(){
+
+  const username =
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
+
+  if(!username){
+
+    showMessage(
+      "🔒 Debes iniciar sesión primero."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/room",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            username:username
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(!data.ok){
+
+      showMessage(
+        data.message ||
+        "No se pudo entrar en la sala."
+      );
+
+      return;
+
+    }
+
+
+    showMessage(
+      data.message
+    );
+
+
+    loadRoom();
+
+  }catch(error){
+
+    showMessage(
+      "Error al entrar en la sala."
+    );
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   INICIAR PARTIDA
+========================= */
+
+async function startGame(){
+
+  const username =
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
+
+  if(!username){
+
+    showMessage(
+      "🔒 Debes iniciar sesión."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    username.toLowerCase() !==
+    "admin1"
+  ){
+
+    showMessage(
+      "⛔ No tienes permisos para iniciar la partida."
+    );
+
+    return;
+
+  }
+
+
+  const confirmStart =
+    confirm(
+      "¿Seguro que quieres iniciar la partida?"
+    );
+
+
+  if(!confirmStart){
+
+    return;
+
+  }
+
+
+  startGameButton.disabled =
+    true;
+
+
+  startGameButton.textContent =
+    "⏳ Iniciando...";
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/room",
+        {
+          method:"PUT",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            username:username
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(!data.ok){
+
+      showMessage(
+        data.message ||
+        "No se pudo iniciar la partida."
+      );
+
+      startGameButton.disabled =
+        false;
+
+      startGameButton.textContent =
+        "▶️ Iniciar partida";
+
+      return;
+
+    }
+
+
+    showMessage(
+      "🎉 " +
+      data.message
+    );
+
+
+    startGameButton.classList.add(
+      "hidden"
+    );
+
+
+    loadRoom();
+
+  }catch(error){
+
+    showMessage(
+      "Error al iniciar la partida."
+    );
+
+    console.error(error);
+
+    startGameButton.disabled =
+      false;
+
+    startGameButton.textContent =
+      "▶️ Iniciar partida";
+
+  }
+
+}
+
+
+/* =========================
+   INICIO
+========================= */
+
+loadRoom();
+
+
+/* =========================
+   ACTUALIZACIÓN AUTOMÁTICA
+========================= */
+
+setInterval(
+  loadRoom,
+  5000
+);
+
+</script>
+
+
+</body>
+
+</html>
