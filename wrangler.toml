@@ -1,0 +1,8 @@
+name = "tengaged-reborns"
+compatibility_date = "2026-09-13"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tengaged-reborn-db"
+database_id = "a345236c-b96f-40ed-a9f2-2fa63d943097"
