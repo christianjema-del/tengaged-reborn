@@ -98,6 +98,10 @@ button.success{
   background:#3b9b68;
 }
 
+button.room{
+  background:#24658d;
+}
+
 button.disabled{
   background:#9aaeb9;
   cursor:not-allowed;
@@ -201,6 +205,14 @@ input{
   text-align:center;
   padding:20px;
   color:#78909c;
+}
+
+.room-info{
+  background:#eef7fb;
+  border:1px solid #c9dfe9;
+  border-radius:8px;
+  padding:12px;
+  margin-top:12px;
 }
 
 @media(max-width:700px){
@@ -452,13 +464,28 @@ Usuario:
   class="cast"
 ></div>
 
-<button
-  id="joinCastingButton"
-  class="success"
-  onclick="joinCasting()"
->
-Entrar al Casting
-</button>
+
+<div class="actions">
+
+  <button
+    id="joinCastingButton"
+    class="success"
+    onclick="joinCasting()"
+  >
+    Entrar al Casting
+  </button>
+
+
+  <button
+    id="enterRoomButton"
+    class="room"
+    onclick="openCastingRoom()"
+  >
+    🎮 Entrar en la sala
+  </button>
+
+</div>
+
 
 <div
   id="castingMsg"
@@ -557,6 +584,9 @@ document.getElementById("castingStatus");
 
 const joinCastingButton =
 document.getElementById("joinCastingButton");
+
+const enterRoomButton =
+document.getElementById("enterRoomButton");
 
 const userActivity =
 document.getElementById("userActivity");
@@ -1515,6 +1545,53 @@ async function joinCasting(){
   }
 
   updateCastingInterface();
+
+}
+
+
+/* =========================
+   ENTRAR EN LA SALA
+========================= */
+
+function openCastingRoom(){
+
+  const username =
+    localStorage.getItem(
+      "tengaged_user"
+    );
+
+  if(!username){
+
+    castingMsg.textContent =
+      "🔒 Debes iniciar sesión primero.";
+
+    showLogin();
+
+    return;
+
+  }
+
+  const joined =
+    castingPlayersList.some(
+      function(player){
+
+        return player.toLowerCase() ===
+               username.toLowerCase();
+
+      }
+    );
+
+  if(!joined){
+
+    castingMsg.textContent =
+      "🔒 Primero debes entrar al Casting #1.";
+
+    return;
+
+  }
+
+  window.location.href =
+    "/room.html";
 
 }
 
