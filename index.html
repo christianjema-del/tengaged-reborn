@@ -372,7 +372,10 @@ return j;
 /* =========================
    MOSTRAR USUARIO
 ========================= */
-
+localStorage.setItem(
+'tengaged_user',
+j.user.username
+);
 function showLoggedUser(username){
 
 currentUser = username;
@@ -391,7 +394,14 @@ $('activity').textContent =
 'Has iniciado sesión como '+username+'.';
 
 render();
+const savedUser =
+localStorage.getItem('tengaged_user');
 
+if(savedUser){
+
+showLoggedUser(savedUser);
+
+}
 }
 
 
