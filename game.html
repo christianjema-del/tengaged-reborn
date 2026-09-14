@@ -1,1269 +1,1433 @@
 <!doctype html>
 <html lang="es">
-
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <meta charset="utf-8">
+<title>Tengaged Reborn - Partida</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  >
+<style>
 
-  <title>
-    Prueba de Inmunidad · Tengaged Reborn
-  </title>
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#eaf5fb;
+  color:#285274;
+}
 
-  <style>
+.wrap{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
 
-    body{
-      font-family:Arial,sans-serif;
-      margin:0;
-      background:#eaf5fb;
-      color:#285274;
-    }
+.card{
+  background:white;
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
 
-    .wrap{
-      max-width:900px;
-      margin:auto;
-      padding:20px;
-    }
+h1,h2,h3{
+  margin-top:0;
+}
 
-    .head{
-      background:white;
-      border-radius:14px;
-      padding:18px;
-      margin-bottom:18px;
-      box-shadow:0 3px 12px rgba(0,0,0,.08);
-    }
+.center{
+  text-align:center;
+}
 
-    .head h1{
-      margin:0 0 6px;
-    }
+.badge{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:20px;
+  background:#dff1ff;
+  margin-bottom:12px;
+  font-weight:bold;
+}
 
-    .card{
-      background:white;
-      border-radius:14px;
-      padding:25px;
-      margin-bottom:18px;
-      box-shadow:0 3px 12px rgba(0,0,0,.08);
-    }
+button{
+  border:0;
+  border-radius:10px;
+  padding:13px 20px;
+  font-size:16px;
+  cursor:pointer;
+  background:#2878b8;
+  color:white;
+}
 
-    .status{
-      padding:14px;
-      border-radius:10px;
-      background:#f1f7fa;
-      margin:15px 0;
-      text-align:center;
-      font-weight:bold;
-    }
+button:hover{
+  opacity:.9;
+}
 
-    button{
-      border:0;
-      border-radius:10px;
-      padding:14px 20px;
-      font-size:17px;
-      font-weight:bold;
-      cursor:pointer;
-    }
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
 
-    #startBtn{
-      background:#285274;
-      color:white;
-    }
+.reaction{
+  width:100%;
+  min-height:170px;
+  font-size:28px;
+  font-weight:bold;
+  background:#2878b8;
+  margin-top:20px;
+}
 
-    #reactionBtn{
-      display:none;
-      width:100%;
-      min-height:160px;
-      background:#d9534f;
-      color:white;
-      font-size:28px;
-    }
+.reaction.waiting{
+  background:#e7edf2;
+  color:#285274;
+}
 
-    #reactionBtn.green{
-      background:#24a148;
-    }
+.reaction.ready{
+  background:#39a852;
+  color:white;
+}
 
-    .result{
-      text-align:center;
-      padding:20px;
-      background:#eef9f0;
-      border-radius:12px;
-      margin-top:18px;
-    }
+.reaction.false{
+  background:#d9534f;
+  color:white;
+}
 
-    .time{
-      font-size:42px;
-      font-weight:bold;
-      margin:10px 0;
-      color:#285274;
-    }
+.hidden{
+  display:none;
+}
 
-    .ranking{
-      margin-top:20px;
-    }
+.status{
+  padding:12px;
+  border-radius:10px;
+  background:#f0f7fb;
+  margin:12px 0;
+}
 
-    .rank{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:12px 14px;
-      border-bottom:1px solid #e5e5e5;
-      gap:10px;
-    }
+.success{
+  background:#e4f8e8;
+  border:1px solid #9bd5a4;
+}
 
-    .rank:last-child{
-      border-bottom:0;
-    }
+.warning{
+  background:#fff5d9;
+  border:1px solid #ead18b;
+}
 
-    .rank strong{
-      min-width:45px;
-    }
+.danger{
+  background:#fde7e7;
+  border:1px solid #e3a0a0;
+}
 
-    .rank-time{
-      font-weight:bold;
-    }
+.winner{
+  text-align:center;
+  background:#fff4c7;
+  border:2px solid #e3bf42;
+  padding:24px;
+  border-radius:14px;
+}
 
-    .pending{
-      color:#777;
-    }
+.winner .name{
+  font-size:28px;
+  font-weight:bold;
+  margin:10px 0;
+}
 
-    .winner{
-      background:#fff7d6;
-      border-radius:10px;
-      margin-bottom:8px;
-    }
+.winner .time{
+  font-size:20px;
+}
 
-    .winner-box{
-      background:#fff4c2;
-      border:2px solid #e0b800;
-      border-radius:14px;
-      padding:22px;
-      text-align:center;
-      margin-top:18px;
-    }
+table{
+  width:100%;
+  border-collapse:collapse;
+}
 
-    .winner-box .trophy{
-      font-size:48px;
-    }
+th,td{
+  padding:10px;
+  border-bottom:1px solid #ddd;
+  text-align:left;
+}
 
-    .winner-box h2{
-      margin:8px 0;
-      color:#8a6800;
-    }
+th{
+  background:#f0f6fa;
+}
 
-    .winner-name{
-      font-size:28px;
-      font-weight:bold;
-      margin:8px 0;
-      color:#285274;
-    }
+.position{
+  font-weight:bold;
+}
 
-    .finished{
-      background:#e8f8ec;
-      border:2px solid #24a148;
-      color:#176b2c;
-    }
+.vote-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-top:18px;
+}
 
-    .error{
-      background:#ffe8e8;
-      color:#a00000;
-      padding:12px;
-      border-radius:10px;
-      margin-top:15px;
-    }
+.vote-player{
+  background:#f5f9fc;
+  border:2px solid #d5e5ef;
+  border-radius:12px;
+  padding:16px;
+  cursor:pointer;
+  text-align:center;
+  transition:.15s;
+}
 
-    .success{
-      background:#e8f8ec;
-      color:#176b2c;
-      padding:12px;
-      border-radius:10px;
-      margin-top:15px;
-    }
+.vote-player:hover{
+  border-color:#2878b8;
+  background:#edf7ff;
+}
 
-    .small{
-      color:#6d7f8a;
-      font-size:14px;
-    }
+.vote-player.selected{
+  border-color:#2878b8;
+  background:#dff1ff;
+}
 
-  </style>
+.vote-player.immune{
+  opacity:.5;
+  cursor:not-allowed;
+  border-color:#e3bf42;
+  background:#fff8da;
+}
 
+.vote-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.vote-note{
+  font-size:13px;
+  margin-top:6px;
+}
+
+.nominee{
+  background:#ffe4e4;
+  border:2px solid #d9534f;
+  border-radius:10px;
+  padding:14px;
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.small{
+  font-size:13px;
+  color:#668096;
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="wrap">
 
-  <div class="head">
+  <div class="card center">
 
-    <h1>
+    <div class="badge">
       🎮 Tengaged Reborn
+    </div>
+
+    <h1 id="title">
+      Cargando partida...
     </h1>
 
-    <div>
-      Jugador:
-      <strong id="username">
-        admin1
-      </strong>
+    <div id="phaseText">
+      Conectando con el servidor...
     </div>
 
   </div>
 
 
-  <div class="card">
+  <!-- =====================================================
+       INMUNIDAD
+       ===================================================== -->
 
-    <h2>
-      🏆 Prueba de Inmunidad
-    </h2>
+  <div id="immunitySection">
 
-    <p>
-      Casting #1 · Primera prueba de la partida
-    </p>
+    <div class="card">
 
+      <h2>🏆 Prueba de Inmunidad</h2>
 
-    <div
-      id="status"
-      class="status"
-    >
-      ⚡ Prepárate...
-      <br>
+      <p>
+        Cuando aparezca <b>¡AHORA!</b>, pulsa el botón
+        lo más rápido posible.
+      </p>
 
-      <span class="small">
-        Pulsa «Comenzar prueba» y espera.
-        Cuando el botón verde aparezca,
-        pulsa lo más rápido posible.
-      </span>
+      <div id="immunityStatus"
+           class="status">
+        Preparando prueba...
+      </div>
+
+      <button
+        id="startButton"
+        onclick="startReaction()">
+        ▶️ Comenzar prueba
+      </button>
+
+      <button
+        id="reactionButton"
+        class="reaction hidden"
+        onclick="react()">
+        ESPERA...
+      </button>
+
+      <div id="reactionResult"
+           class="status hidden">
+      </div>
 
     </div>
 
 
-    <button id="startBtn">
-      ⚡ Comenzar prueba
-    </button>
+    <div class="card">
+
+      <h2>🏅 Clasificación</h2>
+
+      <div id="ranking">
+        Cargando...
+      </div>
+
+    </div>
 
 
-    <button id="reactionBtn">
-      ESPERA...
-    </button>
+    <div class="card">
 
+      <h2>⏳ Pendientes</h2>
 
-    <div id="message"></div>
+      <div id="pending">
+        Cargando...
+      </div>
 
-    <div id="result"></div>
-
-  </div>
-
-
-  <div
-    id="winnerArea"
-    class="card"
-    style="display:none"
-  >
-  </div>
-
-
-  <div class="card">
-
-    <h2>
-      🏅 Clasificación
-    </h2>
-
-    <div id="ranking">
-      Cargando clasificación...
     </div>
 
   </div>
+
+
+  <!-- =====================================================
+       GANADOR INMUNIDAD
+       ===================================================== -->
+
+  <div id="immunityWinnerSection"
+       class="card hidden">
+
+    <div id="immunityWinner">
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       NOMINACIONES
+       ===================================================== -->
+
+  <div id="nominationsSection"
+       class="hidden">
+
+    <div class="card">
+
+      <h2>🗳️ Nominaciones</h2>
+
+      <div id="nominationInfo"
+           class="status">
+      </div>
+
+      <div id="voteArea">
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>📊 Votos</h2>
+
+      <div id="voteRanking">
+        Todavía no hay votos.
+      </div>
+
+    </div>
+
+
+    <div id="nomineesCard"
+         class="card hidden">
+
+      <h2>🚨 Nominados</h2>
+
+      <div id="nominees">
+      </div>
+
+    </div>
+
+  </div>
+
 
 </div>
 
 
 <script>
 
-const username =
+let username =
   localStorage.getItem("username") ||
   localStorage.getItem("currentUser") ||
   "admin1";
 
-
-document.getElementById(
-  "username"
-).textContent = username;
-
-
-const startBtn =
-  document.getElementById("startBtn");
-
-const reactionBtn =
-  document.getElementById("reactionBtn");
-
-const statusBox =
-  document.getElementById("status");
-
-const messageBox =
-  document.getElementById("message");
-
-const resultBox =
-  document.getElementById("result");
-
-const rankingBox =
-  document.getElementById("ranking");
-
-const winnerArea =
-  document.getElementById("winnerArea");
-
-
+let reactionTimer = null;
 let reactionStart = null;
-
-let waiting = false;
-
-let finished = false;
-
-let timer = null;
+let canReact = false;
+let selectedVote = null;
+let alreadyVoted = false;
 
 
-// =====================================================
-// CARGAR PARTIDA
-// =====================================================
+// =========================================================
+// ESCAPAR HTML
+// =========================================================
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+// =========================================================
+// CARGAR DATOS
+// =========================================================
 
 async function loadGame(){
 
   try{
 
     const response =
-      await fetch(
-        "/api/game",
-        {
-          method:"GET",
-          cache:"no-store"
-        }
-      );
+      await fetch("/api/game");
+
+    const data =
+      await response.json();
+
+    if(!response.ok || !data.ok){
+
+      document.getElementById("title")
+        .textContent =
+        "Error";
+
+      document.getElementById("phaseText")
+        .textContent =
+        data.message ||
+        "No se pudo cargar la partida.";
+
+      return;
+    }
+
+    renderGame(data);
+
+  }catch(error){
+
+    document.getElementById("title")
+      .textContent =
+      "Error de conexión";
+
+    document.getElementById("phaseText")
+      .textContent =
+      "No se pudo conectar con el servidor.";
+  }
+
+}
+
+
+// =========================================================
+// RENDER GENERAL
+// =========================================================
+
+function renderGame(data){
+
+  if(data.phase === "immunity"){
+
+    renderImmunity(data);
+
+    return;
+  }
+
+  if(data.phase === "nominations"){
+
+    renderNominations(data);
+
+    return;
+  }
+
+}
+
+
+// =========================================================
+// INMUNIDAD
+// =========================================================
+
+function renderImmunity(data){
+
+  document.getElementById("title")
+    .textContent =
+    "🏆 Prueba de Inmunidad";
+
+  document.getElementById("phaseText")
+    .textContent =
+    "Todos los jugadores deben completar la prueba.";
+
+  document.getElementById("immunitySection")
+    .classList.remove("hidden");
+
+  document.getElementById("nominationsSection")
+    .classList.add("hidden");
+
+
+  // GANADOR SI EXISTE
+
+  if(data.winner){
+
+    document.getElementById(
+      "immunityWinnerSection"
+    ).classList.remove("hidden");
+
+    document.getElementById(
+      "immunityWinner"
+    ).innerHTML = `
+
+      <div class="winner">
+
+        <div>
+          🏆 INMUNIDAD CONSEGUIDA
+        </div>
+
+        <div class="name">
+          ${escapeHtml(data.winner.username)}
+        </div>
+
+        <div class="time">
+          Tiempo ganador:
+          <b>${data.winner.reaction_ms} ms</b>
+        </div>
+
+      </div>
+    `;
+  }
+
+
+  renderRanking(data);
+  renderPending(data);
+
+}
+
+
+// =========================================================
+// CLASIFICACIÓN
+// =========================================================
+
+function renderRanking(data){
+
+  const container =
+    document.getElementById("ranking");
+
+  if(!data.ranking ||
+     data.ranking.length === 0){
+
+    container.innerHTML =
+      "<div class='small'>Todavía no hay tiempos registrados.</div>";
+
+    return;
+  }
+
+  let html = `
+    <table>
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Jugador</th>
+          <th>Tiempo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+  `;
+
+  data.ranking.forEach(player => {
+
+    html += `
+
+      <tr>
+
+        <td class="position">
+          ${player.position}
+        </td>
+
+        <td>
+          ${escapeHtml(player.username)}
+        </td>
+
+        <td>
+          ${player.reaction_ms} ms
+        </td>
+
+      </tr>
+    `;
+
+  });
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+  container.innerHTML = html;
+
+}
+
+
+// =========================================================
+// PENDIENTES
+// =========================================================
+
+function renderPending(data){
+
+  const container =
+    document.getElementById("pending");
+
+  if(!data.pending ||
+     data.pending.length === 0){
+
+    container.innerHTML =
+      `
+      <div class="status success">
+        ✅ Todos han completado la prueba.
+      </div>
+      `;
+
+    return;
+  }
+
+  container.innerHTML =
+    data.pending
+      .map(player => `
+        <div class="status">
+          ⏳ ${escapeHtml(player.username)}
+        </div>
+      `)
+      .join("");
+
+}
+
+
+// =========================================================
+// COMENZAR REACCIÓN
+// =========================================================
+
+function startReaction(){
+
+  const startButton =
+    document.getElementById("startButton");
+
+  const reactionButton =
+    document.getElementById("reactionButton");
+
+  const status =
+    document.getElementById("immunityStatus");
+
+  const result =
+    document.getElementById("reactionResult");
+
+
+  startButton.disabled = true;
+
+  result.classList.add("hidden");
+
+  reactionButton.className =
+    "reaction";
+
+  reactionButton.textContent =
+    "ESPERA...";
+
+  reactionButton.classList.remove(
+    "hidden"
+  );
+
+  canReact = false;
+
+  status.textContent =
+    "⏳ Espera...";
+
+
+  const delay =
+    1500 +
+    Math.random() * 3500;
+
+
+  reactionTimer =
+    setTimeout(() => {
+
+      canReact = true;
+
+      reactionStart =
+        performance.now();
+
+      reactionButton.className =
+        "reaction ready";
+
+      reactionButton.textContent =
+        "🚨 ¡AHORA!";
+
+      status.textContent =
+        "🔥 ¡PULSA AHORA!";
+
+    },delay);
+
+}
+
+
+// =========================================================
+// REACCIÓN
+// =========================================================
+
+async function react(){
+
+  const reactionButton =
+    document.getElementById("reactionButton");
+
+  const status =
+    document.getElementById("immunityStatus");
+
+  const result =
+    document.getElementById("reactionResult");
+
+
+  // FALSA SALIDA
+
+  if(!canReact){
+
+    clearTimeout(reactionTimer);
+
+    reactionButton.className =
+      "reaction false";
+
+    reactionButton.textContent =
+      "❌ SALIDA FALSA";
+
+    status.textContent =
+      "Has pulsado demasiado pronto.";
+
+    result.className =
+      "status danger";
+
+    result.textContent =
+      "❌ No se registra ningún tiempo. Puedes volver a intentarlo.";
+
+    result.classList.remove("hidden");
+
+    document.getElementById("startButton")
+      .disabled = false;
+
+    return;
+  }
+
+
+  canReact = false;
+
+
+  const reactionMs =
+    Math.round(
+      performance.now() -
+      reactionStart
+    );
+
+
+  reactionButton.disabled = true;
+
+  reactionButton.textContent =
+    reactionMs + " ms";
+
+  status.textContent =
+    "💾 Guardando resultado...";
+
+
+  try{
+
+    const response =
+      await fetch("/api/game",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:JSON.stringify({
+
+          username:username,
+
+          reaction_ms:reactionMs
+
+        })
+
+      });
 
 
     const data =
       await response.json();
 
 
-    if(
-      !response.ok ||
-      !data.ok
-    ){
+    if(!response.ok || !data.ok){
 
-      messageBox.innerHTML =
-        `
-        <div class="error">
-          ${
-            escapeHtml(
-              data.message ||
-              "No se pudo cargar la partida."
-            )
-          }
-        </div>
-        `;
+      result.className =
+        "status danger";
 
-      return;
+      result.textContent =
+        data.message ||
+        "No se pudo guardar.";
 
-    }
-
-
-    renderRanking(data);
-
-
-    // =================================================
-    // SI LA PRUEBA YA TERMINÓ
-    // =================================================
-
-    if(data.finished){
-
-      finished = true;
-
-      waiting = false;
-
-      clearTimeout(timer);
-
-
-      startBtn.style.display = "none";
-
-      reactionBtn.style.display = "none";
-
-
-      statusBox.className =
-        "status finished";
-
-
-      statusBox.innerHTML =
-        `
-        🏆 PRUEBA DE INMUNIDAD TERMINADA
-        <br>
-        <span class="small">
-          La inmunidad ya ha sido concedida.
-        </span>
-        `;
-
-
-      renderWinner(data);
-
-
-      const myResult =
-        (data.ranking || []).find(
-          player =>
-            String(
-              player.username
-            ).toLowerCase() ===
-            String(
-              username
-            ).toLowerCase()
-        );
-
-
-      if(myResult){
-
-        const isWinner =
-          data.winner &&
-          String(
-            data.winner.username
-          ).toLowerCase() ===
-          String(
-            username
-          ).toLowerCase();
-
-
-        resultBox.innerHTML =
-          `
-          <div class="result">
-
-            ${
-              isWinner
-                ? `
-                  <div>
-                    🏆
-                    <strong>
-                      ¡HAS GANADO LA INMUNIDAD!
-                    </strong>
-                  </div>
-                `
-                : `
-                  <div>
-                    Tu tiempo
-                  </div>
-                `
-            }
-
-            <div class="time">
-              ${myResult.reaction_ms} ms
-            </div>
-
-          </div>
-          `;
-
-      }
-
-      return;
-
-    }
-
-
-    // =================================================
-    // MI RESULTADO SI TODAVÍA NO HA TERMINADO
-    // =================================================
-
-    const myResult =
-      (data.ranking || []).find(
-        player =>
-          String(
-            player.username
-          ).toLowerCase() ===
-          String(
-            username
-          ).toLowerCase()
+      result.classList.remove(
+        "hidden"
       );
 
+      reactionButton.disabled =
+        false;
 
-    if(myResult){
-
-      finished = true;
-
-      startBtn.style.display = "none";
-
-      reactionBtn.style.display = "none";
-
-
-      statusBox.innerHTML =
-        "✅ Prueba completada";
-
-
-      resultBox.innerHTML =
-        `
-        <div class="result">
-
-          <div>
-            Tu tiempo
-          </div>
-
-          <div class="time">
-            ${myResult.reaction_ms} ms
-          </div>
-
-          <div>
-            Esperando al resto de jugadores...
-          </div>
-
-        </div>
-        `;
-
+      return;
     }
 
-  }
-  catch(error){
 
-    messageBox.innerHTML =
-      `
-      <div class="error">
-        Error conectando con la partida.
-      </div>
-      `;
+    result.className =
+      "status success";
 
+    result.textContent =
+      data.message ||
+      "¡Tiempo registrado!";
+
+    result.classList.remove(
+      "hidden"
+    );
+
+
+    // Si ya terminó inmunidad,
+    // renderizamos inmediatamente
+    // las nominaciones.
+
+    if(data.phase === "nominations"){
+
+      setTimeout(() => {
+
+        renderGame(data);
+
+      },800);
+
+      return;
+    }
+
+
+    reactionButton.classList.add(
+      "waiting"
+    );
+
+
+    loadGame();
+
+  }catch(error){
+
+    result.className =
+      "status danger";
+
+    result.textContent =
+      "Error de conexión.";
+
+    result.classList.remove(
+      "hidden"
+    );
+
+    reactionButton.disabled =
+      false;
   }
 
 }
 
 
-// =====================================================
-// COMENZAR PRUEBA
-// =====================================================
+// =========================================================
+// NOMINACIONES
+// =========================================================
 
-startBtn.addEventListener(
-  "click",
-  () => {
+function renderNominations(data){
 
-    if(
-      finished ||
-      waiting
-    ){
+  document.getElementById("title")
+    .textContent =
+    "🗳️ Fase de Nominaciones";
 
-      return;
-
-    }
+  document.getElementById("phaseText")
+    .textContent =
+    "Cada jugador debe emitir un voto.";
 
 
-    messageBox.innerHTML = "";
-
-    resultBox.innerHTML = "";
-
-
-    startBtn.style.display =
-      "none";
+  document.getElementById("immunitySection")
+    .classList.add("hidden");
 
 
-    reactionBtn.style.display =
-      "block";
+  document.getElementById(
+    "immunityWinnerSection"
+  ).classList.remove("hidden");
 
 
-    reactionBtn.classList.remove(
-      "green"
+  if(data.winner){
+
+    document.getElementById(
+      "immunityWinner"
+    ).innerHTML = `
+
+      <div class="winner">
+
+        <div>
+          🛡️ JUGADOR INMUNE
+        </div>
+
+        <div class="name">
+          ${escapeHtml(data.winner.username)}
+        </div>
+
+        <div class="time">
+          Tiene inmunidad y no puede ser nominado.
+        </div>
+
+      </div>
+
+    `;
+  }
+
+
+  document.getElementById(
+    "nominationsSection"
+  ).classList.remove("hidden");
+
+
+  renderNominationInfo(data);
+
+  renderVoteArea(data);
+
+  renderVoteRanking(data);
+
+  renderNominees(data);
+
+}
+
+
+// =========================================================
+// INFORMACIÓN DE VOTACIÓN
+// =========================================================
+
+function renderNominationInfo(data){
+
+  const info =
+    document.getElementById(
+      "nominationInfo"
     );
 
 
-    reactionBtn.disabled =
-      false;
+  if(data.status === "finished"){
 
+    info.className =
+      "status success";
 
-    reactionBtn.textContent =
-      "ESPERA...";
+    info.innerHTML =
+      `
+      🗳️ <b>Votación cerrada.</b><br>
+      Todos los jugadores han votado.
+      `;
 
-
-    waiting = true;
-
-    reactionStart = null;
-
-
-    statusBox.className =
-      "status";
-
-
-    statusBox.innerHTML =
-      "⚡ Espera al botón verde...";
-
-
-    const delay =
-      Math.floor(
-        Math.random() * 3500
-      ) + 1500;
-
-
-    timer =
-      setTimeout(
-        () => {
-
-          reactionStart =
-            performance.now();
-
-
-          reactionBtn.classList.add(
-            "green"
-          );
-
-
-          reactionBtn.textContent =
-            "🟢 ¡PULSA AHORA!";
-
-
-          statusBox.innerHTML =
-            "🟢 ¡AHORA!";
-
-        },
-        delay
-      );
-
+    return;
   }
-);
 
 
-// =====================================================
-// PULSAR BOTÓN
-// =====================================================
+  info.className =
+    "status";
 
-reactionBtn.addEventListener(
-  "click",
-  async () => {
+  info.innerHTML = `
 
-    if(
-      !waiting ||
-      finished
-    ){
+    🗳️ Votos registrados:
+    <b>${data.totalVotes}</b>
+    /
+    <b>${data.totalPlayers}</b>
 
-      return;
+    <br><br>
 
-    }
+    ⏳ Pendientes:
+    <b>${data.pendingVotes.length}</b>
 
+  `;
 
-    // -----------------------------------------------
-    // FALSA SALIDA
-    // -----------------------------------------------
-
-    if(!reactionStart){
-
-      clearTimeout(timer);
+}
 
 
-      waiting = false;
+// =========================================================
+// ÁREA PARA VOTAR
+// =========================================================
+
+function renderVoteArea(data){
+
+  const area =
+    document.getElementById(
+      "voteArea"
+    );
 
 
-      reactionBtn.style.display =
-        "none";
+  if(data.status === "finished"){
+
+    area.innerHTML = `
+
+      <div class="status success">
+
+        ✅ La votación ha terminado.
+
+        <br><br>
+
+        Ya no se pueden emitir más votos.
+
+      </div>
+    `;
+
+    return;
+  }
 
 
-      startBtn.style.display =
-        "inline-block";
+  const currentVote =
+    data.votes.find(
+      vote =>
+        vote.username.toLowerCase() ===
+        username.toLowerCase()
+    );
 
 
-      statusBox.innerHTML =
-        "❌ ¡Demasiado pronto!";
+  if(currentVote){
+
+    alreadyVoted = true;
+
+    area.innerHTML = `
+
+      <div class="status success">
+
+        ✅ Ya has votado.
+
+        <br><br>
+
+        Tu voto ha sido registrado.
+
+      </div>
+
+    `;
+
+    return;
+  }
 
 
-      messageBox.innerHTML =
-        `
-        <div class="error">
+  alreadyVoted = false;
 
-          Has pulsado antes
-          de que apareciera el verde.
 
-          <br><br>
+  let html = `
 
-          Inténtalo otra vez.
+    <p>
+      Selecciona al jugador que quieres nominar:
+    </p>
+
+    <div class="vote-grid">
+  `;
+
+
+  data.players.forEach(player => {
+
+    const isImmune =
+      data.winner &&
+      player.username.toLowerCase() ===
+      data.winner.username.toLowerCase();
+
+
+    if(isImmune){
+
+      html += `
+
+        <div class="vote-player immune">
+
+          <div class="vote-name">
+            🛡️ ${escapeHtml(player.username)}
+          </div>
+
+          <div class="vote-note">
+            Inmune
+          </div>
 
         </div>
-        `;
+      `;
 
       return;
-
     }
 
 
-    // -----------------------------------------------
-    // CALCULAR TIEMPO
-    // -----------------------------------------------
+    html += `
 
-    const reactionMs =
-      Math.round(
-        performance.now() -
-        reactionStart
+      <div
+        class="vote-player"
+        id="vote-${escapeHtml(player.username)}"
+        onclick="selectVote('${escapeHtml(player.username)}')">
+
+        <div class="vote-name">
+          ${escapeHtml(player.username)}
+        </div>
+
+        <div class="vote-note">
+          🗳️ Nominar
+        </div>
+
+      </div>
+    `;
+
+  });
+
+
+  html += `
+    </div>
+
+    <div style="margin-top:20px">
+
+      <button
+        id="submitVoteButton"
+        disabled
+        onclick="submitVote()">
+
+        🗳️ Confirmar nominación
+
+      </button>
+
+    </div>
+  `;
+
+
+  area.innerHTML = html;
+
+}
+
+
+// =========================================================
+// SELECCIONAR VOTO
+// =========================================================
+
+function selectVote(target){
+
+  if(alreadyVoted){
+    return;
+  }
+
+
+  selectedVote =
+    target;
+
+
+  document
+    .querySelectorAll(".vote-player")
+    .forEach(element => {
+
+      element.classList.remove(
+        "selected"
       );
 
-
-    waiting = false;
-
-    finished = true;
+    });
 
 
-    reactionBtn.disabled =
+  const selected =
+    document.getElementById(
+      "vote-" + target
+    );
+
+
+  if(selected){
+
+    selected.classList.add(
+      "selected"
+    );
+  }
+
+
+  const button =
+    document.getElementById(
+      "submitVoteButton"
+    );
+
+
+  if(button){
+
+    button.disabled =
+      false;
+  }
+
+}
+
+
+// =========================================================
+// ENVIAR VOTO
+// =========================================================
+
+async function submitVote(){
+
+  if(!selectedVote ||
+     alreadyVoted){
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "submitVoteButton"
+    );
+
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "💾 Guardando voto...";
+
+
+  try{
+
+    const response =
+      await fetch("/api/game",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:JSON.stringify({
+
+          username:username,
+
+          vote_target:selectedVote
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok || !data.ok){
+
+      alert(
+        data.message ||
+        "No se pudo registrar el voto."
+      );
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "🗳️ Confirmar nominación";
+
+      return;
+    }
+
+
+    selectedVote =
+      null;
+
+    alreadyVoted =
       true;
 
 
-    statusBox.innerHTML =
-      "⏳ Guardando tu tiempo...";
+    renderGame(data);
 
+  }catch(error){
 
-    reactionBtn.textContent =
-      reactionMs + " ms";
+    alert(
+      "Error de conexión."
+    );
 
+    button.disabled =
+      false;
 
-    try{
-
-      const response =
-        await fetch(
-          "/api/game",
-          {
-
-            method:"POST",
-
-            headers:{
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-
-                username:
-                  username,
-
-                reaction_ms:
-                  reactionMs
-
-              })
-
-          }
-        );
-
-
-      const data =
-        await response.json();
-
-
-      if(
-        !response.ok ||
-        !data.ok
-      ){
-
-        finished = false;
-
-
-        reactionBtn.disabled =
-          false;
-
-
-        reactionBtn.style.display =
-          "none";
-
-
-        startBtn.style.display =
-          "inline-block";
-
-
-        statusBox.innerHTML =
-          "❌ No se ha podido guardar";
-
-
-        messageBox.innerHTML =
-          `
-          <div class="error">
-
-            ${
-              escapeHtml(
-                data.message ||
-                "Error guardando el tiempo."
-              )
-            }
-
-          </div>
-          `;
-
-        return;
-
-      }
-
-
-      // ---------------------------------------------
-      // PRUEBA FINALIZADA
-      // ---------------------------------------------
-
-      if(data.finished){
-
-        finished = true;
-
-
-        reactionBtn.style.display =
-          "none";
-
-
-        startBtn.style.display =
-          "none";
-
-
-        statusBox.className =
-          "status finished";
-
-
-        statusBox.innerHTML =
-          `
-          🏆 PRUEBA TERMINADA
-          <br>
-          <span class="small">
-            Se ha concedido la inmunidad.
-          </span>
-          `;
-
-
-        renderWinner(data);
-
-
-        const isWinner =
-          data.winner &&
-          String(
-            data.winner.username
-          ).toLowerCase() ===
-          String(
-            username
-          ).toLowerCase();
-
-
-        resultBox.innerHTML =
-          `
-          <div class="result">
-
-            ${
-              isWinner
-                ? `
-                  <div>
-                    🏆
-                    <strong>
-                      ¡HAS GANADO LA INMUNIDAD!
-                    </strong>
-                  </div>
-                `
-                : `
-                  <div>
-                    Tu tiempo
-                  </div>
-                `
-            }
-
-            <div class="time">
-              ${reactionMs} ms
-            </div>
-
-          </div>
-          `;
-
-
-        messageBox.innerHTML =
-          `
-          <div class="success">
-
-            🏆
-            La prueba ha terminado.
-            La inmunidad pertenece a
-            <strong>
-              ${escapeHtml(
-                data.winner.username
-              )}
-            </strong>.
-
-          </div>
-          `;
-
-      }
-      else{
-
-        statusBox.innerHTML =
-          "✅ Prueba completada";
-
-
-        messageBox.innerHTML =
-          `
-          <div class="success">
-
-            Tu tiempo ha quedado
-            registrado correctamente.
-
-          </div>
-          `;
-
-
-        resultBox.innerHTML =
-          `
-          <div class="result">
-
-            <div>
-              ⏱️ Tu tiempo
-            </div>
-
-            <div class="time">
-              ${reactionMs} ms
-            </div>
-
-            <div>
-              Esperando al resto
-              de jugadores...
-            </div>
-
-          </div>
-          `;
-
-      }
-
-
-      renderRanking(data);
-
-
-    }
-    catch(error){
-
-      finished = false;
-
-
-      reactionBtn.disabled =
-        false;
-
-
-      reactionBtn.style.display =
-        "none";
-
-
-      startBtn.style.display =
-        "inline-block";
-
-
-      statusBox.innerHTML =
-        "❌ Error de conexión";
-
-
-      messageBox.innerHTML =
-        `
-        <div class="error">
-
-          No se pudo contactar
-          con el servidor.
-
-        </div>
-        `;
-
-    }
-
+    button.textContent =
+      "🗳️ Confirmar nominación";
   }
-);
-
-
-// =====================================================
-// MOSTRAR GANADOR
-// =====================================================
-
-function renderWinner(data){
-
-  if(
-    !data.finished ||
-    !data.winner
-  ){
-
-    winnerArea.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  winnerArea.style.display =
-    "block";
-
-
-  winnerArea.innerHTML =
-    `
-    <div class="winner-box">
-
-      <div class="trophy">
-        🏆
-      </div>
-
-      <h2>
-        INMUNIDAD CONSEGUIDA
-      </h2>
-
-      <div class="winner-name">
-        ${escapeHtml(
-          data.winner.username
-        )}
-      </div>
-
-      <div>
-        Tiempo ganador:
-        <strong>
-          ${data.winner.reaction_ms} ms
-        </strong>
-      </div>
-
-      <br>
-
-      <div class="small">
-        La prueba está oficialmente cerrada.
-      </div>
-
-    </div>
-    `;
 
 }
 
 
-// =====================================================
-// CLASIFICACIÓN
-// =====================================================
+// =========================================================
+// CLASIFICACIÓN DE VOTOS
+// =========================================================
 
-function renderRanking(data){
+function renderVoteRanking(data){
 
-  const ranking =
-    data.ranking || [];
-
-  const pending =
-    data.pending || [];
-
-
-  let html = "";
+  const container =
+    document.getElementById(
+      "voteRanking"
+    );
 
 
-  if(ranking.length === 0){
+  if(!data.voteRanking ||
+     data.voteRanking.length === 0){
 
-    html +=
+    container.innerHTML =
       `
       <div class="small">
-
-        Todavía nadie ha completado
-        la prueba.
-
+        Todavía no hay votos registrados.
       </div>
       `;
 
-  }
-  else{
-
-    ranking.forEach(
-      player => {
-
-        let medal = "";
-
-
-        if(
-          player.position === 1
-        ){
-
-          medal = "🥇";
-
-        }
-        else if(
-          player.position === 2
-        ){
-
-          medal = "🥈";
-
-        }
-        else if(
-          player.position === 3
-        ){
-
-          medal = "🥉";
-
-        }
-        else{
-
-          medal =
-            player.position +
-            "º";
-
-        }
-
-
-        const winnerClass =
-          player.position === 1
-            ? "winner"
-            : "";
-
-
-        html +=
-          `
-          <div
-            class="rank ${winnerClass}"
-          >
-
-            <strong>
-              ${medal}
-            </strong>
-
-            <span>
-              ${escapeHtml(
-                player.username
-              )}
-            </span>
-
-            <span class="rank-time">
-
-              ${player.reaction_ms}
-              ms
-
-            </span>
-
-          </div>
-          `;
-
-      }
-    );
-
+    return;
   }
 
 
-  // -----------------------------------------------
-  // PENDIENTES
-  // -----------------------------------------------
+  let html = `
 
-  if(
-    pending.length > 0 &&
-    !data.finished
-  ){
+    <table>
 
-    html +=
-      `
-      <div
-        style="margin-top:18px"
-      >
+      <thead>
 
-        <strong>
-          ⏳ Pendientes
-        </strong>
+        <tr>
+          <th>Jugador</th>
+          <th>Votos</th>
+        </tr>
 
-      </div>
-      `;
+      </thead>
+
+      <tbody>
+  `;
 
 
-    pending.forEach(
-      player => {
+  data.voteRanking.forEach(player => {
 
-        html +=
-          `
-          <div class="rank pending">
+    html += `
 
-            <strong>
-              ⏳
-            </strong>
+      <tr>
 
-            <span>
-              ${escapeHtml(
-                player.username
-              )}
-            </span>
+        <td>
+          ${escapeHtml(player.username)}
+        </td>
 
-            <span>
-              Pendiente
-            </span>
+        <td>
+          <b>${player.votes}</b>
+        </td>
 
-          </div>
-          `;
+      </tr>
 
-      }
-    );
+    `;
 
-  }
+  });
 
 
-  if(data.finished){
+  html += `
 
-    html +=
-      `
-      <div
-        class="success"
-        style="margin-top:18px"
-      >
+      </tbody>
 
-        🏆
-        Todos los jugadores han
-        completado la prueba.
-
-        <br>
-
-        La clasificación ha quedado cerrada.
-
-      </div>
-      `;
-
-  }
+    </table>
+  `;
 
 
-  rankingBox.innerHTML =
+  container.innerHTML =
     html;
 
 }
 
 
-// =====================================================
-// SEGURIDAD HTML
-// =====================================================
+// =========================================================
+// NOMINADOS
+// =========================================================
 
-function escapeHtml(value){
+function renderNominees(data){
 
-  return String(value)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
+  const card =
+    document.getElementById(
+      "nomineesCard"
     );
+
+  const container =
+    document.getElementById(
+      "nominees"
+    );
+
+
+  if(
+    data.status !== "finished" ||
+    !data.nominees ||
+    data.nominees.length === 0
+  ){
+
+    card.classList.add(
+      "hidden"
+    );
+
+    return;
+  }
+
+
+  card.classList.remove(
+    "hidden"
+  );
+
+
+  let html = `
+
+    <div class="status danger">
+
+      🚨 La votación ha terminado.
+
+      <br>
+
+      Los siguientes jugadores quedan nominados:
+
+    </div>
+  `;
+
+
+  data.nominees.forEach(player => {
+
+    html += `
+
+      <div class="nominee">
+
+        🚨 ${escapeHtml(player.username)}
+
+        <br>
+
+        <span class="small">
+          ${player.votes} voto(s)
+        </span>
+
+      </div>
+
+    `;
+
+  });
+
+
+  container.innerHTML =
+    html;
 
 }
 
 
-// =====================================================
-// CARGA INICIAL
-// =====================================================
+// =========================================================
+// ACTUALIZACIÓN AUTOMÁTICA
+// =========================================================
+
+setInterval(() => {
+
+  loadGame();
+
+},5000);
+
+
+// =========================================================
+// INICIO
+// =========================================================
 
 loadGame();
-
-
-// =====================================================
-// ACTUALIZACIÓN AUTOMÁTICA
-// =====================================================
-
-setInterval(
-  () => {
-
-    if(!waiting){
-
-      loadGame();
-
-    }
-
-  },
-  5000
-);
 
 </script>
 
 </body>
-
 </html>
