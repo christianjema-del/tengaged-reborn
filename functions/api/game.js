@@ -3,7 +3,6 @@ export async function onRequest(context) {
   const db = context.env.DB;
 
   try {
-    // Tabla de acciones de la partida
     await db.prepare(`
       CREATE TABLE IF NOT EXISTS game_actions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,18 +15,19 @@ export async function onRequest(context) {
       )
     `).run();
 
-    // Añadimos la columna si la tabla antigua ya existía
+    // Añadir reaction_ms si la tabla antigua no lo tenía
     try {
       await db.prepare(`
         ALTER TABLE game_actions ADD COLUMN reaction_ms INTEGER
       `).run();
     } catch (e) {
-      // La columna ya existe. No hacemos nada.
+      // Ya existe
     }
 
     // =========================
     // GET
     // =========================
+
     if (request.method === "GET") {
 
       const room = await db.prepare(`
@@ -63,15 +63,14 @@ export async function onRequest(context) {
         FROM game_actions
         WHERE casting_id = 1
         AND action_type = 'immunity'
-        ORDER BY
-          CASE WHEN reaction_ms IS NULL THEN 1 ELSE 0 END,
-          reaction_ms ASC,
-          id ASC
+        AND reaction_ms IS NOT NULL
+        AND reaction_ms > 0
+        ORDER BY reaction_ms ASC, id ASC
       `).all();
 
       return Response.json({
         ok: true,
-        room: room,
+        room,
         players: players.results || [],
         participants: participants.results || [],
         phase: "immunity"
@@ -81,11 +80,13 @@ export async function onRequest(context) {
     // =========================
     // POST
     // =========================
+
     if (request.method === "POST") {
 
       const data = await request.json();
 
       const username = String(data.username || "").trim();
+      const reactionMs = Number(data.reaction_ms);
 
       if (!username) {
         return Response.json({
@@ -94,16 +95,14 @@ export async function onRequest(context) {
         }, { status: 400 });
       }
 
-      const reactionMs = Number(data.reaction_ms);
-
       if (
         !Number.isFinite(reactionMs) ||
-        reactionMs < 1 ||
-        reactionMs > 60000
+        reactionMs < 100 ||
+        reactionMs > 10000
       ) {
         return Response.json({
           ok: false,
-          message: "El tiempo de reacción no es válido."
+          message: "Tiempo de reacción no válido."
         }, { status: 400 });
       }
 
@@ -144,11 +143,13 @@ export async function onRequest(context) {
       }
 
       const existing = await db.prepare(`
-        SELECT id, username, reaction_ms, created_at
+        SELECT id, username, reaction_ms
         FROM game_actions
         WHERE casting_id = 1
         AND LOWER(username) = LOWER(?)
         AND action_type = 'immunity'
+        AND reaction_ms IS NOT NULL
+        AND reaction_ms > 0
         LIMIT 1
       `).bind(player.username).first();
 
@@ -159,10 +160,9 @@ export async function onRequest(context) {
           FROM game_actions
           WHERE casting_id = 1
           AND action_type = 'immunity'
-          ORDER BY
-            CASE WHEN reaction_ms IS NULL THEN 1 ELSE 0 END,
-            reaction_ms ASC,
-            id ASC
+          AND reaction_ms IS NOT NULL
+          AND reaction_ms > 0
+          ORDER BY reaction_ms ASC, id ASC
         `).all();
 
         return Response.json({
@@ -173,34 +173,59 @@ export async function onRequest(context) {
         });
       }
 
-      await db.prepare(`
-        INSERT INTO game_actions (
-          casting_id,
-          username,
-          action_type,
-          reaction_ms
-        )
-        VALUES (1, ?, 'immunity', ?)
-      `).bind(
-        player.username,
-        Math.round(reactionMs)
-      ).run();
+      // Si existe una fila antigua con 0/null, la reutilizamos
+      const oldRow = await db.prepare(`
+        SELECT id
+        FROM game_actions
+        WHERE casting_id = 1
+        AND LOWER(username) = LOWER(?)
+        AND action_type = 'immunity'
+        LIMIT 1
+      `).bind(player.username).first();
+
+      if (oldRow) {
+
+        await db.prepare(`
+          UPDATE game_actions
+          SET reaction_ms = ?,
+              created_at = CURRENT_TIMESTAMP
+          WHERE id = ?
+        `).bind(
+          Math.round(reactionMs),
+          oldRow.id
+        ).run();
+
+      } else {
+
+        await db.prepare(`
+          INSERT INTO game_actions (
+            casting_id,
+            username,
+            action_type,
+            reaction_ms
+          )
+          VALUES (1, ?, 'immunity', ?)
+        `).bind(
+          player.username,
+          Math.round(reactionMs)
+        ).run();
+      }
 
       const participants = await db.prepare(`
         SELECT username, reaction_ms, created_at
         FROM game_actions
         WHERE casting_id = 1
         AND action_type = 'immunity'
-        ORDER BY
-          CASE WHEN reaction_ms IS NULL THEN 1 ELSE 0 END,
-          reaction_ms ASC,
-          id ASC
+        AND reaction_ms IS NOT NULL
+        AND reaction_ms > 0
+        ORDER BY reaction_ms ASC, id ASC
       `).all();
 
-      const winner = participants.results &&
+      const winner =
+        participants.results &&
         participants.results.length > 0
-        ? participants.results[0]
-        : null;
+          ? participants.results[0]
+          : null;
 
       return Response.json({
         ok: true,
@@ -208,7 +233,7 @@ export async function onRequest(context) {
         message: "¡Tiempo registrado!",
         reaction_ms: Math.round(reactionMs),
         participants: participants.results || [],
-        winner: winner
+        winner
       });
     }
 
