@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="es">
 
@@ -6,18 +5,19 @@
 
 <meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Tengaged Reborn - Sala</title>
 
 <style>
 
+*{
+  box-sizing:border-box;
+}
+
 body{
-  font-family:Arial,sans-serif;
   margin:0;
+  font-family:Arial,sans-serif;
   background:#eaf5fb;
   color:#285274;
 }
@@ -28,101 +28,138 @@ body{
   padding:18px;
 }
 
-.head{
+.header{
   background:white;
   border-radius:14px;
   padding:18px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
   margin-bottom:18px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.header h1{
+  margin:0 0 8px;
+}
+
+.connected{
+  color:#66859b;
+  font-size:14px;
 }
 
 .card{
   background:white;
   border-radius:14px;
   padding:20px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
   margin-bottom:18px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
-
-h1,h2,h3{
-  margin-top:0;
 }
 
 .status{
-  display:inline-block;
-  padding:8px 12px;
-  border-radius:20px;
-  background:#dff7e5;
-  color:#19743a;
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:18px;
   font-weight:bold;
 }
 
+.status.waiting{
+  background:#e8f8ed;
+  color:#26733d;
+}
+
 .status.started{
-  background:#ffe2e2;
-  color:#b42318;
+  background:#ffe8e8;
+  color:#a12626;
 }
 
 .players{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
-  margin-top:15px;
 }
 
 .player{
-  background:#f4f9fc;
-  border:1px solid #d8eaf3;
+  background:#f8fcfe;
+  border:1px solid #d8e7ef;
   border-radius:10px;
   padding:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.player-name{
   font-weight:bold;
+}
+
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
 }
 
 button{
   border:0;
   border-radius:10px;
-  padding:12px 16px;
-  margin:5px;
+  padding:13px 18px;
   cursor:pointer;
   font-size:15px;
   font-weight:bold;
-  background:#2d8cff;
+  background:#2d83b8;
   color:white;
 }
 
 button:hover{
-  opacity:.9;
+  background:#246c97;
 }
 
 button.secondary{
-  background:#6c8799;
+  background:#e8f2f7;
+  color:#285274;
 }
 
 button.start{
-  background:#18a957;
+  background:#159447;
+}
+
+button.start:hover{
+  background:#107638;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
 
 .message{
   margin-top:15px;
   padding:12px;
   border-radius:10px;
-  background:#f1f7fa;
-}
-
-.hidden{
   display:none;
 }
 
-.back{
-  display:inline-block;
-  margin-bottom:15px;
-  color:#285274;
-  text-decoration:none;
-  font-weight:bold;
+.message.ok{
+  display:block;
+  background:#e8f8ed;
+  color:#26733d;
 }
 
-.small{
-  color:#6d8494;
-  font-size:14px;
+.message.error{
+  display:block;
+  background:#ffe8e8;
+  color:#a12626;
+}
+
+.empty{
+  color:#7892a2;
+  font-style:italic;
+}
+
+@media(max-width:700px){
+
+  .players{
+    grid-template-columns:1fr;
+  }
+
 }
 
 </style>
@@ -133,16 +170,15 @@ button.start{
 
 <div class="wrap">
 
-  <a class="back" href="/">
-    ← Volver a los Castings
-  </a>
-
-  <div class="head">
+  <div class="header">
 
     <h1>🎮 Tengaged Reborn</h1>
 
-    <div id="connected">
-      Conectado como <strong id="username"></strong>
+    <div
+      class="connected"
+      id="connectedUser"
+    >
+      Conectado como...
     </div>
 
   </div>
@@ -156,55 +192,75 @@ button.start{
       Esta es la sala de espera de la primera partida.
     </p>
 
-    <div id="status" class="status">
-      🟢 Sala abierta
+    <div
+      id="status"
+      class="status waiting"
+    >
+      🟢 Cargando sala...
     </div>
 
-    <p>
-      <strong>Jugadores:</strong>
-      <span id="playerCount">0</span>/16
-    </p>
 
-    <div id="players" class="players"></div>
+    <h3>
+      👥 Jugadores:
+      <span id="playerCount">-</span>/16
+    </h3>
+
+
+    <div
+      id="players"
+      class="players"
+    >
+      <div class="empty">
+        Cargando jugadores...
+      </div>
+    </div>
+
+
+    <div class="buttons">
+
+      <button
+        id="enterButton"
+        onclick="enterRoom()"
+      >
+        🚪 Entrar en la sala
+      </button>
+
+      <button
+        class="secondary"
+        onclick="loadRoom()"
+      >
+        🔄 Actualizar
+      </button>
+
+      <button
+        id="startButton"
+        class="start"
+        onclick="startGame()"
+        style="display:none"
+      >
+        ▶️ Iniciar partida
+      </button>
+
+    </div>
+
+
+    <div
+      id="message"
+      class="message"
+    ></div>
 
   </div>
 
 
   <div class="card">
 
-    <h3>Acciones</h3>
+    <h3>⚡ Estado</h3>
 
-    <button onclick="enterRoom()">
-      🚪 Entrar en la sala
-    </button>
+    <div id="activity">
 
-    <button
-      class="secondary"
-      onclick="loadRoom()"
-    >
-      🔄 Actualizar
-    </button>
-
-    <button
-      id="startButton"
-      class="start hidden"
-      onclick="startGame()"
-    >
-      ▶️ Iniciar partida
-    </button>
-
-    <div id="message" class="message hidden"></div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h3>📌 Estado</h3>
-
-    <p class="small">
       La sala se actualiza automáticamente cada 5 segundos.
-    </p>
+
+    </div>
 
   </div>
 
@@ -217,58 +273,17 @@ const username =
   localStorage.getItem("tengaged_user");
 
 
-const usernameElement =
-  document.getElementById("username");
-
-const statusElement =
-  document.getElementById("status");
-
-const playerCountElement =
-  document.getElementById("playerCount");
-
-const playersElement =
-  document.getElementById("players");
-
-const messageElement =
-  document.getElementById("message");
-
-const startButton =
-  document.getElementById("startButton");
-
-
-/* =========================
-   COMPROBAR LOGIN
-========================= */
-
 if(!username){
 
-  window.location.href = "/";
+  window.location.href="/";
 
 }
 
 
-/* =========================
-   MOSTRAR USUARIO
-========================= */
-
-usernameElement.textContent =
-  username;
-
-
-/* =========================
-   MENSAJES
-========================= */
-
-function showMessage(text){
-
-  messageElement.textContent =
-    text;
-
-  messageElement.classList.remove(
-    "hidden"
-  );
-
-}
+document.getElementById(
+  "connectedUser"
+).textContent =
+  "Conectado como " + username;
 
 
 /* =========================
@@ -290,7 +305,8 @@ async function loadRoom(){
 
       showMessage(
         data.message ||
-        "No se pudo cargar la sala."
+        "No se pudo cargar la sala.",
+        "error"
       );
 
       return;
@@ -298,80 +314,85 @@ async function loadRoom(){
     }
 
 
-    /* CONTADOR */
+    const room =
+      data.room;
 
-    playerCountElement.textContent =
-      data.playerCount;
-
-
-    /* JUGADORES */
-
-    playersElement.innerHTML = "";
+    const players =
+      data.players || [];
 
 
-    data.players.forEach(function(player){
-
-      const div =
-        document.createElement("div");
-
-      div.className =
-        "player";
-
-      div.textContent =
-        "🙂 " + player.username;
-
-      playersElement.appendChild(div);
-
-    });
+    document.getElementById(
+      "playerCount"
+    ).textContent =
+      players.length;
 
 
-    /* ESTADO */
+    renderPlayers(players);
 
-    if(data.room.status === "started"){
 
-      statusElement.textContent =
-        "🔴 Partida iniciada";
+    /*
+     * SI LA PARTIDA YA HA COMENZADO
+     * mandamos directamente a game.html.
+     */
 
-      statusElement.classList.add(
-        "started"
-      );
+    if(
+      room &&
+      room.status === "started"
+    ){
 
-      startButton.classList.add(
-        "hidden"
-      );
+      showStarted();
+
+      return;
+
+    }
+
+
+    /*
+     * SALA DE ESPERA
+     */
+
+    document.getElementById(
+      "status"
+    ).className =
+      "status waiting";
+
+    document.getElementById(
+      "status"
+    ).textContent =
+      "🟢 Sala abierta";
+
+
+    /*
+     * Solo admin1 puede iniciar.
+     */
+
+    if(
+      username.toLowerCase() ===
+      "admin1"
+    ){
+
+      document.getElementById(
+        "startButton"
+      ).style.display =
+        "inline-block";
 
     }else{
 
-      statusElement.textContent =
-        "🟢 Sala abierta";
-
-      statusElement.classList.remove(
-        "started"
-      );
-
-
-      /*
-         SOLO ADMIN1 PUEDE INICIAR
-      */
-
-      if(
-        username.toLowerCase() ===
-        "admin1"
-      ){
-
-        startButton.classList.remove(
-          "hidden"
-        );
-
-      }
+      document.getElementById(
+        "startButton"
+      ).style.display =
+        "none";
 
     }
 
 
   }catch(error){
 
+    console.error(error);
+
     showMessage(
-      "No se pudo conectar con la sala."
+      "Error al conectar con el servidor.",
+      "error"
     );
 
   }
@@ -384,6 +405,18 @@ async function loadRoom(){
 ========================= */
 
 async function enterRoom(){
+
+  const button =
+    document.getElementById(
+      "enterButton"
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "⏳ Entrando...";
+
 
   try{
 
@@ -413,19 +446,53 @@ async function enterRoom(){
 
       showMessage(
         data.message ||
-        "No puedes entrar en la sala."
+        "No se ha podido entrar en la sala.",
+        "error"
       );
+
+      button.disabled=false;
+
+      button.textContent =
+        "🚪 Entrar en la sala";
 
       return;
 
     }
 
 
+    /*
+     * IMPORTANTE:
+     *
+     * Si la partida ya está iniciada,
+     * vamos directamente al juego.
+     */
+
+    if(
+      data.room &&
+      data.room.status === "started"
+    ){
+
+      window.location.href =
+        "/game.html";
+
+      return;
+
+    }
+
+
+    /*
+     * Si todavía está esperando,
+     * mostramos el mensaje y recargamos.
+     */
+
     showMessage(
-      "✅ " +
-      (data.message ||
-      "Has entrado en la sala.")
+      "✅ Has entrado en la sala del Casting #1.",
+      "ok"
     );
+
+
+    button.textContent =
+      "✅ Dentro de la sala";
 
 
     await loadRoom();
@@ -433,9 +500,17 @@ async function enterRoom(){
 
   }catch(error){
 
+    console.error(error);
+
     showMessage(
-      "Error al entrar en la sala."
+      "Error al conectar con el servidor.",
+      "error"
     );
+
+    button.disabled=false;
+
+    button.textContent =
+      "🚪 Entrar en la sala";
 
   }
 
@@ -448,31 +523,16 @@ async function enterRoom(){
 
 async function startGame(){
 
-  if(
-    username.toLowerCase() !==
-    "admin1"
-  ){
-
-    showMessage(
-      "No tienes permisos para iniciar la partida."
-    );
-
-    return;
-
-  }
-
-
-  const confirmStart =
-    confirm(
-      "¿Quieres iniciar la partida del Casting #1?"
+  const button =
+    document.getElementById(
+      "startButton"
     );
 
 
-  if(!confirmStart){
+  button.disabled=true;
 
-    return;
-
-  }
+  button.textContent =
+    "⏳ Iniciando...";
 
 
   try{
@@ -503,29 +563,53 @@ async function startGame(){
 
       showMessage(
         data.message ||
-        "No se pudo iniciar la partida."
+        "No se ha podido iniciar la partida.",
+        "error"
       );
+
+      button.disabled=false;
+
+      button.textContent =
+        "▶️ Iniciar partida";
 
       return;
 
     }
 
 
+    /*
+     * LA PARTIDA HA EMPEZADO.
+     *
+     * Vamos directamente a game.html.
+     */
+
     showMessage(
-      "🚀 " +
-      (data.message ||
-      "La partida ha comenzado.")
+      "🚀 La partida ha comenzado.",
+      "ok"
     );
 
 
-    await loadRoom();
+    setTimeout(function(){
+
+      window.location.href =
+        "/game.html";
+
+    },500);
 
 
   }catch(error){
 
+    console.error(error);
+
     showMessage(
-      "Error al iniciar la partida."
+      "Error al conectar con el servidor.",
+      "error"
     );
+
+    button.disabled=false;
+
+    button.textContent =
+      "▶️ Iniciar partida";
 
   }
 
@@ -533,15 +617,181 @@ async function startGame(){
 
 
 /* =========================
-   CARGA INICIAL
+   MOSTRAR PARTIDA INICIADA
+========================= */
+
+function showStarted(){
+
+  document.getElementById(
+    "status"
+  ).className =
+    "status started";
+
+
+  document.getElementById(
+    "status"
+  ).textContent =
+    "🔴 Partida iniciada";
+
+
+  document.getElementById(
+    "startButton"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "enterButton"
+  ).textContent =
+    "🚀 Entrar en la partida";
+
+
+  document.getElementById(
+    "enterButton"
+  ).disabled=false;
+
+
+  document.getElementById(
+    "enterButton"
+  ).onclick =
+    function(){
+
+      window.location.href =
+        "/game.html";
+
+    };
+
+
+  document.getElementById(
+    "activity"
+  ).textContent =
+    "🚀 La partida ha comenzado.";
+
+
+  /*
+   * Si el usuario ya está dentro,
+   * lo llevamos automáticamente al juego.
+   */
+
+  if(username){
+
+    setTimeout(function(){
+
+      window.location.href =
+        "/game.html";
+
+    },800);
+
+  }
+
+}
+
+
+/* =========================
+   JUGADORES
+========================= */
+
+function renderPlayers(players){
+
+  const container =
+    document.getElementById(
+      "players"
+    );
+
+
+  container.innerHTML="";
+
+
+  if(!players.length){
+
+    container.innerHTML =
+      '<div class="empty">No hay jugadores.</div>';
+
+    return;
+
+  }
+
+
+  players.forEach(function(player){
+
+    const name =
+      typeof player === "string"
+        ? player
+        : player.username;
+
+
+    const div =
+      document.createElement("div");
+
+
+    div.className="player";
+
+
+    div.innerHTML = `
+
+      <div style="font-size:25px">
+        🙂
+      </div>
+
+      <div class="player-name">
+        ${escapeHtml(name)}
+      </div>
+
+    `;
+
+
+    container.appendChild(div);
+
+  });
+
+}
+
+
+/* =========================
+   MENSAJES
+========================= */
+
+function showMessage(
+  text,
+  type
+){
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  message.textContent=text;
+
+  message.className =
+    "message " + type;
+
+}
+
+
+/* =========================
+   SEGURIDAD HTML
+========================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   INICIO
 ========================= */
 
 loadRoom();
 
-
-/* =========================
-   ACTUALIZACIÓN AUTOMÁTICA
-========================= */
 
 setInterval(
   loadRoom,
@@ -549,11 +799,6 @@ setInterval(
 );
 
 </script>
-
-</body>
-
-</html>
-```
 
 </body>
 
