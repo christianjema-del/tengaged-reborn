@@ -1,4 +1,3 @@
-```javascript
 export async function onRequest(context) {
 
   const request = context.request;
@@ -8,26 +7,16 @@ export async function onRequest(context) {
 
   try {
 
-    /* =========================
-       GET — VER SALA
-    ========================= */
-
     if (request.method === "GET") {
 
       const room = await db.prepare(`
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
+        SELECT id, casting_id, status, created_at, started_at
         FROM casting_rooms
         WHERE casting_id = 1
         LIMIT 1
       `).first();
 
       if (!room) {
-
         return Response.json(
           {
             ok: false,
@@ -35,50 +24,33 @@ export async function onRequest(context) {
           },
           { status: 404 }
         );
-
       }
 
       const players = await db.prepare(`
-        SELECT
-          username,
-          joined_at
+        SELECT username, joined_at
         FROM casting_players
         WHERE casting_id = 1
         ORDER BY id ASC
       `).all();
 
       return Response.json({
-
         ok: true,
-
         room: room,
-
         players: players.results,
-
         maxPlayers: 16,
-
         playerCount: players.results.length
-
       });
-
     }
-
-
-    /* =========================
-       POST — ENTRAR EN SALA
-    ========================= */
 
     if (request.method === "POST") {
 
-      const data =
-        await request.json();
+      const data = await request.json();
 
-      const username =
-        String(data.username || "").trim();
-
+      const username = String(
+        data.username || ""
+      ).trim();
 
       if (!username) {
-
         return Response.json(
           {
             ok: false,
@@ -86,106 +58,65 @@ export async function onRequest(context) {
           },
           { status: 400 }
         );
-
       }
 
-
       const player = await db.prepare(`
-        SELECT
-          username
+        SELECT username
         FROM casting_players
         WHERE casting_id = 1
         AND LOWER(username) = LOWER(?)
         LIMIT 1
-      `)
-      .bind(username)
-      .first();
-
+      `).bind(username).first();
 
       if (!player) {
-
         return Response.json(
           {
             ok: false,
-            message:
-              "Primero debes apuntarte al Casting #1."
+            message: "Primero debes apuntarte al Casting #1."
           },
           { status: 403 }
         );
-
       }
 
-
       let room = await db.prepare(`
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
+        SELECT id, casting_id, status, created_at, started_at
         FROM casting_rooms
         WHERE casting_id = 1
         LIMIT 1
       `).first();
 
-
       if (!room) {
 
         await db.prepare(`
-          INSERT INTO casting_rooms
-          (casting_id, status)
-          VALUES
-          (1, 'waiting')
+          INSERT INTO casting_rooms (casting_id, status)
+          VALUES (1, 'waiting')
         `).run();
 
-
         room = await db.prepare(`
-          SELECT
-            id,
-            casting_id,
-            status,
-            created_at,
-            started_at
+          SELECT id, casting_id, status, created_at, started_at
           FROM casting_rooms
           WHERE casting_id = 1
           LIMIT 1
         `).first();
-
       }
 
-
       return Response.json({
-
         ok: true,
-
-        message:
-          "Has entrado en la sala del Casting #1.",
-
+        message: "Has entrado en la sala del Casting #1.",
         room: room,
-
-        username:
-          player.username
-
+        username: player.username
       });
-
     }
-
-
-    /* =========================
-       PUT — INICIAR PARTIDA
-    ========================= */
 
     if (request.method === "PUT") {
 
-      const data =
-        await request.json();
+      const data = await request.json();
 
-      const username =
-        String(data.username || "").trim();
-
+      const username = String(
+        data.username || ""
+      ).trim();
 
       if (!username) {
-
         return Response.json(
           {
             ok: false,
@@ -193,78 +124,45 @@ export async function onRequest(context) {
           },
           { status: 400 }
         );
-
       }
-
-
-      /* SOLO ADMIN1 */
 
       if (
         username.toLowerCase() !==
         ADMIN_USERNAME.toLowerCase()
       ) {
-
         return Response.json(
           {
             ok: false,
-            message:
-              "No tienes permisos para iniciar la partida."
+            message: "No tienes permisos para iniciar la partida."
           },
           { status: 403 }
         );
-
       }
 
-
-      /* BUSCAR SALA */
-
       const room = await db.prepare(`
-        SELECT
-          id,
-          casting_id,
-          status,
-          created_at,
-          started_at
+        SELECT id, casting_id, status, created_at, started_at
         FROM casting_rooms
         WHERE casting_id = 1
         LIMIT 1
       `).first();
 
-
       if (!room) {
-
         return Response.json(
           {
             ok: false,
-            message:
-              "La sala todavía no existe."
+            message: "La sala todavía no existe."
           },
           { status: 404 }
         );
-
       }
-
-
-      /* YA ESTÁ INICIADA */
 
       if (room.status === "started") {
-
         return Response.json({
-
           ok: true,
-
-          message:
-            "La partida ya está iniciada.",
-
-          room:
-            room
-
+          message: "La partida ya está iniciada.",
+          room: room
         });
-
       }
-
-
-      /* CONTAR JUGADORES */
 
       const players = await db.prepare(`
         SELECT COUNT(*) AS total
@@ -272,61 +170,61 @@ export async function onRequest(context) {
         WHERE casting_id = 1
       `).first();
 
-
-      const playerCount =
-        Number(players.total || 0);
-
+      const playerCount = Number(
+        players.total || 0
+      );
 
       if (playerCount < 2) {
-
         return Response.json(
           {
             ok: false,
-
-            message:
-              "Necesitas al menos 2 jugadores para iniciar la partida.",
-
-            playerCount:
-              playerCount
+            message: "Necesitas al menos 2 jugadores para iniciar la partida.",
+            playerCount: playerCount
           },
-
           { status: 400 }
         );
-
       }
-
-
-      /* INICIAR */
 
       await db.prepare(`
         UPDATE casting_rooms
-        SET
-          status = 'started',
-          started_at = CURRENT_TIMESTAMP
+        SET status = 'started',
+            started_at = CURRENT_TIMESTAMP
         WHERE casting_id = 1
       `).run();
 
-
-      /* LEER SALA ACTUALIZADA */
-
-      const updatedRoom =
-        await db.prepare(`
-          SELECT
-            id,
-            casting_id,
-            status,
-            created_at,
-            started_at
-          FROM casting_rooms
-          WHERE casting_id = 1
-          LIMIT 1
-        `).first();
-
+      const updatedRoom = await db.prepare(`
+        SELECT id, casting_id, status, created_at, started_at
+        FROM casting_rooms
+        WHERE casting_id = 1
+        LIMIT 1
+      `).first();
 
       return Response.json({
-
         ok: true,
+        message: "La partida ha comenzado.",
+        room: updatedRoom,
+        playerCount: playerCount
+      });
+    }
 
-        message:
-          "La p
-```
+    return Response.json(
+      {
+        ok: false,
+        message: "Método no permitido."
+      },
+      { status: 405 }
+    );
+
+  } catch (error) {
+
+    return Response.json(
+      {
+        ok: false,
+        message: "Error del servidor.",
+        error: error.message
+      },
+      { status: 500 }
+    );
+
+  }
+}
