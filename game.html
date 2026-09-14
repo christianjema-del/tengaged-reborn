@@ -1,18 +1,17 @@
 <!doctype html>
 <html lang="es">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Tengaged Reborn - Prueba de Inmunidad</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
 
 body{
-  margin:0;
   font-family:Arial,sans-serif;
+  margin:0;
   background:#eaf5fb;
   color:#285274;
 }
@@ -23,166 +22,155 @@ body{
   padding:18px;
 }
 
-.header{
+.head{
   background:white;
-  border-radius:14px;
+  border-radius:16px;
   padding:18px;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
   margin-bottom:18px;
 }
 
-.header h1{
-  margin:0 0 8px;
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  color:#2477b5;
 }
 
-.connected{
-  color:#66859b;
-  font-size:14px;
+.user{
+  margin-top:8px;
+  color:#777;
 }
 
-.live{
+.status{
   display:inline-block;
   margin-top:12px;
-  background:#ffe8e8;
-  color:#a12626;
-  padding:9px 14px;
-  border-radius:10px;
+  background:#ffe4e4;
+  color:#c62828;
+  padding:8px 12px;
+  border-radius:20px;
   font-weight:bold;
 }
 
 .card{
   background:white;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:24px;
   margin-bottom:18px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
-.phase{
-  border-left:6px solid #2d83b8;
-  padding-left:15px;
-}
-
-.phase h2{
+h1,h2{
   margin-top:0;
 }
 
-.description{
-  color:#5e788a;
-  line-height:1.6;
+.subtitle{
+  color:#777;
 }
 
-.action-box{
-  background:#f4faff;
-  border:1px solid #d5e8f2;
-  border-radius:12px;
-  padding:20px;
-  margin-top:20px;
+.game-box{
   text-align:center;
+  padding:25px;
+  border-radius:15px;
+  background:#f4faff;
+  border:2px solid #d7edf9;
 }
 
-button{
+#message{
+  font-size:20px;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.big-button{
+  width:100%;
+  max-width:500px;
+  min-height:90px;
   border:0;
-  border-radius:10px;
-  padding:14px 22px;
-  cursor:pointer;
-  font-size:16px;
-  font-weight:bold;
-  background:#2d83b8;
+  border-radius:18px;
+  background:#2477b5;
   color:white;
+  font-size:24px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:15px;
+  transition:.15s;
 }
 
-button:hover{
-  background:#246c97;
+.big-button:hover{
+  transform:scale(1.02);
 }
 
-button:disabled{
-  opacity:.6;
+.big-button:disabled{
   cursor:not-allowed;
+  opacity:.6;
 }
 
-.success{
-  background:#e8f8ed;
-  color:#26733d;
-  border-radius:10px;
-  padding:14px;
-  font-weight:bold;
+#reactionButton{
   display:none;
-  margin-top:15px;
-}
-
-.error{
-  background:#ffe8e8;
-  color:#a12626;
-  border-radius:10px;
-  padding:14px;
-  font-weight:bold;
-  display:none;
-  margin-top:15px;
-}
-
-.count{
-  font-size:22px;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-
-.players{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.player{
-  background:#f8fcfe;
-  border:1px solid #d8e7ef;
-  border-radius:10px;
-  padding:13px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.player-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.player-name{
-  font-weight:bold;
-}
-
-.participated{
-  color:#26733d;
-  font-size:13px;
-  font-weight:bold;
+  background:#20a957;
+  min-height:180px;
+  font-size:34px;
 }
 
 .waiting{
-  color:#7892a2;
-  font-size:13px;
+  background:#f4f4f4 !important;
+  color:#777 !important;
 }
 
-.loading{
-  color:#7892a2;
-  font-style:italic;
+.result{
+  display:none;
+  margin-top:20px;
+  padding:18px;
+  border-radius:14px;
+  background:#e8fff0;
+  border:2px solid #8de0ad;
 }
 
-.status{
-  padding:14px;
+.result strong{
+  font-size:24px;
+}
+
+.ranking{
+  margin-top:20px;
+}
+
+.player{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
+
+.player:last-child{
+  border-bottom:0;
+}
+
+.medal{
+  font-size:24px;
+  margin-right:8px;
+}
+
+.time{
+  font-weight:bold;
+  color:#2477b5;
+}
+
+.pending{
+  color:#999;
+}
+
+.winner{
+  background:#fff8d9;
   border-radius:10px;
-  background:#fff8df;
-  color:#806600;
-  margin-bottom:18px;
 }
 
-@media(max-width:700px){
-  .players{
-    grid-template-columns:1fr;
-  }
+.footer{
+  text-align:center;
+  color:#888;
+  padding:20px;
 }
+
 </style>
 </head>
 
@@ -190,61 +178,57 @@ button:disabled{
 
 <div class="wrap">
 
-  <div class="header">
-    <h1>🎮 Tengaged Reborn</h1>
-    <div class="connected" id="connectedUser">
-      Conectado como...
+  <div class="head">
+
+    <div class="logo">
+      🎮 Tengaged Reborn
     </div>
 
-    <div class="live">
+    <div class="user">
+      Conectado como: <strong id="username">...</strong>
+    </div>
+
+    <div class="status">
       🔴 PARTIDA EN MARCHA
     </div>
-  </div>
-
-
-  <div class="card">
-
-    <div class="phase">
-
-      <h2>🚀 Casting #1</h2>
-
-      <p>
-        La partida ha comenzado.
-      </p>
-
-      <p class="description">
-        Ahora comienza la primera fase del juego.
-      </p>
-
-    </div>
 
   </div>
 
 
   <div class="card">
 
-    <h2>🏆 Prueba de Inmunidad</h2>
+    <h1>🏆 Prueba de Inmunidad</h1>
 
-    <p>
-      <strong>¡Consigue la inmunidad!</strong>
+    <p class="subtitle">
+      Casting #1 · Primera prueba de la partida
     </p>
 
-    <p class="description">
-      La primera prueba de la partida está a punto de comenzar.
-      Pulsa el botón para participar oficialmente en la prueba.
-      Una vez que participes, tu participación quedará registrada.
-    </p>
+    <div class="game-box">
 
+      <div id="message">
+        ⚡ Prepárate...
+      </div>
 
-    <div class="action-box">
+      <p id="instructions">
+        Pulsa «Comenzar prueba» y espera.
+        Cuando el botón verde aparezca, pulsa lo más rápido posible.
+      </p>
 
-      <button id="participateButton" onclick="participate()">
-        🏆 Participar en la prueba
+      <button
+        id="startButton"
+        class="big-button"
+        onclick="startGame()">
+        ⚡ Comenzar prueba
       </button>
 
-      <div id="success" class="success"></div>
+      <button
+        id="reactionButton"
+        class="big-button"
+        onclick="finishGame()">
+        ⚡ ¡PULSA!
+      </button>
 
-      <div id="error" class="error"></div>
+      <div id="result" class="result"></div>
 
     </div>
 
@@ -253,16 +237,14 @@ button:disabled{
 
   <div class="card">
 
-    <h2>👥 Participantes</h2>
+    <h2>🏅 Clasificación</h2>
 
-    <div class="count">
-      <span id="participantCount">0</span>/16 jugadores
-    </div>
+    <p>
+      Los tiempos más rápidos aparecen arriba.
+    </p>
 
-    <div id="players" class="players">
-      <div class="loading">
-        Cargando jugadores...
-      </div>
+    <div id="ranking" class="ranking">
+      Cargando...
     </div>
 
   </div>
@@ -270,12 +252,17 @@ button:disabled{
 
   <div class="card">
 
-    <h3>⚡ Estado de la prueba</h3>
+    <h2>⚡ Estado de la prueba</h2>
 
-    <div id="status" class="status">
-      Cargando estado...
+    <div id="statusText">
+      🟢 La prueba de inmunidad está activa.
     </div>
 
+  </div>
+
+
+  <div class="footer">
+    Tengaged Reborn · Casting #1
   </div>
 
 </div>
@@ -283,15 +270,28 @@ button:disabled{
 
 <script>
 
-const username = localStorage.getItem("tengaged_user");
+let username = "";
+let gameStarted = false;
+let reactionStart = 0;
+let timer = null;
+let alreadyPlayed = false;
 
-if(!username){
-  window.location.href="/";
-}
 
-document.getElementById("connectedUser").textContent =
-  "Conectado como " + username;
+// =========================
+// CARGAR USUARIO
+// =========================
 
+username =
+  localStorage.getItem("username") ||
+  localStorage.getItem("currentUser") ||
+  "admin1";
+
+document.getElementById("username").textContent = username;
+
+
+// =========================
+// CARGAR ESTADO
+// =========================
 
 async function loadGame(){
 
@@ -303,315 +303,360 @@ async function loadGame(){
 
     if(!data.ok){
 
-      showError(
-        data.message || "No se pudo cargar la partida."
-      );
+      document.getElementById("statusText").textContent =
+        "⚠️ " + (data.message || "No se pudo cargar la partida.");
 
       return;
     }
 
+    renderRanking(data.players || [], data.participants || []);
 
-    const players = data.players || [];
-    const participants = data.participants || [];
+    const mine = (data.participants || []).find(
+      p => p.username.toLowerCase() === username.toLowerCase()
+    );
 
+    if(mine){
 
-    document.getElementById("participantCount").textContent =
-      participants.length;
+      alreadyPlayed = true;
 
+      document.getElementById("startButton").style.display = "none";
+      document.getElementById("reactionButton").style.display = "none";
 
-    renderPlayers(players,participants);
+      document.getElementById("instructions").textContent =
+        "Ya has realizado tu prueba de inmunidad.";
 
+      document.getElementById("message").textContent =
+        "✅ Prueba completada";
 
-    const alreadyParticipated =
-      participants.some(function(player){
-
-        const name =
-          typeof player === "string"
-          ? player
-          : player.username;
-
-        return String(name).toLowerCase() ===
-               String(username).toLowerCase();
-
-      });
-
-
-    if(alreadyParticipated){
-
-      setParticipated();
-
-    }else{
-
-      setWaiting();
+      document.getElementById("statusText").textContent =
+        "🟢 Tu tiempo ya está registrado.";
 
     }
 
-
-    document.getElementById("status").textContent =
-      "🟢 La prueba de inmunidad está activa. Participa para quedar registrado.";
-
   }catch(error){
 
-    console.error(error);
-
-    showError(
-      "Error al conectar con el servidor."
-    );
+    document.getElementById("statusText").textContent =
+      "❌ Error al conectar con la partida.";
 
   }
 
 }
 
 
-async function participate(){
+// =========================
+// COMENZAR
+// =========================
 
-  const button =
-    document.getElementById("participateButton");
+function startGame(){
 
-  button.disabled = true;
+  if(alreadyPlayed) return;
 
-  button.textContent =
-    "⏳ Registrando participación...";
+  gameStarted = true;
+
+  const startButton =
+    document.getElementById("startButton");
+
+  const reactionButton =
+    document.getElementById("reactionButton");
+
+  const message =
+    document.getElementById("message");
+
+  const instructions =
+    document.getElementById("instructions");
+
+  startButton.style.display = "none";
+
+  reactionButton.style.display = "block";
+
+  reactionButton.disabled = true;
+
+  reactionButton.classList.add("waiting");
+
+  reactionButton.textContent =
+    "⏳ ESPERA...";
+
+  message.textContent =
+    "🟡 No pulses todavía...";
+
+  instructions.textContent =
+    "Cuando el botón cambie a verde, pulsa inmediatamente.";
+
+  // Tiempo aleatorio entre 1.5 y 5 segundos
+
+  const delay =
+    Math.floor(Math.random() * 3500) + 1500;
+
+  timer = setTimeout(() => {
+
+    reactionStart = performance.now();
+
+    reactionButton.disabled = false;
+
+    reactionButton.classList.remove("waiting");
+
+    reactionButton.textContent =
+      "⚡ ¡PULSA!";
+
+    message.textContent =
+      "🟢 ¡AHORA!";
+
+  }, delay);
+
+}
 
 
-  hideMessages();
+// =========================
+// TERMINAR
+// =========================
 
+async function finishGame(){
+
+  if(!gameStarted) return;
+
+  const reactionButton =
+    document.getElementById("reactionButton");
+
+  // Si todavía está esperando, es un clic demasiado pronto
+
+  if(reactionStart === 0){
+
+    clearTimeout(timer);
+
+    gameStarted = false;
+
+    reactionButton.style.display = "none";
+
+    document.getElementById("startButton").style.display = "block";
+
+    document.getElementById("message").textContent =
+      "❌ ¡Demasiado pronto!";
+
+    document.getElementById("instructions").textContent =
+      "Has pulsado antes de tiempo. Vuelve a intentarlo.";
+
+    return;
+  }
+
+  const reactionTime =
+    Math.round(performance.now() - reactionStart);
+
+  gameStarted = false;
+
+  reactionButton.disabled = true;
+
+  reactionButton.style.display = "none";
+
+  document.getElementById("message").textContent =
+    "⏱️ " + reactionTime + " ms";
+
+  document.getElementById("instructions").textContent =
+    "Registrando tu tiempo...";
 
   try{
 
-    const response = await fetch(
-      "/api/game",
-      {
-        method:"POST",
+    const response = await fetch("/api/game",{
 
-        headers:{
-          "Content-Type":"application/json"
-        },
+      method:"POST",
 
-        body:JSON.stringify({
-          username:username
-        })
-      }
-    );
+      headers:{
+        "Content-Type":"application/json"
+      },
 
+      body:JSON.stringify({
+        username:username,
+        reaction_ms:reactionTime
+      })
+
+    });
 
     const data = await response.json();
 
-
     if(!data.ok){
 
-      showError(
-        data.message ||
-        "No se ha podido registrar tu participación."
-      );
+      document.getElementById("message").textContent =
+        "❌ " + (data.message || "No se pudo registrar.");
 
-      button.disabled = false;
+      document.getElementById("instructions").textContent =
+        "Inténtalo de nuevo.";
 
-      button.textContent =
-        "🏆 Participar en la prueba";
+      document.getElementById("startButton").style.display =
+        "block";
+
+      reactionStart = 0;
 
       return;
-
     }
 
+    alreadyPlayed = true;
 
-    setParticipated();
+    showResult(reactionTime);
 
-
-    showSuccess(
-      data.message ||
-      "¡Has participado en la prueba de inmunidad!"
+    renderRanking(
+      [],
+      data.participants || []
     );
-
-
-    await loadGame();
-
 
   }catch(error){
 
-    console.error(error);
+    document.getElementById("message").textContent =
+      "❌ Error al guardar el resultado.";
 
-    showError(
-      "Error al conectar con el servidor."
-    );
-
-    button.disabled = false;
-
-    button.textContent =
-      "🏆 Participar en la prueba";
-
+    document.getElementById("startButton").style.display =
+      "block";
   }
 
 }
 
 
-function setParticipated(){
+// =========================
+// RESULTADO
+// =========================
 
-  const button =
-    document.getElementById("participateButton");
+function showResult(time){
 
-  button.disabled = true;
+  const result =
+    document.getElementById("result");
 
-  button.textContent =
-    "✅ Ya has participado";
+  result.style.display = "block";
 
-}
+  result.innerHTML = `
+    <strong>⏱️ ${time} ms</strong>
+    <br><br>
+    Tu tiempo ha quedado registrado.
+  `;
 
-
-function setWaiting(){
-
-  const button =
-    document.getElementById("participateButton");
-
-  button.disabled = false;
-
-  button.textContent =
-    "🏆 Participar en la prueba";
+  document.getElementById("statusText").textContent =
+    "🟢 ¡Prueba completada! Tu tiempo está en la clasificación.";
 
 }
 
 
-function renderPlayers(players,participants){
+// =========================
+// CLASIFICACIÓN
+// =========================
 
-  const container =
-    document.getElementById("players");
+function renderRanking(players, participants){
 
-  container.innerHTML = "";
+  const ranking =
+    document.getElementById("ranking");
 
+  const participantMap = {};
 
-  if(!players.length){
+  participants.forEach(p => {
 
-    container.innerHTML =
-      '<div class="loading">No hay jugadores.</div>';
-
-    return;
-
-  }
-
-
-  players.forEach(function(player){
-
-    const name =
-      typeof player === "string"
-      ? player
-      : player.username;
-
-
-    const participated =
-      participants.some(function(item){
-
-        const participantName =
-          typeof item === "string"
-          ? item
-          : item.username;
-
-        return String(participantName).toLowerCase() ===
-               String(name).toLowerCase();
-
-      });
-
-
-    const div =
-      document.createElement("div");
-
-    div.className="player";
-
-
-    div.innerHTML = `
-
-      <div class="player-left">
-
-        <div style="font-size:25px">
-          🙂
-        </div>
-
-        <div class="player-name">
-          ${escapeHtml(name)}
-        </div>
-
-      </div>
-
-      <div class="${
-        participated
-        ? "participated"
-        : "waiting"
-      }">
-
-        ${
-          participated
-          ? "🏆 Participó"
-          : "⏳ Pendiente"
-        }
-
-      </div>
-
-    `;
-
-
-    container.appendChild(div);
+    participantMap[p.username.toLowerCase()] = p;
 
   });
 
+  let ordered = [];
+
+  if(participants.length > 0){
+
+    ordered = [...participants];
+
+    ordered.sort((a,b) =>
+      Number(a.reaction_ms || 999999) -
+      Number(b.reaction_ms || 999999)
+    );
+
+  }
+
+  let html = "";
+
+  ordered.forEach((player,index) => {
+
+    const time =
+      Number(player.reaction_ms || 0);
+
+    let medal = "";
+
+    if(index === 0) medal = "🥇";
+    else if(index === 1) medal = "🥈";
+    else if(index === 2) medal = "🥉";
+    else medal = "🏅";
+
+    const winnerClass =
+      index === 0 ? "winner" : "";
+
+    html += `
+      <div class="player ${winnerClass}">
+        <div>
+          <span class="medal">${medal}</span>
+          <strong>${escapeHtml(player.username)}</strong>
+        </div>
+
+        <div class="time">
+          ${time} ms
+        </div>
+      </div>
+    `;
+
+  });
+
+
+  // Jugadores que todavía no han participado
+
+  players.forEach(player => {
+
+    if(!participantMap[player.username.toLowerCase()]){
+
+      html += `
+        <div class="player">
+          <div>
+            <span class="medal">🙂</span>
+            <strong>${escapeHtml(player.username)}</strong>
+          </div>
+
+          <div class="pending">
+            ⏳ Pendiente
+          </div>
+        </div>
+      `;
+
+    }
+
+  });
+
+
+  if(!html){
+
+    html = `
+      <div class="player">
+        Todavía nadie ha realizado la prueba.
+      </div>
+    `;
+
+  }
+
+  ranking.innerHTML = html;
+
 }
 
 
-function showSuccess(text){
+// =========================
+// SEGURIDAD HTML
+// =========================
 
-  const element =
-    document.getElementById("success");
+function escapeHtml(text){
 
-  element.textContent = text;
-
-  element.style.display="block";
-
-}
-
-
-function showError(text){
-
-  const element =
-    document.getElementById("error");
-
-  element.textContent = text;
-
-  element.style.display="block";
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 
-function hideMessages(){
-
-  document.getElementById("success").style.display="none";
-
-  document.getElementById("error").style.display="none";
-
-}
-
-
-function escapeHtml(value){
-
-  return String(value)
-
-    .replace(/&/g,"&amp;")
-
-    .replace(/</g,"&lt;")
-
-    .replace(/>/g,"&gt;")
-
-    .replace(/"/g,"&quot;")
-
-    .replace(/'/g,"&#039;");
-
-}
-
+// =========================
+// ACTUALIZACIÓN
+// =========================
 
 loadGame();
 
-
-setInterval(
-  loadGame,
-  5000
-);
+setInterval(loadGame,5000);
 
 </script>
 
