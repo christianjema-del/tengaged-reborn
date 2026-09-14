@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tengaged Reborn - Partida</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#eaf5fb;
+  color:#285274;
+}
+
+.wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:18px;
+}
+
+.header{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  margin-bottom:18px;
+}
+
+.header h1{
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+.connected{
+  color:#66859b;
+  font-size:14px;
+}
+
+.status{
+  margin-top:14px;
+  padding:14px;
+  border-radius:10px;
+  background:#ffe8e8;
+  color:#a12626;
+  font-weight:bold;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:18px;
+}
+
+.card{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  margin-bottom:18px;
+}
+
+.card h2{
+  margin-top:0;
+}
+
+.players{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.player{
+  border:1px solid #d8e7ef;
+  border-radius:10px;
+  padding:12px;
+  background:#f8fcfe;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.player-name{
+  font-weight:bold;
+}
+
+.player-role{
+  font-size:12px;
+  color:#7b95a5;
+  margin-top:3px;
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid #e5eef3;
+}
+
+.stat:last-child{
+  border-bottom:0;
+}
+
+.big-number{
+  font-size:25px;
+  font-weight:bold;
+}
+
+.action{
+  width:100%;
+  border:0;
+  border-radius:10px;
+  padding:13px;
+  margin-top:10px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:bold;
+  background:#2d83b8;
+  color:white;
+}
+
+.action:hover{
+  background:#246c97;
+}
+
+.action.secondary{
+  background:#e8f2f7;
+  color:#285274;
+}
+
+.activity{
+  padding:10px;
+  border-bottom:1px solid #e5eef3;
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.empty{
+  color:#7892a2;
+  font-style:italic;
+}
+
+.notice{
+  padding:13px;
+  border-radius:10px;
+  background:#eef8fd;
+  margin-bottom:15px;
+}
+
+@media(max-width:750px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .players{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+    <h1>🎮 Tengaged Reborn</h1>
+    <div class="connected" id="connectedUser">
+      Conectado como...
+    </div>
+
+    <div class="status">
+      🔴 PARTIDA EN MARCHA
+    </div>
+  </div>
+
+  <div class="notice">
+    🚀 La partida del Casting #1 ha comenzado.
+    <br>
+    <span id="gameInfo">
+      Cargando información de los jugadores...
+    </span>
+  </div>
+
+  <div class="grid">
+
+    <main>
+
+      <div class="card">
+        <h2>👥 Jugadores</h2>
+
+        <div class="players" id="playersList">
+          <div class="empty">
+            Cargando jugadores...
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🎯 Próximamente</h2>
+
+        <div class="activity">
+          🏆 <strong>Prueba</strong>
+          <br>
+          <span class="empty">
+            La primera prueba de la partida aparecerá aquí.
+          </span>
+        </div>
+
+        <div class="activity">
+          🗳️ <strong>Votación</strong>
+          <br>
+          <span class="empty">
+            Las votaciones estarán disponibles cuando comience la fase correspondiente.
+          </span>
+        </div>
+
+        <div class="activity">
+          🚪 <strong>Eliminación</strong>
+          <br>
+          <span class="empty">
+            Aquí aparecerán las eliminaciones de la partida.
+          </span>
+        </div>
+      </div>
+
+    </main>
+
+    <aside>
+
+      <div class="card">
+        <h2>📊 Partida</h2>
+
+        <div class="stat">
+          <span>Jugadores</span>
+          <span class="big-number" id="playerCount">-</span>
+        </div>
+
+        <div class="stat">
+          <span>Máximo</span>
+          <span>16</span>
+        </div>
+
+        <div class="stat">
+          <span>Fase</span>
+          <span id="gamePhase">Inicio</span>
+        </div>
+
+        <button class="action secondary" onclick="loadGame()">
+          🔄 Actualizar
+        </button>
+
+        <button class="action secondary" onclick="goBack()">
+          🚪 Volver a la sala
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>⚡ Actividad</h2>
+
+        <div id="activity">
+          <div class="activity">
+            🚀 La partida ha comenzado.
+          </div>
+
+          <div class="activity">
+            👥 Jugadores conectados:
+            <strong id="activityPlayers">-</strong>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>
+
+<script>
+
+const username = localStorage.getItem("tengaged_user");
+
+if(!username){
+  window.location.href = "/";
+}
+
+document.getElementById("connectedUser").textContent =
+  "Conectado como " + username;
+
+async function loadGame(){
+
+  try{
+
+    const response = await fetch("/api/room");
+
+    const data = await response.json();
+
+    if(!data.ok){
+
+      document.getElementById("playersList").innerHTML =
+        '<div class="empty">No se ha podido cargar la partida.</div>';
+
+      return;
+    }
+
+    if(!data.room){
+
+      document.getElementById("playersList").innerHTML =
+        '<div class="empty">La sala no existe.</div>';
+
+      return;
+    }
+
+    if(data.room.status !== "started"){
+
+      window.location.href = "/room.html";
+
+      return;
+    }
+
+    const players = data.players || [];
+
+    document.getElementById("playerCount").textContent =
+      players.length;
+
+    document.getElementById("activityPlayers").textContent =
+      players.length;
+
+    document.getElementById("gameInfo").textContent =
+      players.length + "/16 jugadores en partida.";
+
+    document.getElementById("gamePhase").textContent =
+      "Preparación";
+
+    renderPlayers(players);
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById("playersList").innerHTML =
+      '<div class="empty">Error al conectar con el servidor.</div>';
+  }
+}
+
+function renderPlayers(players){
+
+  const container =
+    document.getElementById("playersList");
+
+  if(!players.length){
+
+    container.innerHTML =
+      '<div class="empty">No hay jugadores.</div>';
+
+    return;
+  }
+
+  container.innerHTML = "";
+
+  players.forEach(function(player){
+
+    const div = document.createElement("div");
+
+    div.className = "player";
+
+    const name =
+      typeof player === "string"
+        ? player
+        : player.username;
+
+    const isMe =
+      String(name).toLowerCase() ===
+      String(username).toLowerCase();
+
+    div.innerHTML = `
+      <div style="font-size:25px">🙂</div>
+      <div>
+        <div class="player-name">
+          ${escapeHtml(name)}
+          ${isMe ? " ⭐" : ""}
+        </div>
+        <div class="player-role">
+          ${isMe ? "Tú" : "Jugador"}
+        </div>
+      </div>
+    `;
+
+    container.appendChild(div);
+
+  });
+}
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function goBack(){
+
+  window.location.href = "/room.html";
+
+}
+
+loadGame();
+
+setInterval(loadGame,5000);
+
+</script>
+
+</body>
+</html>
