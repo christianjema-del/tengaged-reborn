@@ -3,7 +3,11 @@ export async function onRequest(context) {
   const db = context.env.DB;
 
   try {
-    // Crear tabla si no existe
+
+    // =====================================================
+    // TABLA DE ACCIONES
+    // =====================================================
+
     await db.prepare(`
       CREATE TABLE IF NOT EXISTS game_actions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,7 +20,8 @@ export async function onRequest(context) {
       )
     `).run();
 
-    // Intentar añadir reaction_ms si venimos de la tabla antigua
+
+    // Por si la tabla ya existía antes
     try {
       await db.prepare(`
         ALTER TABLE game_actions ADD COLUMN reaction_ms INTEGER
@@ -25,37 +30,104 @@ export async function onRequest(context) {
       // La columna ya existe
     }
 
+
     // =====================================================
-    // OBTENER CLASIFICACIÓN
+    // TABLA DEL ESTADO DE LA PRUEBA
+    // =====================================================
+
+    await db.prepare(`
+      CREATE TABLE IF NOT EXISTS game_state (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        casting_id INTEGER NOT NULL UNIQUE,
+        phase TEXT NOT NULL DEFAULT 'immunity',
+        status TEXT NOT NULL DEFAULT 'active',
+        winner_username TEXT,
+        completed_at DATETIME,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `).run();
+
+
+    // Crear estado para Casting #1 si todavía no existe
+
+    await db.prepare(`
+      INSERT OR IGNORE INTO game_state (
+        casting_id,
+        phase,
+        status
+      )
+      VALUES (
+        1,
+        'immunity',
+        'active'
+      )
+    `).run();
+
+
+    // =====================================================
+    // OBTENER DATOS COMPLETOS DE LA PRUEBA
     // =====================================================
 
     async function getGameData() {
 
       const room = await db.prepare(`
-        SELECT id, casting_id, status, created_at, started_at
+        SELECT
+          id,
+          casting_id,
+          status,
+          created_at,
+          started_at
         FROM casting_rooms
         WHERE casting_id = 1
         LIMIT 1
       `).first();
 
+
       if (!room) {
+
         return {
           ok: false,
           message: "La sala todavía no existe."
         };
+
       }
 
-      const players = await db.prepare(`
-        SELECT username, joined_at
+
+      const state = await db.prepare(`
+        SELECT
+          id,
+          casting_id,
+          phase,
+          status,
+          winner_username,
+          completed_at,
+          created_at
+        FROM game_state
+        WHERE casting_id = 1
+        LIMIT 1
+      `).first();
+
+
+      const playersResult = await db.prepare(`
+        SELECT
+          username,
+          joined_at
         FROM casting_players
         WHERE casting_id = 1
         ORDER BY id ASC
       `).all();
 
-      const allPlayers = players.results || [];
 
+      const allPlayers = playersResult.results || [];
+
+
+      // Solo contamos tiempos reales
       const results = await db.prepare(`
-        SELECT username, reaction_ms, created_at
+        SELECT
+          id,
+          username,
+          reaction_ms,
+          created_at
         FROM game_actions
         WHERE casting_id = 1
         AND action_type = 'immunity'
@@ -64,11 +136,9 @@ export async function onRequest(context) {
         ORDER BY reaction_ms ASC, id ASC
       `).all();
 
+
       const completed = results.results || [];
 
-      const completedNames = new Set(
-        completed.map(player => player.username.toLowerCase())
-      );
 
       const ranking = completed.map((player, index) => ({
         position: index + 1,
@@ -77,38 +147,103 @@ export async function onRequest(context) {
         created_at: player.created_at
       }));
 
+
+      const completedNames = new Set(
+        completed.map(
+          player => player.username.toLowerCase()
+        )
+      );
+
+
       const pending = allPlayers
-        .filter(player => !completedNames.has(player.username.toLowerCase()))
+        .filter(
+          player =>
+            !completedNames.has(
+              player.username.toLowerCase()
+            )
+        )
         .map(player => ({
           username: player.username,
           reaction_ms: null,
           pending: true
         }));
 
+
       const totalPlayers = allPlayers.length;
+
       const completedPlayers = completed.length;
+
       const pendingPlayers = pending.length;
+
+
+      // ===================================================
+      // GANADOR
+      // ===================================================
 
       let winner = null;
 
-      if (ranking.length > 0) {
-        winner = ranking[0];
+
+      if (state && state.winner_username) {
+
+        const savedWinner = ranking.find(
+          player =>
+            player.username.toLowerCase() ===
+            state.winner_username.toLowerCase()
+        );
+
+
+        if (savedWinner) {
+          winner = savedWinner;
+        }
+
       }
 
+
+      // Si todavía no está guardado pero ya hay resultados,
+      // el primero provisional es el más rápido.
+
+      if (!winner && ranking.length > 0) {
+
+        winner = ranking[0];
+
+      }
+
+
+      const finished =
+        state &&
+        state.status === "finished";
+
+
       return {
+
         ok: true,
+
         room,
+
+        state,
+
         players: allPlayers,
+
         ranking,
+
         pending,
+
         winner,
+
         totalPlayers,
+
         completedPlayers,
+
         pendingPlayers,
+
         phase: "immunity",
-        finished: totalPlayers > 0 && completedPlayers >= totalPlayers
+
+        finished: Boolean(finished)
+
       };
+
     }
+
 
     // =====================================================
     // GET
@@ -118,14 +253,19 @@ export async function onRequest(context) {
 
       const data = await getGameData();
 
+
       if (!data.ok) {
+
         return Response.json(
           data,
           { status: 404 }
         );
+
       }
 
+
       if (data.room.status !== "started") {
+
         return Response.json(
           {
             ok: false,
@@ -133,10 +273,14 @@ export async function onRequest(context) {
           },
           { status: 400 }
         );
+
       }
 
+
       return Response.json(data);
+
     }
+
 
     // =====================================================
     // POST
@@ -144,12 +288,19 @@ export async function onRequest(context) {
 
     if (request.method === "POST") {
 
-      const data = await request.json();
+      const body = await request.json();
 
-      const username = String(data.username || "").trim();
-      const reactionMs = Number(data.reaction_ms);
+
+      const username =
+        String(body.username || "").trim();
+
+
+      const reactionMs =
+        Number(body.reaction_ms);
+
 
       if (!username) {
+
         return Response.json(
           {
             ok: false,
@@ -157,13 +308,16 @@ export async function onRequest(context) {
           },
           { status: 400 }
         );
+
       }
+
 
       if (
         !Number.isFinite(reactionMs) ||
         reactionMs < 100 ||
         reactionMs > 10000
       ) {
+
         return Response.json(
           {
             ok: false,
@@ -171,16 +325,29 @@ export async function onRequest(context) {
           },
           { status: 400 }
         );
+
       }
 
+
+      // ===================================================
+      // COMPROBAR SALA
+      // ===================================================
+
       const room = await db.prepare(`
-        SELECT id, casting_id, status, created_at, started_at
+        SELECT
+          id,
+          casting_id,
+          status,
+          created_at,
+          started_at
         FROM casting_rooms
         WHERE casting_id = 1
         LIMIT 1
       `).first();
 
+
       if (!room) {
+
         return Response.json(
           {
             ok: false,
@@ -188,9 +355,12 @@ export async function onRequest(context) {
           },
           { status: 404 }
         );
+
       }
 
+
       if (room.status !== "started") {
+
         return Response.json(
           {
             ok: false,
@@ -198,7 +368,46 @@ export async function onRequest(context) {
           },
           { status: 400 }
         );
+
       }
+
+
+      // ===================================================
+      // COMPROBAR ESTADO DE LA PRUEBA
+      // ===================================================
+
+      const state = await db.prepare(`
+        SELECT
+          status,
+          winner_username,
+          completed_at
+        FROM game_state
+        WHERE casting_id = 1
+        LIMIT 1
+      `).first();
+
+
+      if (state && state.status === "finished") {
+
+        const gameData = await getGameData();
+
+
+        return Response.json(
+          {
+            ...gameData,
+            alreadyParticipated: false,
+            message:
+              "La prueba de inmunidad ya ha terminado."
+          },
+          { status: 400 }
+        );
+
+      }
+
+
+      // ===================================================
+      // COMPROBAR JUGADOR
+      // ===================================================
 
       const player = await db.prepare(`
         SELECT username
@@ -206,9 +415,13 @@ export async function onRequest(context) {
         WHERE casting_id = 1
         AND LOWER(username) = LOWER(?)
         LIMIT 1
-      `).bind(username).first();
+      `)
+      .bind(username)
+      .first();
+
 
       if (!player) {
+
         return Response.json(
           {
             ok: false,
@@ -216,11 +429,19 @@ export async function onRequest(context) {
           },
           { status: 403 }
         );
+
       }
 
-      // Comprobar si ya tiene un tiempo válido
+
+      // ===================================================
+      // COMPROBAR SI YA HA PARTICIPADO
+      // ===================================================
+
       const existing = await db.prepare(`
-        SELECT id, username, reaction_ms
+        SELECT
+          id,
+          username,
+          reaction_ms
         FROM game_actions
         WHERE casting_id = 1
         AND LOWER(username) = LOWER(?)
@@ -228,20 +449,35 @@ export async function onRequest(context) {
         AND reaction_ms IS NOT NULL
         AND reaction_ms > 0
         LIMIT 1
-      `).bind(player.username).first();
+      `)
+      .bind(player.username)
+      .first();
+
 
       if (existing) {
 
-        const gameData = await getGameData();
+        const gameData =
+          await getGameData();
+
 
         return Response.json({
+
           ...gameData,
+
           alreadyParticipated: true,
-          message: "Ya has participado en la prueba."
+
+          message:
+            "Ya has participado en la prueba."
+
         });
+
       }
 
-      // Buscar una fila antigua con 0/null
+
+      // ===================================================
+      // GUARDAR TIEMPO
+      // ===================================================
+
       const oldRow = await db.prepare(`
         SELECT id
         FROM game_actions
@@ -249,21 +485,29 @@ export async function onRequest(context) {
         AND LOWER(username) = LOWER(?)
         AND action_type = 'immunity'
         LIMIT 1
-      `).bind(player.username).first();
+      `)
+      .bind(player.username)
+      .first();
 
-      const finalTime = Math.round(reactionMs);
+
+      const finalTime =
+        Math.round(reactionMs);
+
 
       if (oldRow) {
 
         await db.prepare(`
           UPDATE game_actions
-          SET reaction_ms = ?,
-              created_at = CURRENT_TIMESTAMP
+          SET
+            reaction_ms = ?,
+            created_at = CURRENT_TIMESTAMP
           WHERE id = ?
-        `).bind(
+        `)
+        .bind(
           finalTime,
           oldRow.id
-        ).run();
+        )
+        .run();
 
       } else {
 
@@ -274,25 +518,125 @@ export async function onRequest(context) {
             action_type,
             reaction_ms
           )
-          VALUES (1, ?, 'immunity', ?)
-        `).bind(
+          VALUES (
+            1,
+            ?,
+            'immunity',
+            ?
+          )
+        `)
+        .bind(
           player.username,
           finalTime
-        ).run();
+        )
+        .run();
+
       }
 
-      const gameData = await getGameData();
+
+      // ===================================================
+      // COMPROBAR SI YA HAN TERMINADO TODOS
+      // ===================================================
+
+      const totalResult = await db.prepare(`
+        SELECT COUNT(*) AS total
+        FROM casting_players
+        WHERE casting_id = 1
+      `).first();
+
+
+      const completedResult = await db.prepare(`
+        SELECT COUNT(*) AS total
+        FROM game_actions
+        WHERE casting_id = 1
+        AND action_type = 'immunity'
+        AND reaction_ms IS NOT NULL
+        AND reaction_ms > 0
+      `).first();
+
+
+      const totalPlayers =
+        Number(totalResult.total || 0);
+
+
+      const completedPlayers =
+        Number(completedResult.total || 0);
+
+
+      // ===================================================
+      // SI ESTÁN TODOS -> CERRAR PRUEBA
+      // ===================================================
+
+      if (
+        totalPlayers > 0 &&
+        completedPlayers >= totalPlayers
+      ) {
+
+        // Buscar el jugador más rápido
+
+        const winnerRow = await db.prepare(`
+          SELECT
+            username,
+            reaction_ms,
+            created_at
+          FROM game_actions
+          WHERE casting_id = 1
+          AND action_type = 'immunity'
+          AND reaction_ms IS NOT NULL
+          AND reaction_ms > 0
+          ORDER BY reaction_ms ASC, id ASC
+          LIMIT 1
+        `).first();
+
+
+        if (winnerRow) {
+
+          await db.prepare(`
+            UPDATE game_state
+            SET
+              status = 'finished',
+              winner_username = ?,
+              completed_at = CURRENT_TIMESTAMP
+            WHERE casting_id = 1
+          `)
+          .bind(
+            winnerRow.username
+          )
+          .run();
+
+        }
+
+      }
+
+
+      // ===================================================
+      // DEVOLVER ESTADO FINAL
+      // ===================================================
+
+      const gameData =
+        await getGameData();
+
 
       return Response.json({
+
         ...gameData,
+
         alreadyParticipated: false,
-        message: "¡Tiempo registrado!",
+
+        message:
+          gameData.finished
+            ? "🏆 ¡Prueba terminada! Se ha concedido la inmunidad al ganador."
+            : "¡Tiempo registrado!",
+
         reaction_ms: finalTime
+
       });
+
     }
 
+
     // =====================================================
-    // MÉTODO NO PERMITIDO
+    // OTRO MÉTODO
     // =====================================================
 
     return Response.json(
@@ -302,6 +646,7 @@ export async function onRequest(context) {
       },
       { status: 405 }
     );
+
 
   } catch (error) {
 
@@ -313,5 +658,6 @@ export async function onRequest(context) {
       },
       { status: 500 }
     );
+
   }
 }
