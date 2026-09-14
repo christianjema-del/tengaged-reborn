@@ -3,26 +3,31 @@ export async function onRequest(context) {
   const db = context.env.DB;
 
   try {
-    /*
-     * Creamos la tabla de acciones de partida si todavía no existe.
-     * Así no necesitamos tocar manualmente D1 ahora mismo.
-     */
+    // Tabla de acciones de la partida
     await db.prepare(`
       CREATE TABLE IF NOT EXISTS game_actions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         casting_id INTEGER NOT NULL,
         username TEXT NOT NULL,
         action_type TEXT NOT NULL,
+        reaction_ms INTEGER,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(casting_id, username, action_type)
       )
     `).run();
 
-    /*
-     * GET
-     * Devuelve información de la partida y quién ha participado
-     * en la prueba de inmunidad.
-     */
+    // Añadimos la columna si la tabla antigua ya existía
+    try {
+      await db.prepare(`
+        ALTER TABLE game_actions ADD COLUMN reaction_ms INTEGER
+      `).run();
+    } catch (e) {
+      // La columna ya existe. No hacemos nada.
+    }
+
+    // =========================
+    // GET
+    // =========================
     if (request.method === "GET") {
 
       const room = await db.prepare(`
@@ -36,18 +41,14 @@ export async function onRequest(context) {
         return Response.json({
           ok: false,
           message: "La sala todavía no existe."
-        }, {
-          status: 404
-        });
+        }, { status: 404 });
       }
 
       if (room.status !== "started") {
         return Response.json({
           ok: false,
           message: "La partida todavía no ha comenzado."
-        }, {
-          status: 400
-        });
+        }, { status: 400 });
       }
 
       const players = await db.prepare(`
@@ -58,11 +59,14 @@ export async function onRequest(context) {
       `).all();
 
       const participants = await db.prepare(`
-        SELECT username, created_at
+        SELECT username, reaction_ms, created_at
         FROM game_actions
         WHERE casting_id = 1
         AND action_type = 'immunity'
-        ORDER BY id ASC
+        ORDER BY
+          CASE WHEN reaction_ms IS NULL THEN 1 ELSE 0 END,
+          reaction_ms ASC,
+          id ASC
       `).all();
 
       return Response.json({
@@ -74,10 +78,9 @@ export async function onRequest(context) {
       });
     }
 
-    /*
-     * POST
-     * Un jugador participa en la prueba de inmunidad.
-     */
+    // =========================
+    // POST
+    // =========================
     if (request.method === "POST") {
 
       const data = await request.json();
@@ -88,9 +91,20 @@ export async function onRequest(context) {
         return Response.json({
           ok: false,
           message: "Falta el nombre de usuario."
-        }, {
-          status: 400
-        });
+        }, { status: 400 });
+      }
+
+      const reactionMs = Number(data.reaction_ms);
+
+      if (
+        !Number.isFinite(reactionMs) ||
+        reactionMs < 1 ||
+        reactionMs > 60000
+      ) {
+        return Response.json({
+          ok: false,
+          message: "El tiempo de reacción no es válido."
+        }, { status: 400 });
       }
 
       const room = await db.prepare(`
@@ -104,23 +118,16 @@ export async function onRequest(context) {
         return Response.json({
           ok: false,
           message: "La sala todavía no existe."
-        }, {
-          status: 404
-        });
+        }, { status: 404 });
       }
 
       if (room.status !== "started") {
         return Response.json({
           ok: false,
           message: "La partida todavía no ha comenzado."
-        }, {
-          status: 400
-        });
+        }, { status: 400 });
       }
 
-      /*
-       * Comprobamos que el jugador pertenece al casting.
-       */
       const player = await db.prepare(`
         SELECT username
         FROM casting_players
@@ -133,16 +140,11 @@ export async function onRequest(context) {
         return Response.json({
           ok: false,
           message: "No perteneces al Casting #1."
-        }, {
-          status: 403
-        });
+        }, { status: 403 });
       }
 
-      /*
-       * Comprobamos si ya había participado.
-       */
       const existing = await db.prepare(`
-        SELECT id, username, created_at
+        SELECT id, username, reaction_ms, created_at
         FROM game_actions
         WHERE casting_id = 1
         AND LOWER(username) = LOWER(?)
@@ -151,12 +153,16 @@ export async function onRequest(context) {
       `).bind(player.username).first();
 
       if (existing) {
+
         const participants = await db.prepare(`
-          SELECT username, created_at
+          SELECT username, reaction_ms, created_at
           FROM game_actions
           WHERE casting_id = 1
           AND action_type = 'immunity'
-          ORDER BY id ASC
+          ORDER BY
+            CASE WHEN reaction_ms IS NULL THEN 1 ELSE 0 END,
+            reaction_ms ASC,
+            id ASC
         `).all();
 
         return Response.json({
@@ -167,40 +173,49 @@ export async function onRequest(context) {
         });
       }
 
-      /*
-       * Registramos la participación.
-       */
       await db.prepare(`
         INSERT INTO game_actions (
           casting_id,
           username,
-          action_type
+          action_type,
+          reaction_ms
         )
-        VALUES (1, ?, 'immunity')
-      `).bind(player.username).run();
+        VALUES (1, ?, 'immunity', ?)
+      `).bind(
+        player.username,
+        Math.round(reactionMs)
+      ).run();
 
       const participants = await db.prepare(`
-        SELECT username, created_at
+        SELECT username, reaction_ms, created_at
         FROM game_actions
         WHERE casting_id = 1
         AND action_type = 'immunity'
-        ORDER BY id ASC
+        ORDER BY
+          CASE WHEN reaction_ms IS NULL THEN 1 ELSE 0 END,
+          reaction_ms ASC,
+          id ASC
       `).all();
+
+      const winner = participants.results &&
+        participants.results.length > 0
+        ? participants.results[0]
+        : null;
 
       return Response.json({
         ok: true,
         alreadyParticipated: false,
-        message: "¡Has participado en la prueba de inmunidad!",
-        participants: participants.results || []
+        message: "¡Tiempo registrado!",
+        reaction_ms: Math.round(reactionMs),
+        participants: participants.results || [],
+        winner: winner
       });
     }
 
     return Response.json({
       ok: false,
       message: "Método no permitido."
-    }, {
-      status: 405
-    });
+    }, { status: 405 });
 
   } catch (error) {
 
@@ -208,8 +223,6 @@ export async function onRequest(context) {
       ok: false,
       message: "Error del servidor.",
       error: error.message
-    }, {
-      status: 500
-    });
+    }, { status: 500 });
   }
 }
