@@ -1,19 +1,11 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-
 <meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
-
-<title>Tengaged Reborn - Partida</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tengaged Reborn - Prueba de Inmunidad</title>
 
 <style>
-
 *{
   box-sizing:border-box;
 }
@@ -26,7 +18,7 @@ body{
 }
 
 .wrap{
-  max-width:1100px;
+  max-width:1000px;
   margin:auto;
   padding:18px;
 }
@@ -41,7 +33,6 @@ body{
 
 .header h1{
   margin:0 0 8px;
-  font-size:28px;
 }
 
 .connected{
@@ -49,102 +40,91 @@ body{
   font-size:14px;
 }
 
-.status{
-  margin-top:14px;
-  padding:14px;
-  border-radius:10px;
-  background:#ffe7e7;
+.live{
+  display:inline-block;
+  margin-top:12px;
+  background:#ffe8e8;
   color:#a12626;
+  padding:9px 14px;
+  border-radius:10px;
   font-weight:bold;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:18px;
 }
 
 .card{
   background:white;
   border-radius:14px;
-  padding:18px;
+  padding:20px;
   box-shadow:0 4px 14px rgba(0,0,0,.08);
   margin-bottom:18px;
 }
 
-.card h2{
+.phase{
+  border-left:6px solid #2d83b8;
+  padding-left:15px;
+}
+
+.phase h2{
   margin-top:0;
 }
 
-.notice{
-  background:#eef8fd;
+.description{
+  color:#5e788a;
+  line-height:1.6;
+}
+
+.action-box{
+  background:#f4faff;
+  border:1px solid #d5e8f2;
   border-radius:12px;
-  padding:15px;
-  margin-bottom:18px;
-}
-
-.test{
-  border:2px solid #f0c24b;
-  background:#fffaf0;
-  border-radius:14px;
   padding:20px;
+  margin-top:20px;
+  text-align:center;
 }
 
-.test h2{
-  margin-top:0;
-  color:#9a6b00;
-}
-
-.test-title{
-  font-size:22px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-
-.test-description{
-  line-height:1.5;
-  color:#526f80;
-}
-
-.participate{
-  width:100%;
+button{
   border:0;
   border-radius:10px;
-  padding:15px;
-  margin-top:18px;
+  padding:14px 22px;
   cursor:pointer;
   font-size:16px;
   font-weight:bold;
-  background:#f0a400;
+  background:#2d83b8;
   color:white;
 }
 
-.participate:hover{
-  background:#d88f00;
+button:hover{
+  background:#246c97;
 }
 
-.participate:disabled{
+button:disabled{
+  opacity:.6;
   cursor:not-allowed;
-  background:#a9bbc5;
 }
 
-.message{
-  margin-top:12px;
-  padding:12px;
-  border-radius:9px;
-  display:none;
-}
-
-.message.ok{
-  display:block;
+.success{
   background:#e8f8ed;
   color:#26733d;
+  border-radius:10px;
+  padding:14px;
+  font-weight:bold;
+  display:none;
+  margin-top:15px;
 }
 
-.message.error{
-  display:block;
+.error{
   background:#ffe8e8;
   color:#a12626;
+  border-radius:10px;
+  padding:14px;
+  font-weight:bold;
+  display:none;
+  margin-top:15px;
+}
+
+.count{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:15px;
 }
 
 .players{
@@ -154,87 +134,56 @@ body{
 }
 
 .player{
+  background:#f8fcfe;
   border:1px solid #d8e7ef;
   border-radius:10px;
-  padding:12px;
-  background:#f8fcfe;
+  padding:13px;
   display:flex;
   align-items:center;
+  justify-content:space-between;
   gap:10px;
 }
 
-.player.done{
-  border-color:#7bc58e;
-  background:#effbf2;
+.player-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .player-name{
   font-weight:bold;
 }
 
-.player-status{
-  font-size:12px;
-  margin-top:3px;
+.participated{
+  color:#26733d;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.waiting{
   color:#7892a2;
+  font-size:13px;
 }
 
-.stat{
-  display:flex;
-  justify-content:space-between;
-  padding:11px 0;
-  border-bottom:1px solid #e5eef3;
-}
-
-.stat:last-child{
-  border-bottom:0;
-}
-
-.big{
-  font-size:24px;
-  font-weight:bold;
-}
-
-.action{
-  width:100%;
-  border:0;
-  border-radius:10px;
-  padding:13px;
-  margin-top:10px;
-  cursor:pointer;
-  font-size:15px;
-  font-weight:bold;
-  background:#e8f2f7;
-  color:#285274;
-}
-
-.activity{
-  padding:10px 0;
-  border-bottom:1px solid #e5eef3;
-}
-
-.activity:last-child{
-  border-bottom:0;
-}
-
-.empty{
+.loading{
   color:#7892a2;
   font-style:italic;
 }
 
-@media(max-width:750px){
+.status{
+  padding:14px;
+  border-radius:10px;
+  background:#fff8df;
+  color:#806600;
+  margin-bottom:18px;
+}
 
-  .grid{
-    grid-template-columns:1fr;
-  }
-
+@media(max-width:700px){
   .players{
     grid-template-columns:1fr;
   }
-
 }
-
 </style>
-
 </head>
 
 <body>
@@ -242,178 +191,90 @@ body{
 <div class="wrap">
 
   <div class="header">
-
     <h1>🎮 Tengaged Reborn</h1>
-
-    <div
-      class="connected"
-      id="connectedUser"
-    >
+    <div class="connected" id="connectedUser">
       Conectado como...
     </div>
 
-    <div class="status">
+    <div class="live">
       🔴 PARTIDA EN MARCHA
+    </div>
+  </div>
+
+
+  <div class="card">
+
+    <div class="phase">
+
+      <h2>🚀 Casting #1</h2>
+
+      <p>
+        La partida ha comenzado.
+      </p>
+
+      <p class="description">
+        Ahora comienza la primera fase del juego.
+      </p>
+
     </div>
 
   </div>
 
 
-  <div class="notice">
+  <div class="card">
 
-    🚀 <strong>Casting #1</strong>
+    <h2>🏆 Prueba de Inmunidad</h2>
 
-    <br><br>
+    <p>
+      <strong>¡Consigue la inmunidad!</strong>
+    </p>
 
-    La partida ha comenzado.
+    <p class="description">
+      La primera prueba de la partida está a punto de comenzar.
+      Pulsa el botón para participar oficialmente en la prueba.
+      Una vez que participes, tu participación quedará registrada.
+    </p>
 
-    <br>
 
-    Ahora comienza la primera fase del juego.
+    <div class="action-box">
+
+      <button id="participateButton" onclick="participate()">
+        🏆 Participar en la prueba
+      </button>
+
+      <div id="success" class="success"></div>
+
+      <div id="error" class="error"></div>
+
+    </div>
 
   </div>
 
 
-  <div class="grid">
+  <div class="card">
 
-    <main>
+    <h2>👥 Participantes</h2>
 
-      <div class="card">
+    <div class="count">
+      <span id="participantCount">0</span>/16 jugadores
+    </div>
 
-        <div class="test">
-
-          <h2>🏆 Prueba de Inmunidad</h2>
-
-          <div class="test-title">
-            ¡Consigue la inmunidad!
-          </div>
-
-          <div class="test-description">
-
-            La primera prueba de la partida está a punto de comenzar.
-
-            <br><br>
-
-            Pulsa el botón para participar oficialmente en la prueba.
-
-            <br><br>
-
-            Una vez que participes, tu participación quedará registrada.
-
-          </div>
-
-          <button
-            class="participate"
-            id="participateButton"
-            onclick="participate()"
-          >
-            🏆 Participar en la prueba
-          </button>
-
-          <div
-            id="message"
-            class="message"
-          ></div>
-
-        </div>
-
+    <div id="players" class="players">
+      <div class="loading">
+        Cargando jugadores...
       </div>
+    </div>
+
+  </div>
 
 
-      <div class="card">
+  <div class="card">
 
-        <h2>👥 Jugadores</h2>
+    <h3>⚡ Estado de la prueba</h3>
 
-        <div
-          class="players"
-          id="playersList"
-        >
-          Cargando...
-        </div>
-
-      </div>
-
-    </main>
-
-
-    <aside>
-
-      <div class="card">
-
-        <h2>📊 Partida</h2>
-
-        <div class="stat">
-
-          <span>Jugadores</span>
-
-          <span
-            class="big"
-            id="playerCount"
-          >
-            -
-          </span>
-
-        </div>
-
-        <div class="stat">
-
-          <span>Participantes</span>
-
-          <span
-            class="big"
-            id="participantCount"
-          >
-            -
-          </span>
-
-        </div>
-
-        <div class="stat">
-
-          <span>Fase</span>
-
-          <span>
-            🏆 Inmunidad
-          </span>
-
-        </div>
-
-        <button
-          class="action"
-          onclick="loadGame()"
-        >
-          🔄 Actualizar
-        </button>
-
-        <button
-          class="action"
-          onclick="window.location.href='/room.html'"
-        >
-          🚪 Volver a la sala
-        </button>
-
-      </div>
-
-
-      <div class="card">
-
-        <h2>⚡ Actividad</h2>
-
-        <div id="activity">
-
-          <div class="activity">
-            🚀 La partida ha comenzado.
-          </div>
-
-          <div class="activity">
-            🏆 Preparando la prueba de inmunidad.
-          </div>
-
-        </div>
-
-      </div>
-
-    </aside>
+    <div id="status" class="status">
+      Cargando estado...
+    </div>
 
   </div>
 
@@ -422,20 +283,13 @@ body{
 
 <script>
 
-const username =
-  localStorage.getItem("tengaged_user");
-
+const username = localStorage.getItem("tengaged_user");
 
 if(!username){
-
   window.location.href="/";
-
 }
 
-
-document.getElementById(
-  "connectedUser"
-).textContent =
+document.getElementById("connectedUser").textContent =
   "Conectado como " + username;
 
 
@@ -443,62 +297,65 @@ async function loadGame(){
 
   try{
 
-    const response =
-      await fetch("/api/game");
+    const response = await fetch("/api/game");
 
-    const data =
-      await response.json();
-
+    const data = await response.json();
 
     if(!data.ok){
 
-      showMessage(
-        data.message || "No se pudo cargar la partida.",
-        "error"
+      showError(
+        data.message || "No se pudo cargar la partida."
       );
 
       return;
+    }
+
+
+    const players = data.players || [];
+    const participants = data.participants || [];
+
+
+    document.getElementById("participantCount").textContent =
+      participants.length;
+
+
+    renderPlayers(players,participants);
+
+
+    const alreadyParticipated =
+      participants.some(function(player){
+
+        const name =
+          typeof player === "string"
+          ? player
+          : player.username;
+
+        return String(name).toLowerCase() ===
+               String(username).toLowerCase();
+
+      });
+
+
+    if(alreadyParticipated){
+
+      setParticipated();
+
+    }else{
+
+      setWaiting();
 
     }
 
 
-    const players =
-      data.players || [];
-
-    const participants =
-      data.participants || [];
-
-
-    document.getElementById(
-      "playerCount"
-    ).textContent =
-      players.length;
-
-
-    document.getElementById(
-      "participantCount"
-    ).textContent =
-      participants.length;
-
-
-    renderPlayers(
-      players,
-      participants
-    );
-
-
-    updateButton(
-      participants
-    );
-
+    document.getElementById("status").textContent =
+      "🟢 La prueba de inmunidad está activa. Participa para quedar registrado.";
 
   }catch(error){
 
     console.error(error);
 
-    showMessage(
-      "No se ha podido conectar con el servidor.",
-      "error"
+    showError(
+      "Error al conectar con el servidor."
     );
 
   }
@@ -506,79 +363,185 @@ async function loadGame(){
 }
 
 
-function renderPlayers(
-  players,
-  participants
-){
+async function participate(){
 
-  const container =
-    document.getElementById(
-      "playersList"
+  const button =
+    document.getElementById("participateButton");
+
+  button.disabled = true;
+
+  button.textContent =
+    "⏳ Registrando participación...";
+
+
+  hideMessages();
+
+
+  try{
+
+    const response = await fetch(
+      "/api/game",
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          username:username
+        })
+      }
     );
 
 
-  container.innerHTML="";
+    const data = await response.json();
+
+
+    if(!data.ok){
+
+      showError(
+        data.message ||
+        "No se ha podido registrar tu participación."
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "🏆 Participar en la prueba";
+
+      return;
+
+    }
+
+
+    setParticipated();
+
+
+    showSuccess(
+      data.message ||
+      "¡Has participado en la prueba de inmunidad!"
+    );
+
+
+    await loadGame();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showError(
+      "Error al conectar con el servidor."
+    );
+
+    button.disabled = false;
+
+    button.textContent =
+      "🏆 Participar en la prueba";
+
+  }
+
+}
+
+
+function setParticipated(){
+
+  const button =
+    document.getElementById("participateButton");
+
+  button.disabled = true;
+
+  button.textContent =
+    "✅ Ya has participado";
+
+}
+
+
+function setWaiting(){
+
+  const button =
+    document.getElementById("participateButton");
+
+  button.disabled = false;
+
+  button.textContent =
+    "🏆 Participar en la prueba";
+
+}
+
+
+function renderPlayers(players,participants){
+
+  const container =
+    document.getElementById("players");
+
+  container.innerHTML = "";
+
+
+  if(!players.length){
+
+    container.innerHTML =
+      '<div class="loading">No hay jugadores.</div>';
+
+    return;
+
+  }
 
 
   players.forEach(function(player){
 
     const name =
       typeof player === "string"
-        ? player
-        : player.username;
+      ? player
+      : player.username;
 
 
     const participated =
       participants.some(function(item){
 
-        return String(
-          item.username
-        ).toLowerCase() ===
-        String(name).toLowerCase();
+        const participantName =
+          typeof item === "string"
+          ? item
+          : item.username;
+
+        return String(participantName).toLowerCase() ===
+               String(name).toLowerCase();
 
       });
-
-
-    const isMe =
-      String(name).toLowerCase() ===
-      String(username).toLowerCase();
 
 
     const div =
       document.createElement("div");
 
-
-    div.className =
-      participated
-        ? "player done"
-        : "player";
+    div.className="player";
 
 
     div.innerHTML = `
 
-      <div style="font-size:25px">
-        ${participated ? "🏆" : "🙂"}
-      </div>
+      <div class="player-left">
 
-      <div>
+        <div style="font-size:25px">
+          🙂
+        </div>
 
         <div class="player-name">
-
           ${escapeHtml(name)}
-
-          ${isMe ? " ⭐" : ""}
-
         </div>
 
-        <div class="player-status">
+      </div>
 
-          ${
-            participated
-              ? "Ha participado"
-              : "Pendiente de participar"
-          }
+      <div class="${
+        participated
+        ? "participated"
+        : "waiting"
+      }">
 
-        </div>
+        ${
+          participated
+          ? "🏆 Participó"
+          : "⏳ Pendiente"
+        }
 
       </div>
 
@@ -592,147 +555,35 @@ function renderPlayers(
 }
 
 
-function updateButton(
-  participants
-){
+function showSuccess(text){
 
-  const button =
-    document.getElementById(
-      "participateButton"
-    );
+  const element =
+    document.getElementById("success");
 
+  element.textContent = text;
 
-  const already =
-    participants.some(function(item){
-
-      return String(
-        item.username
-      ).toLowerCase() ===
-      String(username).toLowerCase();
-
-    });
-
-
-  if(already){
-
-    button.disabled=true;
-
-    button.textContent =
-      "🏆 Ya has participado";
-
-  }else{
-
-    button.disabled=false;
-
-    button.textContent =
-      "🏆 Participar en la prueba";
-
-  }
+  element.style.display="block";
 
 }
 
 
-async function participate(){
+function showError(text){
 
-  const button =
-    document.getElementById(
-      "participateButton"
-    );
+  const element =
+    document.getElementById("error");
 
+  element.textContent = text;
 
-  button.disabled=true;
-
-  button.textContent =
-    "⏳ Registrando...";
-
-
-  try{
-
-    const response =
-      await fetch(
-        "/api/game",
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:JSON.stringify({
-            username:username
-          })
-        }
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if(!data.ok){
-
-      showMessage(
-        data.message ||
-        "No se ha podido registrar la participación.",
-        "error"
-      );
-
-      button.disabled=false;
-
-      button.textContent =
-        "🏆 Participar en la prueba";
-
-      return;
-
-    }
-
-
-    showMessage(
-      data.message ||
-      "¡Participación registrada!",
-      "ok"
-    );
-
-
-    loadGame();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    showMessage(
-      "Error al conectar con el servidor.",
-      "error"
-    );
-
-
-    button.disabled=false;
-
-    button.textContent =
-      "🏆 Participar en la prueba";
-
-  }
+  element.style.display="block";
 
 }
 
 
-function showMessage(
-  text,
-  type
-){
+function hideMessages(){
 
-  const box =
-    document.getElementById(
-      "message"
-    );
+  document.getElementById("success").style.display="none";
 
-
-  box.textContent=text;
-
-  box.className =
-    "message " + type;
+  document.getElementById("error").style.display="none";
 
 }
 
@@ -740,10 +591,15 @@ function showMessage(
 function escapeHtml(value){
 
   return String(value)
+
     .replace(/&/g,"&amp;")
+
     .replace(/</g,"&lt;")
+
     .replace(/>/g,"&gt;")
+
     .replace(/"/g,"&quot;")
+
     .replace(/'/g,"&#039;");
 
 }
@@ -760,5 +616,4 @@ setInterval(
 </script>
 
 </body>
-
 </html>
