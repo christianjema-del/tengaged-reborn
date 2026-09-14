@@ -7,7 +7,6 @@
 <title>Tengaged Reborn - Partida</title>
 
 <style>
-
 body{
   font-family:Arial,sans-serif;
   margin:0;
@@ -18,41 +17,92 @@ body{
 .wrap{
   max-width:1000px;
   margin:auto;
-  padding:20px;
+  padding:18px;
+}
+
+.head{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
 .card{
   background:white;
   border-radius:14px;
-  padding:22px;
-  margin-bottom:18px;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
 h1,h2,h3{
   margin-top:0;
 }
 
-.center{
-  text-align:center;
-}
-
-.badge{
+.phase{
   display:inline-block;
+  background:#285274;
+  color:white;
   padding:7px 12px;
   border-radius:20px;
-  background:#dff1ff;
-  margin-bottom:12px;
   font-weight:bold;
+  margin-bottom:12px;
+}
+
+.player{
+  padding:10px;
+  border-bottom:1px solid #e5edf2;
+}
+
+.player:last-child{
+  border-bottom:0;
+}
+
+.me{
+  font-weight:bold;
+}
+
+.winner{
+  background:#fff4c2;
+  border-radius:8px;
+  padding:12px;
+  font-weight:bold;
+}
+
+.nominee{
+  background:#ffe1e1;
+  border-radius:8px;
+  padding:12px;
+  margin:8px 0;
+  font-weight:bold;
+}
+
+.eliminated{
+  background:#ffd5d5;
+  border-radius:10px;
+  padding:16px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.safe{
+  background:#dff7e6;
+  border-radius:10px;
+  padding:12px;
+}
+
+.pending{
+  color:#777;
 }
 
 button{
   border:0;
   border-radius:10px;
-  padding:13px 20px;
-  font-size:16px;
+  padding:11px 16px;
+  font-size:15px;
   cursor:pointer;
-  background:#2878b8;
+  background:#285274;
   color:white;
 }
 
@@ -65,151 +115,73 @@ button:disabled{
   cursor:not-allowed;
 }
 
-.reaction{
-  width:100%;
-  min-height:170px;
-  font-size:28px;
-  font-weight:bold;
-  background:#2878b8;
-  margin-top:20px;
+.vote-list{
+  display:grid;
+  gap:10px;
+  margin-top:12px;
 }
 
-.reaction.waiting{
-  background:#e7edf2;
-  color:#285274;
+.vote-option{
+  border:2px solid #d9e5ec;
+  border-radius:12px;
+  padding:12px;
+  background:white;
+  cursor:pointer;
 }
 
-.reaction.ready{
-  background:#39a852;
-  color:white;
+.vote-option:hover{
+  border-color:#285274;
 }
 
-.reaction.false{
-  background:#d9534f;
-  color:white;
+.vote-option.selected{
+  border-color:#285274;
+  background:#eaf5fb;
+}
+
+.status{
+  padding:12px;
+  background:#f2f7fa;
+  border-radius:10px;
+  margin-top:12px;
+}
+
+.small{
+  font-size:13px;
+  color:#6d7d87;
 }
 
 .hidden{
   display:none;
 }
 
-.status{
-  padding:12px;
-  border-radius:10px;
-  background:#f0f7fb;
-  margin:12px 0;
+ol{
+  padding-left:25px;
 }
 
-.success{
-  background:#e4f8e8;
-  border:1px solid #9bd5a4;
+.rank-row{
+  padding:8px;
+  border-bottom:1px solid #e5edf2;
 }
 
-.warning{
-  background:#fff5d9;
-  border:1px solid #ead18b;
+.rank-row:last-child{
+  border-bottom:0;
 }
 
-.danger{
-  background:#fde7e7;
-  border:1px solid #e3a0a0;
-}
-
-.winner{
-  text-align:center;
-  background:#fff4c7;
-  border:2px solid #e3bf42;
-  padding:24px;
-  border-radius:14px;
-}
-
-.winner .name{
-  font-size:28px;
-  font-weight:bold;
-  margin:10px 0;
-}
-
-.winner .time{
-  font-size:20px;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-th,td{
-  padding:10px;
-  border-bottom:1px solid #ddd;
-  text-align:left;
-}
-
-th{
-  background:#f0f6fa;
-}
-
-.position{
-  font-weight:bold;
-}
-
-.vote-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
-  margin-top:18px;
-}
-
-.vote-player{
-  background:#f5f9fc;
-  border:2px solid #d5e5ef;
+.badge{
+  display:inline-block;
+  padding:4px 8px;
   border-radius:12px;
-  padding:16px;
-  cursor:pointer;
-  text-align:center;
-  transition:.15s;
+  font-size:12px;
+  background:#edf2f5;
 }
 
-.vote-player:hover{
-  border-color:#2878b8;
-  background:#edf7ff;
+.badge-danger{
+  background:#ffd5d5;
 }
 
-.vote-player.selected{
-  border-color:#2878b8;
-  background:#dff1ff;
+.badge-safe{
+  background:#dff7e6;
 }
-
-.vote-player.immune{
-  opacity:.5;
-  cursor:not-allowed;
-  border-color:#e3bf42;
-  background:#fff8da;
-}
-
-.vote-name{
-  font-size:18px;
-  font-weight:bold;
-}
-
-.vote-note{
-  font-size:13px;
-  margin-top:6px;
-}
-
-.nominee{
-  background:#ffe4e4;
-  border:2px solid #d9534f;
-  border-radius:10px;
-  padding:14px;
-  margin-top:10px;
-  font-weight:bold;
-}
-
-.small{
-  font-size:13px;
-  color:#668096;
-}
-
 </style>
 </head>
 
@@ -217,1215 +189,1350 @@ th{
 
 <div class="wrap">
 
-  <div class="card center">
+  <div class="head">
+    <h1>🎮 Tengaged Reborn</h1>
 
-    <div class="badge">
-      🎮 Tengaged Reborn
+    <div>
+      Jugador:
+      <strong id="username">—</strong>
     </div>
 
-    <h1 id="title">
-      Cargando partida...
-    </h1>
-
-    <div id="phaseText">
-      Conectando con el servidor...
+    <div style="margin-top:8px">
+      <span class="phase" id="phaseLabel">
+        Cargando...
+      </span>
     </div>
 
+    <div class="small">
+      Casting #1 · Partida en curso
+    </div>
   </div>
 
 
-  <!-- =====================================================
-       INMUNIDAD
-       ===================================================== -->
+  <!-- ========================= -->
+  <!-- INMUNIDAD -->
+  <!-- ========================= -->
 
-  <div id="immunitySection">
+  <section class="card" id="immunitySection">
 
-    <div class="card">
+    <h2>🏆 Prueba de Inmunidad</h2>
 
-      <h2>🏆 Prueba de Inmunidad</h2>
+    <p>
+      Pulsa el botón cuando aparezca el momento correcto.
+    </p>
 
-      <p>
-        Cuando aparezca <b>¡AHORA!</b>, pulsa el botón
-        lo más rápido posible.
-      </p>
+    <div id="reactionArea">
 
-      <div id="immunityStatus"
-           class="status">
-        Preparando prueba...
-      </div>
-
-      <button
-        id="startButton"
-        onclick="startReaction()">
-        ▶️ Comenzar prueba
+      <button id="reactionButton">
+        Preparado
       </button>
 
-      <button
-        id="reactionButton"
-        class="reaction hidden"
-        onclick="react()">
-        ESPERA...
-      </button>
-
-      <div id="reactionResult"
-           class="status hidden">
+      <div
+        id="reactionStatus"
+        class="status">
+        Esperando...
       </div>
 
     </div>
 
-
-    <div class="card">
-
-      <h2>🏅 Clasificación</h2>
-
-      <div id="ranking">
-        Cargando...
-      </div>
-
+    <div
+      id="immunityWinner"
+      class="winner hidden">
     </div>
 
+  </section>
 
-    <div class="card">
 
-      <h2>⏳ Pendientes</h2>
+  <!-- ========================= -->
+  <!-- RANKING INMUNIDAD -->
+  <!-- ========================= -->
 
-      <div id="pending">
-        Cargando...
-      </div>
+  <section class="card" id="immunityRankingSection">
 
+    <h2>⚡ Clasificación de inmunidad</h2>
+
+    <div id="immunityRanking">
+      Cargando...
     </div>
 
-  </div>
+  </section>
 
 
-  <!-- =====================================================
-       GANADOR INMUNIDAD
-       ===================================================== -->
+  <!-- ========================= -->
+  <!-- NOMINACIONES -->
+  <!-- ========================= -->
 
-  <div id="immunityWinnerSection"
-       class="card hidden">
+  <section
+    class="card hidden"
+    id="nominationSection">
 
-    <div id="immunityWinner">
+    <h2>🎯 Nominaciones</h2>
+
+    <div
+      id="nominationInfo"
+      class="status">
     </div>
 
-  </div>
-
-
-  <!-- =====================================================
-       NOMINACIONES
-       ===================================================== -->
-
-  <div id="nominationsSection"
-       class="hidden">
-
-    <div class="card">
-
-      <h2>🗳️ Nominaciones</h2>
-
-      <div id="nominationInfo"
-           class="status">
-      </div>
-
-      <div id="voteArea">
-      </div>
-
+    <div
+      id="nominationVoteArea">
     </div>
 
-
-    <div class="card">
-
-      <h2>📊 Votos</h2>
-
-      <div id="voteRanking">
-        Todavía no hay votos.
-      </div>
-
+    <div
+      id="nominationRanking"
+      style="margin-top:16px">
     </div>
 
+  </section>
 
-    <div id="nomineesCard"
-         class="card hidden">
 
-      <h2>🚨 Nominados</h2>
+  <!-- ========================= -->
+  <!-- ELIMINACIÓN -->
+  <!-- ========================= -->
 
-      <div id="nominees">
-      </div>
+  <section
+    class="card hidden"
+    id="eliminationSection">
 
+    <h2>🔥 Eliminación</h2>
+
+    <div
+      id="eliminationInfo"
+      class="status">
     </div>
 
-  </div>
+    <div
+      id="nomineeList"
+      style="margin-top:14px">
+    </div>
 
+    <div
+      id="eliminationVoteArea"
+      style="margin-top:18px">
+    </div>
+
+    <div
+      id="eliminationRanking"
+      style="margin-top:18px">
+    </div>
+
+    <div
+      id="eliminationResult"
+      style="margin-top:18px">
+    </div>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- JUGADORES -->
+  <!-- ========================= -->
+
+  <section class="card">
+
+    <h2>👥 Jugadores</h2>
+
+    <div id="playersList">
+      Cargando...
+    </div>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- HISTORIAL -->
+  <!-- ========================= -->
+
+  <section class="card">
+
+    <h2>📜 Eliminaciones</h2>
+
+    <div id="eliminationHistory">
+      Todavía no hay eliminaciones.
+    </div>
+
+  </section>
 
 </div>
 
 
 <script>
 
-let username =
+const username =
   localStorage.getItem("username") ||
-  localStorage.getItem("currentUser") ||
   "admin1";
 
-let reactionTimer = null;
-let reactionStart = null;
-let canReact = false;
-let selectedVote = null;
-let alreadyVoted = false;
+document.getElementById("username").textContent =
+  username;
 
 
-// =========================================================
-// ESCAPAR HTML
-// =========================================================
+let reactionStarted = false;
+let reactionReady = false;
+let reactionStartTime = null;
+let reactionTimeout = null;
 
-function escapeHtml(value){
+let selectedNominationTarget = null;
+let selectedEliminationTarget = null;
 
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+let myNominationVoteDone = false;
+let myEliminationVoteDone = false;
+
+
+// ======================================
+// API
+// ======================================
+
+async function getGame(){
+
+  const response =
+    await fetch("/api/game", {
+      cache:"no-store"
+    });
+
+  return await response.json();
 }
 
 
-// =========================================================
-// CARGAR DATOS
-// =========================================================
+// ======================================
+// FASE
+// ======================================
 
-async function loadGame(){
+function setPhaseLabel(phase, status){
 
-  try{
+  const label =
+    document.getElementById("phaseLabel");
 
-    const response =
-      await fetch("/api/game");
+  if(phase === "immunity"){
+    label.textContent =
+      "🏆 INMUNIDAD";
+    return;
+  }
 
-    const data =
-      await response.json();
+  if(phase === "nominations"){
+    label.textContent =
+      "🎯 NOMINACIONES";
+    return;
+  }
 
-    if(!response.ok || !data.ok){
+  if(phase === "elimination"){
 
-      document.getElementById("title")
-        .textContent =
-        "Error";
-
-      document.getElementById("phaseText")
-        .textContent =
-        data.message ||
-        "No se pudo cargar la partida.";
-
-      return;
+    if(status === "finished"){
+      label.textContent =
+        "💀 ELIMINACIÓN FINALIZADA";
+    }else{
+      label.textContent =
+        "🔥 ELIMINACIÓN";
     }
 
-    renderGame(data);
-
-  }catch(error){
-
-    document.getElementById("title")
-      .textContent =
-      "Error de conexión";
-
-    document.getElementById("phaseText")
-      .textContent =
-      "No se pudo conectar con el servidor.";
-  }
-
-}
-
-
-// =========================================================
-// RENDER GENERAL
-// =========================================================
-
-function renderGame(data){
-
-  if(data.phase === "immunity"){
-
-    renderImmunity(data);
-
     return;
   }
 
-  if(data.phase === "nominations"){
-
-    renderNominations(data);
-
-    return;
-  }
-
+  label.textContent =
+    "🎮 PARTIDA";
 }
 
 
-// =========================================================
+// ======================================
 // INMUNIDAD
-// =========================================================
-
-function renderImmunity(data){
-
-  document.getElementById("title")
-    .textContent =
-    "🏆 Prueba de Inmunidad";
-
-  document.getElementById("phaseText")
-    .textContent =
-    "Todos los jugadores deben completar la prueba.";
-
-  document.getElementById("immunitySection")
-    .classList.remove("hidden");
-
-  document.getElementById("nominationsSection")
-    .classList.add("hidden");
-
-
-  // GANADOR SI EXISTE
-
-  if(data.winner){
-
-    document.getElementById(
-      "immunityWinnerSection"
-    ).classList.remove("hidden");
-
-    document.getElementById(
-      "immunityWinner"
-    ).innerHTML = `
-
-      <div class="winner">
-
-        <div>
-          🏆 INMUNIDAD CONSEGUIDA
-        </div>
-
-        <div class="name">
-          ${escapeHtml(data.winner.username)}
-        </div>
-
-        <div class="time">
-          Tiempo ganador:
-          <b>${data.winner.reaction_ms} ms</b>
-        </div>
-
-      </div>
-    `;
-  }
-
-
-  renderRanking(data);
-  renderPending(data);
-
-}
-
-
-// =========================================================
-// CLASIFICACIÓN
-// =========================================================
-
-function renderRanking(data){
-
-  const container =
-    document.getElementById("ranking");
-
-  if(!data.ranking ||
-     data.ranking.length === 0){
-
-    container.innerHTML =
-      "<div class='small'>Todavía no hay tiempos registrados.</div>";
-
-    return;
-  }
-
-  let html = `
-    <table>
-
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Jugador</th>
-          <th>Tiempo</th>
-        </tr>
-      </thead>
-
-      <tbody>
-  `;
-
-  data.ranking.forEach(player => {
-
-    html += `
-
-      <tr>
-
-        <td class="position">
-          ${player.position}
-        </td>
-
-        <td>
-          ${escapeHtml(player.username)}
-        </td>
-
-        <td>
-          ${player.reaction_ms} ms
-        </td>
-
-      </tr>
-    `;
-
-  });
-
-  html += `
-      </tbody>
-    </table>
-  `;
-
-  container.innerHTML = html;
-
-}
-
-
-// =========================================================
-// PENDIENTES
-// =========================================================
-
-function renderPending(data){
-
-  const container =
-    document.getElementById("pending");
-
-  if(!data.pending ||
-     data.pending.length === 0){
-
-    container.innerHTML =
-      `
-      <div class="status success">
-        ✅ Todos han completado la prueba.
-      </div>
-      `;
-
-    return;
-  }
-
-  container.innerHTML =
-    data.pending
-      .map(player => `
-        <div class="status">
-          ⏳ ${escapeHtml(player.username)}
-        </div>
-      `)
-      .join("");
-
-}
-
-
-// =========================================================
-// COMENZAR REACCIÓN
-// =========================================================
+// ======================================
 
 function startReaction(){
 
-  const startButton =
-    document.getElementById("startButton");
+  if(reactionStarted){
+    return;
+  }
 
-  const reactionButton =
-    document.getElementById("reactionButton");
+  reactionStarted = true;
+
+  const button =
+    document.getElementById(
+      "reactionButton"
+    );
 
   const status =
-    document.getElementById("immunityStatus");
+    document.getElementById(
+      "reactionStatus"
+    );
 
-  const result =
-    document.getElementById("reactionResult");
-
-
-  startButton.disabled = true;
-
-  result.classList.add("hidden");
-
-  reactionButton.className =
-    "reaction";
-
-  reactionButton.textContent =
-    "ESPERA...";
-
-  reactionButton.classList.remove(
-    "hidden"
-  );
-
-  canReact = false;
+  button.disabled = true;
 
   status.textContent =
     "⏳ Espera...";
-
 
   const delay =
     1500 +
     Math.random() * 3500;
 
-
-  reactionTimer =
+  reactionTimeout =
     setTimeout(() => {
 
-      canReact = true;
+      reactionReady = true;
 
-      reactionStart =
+      reactionStartTime =
         performance.now();
 
-      reactionButton.className =
-        "reaction ready";
+      button.disabled = false;
 
-      reactionButton.textContent =
+      button.textContent =
         "🚨 ¡AHORA!";
 
       status.textContent =
-        "🔥 ¡PULSA AHORA!";
+        "¡PULSA YA!";
 
-    },delay);
-
+    }, delay);
 }
 
 
-// =========================================================
-// REACCIÓN
-// =========================================================
+async function registerReaction(){
 
-async function react(){
+  if(!reactionReady){
+    return;
+  }
 
-  const reactionButton =
-    document.getElementById("reactionButton");
+  const reaction =
+    Math.round(
+      performance.now() -
+      reactionStartTime
+    );
+
+  reactionReady = false;
+
+  const button =
+    document.getElementById(
+      "reactionButton"
+    );
 
   const status =
-    document.getElementById("immunityStatus");
+    document.getElementById(
+      "reactionStatus"
+    );
 
-  const result =
-    document.getElementById("reactionResult");
+  button.disabled = true;
 
+  status.textContent =
+    `⏱️ ${reaction} ms`;
 
-  // FALSA SALIDA
+  const response =
+    await fetch("/api/game", {
+      method:"POST",
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+      body:JSON.stringify({
+        username,
+        reaction_ms:reaction
+      })
+    });
 
-  if(!canReact){
+  const data =
+    await response.json();
 
-    clearTimeout(reactionTimer);
-
-    reactionButton.className =
-      "reaction false";
-
-    reactionButton.textContent =
-      "❌ SALIDA FALSA";
+  if(!data.ok){
 
     status.textContent =
-      "Has pulsado demasiado pronto.";
-
-    result.className =
-      "status danger";
-
-    result.textContent =
-      "❌ No se registra ningún tiempo. Puedes volver a intentarlo.";
-
-    result.classList.remove("hidden");
-
-    document.getElementById("startButton")
-      .disabled = false;
+      data.message ||
+      "Error.";
 
     return;
   }
 
-
-  canReact = false;
-
-
-  const reactionMs =
-    Math.round(
-      performance.now() -
-      reactionStart
-    );
-
-
-  reactionButton.disabled = true;
-
-  reactionButton.textContent =
-    reactionMs + " ms";
-
   status.textContent =
-    "💾 Guardando resultado...";
+    "✅ Prueba completada";
+
+  setTimeout(
+    loadGame,
+    500
+  );
+}
 
 
-  try{
+document
+  .getElementById("reactionButton")
+  .addEventListener(
+    "click",
+    () => {
 
-    const response =
-      await fetch("/api/game",{
+      if(!reactionStarted){
+        startReaction();
+        return;
+      }
 
-        method:"POST",
+      if(reactionReady){
+        registerReaction();
+      }
 
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        body:JSON.stringify({
-
-          username:username,
-
-          reaction_ms:reactionMs
-
-        })
-
-      });
-
-
-    const data =
-      await response.json();
-
-
-    if(!response.ok || !data.ok){
-
-      result.className =
-        "status danger";
-
-      result.textContent =
-        data.message ||
-        "No se pudo guardar.";
-
-      result.classList.remove(
-        "hidden"
-      );
-
-      reactionButton.disabled =
-        false;
-
-      return;
     }
+  );
 
 
-    result.className =
-      "status success";
+// ======================================
+// RENDER INMUNIDAD
+// ======================================
 
-    result.textContent =
-      data.message ||
-      "¡Tiempo registrado!";
+function renderImmunity(data){
 
-    result.classList.remove(
+  const ranking =
+    data.immunity?.ranking ||
+    [];
+
+  const pending =
+    data.immunity?.pending ||
+    [];
+
+  const winner =
+    data.immunity?.winner ||
+    null;
+
+
+  const rankingBox =
+    document.getElementById(
+      "immunityRanking"
+    );
+
+  if(ranking.length === 0){
+
+    rankingBox.innerHTML =
+      "<p>Aún nadie ha completado la prueba.</p>";
+
+  }else{
+
+    rankingBox.innerHTML =
+      ranking.map(
+        (player,index) => `
+          <div class="rank-row">
+            <strong>
+              ${index + 1}.
+              ${player.username}
+            </strong>
+
+            <span class="badge">
+              ${player.reaction_ms} ms
+            </span>
+
+            ${
+              index === 0
+                ? '<span class="badge badge-safe">🏆 Inmunidad</span>'
+                : ''
+            }
+          </div>
+        `
+      ).join("");
+
+  }
+
+
+  if(pending.length > 0){
+
+    rankingBox.innerHTML += `
+      <div
+        class="status"
+        style="margin-top:12px">
+
+        <strong>⏳ Pendientes:</strong><br>
+
+        ${pending.join(", ")}
+
+      </div>
+    `;
+
+  }
+
+
+  const winnerBox =
+    document.getElementById(
+      "immunityWinner"
+    );
+
+  if(winner){
+
+    winnerBox.classList.remove(
       "hidden"
     );
 
+    winnerBox.innerHTML =
+      `🏆 ${winner} tiene la inmunidad.`;
 
-    // Si ya terminó inmunidad,
-    // renderizamos inmediatamente
-    // las nominaciones.
+  }else{
 
-    if(data.phase === "nominations"){
-
-      setTimeout(() => {
-
-        renderGame(data);
-
-      },800);
-
-      return;
-    }
-
-
-    reactionButton.classList.add(
-      "waiting"
-    );
-
-
-    loadGame();
-
-  }catch(error){
-
-    result.className =
-      "status danger";
-
-    result.textContent =
-      "Error de conexión.";
-
-    result.classList.remove(
+    winnerBox.classList.add(
       "hidden"
     );
 
-    reactionButton.disabled =
-      false;
   }
 
 }
 
 
-// =========================================================
+// ======================================
 // NOMINACIONES
-// =========================================================
+// ======================================
 
 function renderNominations(data){
 
-  document.getElementById("title")
-    .textContent =
-    "🗳️ Fase de Nominaciones";
-
-  document.getElementById("phaseText")
-    .textContent =
-    "Cada jugador debe emitir un voto.";
-
-
-  document.getElementById("immunitySection")
-    .classList.add("hidden");
-
-
-  document.getElementById(
-    "immunityWinnerSection"
-  ).classList.remove("hidden");
-
-
-  if(data.winner){
-
+  const section =
     document.getElementById(
-      "immunityWinner"
-    ).innerHTML = `
+      "nominationSection"
+    );
 
-      <div class="winner">
+  if(
+    data.phase !== "nominations" &&
+    data.phase !== "elimination"
+  ){
 
-        <div>
-          🛡️ JUGADOR INMUNE
-        </div>
+    section.classList.add(
+      "hidden"
+    );
 
-        <div class="name">
-          ${escapeHtml(data.winner.username)}
-        </div>
-
-        <div class="time">
-          Tiene inmunidad y no puede ser nominado.
-        </div>
-
-      </div>
-
-    `;
+    return;
   }
 
-
-  document.getElementById(
-    "nominationsSection"
-  ).classList.remove("hidden");
-
-
-  renderNominationInfo(data);
-
-  renderVoteArea(data);
-
-  renderVoteRanking(data);
-
-  renderNominees(data);
-
-}
+  section.classList.remove(
+    "hidden"
+  );
 
 
-// =========================================================
-// INFORMACIÓN DE VOTACIÓN
-// =========================================================
+  const nominees =
+    data.nominations?.nominees ||
+    [];
 
-function renderNominationInfo(data){
+  const total =
+    data.nominations?.totalVotes ||
+    0;
+
+  const expected =
+    data.nominations?.expectedVotes ||
+    0;
+
 
   const info =
     document.getElementById(
       "nominationInfo"
     );
 
+  if(data.phase === "nominations"){
 
-  if(data.status === "finished"){
+    info.innerHTML = `
+      🗳️ Han votado
+      <strong>${total}/${expected}</strong>
+      jugadores.
+      <br><br>
+      El ganador de inmunidad está protegido.
+    `;
 
-    info.className =
-      "status success";
+  }else{
 
-    info.innerHTML =
-      `
-      🗳️ <b>Votación cerrada.</b><br>
-      Todos los jugadores han votado.
+    info.innerHTML = `
+      ✅ Las nominaciones han terminado.
+      <br>
+      Los nominados son:
+      <strong>
+        ${nominees.join(", ")}
+      </strong>
+    `;
+
+  }
+
+
+  const voteArea =
+    document.getElementById(
+      "nominationVoteArea"
+    );
+
+
+  if(data.phase !== "nominations"){
+
+    voteArea.innerHTML = "";
+
+  }else{
+
+    const alreadyVoted =
+      data.nominations?.ranking?.some(
+        row =>
+          row.username === username &&
+          false
+      );
+
+    if(!myNominationVoteDone){
+
+      voteArea.innerHTML = `
+        <h3>Elige a quién nominar</h3>
+
+        <div
+          class="vote-list"
+          id="nominationOptions">
+        </div>
+
+        <button
+          id="sendNominationVote">
+          🗳️ Confirmar voto
+        </button>
       `;
 
-    return;
-  }
+      const options =
+        document.getElementById(
+          "nominationOptions"
+        );
+
+      const players =
+        data.players || [];
+
+      players
+        .filter(player =>
+          player.status === "active" &&
+          player.username !== username &&
+          player.username !== data.immunityWinner
+        )
+        .forEach(player => {
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+          div.className =
+            "vote-option";
+
+          div.textContent =
+            `🎯 ${player.username}`;
+
+          div.onclick = () => {
+
+            selectedNominationTarget =
+              player.username;
+
+            document
+              .querySelectorAll(
+                "#nominationOptions .vote-option"
+              )
+              .forEach(
+                x =>
+                  x.classList.remove(
+                    "selected"
+                  )
+              );
+
+            div.classList.add(
+              "selected"
+            );
+
+          };
+
+          options.appendChild(div);
+
+        });
 
 
-  info.className =
-    "status";
+      document
+        .getElementById(
+          "sendNominationVote"
+        )
+        .onclick =
+        sendNominationVote;
 
-  info.innerHTML = `
+    }else{
 
-    🗳️ Votos registrados:
-    <b>${data.totalVotes}</b>
-    /
-    <b>${data.totalPlayers}</b>
-
-    <br><br>
-
-    ⏳ Pendientes:
-    <b>${data.pendingVotes.length}</b>
-
-  `;
-
-}
-
-
-// =========================================================
-// ÁREA PARA VOTAR
-// =========================================================
-
-function renderVoteArea(data){
-
-  const area =
-    document.getElementById(
-      "voteArea"
-    );
-
-
-  if(data.status === "finished"){
-
-    area.innerHTML = `
-
-      <div class="status success">
-
-        ✅ La votación ha terminado.
-
-        <br><br>
-
-        Ya no se pueden emitir más votos.
-
-      </div>
-    `;
-
-    return;
-  }
-
-
-  const currentVote =
-    data.votes.find(
-      vote =>
-        vote.username.toLowerCase() ===
-        username.toLowerCase()
-    );
-
-
-  if(currentVote){
-
-    alreadyVoted = true;
-
-    area.innerHTML = `
-
-      <div class="status success">
-
-        ✅ Ya has votado.
-
-        <br><br>
-
-        Tu voto ha sido registrado.
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  alreadyVoted = false;
-
-
-  let html = `
-
-    <p>
-      Selecciona al jugador que quieres nominar:
-    </p>
-
-    <div class="vote-grid">
-  `;
-
-
-  data.players.forEach(player => {
-
-    const isImmune =
-      data.winner &&
-      player.username.toLowerCase() ===
-      data.winner.username.toLowerCase();
-
-
-    if(isImmune){
-
-      html += `
-
-        <div class="vote-player immune">
-
-          <div class="vote-name">
-            🛡️ ${escapeHtml(player.username)}
-          </div>
-
-          <div class="vote-note">
-            Inmune
-          </div>
-
+      voteArea.innerHTML = `
+        <div class="safe">
+          ✅ Ya has realizado tu voto.
         </div>
       `;
 
-      return;
     }
 
-
-    html += `
-
-      <div
-        class="vote-player"
-        id="vote-${escapeHtml(player.username)}"
-        onclick="selectVote('${escapeHtml(player.username)}')">
-
-        <div class="vote-name">
-          ${escapeHtml(player.username)}
-        </div>
-
-        <div class="vote-note">
-          🗳️ Nominar
-        </div>
-
-      </div>
-    `;
-
-  });
+  }
 
 
-  html += `
-    </div>
+  renderNominationRanking(
+    data
+  );
 
-    <div style="margin-top:20px">
+}
 
-      <button
-        id="submitVoteButton"
-        disabled
-        onclick="submitVote()">
 
-        🗳️ Confirmar nominación
+function renderNominationRanking(data){
 
-      </button>
+  const box =
+    document.getElementById(
+      "nominationRanking"
+    );
 
-    </div>
+  const ranking =
+    data.nominations?.ranking ||
+    [];
+
+  if(ranking.length === 0){
+
+    box.innerHTML =
+      "";
+
+    return;
+  }
+
+  box.innerHTML = `
+    <h3>📊 Resultado de nominaciones</h3>
+
+    ${
+      ranking.map(
+        player => `
+
+          <div class="rank-row">
+
+            <strong>
+              ${player.username}
+            </strong>
+
+            <span class="badge">
+              ${player.votes} voto(s)
+            </span>
+
+            ${
+              data.nominations.nominees
+                .includes(
+                  player.username
+                )
+                ? '<span class="badge badge-danger">🎯 NOMINADO</span>'
+                : ''
+            }
+
+          </div>
+
+        `
+      ).join("")
+    }
+
   `;
 
-
-  area.innerHTML = html;
-
 }
 
 
-// =========================================================
-// SELECCIONAR VOTO
-// =========================================================
+async function sendNominationVote(){
 
-function selectVote(target){
-
-  if(alreadyVoted){
-    return;
-  }
-
-
-  selectedVote =
-    target;
-
-
-  document
-    .querySelectorAll(".vote-player")
-    .forEach(element => {
-
-      element.classList.remove(
-        "selected"
-      );
-
-    });
-
-
-  const selected =
-    document.getElementById(
-      "vote-" + target
-    );
-
-
-  if(selected){
-
-    selected.classList.add(
-      "selected"
-    );
-  }
-
-
-  const button =
-    document.getElementById(
-      "submitVoteButton"
-    );
-
-
-  if(button){
-
-    button.disabled =
-      false;
-  }
-
-}
-
-
-// =========================================================
-// ENVIAR VOTO
-// =========================================================
-
-async function submitVote(){
-
-  if(!selectedVote ||
-     alreadyVoted){
-
-    return;
-  }
-
-
-  const button =
-    document.getElementById(
-      "submitVoteButton"
-    );
-
-
-  button.disabled =
-    true;
-
-  button.textContent =
-    "💾 Guardando voto...";
-
-
-  try{
-
-    const response =
-      await fetch("/api/game",{
-
-        method:"POST",
-
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        body:JSON.stringify({
-
-          username:username,
-
-          vote_target:selectedVote
-
-        })
-
-      });
-
-
-    const data =
-      await response.json();
-
-
-    if(!response.ok || !data.ok){
-
-      alert(
-        data.message ||
-        "No se pudo registrar el voto."
-      );
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "🗳️ Confirmar nominación";
-
-      return;
-    }
-
-
-    selectedVote =
-      null;
-
-    alreadyVoted =
-      true;
-
-
-    renderGame(data);
-
-  }catch(error){
+  if(!selectedNominationTarget){
 
     alert(
-      "Error de conexión."
+      "Selecciona un jugador."
     );
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "🗳️ Confirmar nominación";
-  }
-
-}
-
-
-// =========================================================
-// CLASIFICACIÓN DE VOTOS
-// =========================================================
-
-function renderVoteRanking(data){
-
-  const container =
-    document.getElementById(
-      "voteRanking"
-    );
-
-
-  if(!data.voteRanking ||
-     data.voteRanking.length === 0){
-
-    container.innerHTML =
-      `
-      <div class="small">
-        Todavía no hay votos registrados.
-      </div>
-      `;
 
     return;
   }
 
+  const button =
+    document.getElementById(
+      "sendNominationVote"
+    );
 
-  let html = `
+  button.disabled = true;
 
-    <table>
+  const response =
+    await fetch("/api/game", {
+      method:"POST",
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+      body:JSON.stringify({
+        username,
+        vote_target:
+          selectedNominationTarget
+      })
+    });
 
-      <thead>
+  const data =
+    await response.json();
 
-        <tr>
-          <th>Jugador</th>
-          <th>Votos</th>
-        </tr>
+  if(!data.ok){
 
-      </thead>
+    alert(
+      data.message ||
+      "No se pudo votar."
+    );
 
-      <tbody>
-  `;
+    button.disabled = false;
+    return;
+  }
 
+  myNominationVoteDone = true;
 
-  data.voteRanking.forEach(player => {
+  selectedNominationTarget = null;
 
-    html += `
-
-      <tr>
-
-        <td>
-          ${escapeHtml(player.username)}
-        </td>
-
-        <td>
-          <b>${player.votes}</b>
-        </td>
-
-      </tr>
-
-    `;
-
-  });
-
-
-  html += `
-
-      </tbody>
-
-    </table>
-  `;
-
-
-  container.innerHTML =
-    html;
-
+  loadGame();
 }
 
 
-// =========================================================
-// NOMINADOS
-// =========================================================
+// ======================================
+// ELIMINACIÓN
+// ======================================
 
-function renderNominees(data){
+function renderElimination(data){
 
-  const card =
+  const section =
     document.getElementById(
-      "nomineesCard"
+      "eliminationSection"
     );
 
-  const container =
-    document.getElementById(
-      "nominees"
-    );
+  if(data.phase !== "elimination"){
 
-
-  if(
-    data.status !== "finished" ||
-    !data.nominees ||
-    data.nominees.length === 0
-  ){
-
-    card.classList.add(
+    section.classList.add(
       "hidden"
     );
 
     return;
   }
 
-
-  card.classList.remove(
+  section.classList.remove(
     "hidden"
   );
 
 
-  let html = `
+  const nominees =
+    data.elimination?.nominees ||
+    [];
 
-    <div class="status danger">
 
-      🚨 La votación ha terminado.
+  const total =
+    data.elimination?.totalVotes ||
+    0;
 
-      <br>
+  const expected =
+    data.elimination?.expectedVotes ||
+    0;
 
-      Los siguientes jugadores quedan nominados:
 
-    </div>
+  const info =
+    document.getElementById(
+      "eliminationInfo"
+    );
+
+
+  if(data.status === "finished"){
+
+    info.innerHTML = `
+      💀 La eliminación ha terminado.
+    `;
+
+  }else{
+
+    info.innerHTML = `
+      🔥 Elige a uno de los nominados
+      para eliminarlo.
+      <br><br>
+      Han votado
+      <strong>${total}/${expected}</strong>
+      jugadores.
+    `;
+
+  }
+
+
+  const nomineeList =
+    document.getElementById(
+      "nomineeList"
+    );
+
+
+  nomineeList.innerHTML = `
+    <h3>🎯 Nominados</h3>
+
+    ${
+      nominees.map(
+        name => `
+          <div class="nominee">
+            🎯 ${name}
+          </div>
+        `
+      ).join("")
+    }
   `;
 
 
-  data.nominees.forEach(player => {
+  renderEliminationVote(
+    data
+  );
 
-    html += `
+  renderEliminationRanking(
+    data
+  );
 
-      <div class="nominee">
-
-        🚨 ${escapeHtml(player.username)}
-
-        <br>
-
-        <span class="small">
-          ${player.votes} voto(s)
-        </span>
-
-      </div>
-
-    `;
-
-  });
-
-
-  container.innerHTML =
-    html;
+  renderEliminationResult(
+    data
+  );
 
 }
 
 
-// =========================================================
-// ACTUALIZACIÓN AUTOMÁTICA
-// =========================================================
+function renderEliminationVote(data){
 
-setInterval(() => {
+  const area =
+    document.getElementById(
+      "eliminationVoteArea"
+    );
+
+
+  if(data.status === "finished"){
+
+    area.innerHTML = "";
+
+    return;
+  }
+
+
+  if(myEliminationVoteDone){
+
+    area.innerHTML = `
+      <div class="safe">
+        ✅ Ya has realizado tu voto de eliminación.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const nominees =
+    data.elimination?.nominees ||
+    [];
+
+
+  if(nominees.length <= 1){
+
+    area.innerHTML = `
+      <div class="status">
+        ⚠️ Solo hay un nominado.
+        Su eliminación se resolverá automáticamente.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  area.innerHTML = `
+    <h3>🔥 Voto de eliminación</h3>
+
+    <div
+      class="vote-list"
+      id="eliminationOptions">
+    </div>
+
+    <button
+      id="sendEliminationVote">
+      💀 Confirmar eliminación
+    </button>
+  `;
+
+
+  const options =
+    document.getElementById(
+      "eliminationOptions"
+    );
+
+
+  nominees
+    .filter(
+      name => name !== username
+    )
+    .forEach(name => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "vote-option";
+
+      div.textContent =
+        `💀 ${name}`;
+
+      div.onclick = () => {
+
+        selectedEliminationTarget =
+          name;
+
+        document
+          .querySelectorAll(
+            "#eliminationOptions .vote-option"
+          )
+          .forEach(
+            x =>
+              x.classList.remove(
+                "selected"
+              )
+          );
+
+        div.classList.add(
+          "selected"
+        );
+
+      };
+
+      options.appendChild(div);
+
+    });
+
+
+  document
+    .getElementById(
+      "sendEliminationVote"
+    )
+    .onclick =
+    sendEliminationVote;
+
+}
+
+
+async function sendEliminationVote(){
+
+  if(!selectedEliminationTarget){
+
+    alert(
+      "Selecciona un nominado."
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "sendEliminationVote"
+    );
+
+  button.disabled = true;
+
+
+  const response =
+    await fetch("/api/game", {
+      method:"POST",
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+      body:JSON.stringify({
+        username,
+        elimination_target:
+          selectedEliminationTarget
+      })
+    });
+
+
+  const data =
+    await response.json();
+
+
+  if(!data.ok){
+
+    alert(
+      data.message ||
+      "No se pudo realizar el voto."
+    );
+
+    button.disabled = false;
+
+    return;
+  }
+
+
+  myEliminationVoteDone = true;
+
+  selectedEliminationTarget = null;
 
   loadGame();
+}
 
-},5000);
+
+function renderEliminationRanking(data){
+
+  const box =
+    document.getElementById(
+      "eliminationRanking"
+    );
 
 
-// =========================================================
-// INICIO
-// =========================================================
+  const ranking =
+    data.elimination?.voteRanking ||
+    [];
+
+
+  if(ranking.length === 0){
+
+    box.innerHTML =
+      "";
+
+    return;
+  }
+
+
+  box.innerHTML = `
+    <h3>📊 Votos de eliminación</h3>
+
+    ${
+      ranking.map(
+        row => `
+
+          <div class="rank-row">
+
+            <strong>
+              ${row.target_username}
+            </strong>
+
+            <span class="badge badge-danger">
+              ${row.votes} voto(s)
+            </span>
+
+          </div>
+
+        `
+      ).join("")
+    }
+  `;
+
+}
+
+
+function renderEliminationResult(data){
+
+  const box =
+    document.getElementById(
+      "eliminationResult"
+    );
+
+
+  if(
+    data.status !== "finished" ||
+    !data.eliminated
+  ){
+
+    box.innerHTML =
+      "";
+
+    return;
+  }
+
+
+  box.innerHTML = `
+    <div class="eliminated">
+
+      💀 ${data.eliminated.username}
+      ha sido eliminado.
+
+      <div
+        class="small"
+        style="margin-top:8px">
+
+        Votos recibidos:
+        ${data.eliminated.votes}
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+// ======================================
+// JUGADORES
+// ======================================
+
+function renderPlayers(data){
+
+  const box =
+    document.getElementById(
+      "playersList"
+    );
+
+
+  const players =
+    data.players || [];
+
+
+  box.innerHTML =
+    players.map(
+      player => `
+
+        <div class="player">
+
+          ${
+            player.status === "eliminated"
+              ? "💀"
+              : "🙂"
+          }
+
+          <span
+            class="${
+              player.username === username
+                ? "me"
+                : ""
+            }">
+
+            ${player.username}
+
+          </span>
+
+          ${
+            player.status === "eliminated"
+              ? `
+                <span
+                  class="badge badge-danger">
+                  ELIMINADO
+                </span>
+              `
+              : `
+                <span
+                  class="badge badge-safe">
+                  ACTIVO
+                </span>
+              `
+          }
+
+        </div>
+
+      `
+    ).join("");
+
+}
+
+
+// ======================================
+// HISTORIAL
+// ======================================
+
+function renderHistory(data){
+
+  const box =
+    document.getElementById(
+      "eliminationHistory"
+    );
+
+
+  const history =
+    data.elimination?.eliminations ||
+    [];
+
+
+  if(history.length === 0){
+
+    box.innerHTML =
+      "Todavía no hay eliminaciones.";
+
+    return;
+  }
+
+
+  box.innerHTML =
+    history.map(
+      row => `
+
+        <div class="player">
+
+          💀
+          <strong>
+            ${row.username}
+          </strong>
+
+          <span class="badge">
+            ${row.votes} voto(s)
+          </span>
+
+        </div>
+
+      `
+    ).join("");
+
+}
+
+
+// ======================================
+// CARGA GENERAL
+// ======================================
+
+async function loadGame(){
+
+  try{
+
+    const data =
+      await getGame();
+
+
+    if(!data.ok){
+
+      console.error(data);
+      return;
+    }
+
+
+    setPhaseLabel(
+      data.phase,
+      data.status
+    );
+
+
+    const immunitySection =
+      document.getElementById(
+        "immunitySection"
+      );
+
+    const immunityRankingSection =
+      document.getElementById(
+        "immunityRankingSection"
+      );
+
+
+    if(data.phase === "immunity"){
+
+      immunitySection
+        .classList
+        .remove("hidden");
+
+      immunityRankingSection
+        .classList
+        .remove("hidden");
+
+      renderImmunity(data);
+
+    }else{
+
+      immunitySection
+        .classList
+        .add("hidden");
+
+      immunityRankingSection
+        .classList
+        .remove("hidden");
+
+      renderImmunity(data);
+
+    }
+
+
+    renderNominations(data);
+
+    renderElimination(data);
+
+    renderPlayers(data);
+
+    renderHistory(data);
+
+
+  }catch(error){
+
+    console.error(
+      "GAME ERROR:",
+      error
+    );
+
+  }
+
+}
+
 
 loadGame();
+
+setInterval(
+  loadGame,
+  3000
+);
 
 </script>
 
