@@ -154,6 +154,20 @@ button:disabled{
   display:none;
 }
 
+body{color:#626775;background:linear-gradient(#b8d8e8 0,#d7e8f0 180px,#edf3f6 420px,#e8eef2 100%)}
+.wrap{max-width:1120px;padding:14px 18px 34px}
+.head,.card{border:1px solid #c2d2dc;border-radius:4px;box-shadow:0 1px 3px #637d8b1c}
+.head{background:linear-gradient(#f8fbfd,#dbe9f1);color:#557b98}
+.card{background:#fff}
+h1,h2{color:#d27680}
+button{border:1px solid #a9c0cc;border-radius:4px;background:linear-gradient(#fff,#e3edf2);color:#5e798e;cursor:pointer}
+.resource-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:12px;margin:8px 0;background:#fff9df;border:1px solid #eadb8e;border-radius:3px;color:#6d6b56}
+.resource-counts{font-weight:bold;color:#637b8f}
+.casting-rules{padding:10px;background:#f7fafb;border-left:3px solid #d88991;color:#71828d}
+.nav{display:flex;flex-wrap:wrap;gap:3px;padding:5px;margin-bottom:14px;background:linear-gradient(#eef4f7,#d5e1e9);border:1px solid #b7cbd7;border-radius:4px}
+.nav a{padding:9px 12px;color:#657b8f;text-decoration:none;font-weight:bold}
+.nav a:hover{background:#fff;color:#d27680}
+
 ol{
   padding-left:25px;
 }
@@ -207,6 +221,8 @@ ol{
       Casting #1 · Partida en curso
     </div>
   </div>
+
+  <nav class="nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/#castingSection">Castings</a><a href="/community.html#blogs">Blogs</a><a href="/game.html">Juegos</a><a href="/community.html#hall-of-fame">Hall of Fame</a><a href="/community.html#designs">Diseños</a><a href="/community.html#shop">Tiendas</a></nav>
 
 
   <!-- ========================= -->
@@ -331,6 +347,9 @@ ol{
 
     <h2>👥 Jugadores</h2>
 
+    <div id="resourceBar" class="resource-bar"><span id="myResources">Cargando recursos…</span><button type="button" id="eatAppleButton" disabled>🍎 Comer manzana (+20 salud)</button></div>
+    <p class="casting-rules">La prueba consume 20 de salud. La manzana recupera 20 (hasta 100). Quien gana inmunidad recibe una llave; las llaves se gastan al nominar y añaden peso al voto.</p>
+
     <div id="playersList">
       Cargando...
     </div>
@@ -358,8 +377,8 @@ ol{
 <script>
 
 const username =
-  localStorage.getItem("username") ||
-  "admin1";
+  localStorage.getItem("tengaged_user") ||
+  "";
 
 document.getElementById("username").textContent =
   username;
@@ -514,6 +533,7 @@ async function registerReaction(){
   const response =
     await fetch("/api/game", {
       method:"POST",
+          credentials:"include",
       headers:{
         "Content-Type":
           "application/json"
@@ -926,6 +946,7 @@ async function sendNominationVote(){
   const response =
     await fetch("/api/game", {
       method:"POST",
+          credentials:"include",
       headers:{
         "Content-Type":
           "application/json"
@@ -1204,6 +1225,7 @@ async function sendEliminationVote(){
   const response =
     await fetch("/api/game", {
       method:"POST",
+          credentials:"include",
       headers:{
         "Content-Type":
           "application/json"
@@ -1359,16 +1381,13 @@ function renderPlayers(data){
               : "🙂"
           }
 
-          <span
-            class="${
-              player.username === username
-                ? "me"
-                : ""
-            }">
-
+          <a
+            class="${player.username === username ? "me" : ""}"
+            href="/profile.html?username=${encodeURIComponent(player.username)}">
             ${player.username}
+          </a>
 
-          </span>
+          <div class="resource-counts">🔑 ${Number(player.keys)||0} · 🍎 ${Number(player.apples)||0} · ❤️ ${Number(player.health)||0}/100</div>
 
           ${
             player.status === "eliminated"
@@ -1392,6 +1411,21 @@ function renderPlayers(data){
     ).join("");
 
 }
+
+function renderMyResources(data){
+  const player=(data.players||[]).find(entry=>entry.username.toLowerCase()===username.toLowerCase());
+  const label=document.getElementById("myResources");
+  const button=document.getElementById("eatAppleButton");
+  if(!player){label.textContent="Inscríbete al casting para obtener recursos.";button.disabled=true;return;}
+  label.textContent=`Tus recursos: 🔑 ${Number(player.keys)||0} llaves · 🍎 ${Number(player.apples)||0} manzanas · ❤️ ${Number(player.health)||0}/100 salud`;
+  button.disabled=!(Number(player.apples)>0&&Number(player.health)<100);
+}
+
+document.getElementById("eatAppleButton").addEventListener("click",async()=>{
+  const button=document.getElementById("eatAppleButton");button.disabled=true;
+  try{const response=await fetch("/api/game",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"eat_apple"})});const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||"No se pudo usar la manzana.");await loadGame();}
+  catch(error){document.getElementById("myResources").textContent=error.message;}
+});
 
 
 // ======================================
@@ -1511,6 +1545,7 @@ async function loadGame(){
     renderElimination(data);
 
     renderPlayers(data);
+    renderMyResources(data);
 
     renderHistory(data);
 

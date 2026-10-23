@@ -1,11 +1,23 @@
+import { ensureProfileSchema, getSessionUser, jsonError } from "../_shared/auth.js";
+import { ensureCastingSchema, listCastingPlayers } from "../_shared/casting.js";
+
 export async function onRequest(context) {
 
   const request = context.request;
   const db = context.env.DB;
+  let authenticatedUser = null;
 
   const MAX_PLAYERS = 16;
 
   try {
+
+    await ensureCastingSchema(db);
+
+    if (request.method === "POST") {
+      await ensureProfileSchema(db);
+      authenticatedUser = await getSessionUser(request, db);
+      if (!authenticatedUser) return jsonError("Inicia sesión para entrar al casting.", 401);
+    }
 
     /* =========================
        GET = VER JUGADORES
@@ -13,9 +25,7 @@ export async function onRequest(context) {
 
     if (request.method === "GET") {
 
-      const result = await db.prepare(
-        "SELECT username, joined_at FROM casting_players WHERE casting_id = 1 ORDER BY id ASC"
-      ).all();
+      const result = { results: await listCastingPlayers(db) };
 
       return Response.json({
         ok: true,
@@ -33,33 +43,14 @@ export async function onRequest(context) {
 
     if (request.method === "POST") {
 
-      const data = await request.json();
-
-      const username =
-        String(data.username || "").trim();
-
-
-      if (!username) {
-
-        return Response.json(
-          {
-            ok: false,
-            message: "Falta el nombre de usuario."
-          },
-          { status: 400 }
-        );
-
-      }
+      const username = authenticatedUser.username;
 
 
       /* =========================
          COMPROBAR JUGADORES
       ========================= */
 
-      const current =
-        await db.prepare(
-          "SELECT username, joined_at FROM casting_players WHERE casting_id = 1 ORDER BY id ASC"
-        ).all();
+      const current = { results: await listCastingPlayers(db) };
 
       const players =
         current.results;
@@ -134,24 +125,36 @@ export async function onRequest(context) {
          AÑADIR JUGADOR
       ========================= */
 
-      await db.prepare(
-
-        "INSERT INTO casting_players (username, casting_id) VALUES (?, 1)"
-
-      )
-      .bind(username)
-      .run();
+      const joined = await db.prepare(`
+        INSERT OR IGNORE INTO casting_players (username, casting_id)
+        SELECT ?, 1
+        WHERE (SELECT COUNT(*) FROM casting_players WHERE casting_id=1) < ?
+          AND NOT EXISTS (SELECT 1 FROM casting_players WHERE casting_id=1 AND LOWER(username)=LOWER(?))
+      `).bind(username, MAX_PLAYERS, username).run();
 
 
       /* =========================
          VOLVER A LEER D1
       ========================= */
 
-      const updated =
-        await db.prepare(
-          "SELECT username, joined_at FROM casting_players WHERE casting_id = 1 ORDER BY id ASC"
-        ).all();
+      const updated = { results: await listCastingPlayers(db) };
 
+
+      if (joined.meta.changes) {
+        await db.prepare("INSERT OR IGNORE INTO casting_resources(casting_id,username,keys,apples,health) VALUES(1,?,0,3,100)").bind(username).run();
+      }
+      if (!joined.meta.changes) {
+        const latest = { results: await listCastingPlayers(db) };
+        const isNowJoined = latest.results.some(player => player.username.toLowerCase() === username.toLowerCase());
+        return Response.json({
+          ok: isNowJoined,
+          alreadyJoined: isNowJoined,
+          full: !isNowJoined && latest.results.length >= MAX_PLAYERS,
+          message: isNowJoined ? "Ya estás dentro del Casting #1." : "El casting está completo. No quedan plazas.",
+          players: latest.results,
+          maxPlayers: MAX_PLAYERS
+        }, { status: isNowJoined ? 200 : 409 });
+      }
 
       return Response.json({
 

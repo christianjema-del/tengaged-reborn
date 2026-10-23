@@ -1,11 +1,21 @@
+import { ensureProfileSchema, getSessionUser, jsonError } from "../_shared/auth.js";
+import { ensureCastingSchema, listCastingPlayers } from "../_shared/casting.js";
+
 export async function onRequest(context) {
 
   const request = context.request;
   const db = context.env.DB;
-
-  const ADMIN_USERNAME = "admin1";
+  let authenticatedUser = null;
 
   try {
+
+    await ensureCastingSchema(db);
+
+    if (request.method === "POST" || request.method === "PUT") {
+      await ensureProfileSchema(db);
+      authenticatedUser = await getSessionUser(request, db);
+      if (!authenticatedUser) return jsonError("Inicia sesión para continuar.", 401);
+    }
 
     if (request.method === "GET") {
 
@@ -26,12 +36,7 @@ export async function onRequest(context) {
         );
       }
 
-      const players = await db.prepare(`
-        SELECT username, joined_at
-        FROM casting_players
-        WHERE casting_id = 1
-        ORDER BY id ASC
-      `).all();
+      const players = { results: await listCastingPlayers(db) };
 
       return Response.json({
         ok: true,
@@ -44,21 +49,7 @@ export async function onRequest(context) {
 
     if (request.method === "POST") {
 
-      const data = await request.json();
-
-      const username = String(
-        data.username || ""
-      ).trim();
-
-      if (!username) {
-        return Response.json(
-          {
-            ok: false,
-            message: "Falta el nombre de usuario."
-          },
-          { status: 400 }
-        );
-      }
+      const username = authenticatedUser.username;
 
       const player = await db.prepare(`
         SELECT username
@@ -110,26 +101,7 @@ export async function onRequest(context) {
 
     if (request.method === "PUT") {
 
-      const data = await request.json();
-
-      const username = String(
-        data.username || ""
-      ).trim();
-
-      if (!username) {
-        return Response.json(
-          {
-            ok: false,
-            message: "Falta el nombre de usuario."
-          },
-          { status: 400 }
-        );
-      }
-
-      if (
-        username.toLowerCase() !==
-        ADMIN_USERNAME.toLowerCase()
-      ) {
+      if (!authenticatedUser.is_admin || authenticatedUser.username.toLowerCase() !== "admin1") {
         return Response.json(
           {
             ok: false,
