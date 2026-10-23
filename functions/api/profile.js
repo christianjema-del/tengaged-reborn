@@ -22,7 +22,7 @@ export async function onRequest({ request, env }) {
     const username = String(new URL(request.url).searchParams.get("username") || "").trim();
     if (!username) return jsonError("Falta el usuario.", 400);
 
-    const profile = await env.DB.prepare(`
+    let profile = await env.DB.prepare(`
       SELECT u.username, u.karma, u.t_money, u.is_admin, u.is_banned, u.is_test_bot, u.ban_reason, u.bio,
              s.games_played, s.wins, s.points, s.created_at, equipped.theme_code, avatar.theme_code AS avatar_code,
              COALESCE((SELECT r.keys FROM casting_resources r WHERE r.casting_id=1 AND LOWER(r.username)=LOWER(u.username)),0) AS casting_keys,
@@ -39,7 +39,30 @@ export async function onRequest({ request, env }) {
       LIMIT 1
     `).bind(username).first();
 
-    if (!profile) return jsonError("No existe ese perfil.", 404);
+    // Older casting entries can predate registered user accounts. Keep their
+    // public profile links working using the participant record and its game
+    // resources; registered accounts always take precedence above.
+    if (!profile) {
+      const participant = await env.DB.prepare(`
+        SELECT p.username, p.joined_at,
+               COALESCE(r.keys,0) AS casting_keys,
+               COALESCE(r.apples,3) AS casting_apples,
+               COALESCE(r.health,100) AS casting_health
+        FROM casting_players p
+        LEFT JOIN casting_resources r
+          ON r.casting_id=p.casting_id AND LOWER(r.username)=LOWER(p.username)
+        WHERE p.casting_id=1 AND LOWER(p.username)=LOWER(?)
+        ORDER BY p.id DESC LIMIT 1
+      `).bind(username).first();
+      if (!participant) return jsonError("No existe ese perfil.", 404);
+      profile = {
+        ...participant,
+        karma: 0, t_money: 0, is_admin: 0, is_banned: 0,
+        is_test_bot: 0, ban_reason: null, bio: "", theme_code: null,
+        avatar_code: null, games_played: 0, wins: 0, points: 0,
+        created_at: participant.joined_at
+      };
+    }
     return Response.json({
       ok: true,
       profile: {
