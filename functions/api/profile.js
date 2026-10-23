@@ -21,12 +21,11 @@ export async function onRequest({ request, env }) {
     if (request.method !== "GET") return jsonError("Método no permitido.", 405);
     const username = String(new URL(request.url).searchParams.get("username") || "").trim();
     if (!username) return jsonError("Falta el usuario.", 400);
+    const viewer = await getSessionUser(request, env.DB);
 
     let profile = await env.DB.prepare(`
-      SELECT u.username, u.karma, u.t_money, u.is_admin, u.is_banned, u.is_test_bot, u.ban_reason, u.bio,
-             s.games_played, s.wins, s.points, s.created_at, equipped.theme_code, avatar.theme_code AS avatar_code,
-             COALESCE((SELECT r.keys FROM casting_resources r WHERE r.casting_id=1 AND LOWER(r.username)=LOWER(u.username)),0) AS casting_keys,
-             COALESCE((SELECT r.apples FROM casting_resources r WHERE r.casting_id=1 AND LOWER(r.username)=LOWER(u.username)),0) AS casting_apples,
+      SELECT u.id AS user_id, u.username, u.karma, u.t_money, u.is_admin, u.is_banned, u.is_test_bot, u.ban_reason, u.bio,
+             s.games_played, s.wins, s.created_at, equipped.theme_code, avatar.theme_code AS avatar_code,
              COALESCE((SELECT r.health FROM casting_resources r WHERE r.casting_id=1 AND LOWER(r.username)=LOWER(u.username)),0) AS casting_health
       FROM users u
       LEFT JOIN user_stats s ON LOWER(s.username) = LOWER(u.username)
@@ -45,8 +44,6 @@ export async function onRequest({ request, env }) {
     if (!profile) {
       const participant = await env.DB.prepare(`
         SELECT p.username, p.joined_at,
-               COALESCE(r.keys,0) AS casting_keys,
-               COALESCE(r.apples,3) AS casting_apples,
                COALESCE(r.health,100) AS casting_health
         FROM casting_players p
         LEFT JOIN casting_resources r
@@ -59,16 +56,17 @@ export async function onRequest({ request, env }) {
         ...participant,
         karma: 0, t_money: 0, is_admin: 0, is_banned: 0,
         is_test_bot: 0, ban_reason: null, bio: "", theme_code: null,
-        avatar_code: null, games_played: 0, wins: 0, points: 0,
+        avatar_code: null, games_played: 0, wins: 0,
         created_at: participant.joined_at
       };
     }
+    const isOwner = Boolean(viewer && profile.user_id && Number(viewer.id) === Number(profile.user_id));
     return Response.json({
       ok: true,
       profile: {
         username: profile.username,
         karma: Number(profile.karma) || 0,
-        t_money: Number(profile.t_money) || 0,
+        t_money: isOwner ? Number(profile.t_money) || 0 : null,
         is_admin: Boolean(profile.is_admin),
         is_test_bot: Boolean(profile.is_test_bot),
         is_banned: Boolean(profile.is_banned),
@@ -76,12 +74,9 @@ export async function onRequest({ request, env }) {
         bio: profile.bio || "",
         theme_code: profile.theme_code || "default",
         avatar_code: profile.avatar_code || "default",
-        casting_keys: Number(profile.casting_keys) || 0,
-        casting_apples: Number(profile.casting_apples) || 0,
-        casting_health: Number(profile.casting_health) || 0,
+        casting_health: isOwner ? Number(profile.casting_health) || 0 : null,
         games_played: Number(profile.games_played) || 0,
         wins: Number(profile.wins) || 0,
-        points: Number(profile.points) || 0,
         created_at: profile.created_at || null
       }
     }, { headers: { "Cache-Control": "no-store" } });
