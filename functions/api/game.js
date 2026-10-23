@@ -1,3 +1,6 @@
+import { ensureProfileSchema, getSessionUser } from "../_shared/auth.js";
+import { ensureCastingSchema } from "../_shared/casting.js";
+
 const CASTING_ID = 1;
 const MAX_PLAYERS = 16;
 
@@ -21,10 +24,17 @@ async function createTables(db) {
       action_type TEXT NOT NULL,
       reaction_ms INTEGER,
       vote_target TEXT,
+      vote_weight INTEGER NOT NULL DEFAULT 1,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(casting_id, username, action_type)
     )
   `).run();
+
+  try {
+    await db.prepare("ALTER TABLE game_actions ADD COLUMN vote_weight INTEGER NOT NULL DEFAULT 1").run();
+  } catch (error) {
+    if (!/duplicate column/i.test(String(error.message || error))) throw error;
+  }
 
   await db.prepare(`
     CREATE TABLE IF NOT EXISTS game_state (
@@ -123,12 +133,13 @@ async function getPlayers(db) {
 
   const result = await db.prepare(`
     SELECT
-      username,
-      status,
-      eliminated_at
-    FROM game_players
-    WHERE casting_id = ?
-    ORDER BY id ASC
+      p.username, p.status, p.eliminated_at,
+      COALESCE(r.keys,0) AS keys, COALESCE(r.apples,3) AS apples,
+      COALESCE(r.health,100) AS health
+    FROM game_players p
+    LEFT JOIN casting_resources r ON r.casting_id=p.casting_id AND LOWER(r.username)=LOWER(p.username)
+    WHERE p.casting_id = ?
+    ORDER BY p.id ASC
   `).bind(CASTING_ID).all();
 
   return result.results || [];
@@ -210,7 +221,7 @@ async function getNominations(db) {
   for (const player of activePlayers) {
 
     const result = await db.prepare(`
-      SELECT COUNT(*) AS votes
+      SELECT COALESCE(SUM(COALESCE(vote_weight,1)),COUNT(*)) AS votes
       FROM game_actions
       WHERE casting_id = ?
         AND action_type = 'vote'
@@ -337,6 +348,16 @@ async function checkTransitions(db) {
     return null;
   }
 
+  if (state.phase === "immunity" && state.status === "active") {
+    const winner = await getImmunity(db);
+    const active = await getActivePlayers(db);
+    if (winner.ranking.length >= active.length && winner.ranking.length > 0 && winner.winner) {
+      await db.prepare("UPDATE casting_resources SET keys=keys+1 WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, winner.winner).run();
+      await db.prepare("UPDATE game_state SET phase='nominations', status='active', winner_username=? WHERE casting_id=? AND phase='immunity'").bind(winner.winner, CASTING_ID).run();
+      state = await getState(db);
+    }
+  }
+
   // --------------------------
   // Nominaciones terminadas
   // --------------------------
@@ -405,6 +426,15 @@ async function getGame(db) {
 
   let state =
     await checkTransitions(db);
+
+  if (body?.action === "eat_apple") {
+    const player = await db.prepare("SELECT status FROM game_players WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, username).first();
+    if (!player || player.status !== "active") return response({ok:false,message:"Solo los jugadores activos pueden comer una manzana."},403);
+    const eaten = await db.prepare(`UPDATE casting_resources SET apples=apples-1, health=MIN(100,health+20)
+      WHERE casting_id=? AND LOWER(username)=LOWER(?) AND apples>0 AND health<100`).bind(CASTING_ID, username).run();
+    if (!eaten.meta.changes) return response({ok:false,message:"No tienes manzanas o ya tienes la salud completa."},400);
+    return response(await getGame(db));
+  }
 
   const players =
     await getPlayers(db);
@@ -488,7 +518,7 @@ async function getGame(db) {
 // POST
 // ==========================================
 
-async function handlePost(db, request) {
+async function handlePost(db, request, authenticatedUser) {
 
   let body;
 
@@ -501,17 +531,7 @@ async function handlePost(db, request) {
     },400);
   }
 
-  const username =
-    String(
-      body?.username || ""
-    ).trim();
-
-  if (!username) {
-    return response({
-      ok:false,
-      message:"Falta el usuario."
-    },400);
-  }
+  const username = authenticatedUser.username;
 
 
   let state =
@@ -624,6 +644,7 @@ async function handlePost(db, request) {
 
     }
 
+    await db.prepare("UPDATE casting_resources SET health=MAX(0,health-20) WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, username).run();
 
     const immunity =
       await getImmunity(db);
@@ -641,6 +662,12 @@ async function handlePost(db, request) {
 
       const winner =
         immunity.ranking[0].username;
+
+      const keyAward = await db.prepare("INSERT OR IGNORE INTO game_actions(casting_id,username,action_type) VALUES(?,?,'key_award')")
+        .bind(CASTING_ID, winner).run();
+      if (keyAward.meta.changes) {
+        await db.prepare("UPDATE casting_resources SET keys=keys+1 WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, winner).run();
+      }
 
       await db.prepare(`
         UPDATE game_state
@@ -794,20 +821,12 @@ async function handlePost(db, request) {
     }
 
 
-    await db.prepare(`
-      INSERT INTO game_actions
-      (
-        casting_id,
-        username,
-        action_type,
-        vote_target
-      )
-      VALUES (?, ?, 'vote', ?)
-    `).bind(
-      CASTING_ID,
-      username,
-      target
-    ).run();
+    const resources = await db.prepare("SELECT keys FROM casting_resources WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, username).first();
+    const voteWeight = 1 + (Number(resources?.keys) || 0);
+    await db.batch([
+      db.prepare("INSERT INTO game_actions(casting_id,username,action_type,vote_target,vote_weight) VALUES(?,?,'vote',?,?)").bind(CASTING_ID, username, target, voteWeight),
+      db.prepare("UPDATE casting_resources SET keys=0 WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, username)
+    ]);
 
 
     await checkTransitions(db);
@@ -1052,6 +1071,7 @@ export async function onRequest(context) {
     }
 
 
+    await ensureCastingSchema(db);
     await createTables(db);
 
 
@@ -1070,9 +1090,14 @@ export async function onRequest(context) {
       context.request.method === "POST"
     ) {
 
+      await ensureProfileSchema(db);
+      const user = await getSessionUser(context.request, db);
+      if (!user) return response({ ok:false, message:"Inicia sesión para jugar." },401);
+
       return await handlePost(
         db,
-        context.request
+        context.request,
+        user
       );
 
     }
