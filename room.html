@@ -154,6 +154,18 @@ button:disabled{
   font-style:italic;
 }
 
+body{color:#626775;background:linear-gradient(#b8d8e8 0,#d7e8f0 180px,#edf3f6 420px,#e8eef2 100%)}
+.wrap{max-width:1120px;padding:14px 18px 34px}
+.header,.card{border:1px solid #c2d2dc;border-radius:4px;box-shadow:0 1px 3px #637d8b1c}
+.header{background:linear-gradient(#f8fbfd,#dbe9f1);color:#557b98}
+.card{background:#fff}
+h1,h2{color:#d27680}
+button{border:1px solid #a9c0cc;border-radius:4px;background:linear-gradient(#fff,#e3edf2);color:#5e798e}
+.nav{display:flex;flex-wrap:wrap;gap:3px;padding:5px;margin-bottom:14px;background:linear-gradient(#eef4f7,#d5e1e9);border:1px solid #b7cbd7;border-radius:4px}
+.nav a{padding:9px 12px;color:#657b8f;text-decoration:none;font-weight:bold}
+.nav a:hover{background:#fff;color:#d27680}
+.muted{color:#87949c;font-size:12px}
+
 @media(max-width:700px){
 
   .players{
@@ -183,6 +195,8 @@ button:disabled{
 
   </div>
 
+  <nav class="nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/#castingSection">Castings</a><a href="/community.html#blogs">Blogs</a><a href="/game.html">Juegos</a><a href="/community.html#hall-of-fame">Hall of Fame</a><a href="/community.html#designs">Diseños</a><a href="/community.html#shop">Tiendas</a></nav>
+
 
   <div class="card">
 
@@ -191,6 +205,7 @@ button:disabled{
     <p>
       Esta es la sala de espera de la primera partida.
     </p>
+    <p class="muted">🔑 Las llaves ganadas cuentan para tus nominaciones · 🍎 Las manzanas recuperan salud durante la partida.</p>
 
     <div
       id="status"
@@ -425,6 +440,7 @@ async function enterRoom(){
         "/api/room",
         {
           method:"POST",
+          credentials:"include",
 
           headers:{
             "Content-Type":
@@ -542,6 +558,7 @@ async function startGame(){
         "/api/room",
         {
           method:"PUT",
+          credentials:"include",
 
           headers:{
             "Content-Type":
@@ -733,9 +750,11 @@ function renderPlayers(players){
         🙂
       </div>
 
-      <div class="player-name">
+      <a class="player-name" href="/profile.html?username=${encodeURIComponent(name)}">
         ${escapeHtml(name)}
-      </div>
+      </a>
+
+      <div class="muted">🔑 ${Number(player.keys)||0} llaves · 🍎 ${Number(player.apples)||0} manzanas · ❤️ ${Number(player.health)||0}/100 salud</div>
 
     `;
 

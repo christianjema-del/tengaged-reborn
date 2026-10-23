@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfil | Tengaged Reborn</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font:14px Arial,Helvetica,sans-serif;color:#626775;background:linear-gradient(#b8d8e8 0,#d7e8f0 180px,#edf3f6 420px,#e8eef2 100%)}a{color:#65829b}.wrap{max-width:1180px;margin:auto;padding:14px 18px 34px}.head{display:flex;justify-content:space-between;align-items:center;gap:18px;min-height:76px;padding:14px 20px;margin-bottom:8px;background:linear-gradient(#f8fbfd,#dbe9f1);border:1px solid #a9c3d2;border-radius:5px}.logo{font-size:30px;font-weight:bold;color:#557b98;text-decoration:none;letter-spacing:-1px}.logo b{color:#e68487}.nav{display:flex;gap:3px;margin-bottom:14px;padding:5px;background:linear-gradient(#eef4f7,#d5e1e9);border:1px solid #b7cbd7;border-radius:4px}.nav a{padding:9px 13px;color:#657b8f;text-decoration:none;font-weight:bold}.nav a:hover{background:#fff;color:#d2747d}.layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,.9fr);gap:14px;align-items:start}.card{min-width:0;margin-bottom:14px;padding:17px;background:#fff;border:1px solid #c2d2dc;border-radius:4px;box-shadow:0 1px 3px #637d8b1c}.hero{display:flex;align-items:center;gap:18px;padding:20px;background:linear-gradient(110deg,#fff,#f3f7f9)}.portrait{display:grid;place-items:center;flex:none;width:112px;height:112px;border:3px solid #c4d6df;background:linear-gradient(#fff,#e7f0f4);color:#67839a;font:bold 42px Georgia,serif}.identity h1{margin:0 0 7px;color:#688198;font-size:29px}.badge{display:inline-block;padding:4px 8px;border:1px solid #e6c9ce;border-radius:3px;background:#fff5f6;color:#bf707a;font-weight:bold}.identity p{margin:9px 0 0;color:#82909b}.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0}.stat{padding:13px 8px;text-align:center;background:linear-gradient(#fff,#f4f7f8);border:1px solid #d3dfe5}.stat strong{display:block;color:#6c8295;font-size:21px}.stat span{display:block;margin-top:5px;color:#85919a;font-size:12px}.section-title{margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid #e7d5d8;color:#d27680;font-size:20px}.profile-tabs{display:flex;gap:4px;margin:-3px -3px 14px;border-bottom:1px solid #dbe4e8}.profile-tabs span{padding:8px 12px;border:1px solid #d6e0e6;border-bottom:0;background:linear-gradient(#fff,#e7eff3);color:#687f93;font-weight:bold}.info-row{display:flex;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid #edf1f3}.info-row:last-child{border:0}.info-row strong{color:#71889a}.side-banner{padding:17px;text-align:center;background:linear-gradient(135deg,#fff8d8,#f4e8a6);border-bottom:1px solid #eadb8e;color:#86783e}.side-banner strong{display:block;margin:5px 0;color:#66582c;font:22px Georgia,serif;letter-spacing:2px}.side-banner small{color:#8c8170}.profile-links{display:grid;gap:7px;margin-top:13px}.profile-links a,.button{display:inline-block;padding:9px 12px;text-align:center;border:1px solid #a9c0cc;border-radius:4px;background:linear-gradient(#fff,#e3edf2);color:#5e798e;font-weight:bold;text-decoration:none;cursor:pointer}.button:hover,.profile-links a:hover{background:#f8fbfc;color:#d27680}.admin{border-color:#dfc7ca}.admin .section-title{color:#b56470}.admin label{display:block;margin:10px 0 5px;color:#6c7f90;font-weight:bold}.admin input,.admin textarea{display:block;width:100%;padding:9px;border:1px solid #bdcdd7;border-radius:3px;font:14px Arial,sans-serif}.admin textarea{min-height:68px;resize:vertical}.admin-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.admin-actions .wide{grid-column:1/-1}.danger{border-color:#dbaeb4;background:linear-gradient(#fff,#f8e7e9);color:#a75260}.notice{min-height:22px;margin:10px 0 0;padding:8px;background:#f3f7f8;color:#71828d}.banned{padding:10px;border:1px solid #e4c3c7;background:#fff0f1;color:#9a4d57;font-weight:bold}.hidden{display:none!important}.footer{padding:12px;text-align:center;color:#8493a0;font-size:12px}
+    body.theme-rose .hero{border-top:5px solid #e7a9b2}body.theme-sky .hero{border-top:5px solid #90bdd5}body.theme-gold .hero{border-top:5px solid #dfc663}body.theme-lilac .hero{border-top:5px solid #baa4d8}.portrait{position:relative}body.avatar-star .portrait:after{content:"⭐";position:absolute;right:-10px;bottom:-8px;padding:4px;border:1px solid #e3d18c;border-radius:50%;background:#fff9df;font-size:20px}.bio{white-space:pre-wrap;line-height:1.55}.bio-form{margin-top:13px}.bio-form textarea{display:block;width:100%;min-height:82px;padding:9px;border:1px solid #bdcdd7;border-radius:3px;font:14px Arial,sans-serif}.bio-form button{margin-top:7px}
+    @media(max-width:760px){.wrap{padding:10px}.layout{grid-template-columns:1fr}.hero{align-items:flex-start}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:last-child{grid-column:1/-1}.head{align-items:flex-start;flex-direction:column}.nav{flex-wrap:wrap}.portrait{width:82px;height:82px;font-size:32px}.identity h1{font-size:24px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="head"><a class="logo" href="/">tengaged<b>.es</b> reborn</a><span id="sessionLabel">Perfil de usuario</span></header>
+    <nav class="nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/#castingSection">Castings</a><a href="/community.html#blogs">Blogs</a><a href="/game.html">Juegos</a><a href="/community.html#hall-of-fame">Hall of Fame</a><a href="/community.html#designs">Diseños</a><a href="/community.html#shop">Tiendas</a><a href="/profile.html" id="myProfileLink" class="hidden">Mi perfil</a></nav>
+    <main id="profilePage" class="hidden">
+      <div id="bannedNotice" class="card banned hidden"></div>
+      <section class="card hero">
+        <div id="portrait" class="portrait" aria-label="Avatar">?</div>
+        <div class="identity"><h1 id="username">Cargando perfil…</h1><span id="roleBadge" class="badge hidden">Administrador</span><span id="testBotBadge" class="badge hidden">Cuenta de prueba</span><p id="joined">Miembro de Tengaged Reborn</p></div>
+      </section>
+      <div class="stats" aria-label="Estadísticas del usuario">
+        <div class="stat"><strong id="karma">0</strong><span>Karma</span></div>
+        <div class="stat"><strong id="money">0</strong><span>T$</span></div>
+        <div class="stat"><strong id="games">0</strong><span>Partidas jugadas</span></div>
+        <div class="stat"><strong id="wins">0</strong><span>Victorias</span></div>
+        <div class="stat"><strong id="points">0</strong><span>Puntos</span></div>
+        <div class="stat"><strong id="castingKeys">0</strong><span>Llaves del casting 🔑</span></div>
+        <div class="stat"><strong id="castingApples">0</strong><span>Manzanas 🍎</span></div>
+        <div class="stat"><strong id="castingHealth">—</strong><span>Salud ❤️</span></div>
+      </div>
+      <div class="layout">
+        <div>
+          <section class="card">
+            <div class="profile-tabs"><span>Perfil</span><span>Estadísticas</span><span>Actividad</span></div>
+            <h2 class="section-title">Sobre este jugador</h2>
+            <div class="info-row"><strong>Nombre de usuario</strong><span id="aboutUsername">—</span></div>
+            <div class="info-row"><strong>Estado</strong><span id="accountStatus">Activo</span></div>
+            <div class="info-row"><strong>Miembro desde</strong><span id="memberSince">—</span></div>
+            <h2 class="section-title" style="margin-top:16px">Sobre mí</h2>
+            <div id="bioText" class="bio">Este jugador aún no ha escrito una descripción.</div>
+            <form id="bioForm" class="bio-form hidden"><label for="bioInput">Tu descripción (máximo 300 caracteres)</label><textarea id="bioInput" maxlength="300"></textarea><button class="button">Guardar descripción</button><div id="bioNotice" class="notice" aria-live="polite"></div></form>
+          </section>
+          <section id="adminPanel" class="card admin hidden">
+            <h2 class="section-title">Administración de usuario</h2>
+            <p>Solo visible para la cuenta administradora. Cada acción queda registrada.</p>
+            <a class="button" href="/admin.html">Abrir panel completo de administración</a>
+            <form id="adminLookup" class="admin-actions"><label class="wide" for="adminUsername">Buscar cualquier usuario</label><input class="wide" id="adminUsername" maxlength="24" placeholder="Nombre de usuario"><button class="button wide">Abrir perfil para administrar</button></form>
+            <label for="amount">Cantidad para entregar</label><input id="amount" type="number" min="1" max="1000000" step="1" value="10">
+            <div class="admin-actions"><button class="button" id="giveKarma">Dar karma</button><button class="button" id="giveMoney">Dar T$</button></div>
+            <label for="banReason">Motivo del baneo</label><textarea id="banReason" maxlength="180" placeholder="Explica brevemente el motivo"></textarea>
+            <div class="admin-actions"><button class="button danger wide" id="banButton">Banear usuario</button><button class="button wide hidden" id="unbanButton">Retirar baneo</button></div>
+            <div id="adminNotice" class="notice" role="status" aria-live="polite"></div>
+          </section>
+        </div>
+        <aside>
+          <section class="card" style="padding:0;overflow:hidden"><div class="side-banner"><span>¡La partida te espera!</span><strong>CASTING STARS</strong><small>Juega, vota y crea tu historia</small></div><div style="padding:14px"><h2 class="section-title">Enlaces</h2><div class="profile-links"><a href="/#castingSection">Ver los castings</a><a href="/">Volver al inicio</a></div></div></section>
+          <section class="card"><h2 class="section-title">Actividad reciente</h2><div id="activityText" class="info-row">Aún no hay actividad para mostrar.</div></section>
+        </aside>
+      </div>
+    </main>
+    <section id="errorBox" class="card hidden" role="alert"></section>
+    <footer class="footer">Tengaged Reborn</footer>
+  </div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const requestedUsername = (params.get("username") || "").trim();
+    const byId = id => document.getElementById(id);
+    let profile;
+    let viewer;
+
+    function showError(message) { byId("errorBox").textContent = message; byId("errorBox").classList.remove("hidden"); }
+    function formatNumber(value) { return (Number(value) || 0).toLocaleString("es-ES"); }
+    async function refreshProfile() {
+      const response = await fetch("/api/profile?username=" + encodeURIComponent(requestedUsername), { credentials: "include", cache: "no-store" });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.message || "No se pudo cargar el perfil.");
+      profile = data.profile;
+      byId("username").textContent = profile.username;
+      byId("aboutUsername").textContent = profile.username;
+      byId("portrait").textContent = profile.username.slice(0, 1).toUpperCase();
+      byId("karma").textContent = formatNumber(profile.karma);
+      byId("money").textContent = formatNumber(profile.t_money);
+      byId("games").textContent = formatNumber(profile.games_played);
+      byId("wins").textContent = formatNumber(profile.wins);
+      byId("points").textContent = formatNumber(profile.points);
+      byId("castingKeys").textContent = formatNumber(profile.casting_keys);
+      byId("castingApples").textContent = formatNumber(profile.casting_apples);
+      byId("castingHealth").textContent = formatNumber(profile.casting_health) + "/100";
+      byId("bioText").textContent = profile.bio || "Este jugador aún no ha escrito una descripción.";
+      if (viewer && viewer.username.toLowerCase() === profile.username.toLowerCase()) { byId("bioForm").classList.remove("hidden"); byId("bioInput").value = profile.bio || ""; }
+      document.body.classList.remove("theme-rose", "theme-sky", "theme-gold", "theme-lilac");
+      if (["rose", "sky", "gold", "lilac"].includes(profile.theme_code)) document.body.classList.add("theme-" + profile.theme_code);
+      document.body.classList.toggle("avatar-star", profile.avatar_code === "star");
+      byId("roleBadge").classList.toggle("hidden", !profile.is_admin);
+      byId("testBotBadge").classList.toggle("hidden", !profile.is_test_bot);
+      const date = profile.created_at ? new Date(profile.created_at).toLocaleDateString("es-ES") : "Sin fecha disponible";
+      byId("joined").textContent = "Miembro desde " + date;
+      byId("memberSince").textContent = date;
+      byId("accountStatus").textContent = profile.is_banned ? "Baneado" : "Activo";
+      byId("bannedNotice").classList.toggle("hidden", !profile.is_banned);
+      byId("bannedNotice").textContent = profile.is_banned ? "Cuenta baneada · " + profile.ban_reason : "";
+      const isSelf = viewer && viewer.username.toLowerCase() === profile.username.toLowerCase();
+      byId("banButton").classList.toggle("hidden", profile.is_banned || isSelf);
+      byId("unbanButton").classList.toggle("hidden", !profile.is_banned || isSelf);
+      byId("profilePage").classList.remove("hidden");
+      document.title = profile.username + " | Tengaged Reborn";
+    }
+    async function loadViewer() {
+      try {
+        const response = await fetch("/api/me", { credentials: "include", cache: "no-store" });
+        const data = await response.json();
+        if (response.ok && data.ok) {
+          viewer = data.user;
+          byId("sessionLabel").textContent = "Conectado como " + viewer.username;
+          byId("myProfileLink").href = "/profile.html?username=" + encodeURIComponent(viewer.username);
+          byId("myProfileLink").classList.remove("hidden");
+          if (viewer.is_admin && viewer.username.toLowerCase() === "admin1") byId("adminPanel").classList.remove("hidden");
+        }
+      } catch (_) { /* Profiles remain public while administration stays unavailable. */ }
+    }
+    async function adminAction(action) {
+      const notice = byId("adminNotice");
+      notice.textContent = "Guardando…";
+      const body = { username: profile.username, action, reason: byId("banReason").value.trim() };
+      if (action === "give_karma" || action === "give_t_money") body.amount = Number(byId("amount").value);
+      try {
+        const response = await fetch("/api/admin-user", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || "No se pudo guardar el cambio.");
+        notice.textContent = data.message;
+        await refreshProfile();
+      } catch (error) { notice.textContent = error.message; }
+    }
+    byId("giveKarma").addEventListener("click", () => adminAction("give_karma"));
+    byId("giveMoney").addEventListener("click", () => adminAction("give_t_money"));
+    byId("banButton").addEventListener("click", () => adminAction("ban"));
+    byId("unbanButton").addEventListener("click", () => adminAction("unban"));
+    byId("adminLookup").addEventListener("submit", event => {
+      event.preventDefault();
+      const username = byId("adminUsername").value.trim();
+      if (username) location.href = "/profile.html?username=" + encodeURIComponent(username);
+    });
+    byId("bioForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      byId("bioNotice").textContent = "Guardando…";
+      try {
+        const response = await fetch("/api/profile", { method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ bio: byId("bioInput").value }) });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || "No se pudo guardar la descripción.");
+        byId("bioNotice").textContent = data.message;
+        await refreshProfile();
+      } catch (error) { byId("bioNotice").textContent = error.message; }
+    });
+    (async () => {
+      if (!requestedUsername) return showError("Indica un nombre de usuario para ver su perfil.");
+      await loadViewer();
+      try { await refreshProfile(); } catch (error) { showError(error.message); }
+    })();
+  </script>
+</body>
+</html>
