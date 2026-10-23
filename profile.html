@@ -9,6 +9,38 @@
     body.theme-rose .hero{border-top:5px solid #e7a9b2}body.theme-sky .hero{border-top:5px solid #90bdd5}body.theme-gold .hero{border-top:5px solid #dfc663}body.theme-lilac .hero{border-top:5px solid #baa4d8}.portrait{position:relative}body.avatar-star .portrait:after{content:"⭐";position:absolute;right:-10px;bottom:-8px;padding:4px;border:1px solid #e3d18c;border-radius:50%;background:#fff9df;font-size:20px}.bio{white-space:pre-wrap;line-height:1.55}.bio-form{margin-top:13px}.bio-form textarea{display:block;width:100%;min-height:82px;padding:9px;border:1px solid #bdcdd7;border-radius:3px;font:14px Arial,sans-serif}.bio-form button{margin-top:7px}
     @media(max-width:760px){.wrap{padding:0 9px 24px}.layout{grid-template-columns:1fr}.hero{align-items:flex-start}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.head{align-items:flex-start;flex-direction:column;gap:4px;min-height:72px;padding:12px}.head #sessionLabel{align-self:flex-end}.nav{justify-content:flex-start;flex-wrap:wrap}.nav a{padding:8px 9px}.portrait{width:82px;height:82px;font-size:32px}.identity h1{font-size:23px}}
   </style>
+  <style>
+    body{background:#eef0f1;color:#505b64;font:12px Arial,Helvetica,sans-serif}
+    .wrap{max-width:1000px;padding:10px 14px 28px}
+    .head{min-height:52px;padding:8px 12px;background:linear-gradient(#e7f4f8,#a8ccd9);border-color:#94b5c0;border-bottom:1px solid #94b5c0;border-radius:0}
+    .logo{font-size:23px;letter-spacing:-1px;color:#345a68}
+    .nav{justify-content:flex-start;min-height:34px;margin-bottom:10px;padding:2px 5px;background:#c8dde4;border:1px solid #a5c0c8;border-top:0;border-radius:0}
+    .nav a{padding:6px 9px;background:linear-gradient(#f6fafb,#dce9ec);border:1px solid #b6cbd1;border-radius:0;color:#425e68;font-size:11px}
+    .layout{grid-template-columns:minmax(0,2.65fr) minmax(190px,.85fr);gap:9px}
+    .card{margin-bottom:9px;padding:10px;border-color:#cad4d8;border-radius:0;box-shadow:none}
+    .hero{display:grid;grid-template-columns:82px minmax(150px,1fr) minmax(260px,1.7fr);align-items:center;gap:10px;min-height:114px;padding:9px;background:#fff;border:1px solid #c7d3d8}
+    .portrait{width:76px;height:76px;border:2px solid #d3dfe3;outline:1px solid #aebfc5;font-size:30px;box-shadow:none}
+    .identity h1{margin:0 0 4px;color:#273f4a;font:bold 15px Arial,sans-serif}
+    .identity p{margin:4px 0 0;font-size:11px}
+    .badge{padding:2px 5px;font-size:10px}
+    .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:0}
+    .stat{min-height:44px;padding:5px 3px;background:#f5f7f7;border:1px solid #d8dfe1;border-radius:0}
+    .stat strong{font-size:16px;color:#395d69}
+    .stat span{margin-top:2px;font-size:10px}
+    .profile-tabs{gap:2px;margin:0 0 8px}
+    .profile-tabs a{padding:5px 8px;border:1px solid #cbd6d9;border-bottom:0;border-radius:0;background:linear-gradient(#fff,#e6edef);font-size:11px}
+    .section-title{margin-bottom:7px;padding-bottom:5px;color:#c84968;font:bold 15px Arial,sans-serif}
+    .info-row{padding:6px 2px}
+    .bio{padding:11px;background:#fffbd4;border:1px solid #eee7a6;color:#554f38;min-height:56px;line-height:1.45}
+    .side-banner{padding:8px;background:#f8f8f6;border-bottom:1px solid #d3dcdf}
+    .side-banner strong{font-size:15px;letter-spacing:.5px}
+    .side-card-title{padding:7px 9px;font-size:13px}
+    .side-card-body{padding:8px}
+    .profile-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:5px}
+    .profile-links a,.button{padding:6px 5px;border-radius:0;font-size:10px}
+    .footer{font-size:11px}
+    @media(max-width:760px){.wrap{padding:7px}.hero{grid-template-columns:64px minmax(0,1fr);align-items:start;gap:8px}.portrait{width:60px;height:60px}.stats{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr))}.nav{flex-wrap:wrap}.layout{grid-template-columns:1fr}.identity h1{font-size:14px}}
+  </style>
 </head>
 <body>
   <div class="wrap">
@@ -19,21 +51,18 @@
       <section class="card hero">
         <div id="portrait" class="portrait" aria-label="Avatar">?</div>
         <div class="identity"><h1 id="username">Cargando perfil…</h1><span id="roleBadge" class="badge hidden">Administrador</span><span id="testBotBadge" class="badge hidden">Cuenta de prueba</span><p id="joined">Miembro de Tengaged Reborn</p></div>
+        <div id="stats" class="stats" aria-label="Estadísticas del usuario">
+          <div class="stat"><strong id="karma">0</strong><span>Karma</span></div>
+          <div id="moneyStat" class="stat hidden"><strong id="money">0</strong><span>T$</span></div>
+          <div class="stat"><strong id="games">0</strong><span>Partidas jugadas</span></div>
+          <div class="stat"><strong id="wins">0</strong><span>Victorias</span></div>
+          <div id="healthStat" class="stat hidden"><strong id="castingHealth">—</strong><span>Salud ❤️</span></div>
+        </div>
       </section>
-      <div class="stats" aria-label="Estadísticas del usuario">
-        <div class="stat"><strong id="karma">0</strong><span>Karma</span></div>
-        <div class="stat"><strong id="money">0</strong><span>T$</span></div>
-        <div class="stat"><strong id="games">0</strong><span>Partidas jugadas</span></div>
-        <div class="stat"><strong id="wins">0</strong><span>Victorias</span></div>
-        <div class="stat"><strong id="points">0</strong><span>Puntos</span></div>
-        <div class="stat"><strong id="castingKeys">0</strong><span>Llaves del casting 🔑</span></div>
-        <div class="stat"><strong id="castingApples">0</strong><span>Manzanas 🍎</span></div>
-        <div class="stat"><strong id="castingHealth">—</strong><span>Salud ❤️</span></div>
-      </div>
       <div class="layout">
         <div>
           <section class="card">
-            <div class="profile-tabs"><a href="#about">Perfil</a><a href="#gameStats">Estadísticas</a><a href="#activity">Actividad</a></div>
+            <div class="profile-tabs"><a href="#about">Perfil</a><a href="#stats">Estadísticas</a><a href="#activity">Actividad</a></div>
             <h2 id="about" class="section-title">Sobre este jugador</h2>
             <div class="info-row"><strong>Nombre de usuario</strong><span id="aboutUsername">—</span></div>
             <div class="info-row"><strong>Estado</strong><span id="accountStatus">Activo</span></div>
@@ -56,7 +85,7 @@
         </div>
         <aside>
           <section class="card" style="padding:0;overflow:hidden"><div class="side-banner"><span>Bienvenido a la comunidad</span><strong>TENGAGED REBORN</strong><small>Juega, vota y crea tu historia</small></div><h2 class="side-card-title">Comunidad</h2><div class="side-card-body"><div class="profile-links"><a href="/community.html#blogs">Blogs</a><a href="/community.html#hall-of-fame">Hall of Fame</a><a href="/community.html#designs">Diseños</a><a href="/community.html#shop">Tiendas</a><a href="/#castingSection">Ver los castings</a></div></div></section>
-          <section id="gameStats" class="card"><h2 class="section-title">My Games · Estadísticas</h2><div class="info-row"><strong>Partidas jugadas</strong><span id="sideGames">0</span></div><div class="info-row"><strong>Victorias</strong><span id="sideWins">0</span></div><div class="info-row"><strong>Puntos</strong><span id="sidePoints">0</span></div><div class="info-row"><strong>Karma</strong><span id="sideKarma">0</span></div></section>
+          <section class="card"><h2 class="section-title">My Games</h2><div class="info-row"><strong>Partidas jugadas</strong><span id="sideGames">0</span></div><div class="info-row"><strong>Victorias</strong><span id="sideWins">0</span></div><div class="info-row"><strong>Karma</strong><span id="sideKarma">0</span></div></section>
           <section id="activity" class="card"><h2 class="section-title">Actividad reciente</h2><div id="activityText" class="info-row">Aún no hay actividad para mostrar.</div></section>
         </aside>
       </div>
@@ -82,17 +111,18 @@
       byId("aboutUsername").textContent = profile.username;
       byId("portrait").textContent = profile.username.slice(0, 1).toUpperCase();
       byId("karma").textContent = formatNumber(profile.karma);
-      byId("money").textContent = formatNumber(profile.t_money);
       byId("games").textContent = formatNumber(profile.games_played);
       byId("wins").textContent = formatNumber(profile.wins);
-      byId("points").textContent = formatNumber(profile.points);
       byId("sideGames").textContent = formatNumber(profile.games_played);
       byId("sideWins").textContent = formatNumber(profile.wins);
-      byId("sidePoints").textContent = formatNumber(profile.points);
       byId("sideKarma").textContent = formatNumber(profile.karma);
-      byId("castingKeys").textContent = formatNumber(profile.casting_keys);
-      byId("castingApples").textContent = formatNumber(profile.casting_apples);
-      byId("castingHealth").textContent = formatNumber(profile.casting_health) + "/100";
+      const isSelf = Boolean(viewer && viewer.username.toLowerCase() === profile.username.toLowerCase());
+      byId("moneyStat").classList.toggle("hidden", !isSelf);
+      byId("healthStat").classList.toggle("hidden", !isSelf);
+      if (isSelf) {
+        byId("money").textContent = formatNumber(profile.t_money);
+        byId("castingHealth").textContent = formatNumber(profile.casting_health) + "/100";
+      }
       byId("bioText").textContent = profile.bio || "Este jugador aún no ha escrito una descripción.";
       if (viewer && viewer.username.toLowerCase() === profile.username.toLowerCase()) { byId("bioForm").classList.remove("hidden"); byId("bioInput").value = profile.bio || ""; }
       document.body.classList.remove("theme-rose", "theme-sky", "theme-gold", "theme-lilac");
@@ -106,7 +136,6 @@
       byId("accountStatus").textContent = profile.is_banned ? "Baneado" : "Activo";
       byId("bannedNotice").classList.toggle("hidden", !profile.is_banned);
       byId("bannedNotice").textContent = profile.is_banned ? "Cuenta baneada · " + profile.ban_reason : "";
-      const isSelf = viewer && viewer.username.toLowerCase() === profile.username.toLowerCase();
       byId("banButton").classList.toggle("hidden", profile.is_banned || isSelf);
       byId("unbanButton").classList.toggle("hidden", !profile.is_banned || isSelf);
       byId("profilePage").classList.remove("hidden");
