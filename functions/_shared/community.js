@@ -40,12 +40,14 @@ export async function ensureCommunitySchema(db) {
     ["profile-sky", "Perfil cielo", "Diseños de perfil", "Un marco azul clásico para tu perfil.", 25, "sky"],
     ["profile-gold", "Perfil dorado", "Diseños de perfil", "Un acabado dorado para destacar.", 60, "gold"],
     ["profile-lilac", "Perfil lila", "Diseños de perfil", "Un tono lila pastel para tu perfil.", 40, "lilac"],
-    ["avatar-classic-blue", "Clásico azul", "Avatares", "Retrato clásico de Tengaged en tonos azules.", 0, "classic-blue"],
-    ["avatar-classic-rose", "Clásico rosa", "Avatares", "Retrato clásico de Tengaged en tonos rosas.", 0, "classic-rose"],
-    ["avatar-classic-gold", "Clásico dorado", "Avatares", "Retrato clásico de Tengaged en tonos dorados.", 0, "classic-gold"],
-    ["avatar-classic-mint", "Clásico menta", "Avatares", "Retrato clásico de Tengaged en tonos menta.", 0, "classic-mint"],
-    ["avatar-classic-lilac", "Clásico lila", "Avatares", "Retrato clásico de Tengaged en tonos lilas.", 0, "classic-lilac"],
-    ["avatar-classic-sunset", "Clásico atardecer", "Avatares", "Retrato clásico de Tengaged en tonos cálidos.", 0, "classic-sunset"],
+    ["avatar-classic-blue", "Avatar chica azul", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-blue"],
+    ["avatar-classic-rose", "Avatar chica rosa", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-rose"],
+    ["avatar-classic-gold", "Avatar chico dorado", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-gold"],
+    ["avatar-classic-mint", "Avatar chico menta", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-mint"],
+    ["avatar-classic-lilac", "Avatar chica lila", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-lilac"],
+    ["avatar-classic-sunset", "Avatar chico atardecer", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-sunset"],
+    ["avatar-classic-ocean", "Avatar chico océano", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-ocean"],
+    ["avatar-classic-coral", "Avatar chica coral", "Avatares", "Avatar ilustrado básico de estilo social.", 0, "classic-coral"],
     ["avatar-star", "Avatar estrella", "Avatares", "Un distintivo de estrella para tu perfil.", 20, "star"]
   ];
   for (const item of items) {
