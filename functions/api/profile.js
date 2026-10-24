@@ -13,10 +13,30 @@ export async function onRequest({ request, env }) {
       const viewer = await getSessionUser(request, env.DB);
       if (!viewer) return jsonError("Inicia sesión para editar el perfil.", 401);
       const body = await request.json().catch(() => ({}));
-      const bio = String(body.bio || "").trim();
-      if (bio.length > 300) return jsonError("La descripción no puede superar 300 caracteres.", 400);
-      await env.DB.prepare("UPDATE users SET bio=? WHERE id=?").bind(bio, viewer.id).run();
-      return Response.json({ ok: true, message: "Perfil actualizado." });
+      let updatedBio = false;
+      let updatedAvatar = false;
+      if (Object.prototype.hasOwnProperty.call(body, "bio")) {
+        const bio = String(body.bio || "").trim();
+        if (bio.length > 300) return jsonError("La descripción no puede superar 300 caracteres.", 400);
+        await env.DB.prepare("UPDATE users SET bio=? WHERE id=?").bind(bio, viewer.id).run();
+        updatedBio = true;
+      }
+      if (Object.prototype.hasOwnProperty.call(body, "avatar_code")) {
+        const avatarCode = String(body.avatar_code || "");
+        const allowedAvatars = new Set(["classic-blue", "classic-rose", "classic-gold", "classic-mint", "classic-lilac", "classic-sunset"]);
+        if (!allowedAvatars.has(avatarCode)) return jsonError("El avatar seleccionado no está disponible.", 400);
+        const avatar = await env.DB.prepare("SELECT code FROM shop_items WHERE category='Avatares' AND theme_code=? AND price=0 LIMIT 1").bind(avatarCode).first();
+        if (!avatar) return jsonError("No se pudo encontrar ese avatar.", 404);
+        await env.DB.batch([
+          env.DB.prepare("UPDATE user_inventory SET is_equipped=0 WHERE user_id=? AND item_code IN (SELECT code FROM shop_items WHERE category='Avatares')").bind(viewer.id),
+          env.DB.prepare("INSERT OR IGNORE INTO user_inventory(user_id,item_code) VALUES(?,?)").bind(viewer.id, avatar.code),
+          env.DB.prepare("UPDATE user_inventory SET is_equipped=1 WHERE user_id=? AND item_code=?").bind(viewer.id, avatar.code)
+        ]);
+        updatedAvatar = true;
+      }
+      if (!updatedBio && !updatedAvatar) return jsonError("No hay cambios de perfil para guardar.", 400);
+      const message = updatedBio && updatedAvatar ? "Perfil y avatar actualizados." : updatedAvatar ? "Avatar actualizado." : "Perfil actualizado.";
+      return Response.json({ ok: true, message });
     }
     if (request.method !== "GET") return jsonError("Método no permitido.", 405);
     const username = String(new URL(request.url).searchParams.get("username") || "").trim();
@@ -25,7 +45,7 @@ export async function onRequest({ request, env }) {
 
     let profile = await env.DB.prepare(`
       SELECT u.id AS user_id, u.username, u.karma, u.t_money, u.is_admin, u.is_banned, u.is_test_bot, u.ban_reason, u.bio,
-             s.games_played, s.wins, s.created_at, equipped.theme_code, avatar.theme_code AS avatar_code,
+             s.games_played, s.wins, s.created_at, equipped.theme_code, COALESCE(avatar.theme_code,'classic-blue') AS avatar_code,
              COALESCE((SELECT r.health FROM casting_resources r WHERE r.casting_id=1 AND LOWER(r.username)=LOWER(u.username)),0) AS casting_health
       FROM users u
       LEFT JOIN user_stats s ON LOWER(s.username) = LOWER(u.username)
@@ -56,7 +76,7 @@ export async function onRequest({ request, env }) {
         ...participant,
         karma: 0, t_money: 0, is_admin: 0, is_banned: 0,
         is_test_bot: 0, ban_reason: null, bio: "", theme_code: null,
-        avatar_code: null, games_played: 0, wins: 0,
+        avatar_code: "classic-blue", games_played: 0, wins: 0,
         created_at: participant.joined_at
       };
     }

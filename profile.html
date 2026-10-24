@@ -19,7 +19,16 @@
     .layout{grid-template-columns:minmax(0,2.65fr) minmax(190px,.85fr);gap:9px}
     .card{margin-bottom:9px;padding:10px;border-color:#cad4d8;border-radius:0;box-shadow:none}
     .hero{display:grid;grid-template-columns:82px minmax(150px,1fr) minmax(260px,1.7fr);align-items:center;gap:10px;min-height:114px;padding:9px;background:#fff;border:1px solid #c7d3d8}
-    .portrait{width:76px;height:76px;border:2px solid #d3dfe3;outline:1px solid #aebfc5;font-size:30px;box-shadow:none}
+    .portrait{display:block;overflow:hidden;width:76px;height:76px;padding:0;border:2px solid #d3dfe3;outline:1px solid #aebfc5;background:#dcecf1;box-shadow:none}
+    .avatar-art{display:block;width:100%;height:100%}
+    .avatar-editor{padding:10px;background:#fff}
+    .avatar-editor p{margin:0 0 9px;color:#73818a;font-size:11px}
+    .avatar-options{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+    .avatar-option{display:grid;justify-items:center;gap:4px;min-width:0;padding:5px 3px;border:1px solid #ccd7db;background:linear-gradient(#fff,#edf3f4);color:#506874;font:10px Arial,sans-serif;cursor:pointer}
+    .avatar-option .avatar-art{width:48px;height:48px;border:1px solid #d3dfe3}
+    .avatar-option:hover,.avatar-option.selected{border-color:#5e94a4;background:#e8f5f7;box-shadow:0 0 0 1px #9fc2ca}
+    .avatar-editor-actions{display:flex;align-items:center;gap:9px;margin-top:8px}
+    .avatar-editor-actions .button{font-size:11px}
     .identity h1{margin:0 0 4px;color:#273f4a;font:bold 15px Arial,sans-serif}
     .identity p{margin:4px 0 0;font-size:11px}
     .badge{padding:2px 5px;font-size:10px}
@@ -39,7 +48,7 @@
     .profile-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:5px}
     .profile-links a,.button{padding:6px 5px;border-radius:0;font-size:10px}
     .footer{font-size:11px}
-    @media(max-width:760px){.wrap{padding:7px}.hero{grid-template-columns:64px minmax(0,1fr);align-items:start;gap:8px}.portrait{width:60px;height:60px}.stats{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr))}.nav{flex-wrap:wrap}.layout{grid-template-columns:1fr}.identity h1{font-size:14px}}
+    @media(max-width:760px){.wrap{padding:7px}.hero{grid-template-columns:64px minmax(0,1fr);align-items:start;gap:8px}.portrait{width:60px;height:60px}.avatar-options{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-option .avatar-art{width:54px;height:54px}.stats{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr))}.nav{flex-wrap:wrap}.layout{grid-template-columns:1fr}.identity h1{font-size:14px}}
   </style>
 </head>
 <body>
@@ -58,6 +67,12 @@
           <div class="stat"><strong id="wins">0</strong><span>Victorias</span></div>
           <div id="healthStat" class="stat hidden"><strong id="castingHealth">—</strong><span>Salud ❤️</span></div>
         </div>
+      </section>
+      <section id="avatarEditor" class="card avatar-editor hidden" aria-labelledby="avatarEditorTitle">
+        <h2 id="avatarEditorTitle" class="section-title">Mi avatar</h2>
+        <p>Elige el retrato que quieres mostrar en tu perfil. Puedes cambiarlo cuando quieras.</p>
+        <div id="avatarOptions" class="avatar-options" role="group" aria-label="Avatares disponibles"></div>
+        <div class="avatar-editor-actions"><button type="button" id="saveAvatar" class="button">Guardar avatar</button><span id="avatarNotice" class="notice" role="status" aria-live="polite"></span></div>
       </section>
       <div class="layout">
         <div>
@@ -97,8 +112,54 @@
     const params = new URLSearchParams(location.search);
     const requestedUsername = (params.get("username") || "").trim();
     const byId = id => document.getElementById(id);
+    const avatarDesigns = [
+      { code: "classic-blue", name: "Azul", bg: "#d9f0f5", skin: "#f4c69b", hair: "#49382f", shirt: "#329db8", style: "short" },
+      { code: "classic-rose", name: "Rosa", bg: "#f7e1e9", skin: "#e9ad86", hair: "#742f48", shirt: "#d96c91", style: "long" },
+      { code: "classic-gold", name: "Dorado", bg: "#f7edc9", skin: "#f3c89a", hair: "#b57932", shirt: "#d6a640", style: "spiky" },
+      { code: "classic-mint", name: "Menta", bg: "#dff1e6", skin: "#9b6246", hair: "#302d28", shirt: "#49a982", style: "curly" },
+      { code: "classic-lilac", name: "Lila", bg: "#ece3f6", skin: "#edc29d", hair: "#644b87", shirt: "#9172bd", style: "fringe" },
+      { code: "classic-sunset", name: "Atardecer", bg: "#f8e2d3", skin: "#bf7956", hair: "#3f2928", shirt: "#d77d4d", style: "cap" }
+    ];
     let profile;
     let viewer;
+    let selectedAvatarCode = "classic-blue";
+
+    function avatarSvg(code, label = "Avatar de Tengaged") {
+      const avatar = avatarDesigns.find(item => item.code === code) || avatarDesigns[0];
+      const hairShapes = {
+        short: '<path d="M24 47c-4-21 7-35 26-35 19 0 29 13 26 35l-8-7-4-11-11 8-13-3-8 13z" fill="' + avatar.hair + '"/><path d="M29 32l8 5m8-12 5 11m11-10 2 10" stroke="#fff" stroke-opacity=".18" stroke-width="3"/>',
+        long: '<path d="M23 49c-5-23 7-38 27-38 20 0 32 14 27 40l-5 27-10-4-1-39-11 8-16-4-4 35-10 4z" fill="' + avatar.hair + '"/><path d="M34 55l-2 17m34-19 3 19" stroke="#fff" stroke-opacity=".2" stroke-width="3"/>',
+        spiky: '<path d="M24 47l-7-15 15 5-2-19 15 12 8-19 8 20 15-10-4 20 11-1-5 17-12-8-15 5-17-4-9 8-7-14z" fill="' + avatar.hair + '"/>',
+        curly: '<path d="M24 48c-7-15 1-31 14-34 3-11 20-12 26-2 15 0 20 18 11 33l-7-8-9 5-9-8-11 8-9-4z" fill="' + avatar.hair + '"/><circle cx="30" cy="26" r="8" fill="' + avatar.hair + '"/><circle cx="46" cy="17" r="8" fill="' + avatar.hair + '"/><circle cx="63" cy="20" r="8" fill="' + avatar.hair + '"/><circle cx="73" cy="31" r="8" fill="' + avatar.hair + '"/>',
+        fringe: '<path d="M23 49c-5-23 8-38 28-38 21 0 32 16 25 40l-8-13-12 8-9-12-12 15-8-6-5 12z" fill="' + avatar.hair + '"/><path d="M30 36c7 5 12 4 18 0 5 5 11 5 17 0" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="3"/>',
+        cap: '<path d="M24 48c-3-21 8-36 27-36 19 0 29 14 25 37l-9-10-13 6-12-8-12 14z" fill="' + avatar.hair + '"/><path d="M23 29c2-18 17-25 31-22 12 2 20 10 21 20-13 3-34 5-52 2z" fill="#e8a05f"/><path d="M23 29c12 5 39 4 54-1" fill="none" stroke="#b86740" stroke-width="4"/>'
+      };
+      return '<svg class="avatar-art" viewBox="0 0 100 100" role="img" aria-label="' + label + '" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="' + avatar.bg + '"/><circle cx="50" cy="48" r="46" fill="' + avatar.bg + '"/><path d="M12 100c3-21 17-31 38-31s35 10 38 31" fill="' + avatar.shirt + '"/><path d="M40 65h20v14H40z" fill="' + avatar.skin + '"/><path d="M26 46c0-20 9-31 24-31s24 11 24 31c0 18-10 29-24 29S26 64 26 46z" fill="' + avatar.skin + '"/><path d="M26 45c0-20 9-31 24-31s24 11 24 31" fill="none" stroke="#603f33" stroke-opacity=".18" stroke-width="2"/><path d="M35 48h7m16 0h7" stroke="#332b2b" stroke-width="3" stroke-linecap="round"/><path d="M43 61c4 4 10 4 14 0" fill="none" stroke="#a84f53" stroke-width="2.5" stroke-linecap="round"/>' + hairShapes[avatar.style] + '<path d="M40 78l10 8 10-8" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3"/></svg>';
+    }
+
+    function populateAvatarChoices() {
+      const root = byId("avatarOptions");
+      for (const avatar of avatarDesigns) {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "avatar-option";
+        option.dataset.avatarCode = avatar.code;
+        option.setAttribute("aria-pressed", "false");
+        option.innerHTML = avatarSvg(avatar.code, avatar.name) + "<span></span>";
+        option.querySelector("span").textContent = avatar.name;
+        option.addEventListener("click", () => {
+          selectedAvatarCode = avatar.code;
+          byId("portrait").innerHTML = avatarSvg(selectedAvatarCode, "Avatar de " + (profile?.username || "usuario"));
+          root.querySelectorAll(".avatar-option").forEach(button => {
+            const active = button.dataset.avatarCode === selectedAvatarCode;
+            button.classList.toggle("selected", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+          byId("avatarNotice").textContent = "Vista previa: " + avatar.name;
+        });
+        root.append(option);
+      }
+    }
 
     function showError(message) { byId("errorBox").textContent = message; byId("errorBox").classList.remove("hidden"); }
     function formatNumber(value) { return (Number(value) || 0).toLocaleString("es-ES"); }
@@ -109,7 +170,8 @@
       profile = data.profile;
       byId("username").textContent = profile.username;
       byId("aboutUsername").textContent = profile.username;
-      byId("portrait").textContent = profile.username.slice(0, 1).toUpperCase();
+      const currentAvatar = avatarDesigns.some(item => item.code === profile.avatar_code) ? profile.avatar_code : "classic-blue";
+      byId("portrait").innerHTML = avatarSvg(currentAvatar, "Avatar de " + profile.username);
       byId("karma").textContent = formatNumber(profile.karma);
       byId("games").textContent = formatNumber(profile.games_played);
       byId("wins").textContent = formatNumber(profile.wins);
@@ -124,7 +186,17 @@
         byId("castingHealth").textContent = formatNumber(profile.casting_health) + "/100";
       }
       byId("bioText").textContent = profile.bio || "Este jugador aún no ha escrito una descripción.";
-      if (viewer && viewer.username.toLowerCase() === profile.username.toLowerCase()) { byId("bioForm").classList.remove("hidden"); byId("bioInput").value = profile.bio || ""; }
+      if (isSelf) {
+        byId("bioForm").classList.remove("hidden");
+        byId("bioInput").value = profile.bio || "";
+        byId("avatarEditor").classList.remove("hidden");
+        selectedAvatarCode = currentAvatar;
+        byId("avatarOptions").querySelectorAll(".avatar-option").forEach(button => {
+          const active = button.dataset.avatarCode === selectedAvatarCode;
+          button.classList.toggle("selected", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+      }
       document.body.classList.remove("theme-rose", "theme-sky", "theme-gold", "theme-lilac");
       if (["rose", "sky", "gold", "lilac"].includes(profile.theme_code)) document.body.classList.add("theme-" + profile.theme_code);
       document.body.classList.toggle("avatar-star", profile.avatar_code === "star");
@@ -171,6 +243,16 @@
     byId("giveMoney").addEventListener("click", () => adminAction("give_t_money"));
     byId("banButton").addEventListener("click", () => adminAction("ban"));
     byId("unbanButton").addEventListener("click", () => adminAction("unban"));
+    byId("saveAvatar").addEventListener("click", async () => {
+      byId("avatarNotice").textContent = "Guardando…";
+      try {
+        const response = await fetch("/api/profile", { method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ avatar_code: selectedAvatarCode }) });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || "No se pudo guardar el avatar.");
+        byId("avatarNotice").textContent = data.message;
+        await refreshProfile();
+      } catch (error) { byId("avatarNotice").textContent = error.message; }
+    });
     byId("adminLookup").addEventListener("submit", event => {
       event.preventDefault();
       const username = byId("adminUsername").value.trim();
@@ -187,6 +269,7 @@
         await refreshProfile();
       } catch (error) { byId("bioNotice").textContent = error.message; }
     });
+    populateAvatarChoices();
     (async () => {
       if (!requestedUsername) return showError("Indica un nombre de usuario para ver su perfil.");
       await loadViewer();
