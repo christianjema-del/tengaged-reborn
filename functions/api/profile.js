@@ -23,7 +23,7 @@ export async function onRequest({ request, env }) {
       }
       if (Object.prototype.hasOwnProperty.call(body, "avatar_code")) {
         const avatarCode = String(body.avatar_code || "");
-        const allowedAvatars = new Set(["classic-blue", "classic-rose", "classic-gold", "classic-mint", "classic-lilac", "classic-sunset"]);
+        const allowedAvatars = new Set(["classic-blue", "classic-rose", "classic-gold", "classic-mint", "classic-lilac", "classic-sunset", "classic-ocean", "classic-coral"]);
         if (!allowedAvatars.has(avatarCode)) return jsonError("El avatar seleccionado no está disponible.", 400);
         const avatar = await env.DB.prepare("SELECT code FROM shop_items WHERE category='Avatares' AND theme_code=? AND price=0 LIMIT 1").bind(avatarCode).first();
         if (!avatar) return jsonError("No se pudo encontrar ese avatar.", 404);
