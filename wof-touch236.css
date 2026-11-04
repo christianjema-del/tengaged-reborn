@@ -1,0 +1,7 @@
+.wof-touch{max-width:550px;margin:10px auto 16px;font:13px/1.35 Arial,Helvetica,sans-serif;color:#444}
+.wof-touch p{margin:0 0 8px;text-align:center}
+.wof-touch-row{display:flex;justify-content:center;gap:4px;margin-bottom:4px}
+.wof-touch button{flex:1 1 0;min-width:0;max-width:52px;height:46px;padding:0;border:1px solid #6d86ad;border-radius:6px;background:#eef2f8;color:#2f4468;font:bold 19px/1 Arial,Helvetica,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.wof-touch button:active{background:#b9c9e3}
+.wof-touch button.wof-touch-vowel{border-color:#c98a4a;background:#fdf1e3;color:#8a4a12}
+.wof-touch button.wof-touch-vowel:active{background:#f4d2ab}

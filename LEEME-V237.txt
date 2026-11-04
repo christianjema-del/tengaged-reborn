@@ -1,0 +1,4 @@
+V237 — Wheel of Fortune en castellano: 135 paneles con enunciado. Cada partida reparte 40 al azar y sin repetir. Words conserva su lista.
+Limitaciones del SWF comprobadas en el juego: enunciado de una línea (26 caracteres) sin tildes, eñes ni signos; respuestas solo A-Z. Por eso se usan palabras que no llevan tilde ni eñe. tests/wof-panels236.test.mjs lo vigila.
+Móvil: teclado grande bajo el tablero en pantallas táctiles de hasta 1024 px (wof-touch236.js). Cada tecla pulsa la letra original; giro, compra de vocales, solución y puntuación siguen dentro del SWF.
+Los textos del propio SWF siguen en inglés. Los combates de Hunger y los días de El Duelo ya empezados conservan sus palabras hasta terminar. No modifica partidas, puntuaciones ni premios.
