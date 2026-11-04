@@ -1,0 +1,6 @@
+.guitar-touch{max-width:550px;margin:10px auto 16px;font:13px/1.35 Arial,Helvetica,sans-serif;color:#444}
+.guitar-touch p{margin:0 0 8px;text-align:center}
+.guitar-touch-row{display:flex;gap:6px}
+.guitar-touch button{flex:1 1 0;min-width:0;height:76px;padding:0;border:2px solid rgba(0,0,0,.35);border-radius:12px;color:#fff;font:bold 24px/1 Arial,Helvetica,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.6);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.guitar-touch-red{background:#d83a3a}.guitar-touch-green{background:#3f9d3c}.guitar-touch-blue{background:#3f5fd0}.guitar-touch-yellow{background:#d7b92e}.guitar-touch-orange{background:#e2852c}
+.guitar-touch button[data-down]{filter:brightness(1.35);transform:translateY(1px)}

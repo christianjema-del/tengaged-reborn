@@ -1,0 +1,4 @@
+V239 — Guitar: tema instrumental original de 2:36 (94 BPM, sol menor), compuesto y sintetizado para este juego, sin tomar material de otras canciones. 295 notas nuevas generadas desde su partitura, con adelanto de 295 ms para coincidir con la ventana de acierto del SWF.
+En Guitar.swf cambian solo el sonido SongMP3 (ahora ADPCM mono a 11025 Hz) y SongTrack.loadDemoTrack. Puntuación, tiempos y envío de resultados siguen dentro del juego.
+Móvil: cinco botones táctiles bajo el tablero en pantallas de hasta 1024 px (guitar-touch238.js). Envían las teclas 1-5 y evitan que Ruffle pierda el foco.
+Los textos del SWF siguen en inglés. No modifica partidas, puntuaciones ni premios ya guardados.

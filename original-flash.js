@@ -24,6 +24,7 @@ export async function play(host,kind,questions,done,options={}){
  host.replaceChildren();const file=FILES[kind];if(!file)throw Error('Juego no reconocido');
  const mobileMaze=kind==='maze'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const mobileWheel=kind==='wheel'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
+ const mobileGuitar=kind==='guitar'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const title=make('h3',LABELS[kind]);host.append(title);
  const note=make('p',options.duel?'Prueba de El Duelo. Pulsa dentro del tablero para controlarlo.':options.frookies?'Prueba de PoV. Pulsa dentro del tablero para controlarlo.':options.hunger?'Combate de Hunger · Minijuego original de Casting. Pulsa dentro del tablero para controlarlo.':'Prueba de Casting. Pulsa dentro del tablero para controlarla.');host.append(note);
  const container=make('div');container.className='original-flash-frame';host.append(container);
@@ -57,6 +58,9 @@ export async function play(host,kind,questions,done,options={}){
  }
  if(mobileWheel){
   try{if(!document.querySelector('link[data-wof-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/wof-touch236.css?v=236';style.dataset.wofTouch='true';document.head.append(style);}const {installWofTouch}=await import('/wof-touch236.js?v=236');disposeTouch=installWofTouch(container,player);}catch(error){console.warn('Wheel touch keys:',error);}
+ }
+ if(mobileGuitar){
+  try{if(!document.querySelector('link[data-guitar-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/guitar-touch238.css?v=239';style.dataset.guitarTouch='true';document.head.append(style);}const {installGuitarTouch}=await import('/guitar-touch238.js?v=239');disposeTouch=installGuitarTouch(container,player);}catch(error){console.warn('Guitar touch buttons:',error);}
  }
  return ()=>{disposeTouch?.();player.remove();};
  }catch(err){status.textContent='No se pudo abrir el juego original: '+(err?.message||err);button.disabled=true;throw err;}
