@@ -1,0 +1,1 @@
+V240 — Hunger: en la pantalla de lucha, "Experiencia Lucha" ya no se corta en la columna del rival. El texto se ajusta a su columna. Cambio solo visual: no modifica partidas, experiencia, salud ni puntuaciones.
