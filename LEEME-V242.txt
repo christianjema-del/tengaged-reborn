@@ -1,0 +1,2 @@
+V242 — Base de datos: la reparación de los diseños de Pau deja de comprobarse en cada conexión nueva; un marcador la limita a una sola vez y reduce consultas a D1.
+Pruebas: las 187 pasan. Se actualizaron 12 pruebas desfasadas respecto a reglas ya vigentes de Hunger, Frookies, Casting y el directorio de juegos. No modifica partidas, puntuaciones ni premios.

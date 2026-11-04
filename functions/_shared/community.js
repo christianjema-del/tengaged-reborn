@@ -16,8 +16,10 @@ import {ensureDesignManagement} from './design-management.js';
 const ready=new WeakMap();
 export async function ensureCommunitySchema(db) {
  if(ready.has(db))return ready.get(db);
- const task=setup(db).then(()=>repairPauDesigns224(db));ready.set(db,task);try{return await task;}catch(e){ready.delete(db);throw e;}
+ const task=setupOnce224(db);ready.set(db,task);try{return await task;}catch(e){ready.delete(db);throw e;}
 }
+// La reparación de diseños va tras la migración: con el marcador, cada petición hace una sola consulta.
+async function setupOnce224(db){if(await schemaReady170(db,'community-224'))return;await setup(db);await repairPauDesigns224(db);await markSchema170(db,'community-224');}
 async function setup(db) {
  if(await schemaReady170(db,'community-170'))return;
   await db.prepare(`CREATE TABLE IF NOT EXISTS blog_posts (

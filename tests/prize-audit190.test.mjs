@@ -33,8 +33,9 @@ for(let i=0;i<45;i++)sql.prepare('INSERT INTO users(id,username,is_admin,karma,t
 sql.exec("VACUUM INTO '"+dbfile.replaceAll("'","''")+"'");
 function limited(query,write=false){const script=`import sqlite3,json,sys
 c=sqlite3.connect(sys.argv[1]);c.row_factory=sqlite3.Row
-c.setlimit(sqlite3.SQLITE_LIMIT_COMPOUND_SELECT,1)
 q=sys.stdin.read()
+if hasattr(c,'setlimit'): c.setlimit(sqlite3.SQLITE_LIMIT_COMPOUND_SELECT,1)
+elif sys.argv[2]!='write' and 'UNION' in q.upper(): raise sqlite3.OperationalError('too many terms in compound SELECT')
 if sys.argv[2]=='write':
  c.executescript(q);c.commit();print('[]')
 else: print(json.dumps([dict(r) for r in c.execute(q)]))
