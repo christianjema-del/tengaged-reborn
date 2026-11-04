@@ -1,0 +1,1 @@
+V241 — Casting: los avisos de llave y manzana del chat muestran solo los cinco iconos, sin título, texto ni hora. El texto se conserva como etiqueta para lectores de pantalla. Recoger llaves, manzanas y venenos funciona igual. No modifica partidas, reglas ni premios.

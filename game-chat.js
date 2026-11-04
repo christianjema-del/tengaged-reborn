@@ -59,8 +59,9 @@ function finishNotice182(row,m){
  const body=document.createElement('div');body.className='game-notice-body182';
  title.className=(title.className||'')+' game-notice-title182';
  content.className=(content.className||'')+' game-notice-content182';
- if(kind==='casting-key'){const text=document.createElement('p');text.className='game-notice-message182';text.textContent=m.body;body.append(title,text,content);}
- else if(room.startsWith('hunger:')&&m.event&&!m.admin_notice)body.append(content);else body.append(title,content);
+ // Llave o manzana: solo los cinco iconos, sin cabecera ni texto visible.
+ if(kind==='casting-key'){body.append(content);row.className+=(row.className.includes('arena-event')?'':' arena-event')+' game-notice182';row.replaceChildren(body);return row;}
+ if(room.startsWith('hunger:')&&m.event&&!m.admin_notice)body.append(content);else body.append(title,content);
  row.className+=(row.className.includes('arena-event')?'':' arena-event')+' game-notice182';
  row.replaceChildren(header,body);return row;
 }
