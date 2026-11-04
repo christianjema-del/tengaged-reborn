@@ -1,0 +1,2 @@
+V236 — El Duelo: se retira el apartado Resultados anteriores de la página y los avisos automáticos de texto simple del chat público (inicio de día, comienzo del duelo, eliminación, finalistas y ganador), también en partidas existentes. Se conservan en el chat los resultados de cada día y la cadena de salvación. No modifica partidas, puntuaciones ni premios.
+No incluye la V235 (estilos de Hunger): el zip de esa versión está incompleto.
