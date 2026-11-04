@@ -1,0 +1,3 @@
+V238 — Words en castellano: 120 palabras sin tilde ni Ñ, porque el teclado de Words.swf solo tiene A-Z. Cada partida reparte 64 al azar y sin repetir.
+Words.swf no muestra enunciados: functions/_shared/words-list237.js guarda la categoría de cada palabra por si se añade esa función. Los textos del SWF siguen en inglés.
+Las partidas ya empezadas conservan sus palabras hasta terminar. No modifica partidas, puntuaciones ni premios. Guitar no cambia.

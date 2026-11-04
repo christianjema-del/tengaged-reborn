@@ -18,5 +18,4 @@ for(const {question,answer} of WOF_PANELS){
 }
 const data=gameData('WOF',100);assert.equal(data.items.length,WOF_PANELS_PER_GAME);assert.equal(new Set(data.items.map(i=>i.answer)).size,WOF_PANELS_PER_GAME);assert.ok(data.items.every(i=>WOF_PANELS.some(p=>p.answer===i.answer&&p.question===i.question)));
 assert.notDeepEqual(wofPanels(()=>0).map(p=>p.answer),wofPanels(()=>0.99).map(p=>p.answer));
-assert.equal(gameData('WORDS',100).items.length,64);assert.equal(gameData('WORDS',100).items[0].answer,'TIGER');
 console.log('PASS Wheel of Fortune: paneles en castellano compatibles con el SWF, sin repetir y en orden aleatorio');
