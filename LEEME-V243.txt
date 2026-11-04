@@ -1,0 +1,2 @@
+V243 — Minijuegos: textos de los 11 SWF traducidos al castellano, con una Arial reducida que incluye tildes, eñe y signos de apertura. Botones: JUGAR, OTRO y RESOLVER. Siguen en inglés los nombres de los juegos y las casillas dibujadas de la ruleta. No cambian reglas, puntuaciones ni tiempos.
+Perfil: Últimas Acciones replica el formato del perfil archivado de Tengaged (lista ol.smallList, frases y fecha corta). Muestra las 15 acciones más recientes, sin paginación. "días" se escribe con tilde.

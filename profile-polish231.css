@@ -1,7 +1,9 @@
-body.classic166.page-profile #profilePage #activityText{padding:0!important}
-body.classic166.page-profile #profilePage .profile-classic-action{display:block!important;background:#f4f8fb!important;border:0!important;margin:2px 0!important;padding:3px 5px!important;font:12px/18px 'Trebuchet MS',Arial!important;color:#666!important;overflow-wrap:anywhere}
-body.classic166.page-profile #profilePage .profile-classic-action a{color:#4682b4!important;text-decoration:none}
-body.classic166.page-profile #profilePage .profile-classic-action small{display:inline!important;color:#a1a1a1;font:10px/18px Arial!important;margin-left:6px;white-space:nowrap}
+body.classic166.page-profile #profilePage #activity{background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+body.classic166.page-profile #profilePage #activity>h2{display:block!important;background:none!important;color:#ff536d!important;font:bold 18px Arial,"Trebuchet MS",sans-serif!important;border:0!important;border-bottom:1px dotted #ffc3c3!important;margin:0 0 8px!important;padding:0 1px 0 5px!important;text-transform:none!important}
+body.classic166.page-profile #profilePage ol.smallList{list-style:none!important;margin:0 0 5px!important;padding:0!important;font:11px "Trebuchet MS",Verdana,Arial,sans-serif!important;color:#5d5d5d!important}
+body.classic166.page-profile #profilePage ol.smallList>li{display:list-item!important;list-style:none!important;background:#f4f8fb!important;border:0!important;color:#515151!important;font:11px "Trebuchet MS",Verdana,Arial,sans-serif!important;margin:2px 0 0!important;padding:1px 0 1px 4px!important;text-align:left!important;overflow-wrap:anywhere}
+body.classic166.page-profile #profilePage ol.smallList a{color:#4682b4!important;font:inherit!important;text-decoration:none!important}
+body.classic166.page-profile #profilePage ol.smallList .date{color:#9c9c9c!important;font:inherit!important;padding:0 2px 0 0!important;float:none!important;white-space:nowrap}
 .friend-reorder-list{display:grid;gap:4px;margin-top:10px;max-width:100%}
 .friend-reorder-row{display:grid!important;grid-template-columns:44px minmax(0,1fr) 40px 40px!important;align-items:center;gap:5px;background:#f2f7fb;border:1px solid #d7e3eb;padding:4px;min-height:54px}
 .friend-reorder-row>span:not(.friend-drag-handle231){overflow-wrap:anywhere;font-size:12px;min-width:0}
