@@ -1,0 +1,5 @@
+V206 — Perfiles referencia randomize 2013
+Proporciones de columnas 550/330 y separación, retrato original 140x161, descripción #ffffcc y filas de blogs con distintivo amarillo #ffda02 del mejor puesto. Aplicado al perfil de todos los usuarios; conservados funciones, roles, identidad, juegos y diseño responsive.
+El mejor puesto observado se guarda en blog_top206 al consultar blogs o votar, y se conserva al salir del top diario. Se utiliza el mismo ranking real de 24 horas del listado de blogs, con desempate por id. Los blogs antiguos sin registro histórico no reciben un puesto inventado.
+No se modifican saldos ni premios. Conserva V205, reglas Hunger y armario Peach.
+Verificado con SQLite: persistencia tras salir de top, no empeorar mejor puesto, no duplicación, sin premios inventados; pruebas blogs107, blogs-archive162, profile-classic166 y profile-actions-ui correctas. No se ha verificado réplica pixel a pixel en Safari real.

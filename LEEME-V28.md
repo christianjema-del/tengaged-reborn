@@ -1,0 +1,1 @@
+V28. Corrección conservadora basada en la V27 estable. Ver AUDITORIA-V28.md. No hay cambios en Cloudflare público hasta que se despliegue. Los formatos de Regaged documentados (4 diseños activos, voto 3 días, subasta 12 h, tiendas semanales) se han registrado para implementación futura, no se han añadido como mecanismos sin pruebas.

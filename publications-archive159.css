@@ -1,0 +1,55 @@
+/* Reimplemented from the measured /posts and /design layouts, 11 March 2015. */
+body.blogs-reference #blogsMain,body.designs-reference .wrap>main{max-width:920px!important;margin-inline:auto!important;box-sizing:border-box!important}
+body.blogs-reference .blogs-heading{display:flex!important;align-items:baseline!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:8px!important;margin:0 0 8px!important;padding:0!important;border:0!important}
+body.blogs-reference .blogs-heading h1,body.designs-reference .section-heading h1{font:normal 24px/29px 'Trebuchet MS',Arial,sans-serif!important;color:#ff536d!important;margin:0!important;padding:0 0 0 5px!important}
+body.blogs-reference #blogsLayout{display:grid!important;grid-template-columns:minmax(0,510fr) minmax(0,380fr)!important;gap:30px!important;align-items:start!important;padding-top:10px!important}
+body.blogs-reference #blogsListColumn,body.blogs-reference #blogsSidebar{min-width:0!important;padding:0!important}
+body.blogs-reference .blogs-section-title,body.designs-reference .section-title{font:bold 18px/22px Arial,sans-serif!important;color:#ff536d!important;border:0!important;border-bottom:1px dotted #ffc3c3!important;background:none!important;padding:0 1px 0 5px!important;margin:0 0 8px!important}
+body.blogs-reference .blogs-section-title small,body.designs-reference .section-title small{display:inline-block!important;vertical-align:middle!important;font:normal 11px/17px 'Trebuchet MS',Arial,sans-serif!important;background:#fff0f0!important;color:#ff647b!important;padding:0 3px!important;margin:0 0 1px 7px!important;white-space:normal!important}
+body.blogs-reference .reference-blog-row{display:grid!important;grid-template-columns:50px minmax(0,1fr)!important;gap:10px!important;min-height:0!important;width:100%!important;padding:0 0 1px 5px!important;margin:8px 0!important;background:none!important;border:0!important;box-shadow:none!important;align-items:start!important;box-sizing:border-box!important}
+body.blogs-reference .blog-portrait{width:50px!important;height:46px!important;padding:0!important;margin:3px 0 0!important;border:0!important;background:none!important}
+body.blogs-reference .blog-portrait img{display:block!important;width:40px!important;height:46px!important;max-width:100%!important;padding:0!important;border:0!important;border-radius:0!important;object-fit:contain!important;background:#d7e7f4!important}
+body.blogs-reference .blog-copy{min-width:0!important;padding:0!important}
+body.blogs-reference .blog-copy>header{display:block!important;position:relative!important;min-width:0!important;padding:0!important;background:#f7fafc!important;border:0!important}
+body.blogs-reference .blog-copy h3{font:bold 14px/17px 'Trebuchet MS',Arial,sans-serif!important;margin:0!important;padding:0 40px 0 0!important;border:0!important;background:#f7fafc!important;overflow-wrap:anywhere!important}
+body.blogs-reference .blog-copy h3 a{color:#457dad!important;text-decoration:none!important;font:inherit!important}
+body.blogs-reference .blog-copy h3 a:hover{text-decoration:underline!important}
+body.blogs-reference .blog-meta{display:block!important;font:10px/13px Arial,sans-serif!important;padding:0 28px 0 2px!important;margin:0!important;background:#f7fafc!important;border-bottom:1px solid #eef5f8!important;color:#999!important;overflow-wrap:anywhere!important}
+body.blogs-reference .blog-meta a{display:inline!important;color:#457dad!important;font-size:10px!important}
+body.blogs-reference .blog-meta .blog-color{display:inline-block!important;width:10px!important;height:9px!important;margin:0 2px 0 0!important;border-radius:0!important;vertical-align:baseline!important}
+body.blogs-reference .blog-copy .blog-row-counts{position:absolute!important;right:0!important;top:0!important;display:flex!important;flex-direction:column!important;align-items:flex-end!important;gap:0!important;padding:0!important;font:11px/13px Arial!important}
+body.blogs-reference .blog-row-counts strong{font:bold 14px/17px Arial!important;color:#ff6464!important;white-space:nowrap!important}
+body.blogs-reference .blog-comment-count{font:bold 11px/13px Arial!important;color:#457dad!important;white-space:nowrap!important}
+body.blogs-reference .blog-comment-count:before{content:'▱ ';font-size:12px}
+body.blogs-reference .blog-copy .blog-excerpt{display:block!important;font:11px/14px Arial,sans-serif!important;color:#5c5c5c!important;white-space:pre-line!important;max-height:64px!important;overflow:hidden!important;overflow-wrap:anywhere!important;margin:0!important;padding:0 0 3px!important;-webkit-line-clamp:unset!important}
+body.blogs-reference .reference-blog-row .blog-rank,body.blogs-reference .reference-blog-row .blog-vote-state{display:none!important}
+body.blogs-reference #blogTrending{margin:0 0 14px!important}
+body.blogs-reference #trendingBlogs{display:flex!important;flex-wrap:wrap!important;gap:8px!important;padding-left:5px!important;min-width:0!important}
+body.blogs-reference .blog-trending-person{width:50px!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;font:10px/13px Arial!important;overflow-wrap:anywhere!important}
+body.blogs-reference .blog-trending-person img{width:40px!important;height:46px!important;object-fit:contain!important;background:#d7e7f4!important}
+body.blogs-reference .publication-topics159{display:flex!important;flex-wrap:wrap!important;gap:4px!important;margin:10px 0 0!important;min-width:0!important}
+body.blogs-reference .publication-topics159[hidden]{display:none!important}
+body.blogs-reference .publication-topic159{display:block!important;max-width:100px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font:11px/18px 'Trebuchet MS',Arial!important;color:#457dad!important;background:#ebf3f7!important;border:0!important;border-bottom:1px solid #c4d7e5!important;border-right:1px solid #c4d7e5!important;border-radius:3px!important;padding:2px 4px!important;text-decoration:none!important}
+body.designs-reference .section-grid{display:grid!important;grid-template-columns:minmax(0,510fr) minmax(0,380fr)!important;gap:30px!important;min-width:0!important}
+body.designs-reference .section-grid>div,body.designs-reference .section-grid>section{min-width:0!important}
+body.designs-reference .design-grid>.design-card{display:grid!important;grid-template-columns:60px minmax(0,1fr)!important;gap:10px!important;min-height:80px!important;width:100%!important;padding:0 0 1px 5px!important;margin:8px 0!important;background:none!important;border:0!important;box-shadow:none!important;box-sizing:border-box!important}
+body.designs-reference.page-designs .wrap main .design-card>.design-preview{width:60px!important;height:60px!important;aspect-ratio:1!important;border:1px solid #ddd!important;padding:0!important;margin:0!important}
+body.designs-reference .design-card-copy{min-width:0!important;padding:0!important;position:relative!important}
+body.designs-reference .design-card h3{font:bold 14px/17px 'Trebuchet MS',Arial!important;background:#f7fafc!important;padding:0 40px 0 0!important;margin:0!important;overflow-wrap:anywhere!important}
+body.designs-reference .design-card h3 a{color:#457dad!important}
+body.designs-reference .design-author{display:block!important;background:#f7fafc!important;border-bottom:1px solid #eef5f8!important;font:10px/13px Arial!important;color:#999!important;padding:0 26px 0 2px!important}
+body.designs-reference .design-author a{display:inline!important;font:10px/13px Arial!important;color:#457dad!important}
+body.designs-reference .design-author i{display:inline-block!important;width:10px!important;height:9px!important;margin-right:2px!important;border-radius:0!important}
+body.designs-reference .design-author small{font:10px/13px Arial!important;margin-left:3px!important}
+body.designs-reference .design-card .design-counts{right:0!important;top:0!important;gap:0!important;font:bold 11px/13px Arial!important}
+body.designs-reference .design-counts strong{font:bold 14px/17px Arial!important;color:#ff6464!important}
+body.designs-reference .design-description{font:11px/14px Arial!important;color:#5c5c5c!important;max-height:64px!important;overflow:hidden!important;overflow-wrap:anywhere!important;padding:0 0 3px!important;margin:0!important}
+body.designs-reference .design-card .design-expiry{display:none!important}
+body.designs-reference .design-auction-banner{margin:0 0 8px!important;border:1px solid #e2e76c!important;background:#ffffba!important;border-radius:4px!important;padding:14px 12px!important}
+body.designs-reference .publication-initial159{display:block;margin:5px 0;color:#888}
+body.blogs-reference .pagination,body.designs-reference .pagination{display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin:10px 0!important}
+@media(max-width:700px){body.blogs-reference #blogsLayout,body.designs-reference .section-grid{grid-template-columns:minmax(0,1fr)!important;gap:24px!important}body.blogs-reference #blogsSidebar{grid-row:auto!important}body.blogs-reference .blogs-heading nav{display:flex!important;flex-wrap:wrap!important;gap:6px!important}body.blogs-reference .blog-copy h3,body.designs-reference .design-card h3{font-size:14px!important}body.blogs-reference .blog-copy .blog-excerpt,body.designs-reference .design-description{font-size:12px!important;line-height:16px!important}body.blogs-reference .blog-meta,body.designs-reference .design-author{font-size:11px!important;line-height:15px!important}body.designs-reference.design-detail-view .section-grid{grid-template-columns:minmax(0,1fr)!important}}
+
+body .publication-pages159{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:8px 0;font:12px/18px Arial}body .publication-pages159 a,body .publication-pages159 span{min-width:18px;text-align:center;padding:1px 3px;color:#457dad;text-decoration:none}body .publication-pages159 [aria-current=page]{background:#457dad;color:#fff}body .publication-pages159 a:hover{background:#ebf3f7}@media(pointer:coarse){body .publication-pages159 a,body .publication-pages159 [aria-current=page]{min-width:36px;min-height:36px;line-height:34px}}
+
+body.blogs-reference .blog-copy,body.blogs-reference .blog-copy .blog-excerpt,body.designs-reference .design-card-copy,body.designs-reference .design-description{background:transparent!important}

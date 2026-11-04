@@ -1,0 +1,2 @@
+V56: Public feed de Hunger ajustado a las capturas de Regaged: avatares grandes en extremos, espadas centradas, calavera en muertes, cabecera amarilla y eliminación total de la pérdida de salud en los recuadros de combate. Cache-busting v56. El daño sigue almacenado en servidor para las reglas del juego.
+Iconos recortados de la captura aportada por el usuario, para reproducir los gráficos que se ven en Regaged.

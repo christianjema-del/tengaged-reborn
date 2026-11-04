@@ -1,0 +1,4 @@
+V217 · El Duelo: página de desafío y lista de salvación
+Jugar prueba abre duel-challenge.html con el juego y fase correctos. Carga el minijuego original y consulta la confirmación de guardado. No reinicia el intento al consultar el estado. Incluye Volver al juego y Reintentar conexión.
+Lista de salvación con miniavatares de 26x30, posiciones y controles compactos. Móvil con botones táctiles.
+Conserva los cambios de Hunger V216. Pruebas API, interfaz, página separada, guardado, fase y regresión Hunger superadas. No se ha podido verificar visualmente el reproductor en un navegador real desde este entorno.

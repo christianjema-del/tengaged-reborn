@@ -1,14 +1,4 @@
-export async function onRequest() {
-  return new Response(
-    JSON.stringify({
-      ok: true,
-      message: "Tengaged Reborn API funcionando"
-    }),
-    {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }
-  );
-}
+import {withStorageGuard} from '../_shared/storage-guard141.js';
+async function handle141_onRequest(){return Response.json({ok:true,version:234,build:"V234-POLLO-AMARILLO",timestamp:new Date().toISOString()},{headers:{"Cache-Control":"no-store"}});}
+
+export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

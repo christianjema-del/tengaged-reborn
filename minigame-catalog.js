@@ -1,0 +1,1 @@
+export const CASTING_MINIGAMES=Object.freeze({wheel:'Wheel of Fortune',numbers:'Numbers',deal:'Deal or No Deal',match:'Match Three',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'Snow Flakes',words:'Words',line:'Line Balls'});

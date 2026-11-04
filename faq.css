@@ -1,0 +1,20 @@
+body .faq-page{padding:20px 26px 32px;box-sizing:border-box;background:#fff;min-height:700px;color:#666;font:13px/1.65 Arial,sans-serif;border-radius:12px 12px 0 0;min-width:0}
+body .faq-page h1{font:bold 25px/1.3 Arial,sans-serif;color:#ff536e;margin:0 0 18px}
+.faq-page .faq-overview{display:inline-block;padding:5px 10px;background:#fffad8;border:1px solid #e9df9e;color:#6d8796;text-decoration:none;border-radius:3px;font-size:12px}
+.faq-index{display:flex;flex-wrap:wrap;gap:6px 16px;margin:18px 0 22px;padding-bottom:8px;border-bottom:1px dotted #f2c2cd}
+.faq-page a{color:#548fa9;text-decoration:underline;overflow-wrap:anywhere}
+.faq-page dl{margin:0;max-width:100%;min-width:0}
+.faq-page dt{font:bold 16px/1.4 Arial,sans-serif;color:#ff536e;border-bottom:1px dotted #f4c8d2;margin:21px 0 7px;padding-bottom:4px;scroll-margin-top:135px}
+.faq-page dd{margin:0 0 14px 18px;max-width:100%;overflow-wrap:anywhere}
+.faq-table-scroll{overflow-x:auto;max-width:100%;margin:15px 0;overscroll-behavior-x:contain}
+.faq-page table{border-collapse:collapse;min-width:420px;width:min(100%,650px);font:12px/1.5 Arial;color:#777}
+.faq-page caption{text-align:left;font-weight:bold;padding:4px 0 8px;color:#658ca1}
+.faq-page th,.faq-page td{padding:6px 10px;text-align:left;border:1px solid #e3eaf0;font-weight:400;white-space:nowrap}
+.faq-page thead th{font-weight:bold;background:#edf4f9;color:#578ca7}
+.faq-page tbody tr:nth-child(even){background:#f8fafc}
+.faq-color{width:11px;height:15px;display:inline-block;vertical-align:middle;margin-right:7px;border:1px solid #ccc;border-radius:1px}
+.faq-note{margin-top:25px;padding:10px;background:#fffde8;font-size:12px;color:#8b876f}
+.faq-page [hidden]{display:none!important}
+@media(max-width:760px){body .faq-page{padding:17px 13px 25px;border-radius:0;min-height:0;font-size:14px;line-height:1.65}.faq-page h1{font-size:23px}.faq-page dt{font-size:16px;scroll-margin-top:175px}.faq-page dd{margin-left:0}.faq-index{gap:8px 14px}.faq-index a{display:inline-flex;align-items:center;min-height:36px}.faq-page .faq-overview{font-size:13px}.faq-page table{font-size:12px}.faq-page th,.faq-page td{padding:6px 8px}}
+
+.faq-page table.game-prizes{width:100%;min-width:980px}.faq-table-scroll:focus-visible{outline:2px solid #548fa9;outline-offset:2px}

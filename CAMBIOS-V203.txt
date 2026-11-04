@@ -1,0 +1,1 @@
+V203: Cornucopia suma una flecha cada 25 minutos, sin límite de acumulación. Dianas siguen cada 20 minutos y solo suman hasta 15. Conserva todos los cambios de V202.

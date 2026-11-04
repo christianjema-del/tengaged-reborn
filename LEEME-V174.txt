@@ -1,0 +1,11 @@
+V174 — Tarjetas y partidas activas
+
+Las tarjetas añadidas por las menciones se limitan a Blogs, Diseños y Perfil.
+Se restaura la lista de partidas activas con enlaces #Hunger 4, #Casting 6, etc., uno debajo del otro.
+Pantallas amplias: junto a la cabecera. Pantallas estrechas: dentro del ancho de la página.
+Se conservan las reglas, las inscripciones y los datos.
+
+Publicación en Cloudflare desde esta carpeta:
+npx wrangler pages deploy . --project-name tengaged-reborns
+
+El acceso Vercel mostrará esta actualización sin volver a desplegar Vercel.

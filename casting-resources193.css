@@ -1,0 +1,7 @@
+/* The reference sprite has exactly four slots: keys, apples, checks, day. */
+body.casting-daily #resources .casting-stats>div.casting-stat-keys{left:8px!important;top:100px!important;height:29px!important}
+body.casting-daily #resources .casting-stats>div.casting-stat-apples{left:74px!important;top:100px!important;height:29px!important}
+body.casting-daily #resources .casting-stats>div.casting-stat-checks{left:140px!important;top:100px!important;height:29px!important}
+body.casting-daily #resources .casting-stats>div.casting-stat-day{left:214px!important;top:87px!important;height:46px!important}
+body.casting-daily #resources .casting-stats>div.casting-stat-day dd{font:bold 36px/46px Arial!important;color:#7b9cb1!important}
+body.casting-daily #resources .casting-resource-health{display:block!important;position:static!important;margin:3px 0 8px!important;padding:0!important;font:12px/18px Arial!important;color:#647986!important;overflow-wrap:anywhere}

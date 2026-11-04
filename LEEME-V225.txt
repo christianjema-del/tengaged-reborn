@@ -1,0 +1,5 @@
+V225 · Indicadores Casting y desbloqueo El Duelo
+Frookies y El Duelo usan el mismo sprite de Casting para el tic verde (master.gif, -198px -374px,16x17), y el mismo interrogante rojo de Casting (Arial negrita21/18px #ef4d66).
+El reloj depende exclusivamente de ser participante de la prueba actual y no tener resultado guardado. En duelo de eliminación solo cuentan los dos nominados. No depende de preferencias ni aparece en salvados que esperan.
+La fase avanza al estar guardadas todas las pruebas elegibles. En clasificación también se esperan las listas de preferencias de los humanos para no saltarlas antes de guardarlas. Los bots con resultado ya guardado resuelven su duelo en la siguiente consulta, sin esperar24h. No salta la siguiente prueba humana.
+Pruebas específicas de relojes y dos bots, ciclo completo, API, UI, arrastre y regresión final Frookies superadas. Conserva cambios anteriores. Requiere desplegar y abrir El Duelo para aplicar a la ronda actual.

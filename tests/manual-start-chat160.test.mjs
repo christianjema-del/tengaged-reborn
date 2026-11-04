@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import * as hunger from '../functions/_shared/hunger.js';
+import * as casting from '../functions/_shared/casting-daily.js';
+const T=1793440000000,admin={id:1,username:'admin1',is_admin:true},user={id:2,username:'Human'};
+let s=hunger.fresh(T,5);
+hunger.act(s,admin,{action:'join'},T);hunger.act(s,user,{action:'join'},T);
+hunger.advance(s,T+2*hunger.LOBBY_MS);assert.equal(s.phase,'waiting');assert.equal(s.players.length,2);
+assert.throws(()=>hunger.act(s,{...admin,username:'OtherAdmin'},{action:'start'},T),/admin1/);
+hunger.act(s,admin,{action:'fill_bots'},T);assert.equal(s.players.length,30);assert.equal(s.phase,'waiting');
+hunger.advance(s,T+3*hunger.LOBBY_MS);assert.equal(s.phase,'waiting');
+hunger.act(s,admin,{action:'start'},T+3*hunger.LOBBY_MS);assert.equal(s.phase,'active');assert.equal(s.startedAt,T+3*hunger.LOBBY_MS);
+s=hunger.fresh(T,4);hunger.act(s,admin,{action:'join'},T);hunger.act(s,user,{action:'join'},T);
+s.reopening161={at:T};s.phase='active';s.startedAt=T;s.tickAt=T;s.players[0].health=43;s.players[0].arrows=7;s.fights=[{id:'pending',attacker:1,defender:2,mode:'flash-v1',kind:'numbers',startedAt:T,endsAt:T+1000000,runs:{}}];
+const ops=JSON.stringify(s.ops);hunger.advance(s,T+1000);assert.equal(s.phase,'waiting');assert.equal(s.players[0].health,43);
+hunger.advance(s,T+100000);assert.equal(s.players[0].health,43);assert.throws(()=>hunger.act(s,user,{action:'join'},T+100000));
+hunger.act(s,admin,{action:'start'},T+200000);assert.equal(s.phase,'active');assert.equal(s.fights[0].endsAt,T+1200000);assert.equal(s.players[0].arrows,7);assert.equal(JSON.stringify(s.ops),ops);
+hunger.advance(s,T+200000);assert.equal(s.phase,'active','resumed game is not paused again');
+function game(){const g=casting.fresh(10,T);for(let i=0;i<20;i++)casting.act(g,{username:'P'+i},{action:'join'},T);for(let i=1;i<20;i++)g.players[i].bot=true;return g;}
+s=game();s.players[0].lastChatAt=T+casting.DAY_MS;s.players[0].keys=0;for(const p of s.players.slice(1))p.keys=100;
+casting.advance(s,T+casting.DAY_MS);assert.ok(!s.nominees.includes('P0'),'active human is not nominated below bots');
+s.nominees=['P0','P1','P2'];s.ballots={'p3':{P0:3,P1:1,P2:2}};s.players[0].lastChatAt=T+2*casting.DAY_MS;
+casting.advance(s,T+2*casting.DAY_MS);assert.equal(s.players[0].status,'active');assert.ok(s.eliminations.length>0);assert.ok(s.eliminations.every(e=>e.username!=='P0'));
+s=game();s.players=s.players.slice(0,5);s.players[0].lastChatAt=T;s.players[0].keys=0;for(const p of s.players.slice(1))p.keys=100;casting.advance(s,T+1);assert.equal(s.phase,'finished');assert.equal(s.players[0].placement,1);
+s=game();s.players[0].health=1;s.players[0].lastChatAt=T;s.keyDrops=[{id:'poison',at:T,position:0,expiresAt:T+100000}];
+casting.act(s,{username:'P0'},{action:'claim_key',dropId:'poison',slot:1},T+1);
+assert.equal(s.players[0].status,'active');assert.equal(s.players[0].health,1);assert.ok(s.eliminations.some(e=>e.username!=='P0'));
+console.log('PASS V160: manual start, permissions, full/expired lobbies, edition 4 pause/resume, unchanged ledger, bot-first nominations/evictions/finals/health.');

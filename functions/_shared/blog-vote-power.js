@@ -1,0 +1,2 @@
+import {COLOR_LEVEL_BY_CODE} from '../../color-level-catalog.js';
+export async function blogVotePower(db,userId){const rows=await db.prepare("SELECT s.theme_code FROM user_inventory i JOIN shop_items s ON s.code=i.item_code WHERE i.user_id=? AND i.is_equipped=1 AND s.category='Tarjetas de color'").bind(userId).all();return Math.max(1,...(rows.results||[]).map(r=>COLOR_LEVEL_BY_CODE[r.theme_code]?.power||1));}

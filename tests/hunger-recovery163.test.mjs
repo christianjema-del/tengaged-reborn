@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {fresh,act} from '../functions/_shared/hunger.js';import {onRequest,ensureHunger} from '../functions/api/hunger.js';
+const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE users(id INTEGER PRIMARY KEY,username TEXT,is_admin INTEGER,karma INTEGER DEFAULT 0,t_money INTEGER DEFAULT 1000);CREATE TABLE sessions(token_hash TEXT,user_id INTEGER,expires_at TEXT)');class Q{constructor(q,args=[]){this.q=q;this.args=args;}bind(...args){return new Q(this.q,args);}async first(){return sql.prepare(this.q).get(...this.args)||null;}async all(){return {results:sql.prepare(this.q).all(...this.args)};}async run(){return {meta:{changes:Number(sql.prepare(this.q).run(...this.args).changes)}};}}let batchQueue=Promise.resolve();const db={prepare:q=>new Q(q),batch(items){const task=batchQueue.then(async()=>{sql.exec('BEGIN');try{const result=[];for(const q of items)result.push(await q.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}});batchQueue=task.catch(()=>{});return task;}};await ensureHunger(db);sql.prepare("INSERT INTO users(id,username,is_admin) VALUES(1,'admin1',1)").run();
+
+
+const now=Date.now(),old=fresh(now-1000000,4);old.phase='finished';old.finishedAt=now-100;old.winner='Tributo_19';
+old.players=['Peach','Lamine','Cristi','PauCubarsi'].map((username,i)=>({id:i+2,username,bot:false,health:0,placement:30-i,joinedAt:now-999999}));
+for(const p of old.players){sql.prepare('INSERT INTO users(id,username,is_admin) VALUES(?,?,0)').run(p.id,p.username);old.ops.push({key:'hunger:4:entry:'+p.id,user:p.id,money:-20,karma:0});}
+old.players.push({id:-419,username:'Tributo_19',bot:true,health:70,placement:1});
+sql.prepare('INSERT INTO hunger_history VALUES(?,?,?)').run(4,old.finishedAt,JSON.stringify(old));
+sql.prepare('UPDATE hunger_arena SET state=?').run(JSON.stringify(fresh(now,6)));
+async function read(path='?edition=4'){const r=await onRequest({env:{DB:db},request:new Request('https://test.local/api/hunger'+path)});assert.equal(r.status,200);return r.json();}
+const results=await Promise.all([read(),read(''),read()]);for(const r of results){assert.equal(r.edition,4);assert.equal(r.phase,'waiting');assert.equal(r.archived,undefined);assert.equal(r.startAt,null);assert.deepEqual(r.players.map(p=>p.username),['Peach','Lamine','Cristi','PauCubarsi']);assert.ok(r.players.every(p=>p.alive&&!p.bot&&p.placement===null));}
+assert.equal(sql.prepare('SELECT COUNT(*) n FROM hunger_history WHERE edition=4').get().n,0);
+let state=JSON.parse(sql.prepare('SELECT state FROM hunger_arena').get().state);const backup=sql.prepare('SELECT * FROM hunger_recovery172 WHERE edition=4').get();assert.equal(JSON.parse(backup.previous_arena).edition,6);assert.equal(JSON.parse(backup.previous_archive).winner,'Tributo_19');assert.equal(backup.applied,1);
+const balance=sql.prepare('SELECT id,t_money,karma FROM users ORDER BY id').all();await read();assert.deepEqual(sql.prepare('SELECT id,t_money,karma FROM users ORDER BY id').all(),balance);
+sql.prepare("INSERT INTO users(id,username,is_admin) VALUES(90,'NewUser',0)").run();act(state,{id:90,username:'NewUser'},{action:'join'},now+1);assert.equal(state.phase,'waiting');assert.throws(()=>act(state,{id:1,username:'OtherAdmin',is_admin:true},{action:'start'},now+2));
+act(state,{id:1,username:'admin1',is_admin:true},{action:'start'},Date.now()+100);sql.prepare('UPDATE hunger_arena SET state=?').run(JSON.stringify(state));assert.equal((await read()).phase,'active','no repeat recovery after manual start');
+// A later game with entrants must never be overwritten.
+sql.prepare('INSERT OR IGNORE INTO hunger_history VALUES(?,?,?)').run(4,old.finishedAt,JSON.stringify(old));const later=fresh(now,5);later.players=[{id:2,username:'Peach',bot:false,health:70}];sql.prepare('UPDATE hunger_arena SET state=?').run(JSON.stringify(later));assert.equal((await read('')).edition,5);
+// Also recover when the finished arena has not yet rolled over or been archived.
+sql.prepare('DELETE FROM hunger_history WHERE edition=4').run();sql.prepare('UPDATE hunger_arena SET state=?').run(JSON.stringify(old));assert.equal((await read()).phase,'waiting');
+const profiles=sql.prepare("SELECT status,placement FROM user_game_history WHERE game_type='HUNGER' AND game_id='4' AND username IN ('Peach','Lamine','Cristi','PauCubarsi')").all();assert.equal(profiles.length,4);assert.ok(profiles.every(p=>p.status==='active'&&p.placement===null));
+console.log('PASS V163 archived finished Hunger4 recovery, concurrent requests, retained entrants, backup, unchanged balances, no repeated reset and protection of later entrants.');

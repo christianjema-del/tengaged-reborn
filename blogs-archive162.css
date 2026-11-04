@@ -1,0 +1,144 @@
+/* Measured against the supplied 2015 /posts and /blog/Doby captures.
+   Rules are scoped to Blogs; other pages keep the existing theme. */
+body.page-blogs{background:linear-gradient(#d4e4eb 0,#eef3f5 220px,#fff 1050px)!important;background-attachment:fixed!important;color:#5d5d5d}
+body.page-blogs>.wrap{width:981px!important;max-width:calc(100% - 24px)!important;margin:0 auto!important;padding:0!important}
+body.page-blogs #blogsMain{box-sizing:border-box!important;width:100%!important;max-width:none!important;min-height:760px!important;margin:0!important;padding:16px 16px 20px!important;border-left:1px solid #e3eff6!important;border-bottom:1px solid #eff6fa!important;border-radius:16px 0 0 0!important;background:#fff!important;box-shadow:none!important;font:11px/normal Verdana,Geneva,Arial,sans-serif!important;letter-spacing:normal!important;color:#5d5d5d!important}
+body.page-blogs #blogsMain [hidden]{display:none!important}
+body.page-blogs #blogsMain a{color:#4682b4;text-decoration:none}
+body.page-blogs #blogsMain a:hover{text-decoration:underline}
+body.page-blogs #blogsMain h1{font:normal 24px/29px 'Trebuchet MS',Trebuchet,Verdana,Arial,sans-serif!important;color:#ff536d!important;margin:0 0 8px!important;padding:0 0 0 5px!important;border:0!important;background:none!important;overflow-wrap:anywhere}
+body.page-blogs #blogsMain h2.blogs-section-title{font:bold 18px/22px Arial,'Trebuchet MS',Verdana,sans-serif!important;color:#ff536d!important;border:0!important;border-bottom:1px dotted #ffc3c3!important;margin:0 0 8px!important;padding:0 1px 0 5px!important;background:none!important}
+body.page-blogs #blogsMain h2.blogs-section-title small{font:normal 11px/17px 'Trebuchet MS',Arial,sans-serif!important;display:inline-block;vertical-align:middle;background:#fff0f0;color:#ff647b;padding:0 3px;margin-left:7px;white-space:normal}
+body.page-blogs #blogsMain .blogs-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;min-height:38px;margin:0 0 8px;padding:0;border:0}
+body.page-blogs #blogsMain .blogs-heading h1:before{content:'';display:inline-block;width:21px;height:15px;border:1.5px solid currentColor;border-radius:50%;vertical-align:middle;margin-right:7px;transform:rotate(-12deg)}
+body.page-blogs #blogsMain .blogs-askme{background:#ffffe5;color:#333;padding:10px 6px;font:12px/18px Arial;white-space:nowrap;margin-top:0}
+body.page-blogs #blogsMain .blogs-askme strong{color:#ff536d;font:normal 14px/18px 'Trebuchet MS',Arial}
+body.page-blogs .blogs-owner-tools{display:flex;justify-content:flex-end;align-items:center;gap:10px;font:11px/18px 'Trebuchet MS',Arial;margin:-3px 0 3px;min-height:0}
+body.page-blogs .blogs-owner-tools button{border:0;background:none;padding:0;color:#4682b4;cursor:pointer;font:inherit}
+body.page-blogs .blogs-owner-tools button:hover{text-decoration:underline}
+body.page-blogs #blogsMain #notice:empty,body.page-blogs #blogsMain #blogNotice:empty,body.page-blogs #blogsMain #blogSearchStatus:empty{display:none!important;margin:0!important;padding:0!important}
+body.page-blogs #blogNotice:not(:empty){padding:9px;background:#fffbe1;border:1px solid #efdfb3;margin:6px 0;color:#665}
+body.page-blogs #blogsLayout{display:grid!important;grid-template-columns:minmax(0,510fr) minmax(0,380fr)!important;column-gap:58px!important;row-gap:24px!important;align-items:start!important;padding-top:10px!important}
+body.page-blogs #blogsListColumn,body.page-blogs #blogsSidebar{min-width:0;padding:0!important}
+body.page-blogs .reference-blog-row{display:grid!important;grid-template-columns:50px minmax(0,1fr)!important;gap:10px!important;clear:left;box-sizing:border-box!important;width:100%!important;margin:8px 0!important;padding:0 0 1px 5px!important;min-height:0!important;background:none!important;border:0!important;box-shadow:none!important;align-items:start}
+body.page-blogs .blog-portrait-column{min-width:0;width:50px;margin-top:3px}
+body.page-blogs .blog-portrait{display:block;width:40px;height:46px;padding:0;margin:0;border:0;background:#d7e7f4;overflow:hidden}
+body.page-blogs #blogsMain .blog-portrait img,body.page-blogs #blogsMain .blog-trending-person img{display:block!important;width:40px!important;min-width:40px!important;max-width:40px!important;height:46px!important;min-height:46px!important;max-height:46px!important;margin:0!important;padding:0!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:#d7e7f4}
+body.page-blogs #blogsMain img[data-avatar-mode=photo]{object-fit:cover!important}
+body.page-blogs .blog-copy{min-width:0;background:none!important}
+body.page-blogs .blog-copy>header{position:relative;background:#f7fafc;border:0;min-height:0;margin:0;padding:0!important}
+body.page-blogs #blogsMain .blog-copy h3{font:bold 14px/17px 'Trebuchet MS',Trebuchet,Arial,sans-serif!important;background:#f7fafc!important;color:#4682b4!important;border:0!important;margin:0!important;padding:0 40px 0 0!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.page-blogs #blogsMain .blog-copy h3 a{font:inherit;color:inherit}
+body.page-blogs .blog-meta{display:block;font:10px/13px Arial,sans-serif!important;padding:0 28px 0 2px!important;margin:0!important;background:#f7fafc!important;border-bottom:1px solid #eef5f8;color:#999;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+body.page-blogs .blog-meta a{display:inline;font-weight:bold}
+body.page-blogs .blog-color{display:inline-block;width:10px;height:9px;vertical-align:baseline;border:0;border-radius:0;margin:0 2px 0 0;padding:0}
+body.page-blogs .blog-row-counts{position:absolute;right:0;top:0;display:flex;flex-direction:column;align-items:flex-end;gap:0;font:11px/13px Arial;white-space:nowrap}
+body.page-blogs .blog-row-counts strong{font:bold 14px/17px Arial!important;color:#ff6464!important}
+body.page-blogs .blog-row-counts .blog-comment-count{font:bold 11px/13px Arial!important;color:#4682b4}
+body.page-blogs .blog-comment-count:before{content:'';display:inline-block;width:9px;height:6px;vertical-align:middle;border:1px solid currentColor;border-radius:50%;margin-right:3px}
+body.page-blogs #blogsMain .blog-excerpt{display:block!important;font:11px/14px Arial,sans-serif!important;color:#5c5c5c!important;background:none!important;margin:0!important;padding:0 0 3px!important;white-space:pre-line!important;max-height:64px!important;overflow:hidden!important;overflow-wrap:anywhere!important;word-break:normal}
+body.page-blogs .blog-external{word-break:break-word}
+body.page-blogs .publication-topics159{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0 0;padding:0}
+body.page-blogs .publication-topic159{display:block;box-sizing:border-box;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:11px/18px 'Trebuchet MS',Arial;color:#4682b4;background:#ebf3f7;border:0;border-bottom:1px solid #c4d7e5;border-right:1px solid #c4d7e5;border-radius:3px;padding:2px 4px}
+body.page-blogs #blogTrending{margin:0 0 0!important}
+body.page-blogs .blogs-design-strip{box-sizing:border-box;display:grid;grid-template-columns:19px repeat(5,minmax(0,1fr));gap:5px;align-items:center;height:68px;padding:3px 5px 4px 0;margin:0 0 10px;background:#ffbccb;overflow:hidden}
+body.page-blogs .blogs-design-label{width:19px;height:61px;overflow:hidden;font-size:0!important;background:url('/assets/blogs/design-label-2015.gif') center/19px 61px no-repeat #ff426f}
+body.page-blogs .blogs-design-strip .design-preview{display:block;box-sizing:border-box;width:100%!important;height:60px!important;max-width:65px!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;aspect-ratio:auto!important;border-radius:0!important;background:#fff;overflow:hidden}
+body.page-blogs .blogs-design-strip .design-preview img,body.page-blogs .blogs-design-strip .design-preview svg{display:block;width:100%!important;height:60px!important;object-fit:contain!important;aspect-ratio:auto!important;margin:0!important;border:0!important}
+body.page-blogs .blogs-design-empty{grid-column:2/-1;font:11px Arial}
+body.page-blogs #trendingBlogs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;min-height:0;padding:0 0 0 5px;color:#999;font:11px Arial}
+body.page-blogs #trendingBlogs>p{grid-column:1/-1;margin:4px 0 10px}
+body.page-blogs .blog-trending-person{display:flex;min-width:0;flex-direction:column;align-items:center;text-align:center;font:bold 10px/13px 'Trebuchet MS',Arial;overflow:hidden}
+body.page-blogs .blog-trending-person>span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.page-blogs .blog-vote-icons{display:flex;align-items:center;gap:4px;margin:3px 0 0;height:19px;flex:none}
+body.page-blogs #blogsMain button.blog-vote-icon{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:17px;height:17px;min-width:17px!important;min-height:17px!important;padding:0!important;margin:0;border:0!important;border-radius:1px!important;background:#a4a4a4!important;color:white!important;box-shadow:none!important;font:bold 17px/17px Arial!important;cursor:pointer}
+body.page-blogs #blogsMain button.blog-vote-icon:enabled.blog-plus{background:#7da35c!important}
+body.page-blogs #blogsMain button.blog-vote-icon:enabled.blog-minus{background:#c96772!important}
+body.page-blogs #blogsMain button.blog-vote-icon:disabled{opacity:.8;cursor:default}
+body.page-blogs #blogsMain button.blog-vote-icon[aria-pressed=true]{opacity:1;outline:2px solid #4682b4;outline-offset:1px}
+body.page-blogs #blogsMain a:focus-visible,body.page-blogs #blogsMain button:focus-visible{outline:2px solid #4682b4;outline-offset:3px}
+body.page-blogs #blogsMain button.blog-continue{display:block;box-sizing:border-box;width:100%;min-height:24px;margin:10px 0;padding:4px 8px;background:#eef5fa;border:1px solid #dce8f0;border-radius:0;box-shadow:none;color:#4682b4;font:12px Arial;cursor:pointer}
+body.page-blogs #blogsBottom{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:16px;border-top:1px dotted #ffc3c3;padding-top:6px;font:11px/18px 'Trebuchet MS',Arial}
+body.page-blogs #blogsBottom>a[aria-current=page]{color:#ff536d}
+body.page-blogs #blogsBottom details{margin-left:auto}
+body.page-blogs #blogComposer{margin:10px 0 20px;padding:14px;background:#f4f8fb;border:1px solid #d5e1ec}
+body.page-blogs #blogComposer h2{margin:0 0 10px;color:#ff536d;font:normal 20px 'Trebuchet MS',Arial}
+body.page-blogs #blogComposer form{display:grid;gap:10px}
+body.page-blogs #blogComposer label{display:grid;gap:4px;font:12px Arial}
+body.page-blogs #blogComposer textarea{min-height:160px}
+body.page-blogs #blogsMain input,body.page-blogs #blogsMain textarea{box-sizing:border-box;max-width:100%;border:1px solid #bccbd6;background:#fff;padding:5px;font:12px Arial;color:#555}
+body.page-blogs #blogsMain button:not(.blog-vote-icon):not(.blog-continue){cursor:pointer;color:#4682b4}
+body.page-blogs #blogComposer button,body.page-blogs .blog-add-comment form button{justify-self:start;background:#eef5fa;border:1px solid #c7d9e7;padding:5px 12px;font:12px 'Trebuchet MS',Arial}
+/* Personal blogs and individual posts use the archived 290 / 621 arrangement. */
+body.page-blogs:is(.blog-detail,.blog-author) #blogsLayout{grid-template-columns:290px minmax(0,1fr)!important;column-gap:27px!important;padding-top:0!important}
+body.page-blogs:is(.blog-detail,.blog-author) #blogsListColumn{grid-column:2;grid-row:1;border-left:1px solid #d5e1ec;padding:0 10px 0 20px!important}
+body.page-blogs:is(.blog-detail,.blog-author) #blogsSidebar{grid-column:1;grid-row:1}
+body.page-blogs:is(.blog-detail,.blog-author) .blogs-heading{display:none!important}
+body.page-blogs:is(.blog-detail,.blog-author) .blogs-owner-tools{margin:0 0 8px}
+body.page-blogs .author-blog-banner{display:grid;grid-template-columns:150px 140px;align-items:stretch;width:290px;height:161px;background:#d5e7f6;overflow:hidden}
+body.page-blogs .author-blog-portrait{display:block;width:140px;height:161px;overflow:hidden;background:#d7e7f4}
+body.page-blogs #blogsMain .author-blog-portrait img{display:block!important;width:140px!important;height:161px!important;min-width:140px!important;max-width:140px!important;min-height:161px!important;max-height:161px!important;object-fit:contain!important;border:0!important;border-radius:0!important;margin:0!important;padding:0!important}
+body.page-blogs .author-blog-mark{align-self:center;justify-self:center;display:flex;justify-content:center;align-items:center;box-sizing:border-box;width:130px;height:94px;border-radius:50%;background:#fff;color:#ff536d!important;box-shadow:2px 3px 3px #96b0c6;font:normal 23px 'Trebuchet MS',Arial;transform:rotate(-8deg)}
+body.page-blogs #authorBlog h3{font:normal 14px/19px 'Trebuchet MS',Arial;color:#ff536d;border-bottom:1px dotted #ffc3c3;margin:6px 0 3px;padding-bottom:1px}
+body.page-blogs .author-blog-all{float:right;font:11px 'Trebuchet MS',Arial}
+body.page-blogs .author-blog-list{list-style:none;margin:0 0 5px;padding:0;font:11px/14px 'Trebuchet MS',Verdana,Arial}
+body.page-blogs .author-blog-list li{margin:2px 0 0;padding:1px 0 1px 4px;background:#f4f8fb;overflow:hidden;min-height:16px}
+body.page-blogs .author-blog-entry{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.page-blogs .author-blog-entry.current{color:#ff536d!important}
+body.page-blogs .blog-detail-heading{margin:0;padding:0!important;border:0;background:none!important}
+body.page-blogs #blogsMain .blog-detail-heading h1{padding-left:0!important;margin:0!important}
+body.page-blogs #blogsMain .blog-detail-heading h2{font:bold 16px/22px 'Trebuchet MS',Arial;margin:0;padding:5px 10px;color:#4682b4;background:#e9f1f9;border:0;overflow-wrap:anywhere}
+body.page-blogs .blog-rss{float:right;overflow:hidden;font:bold 9px Arial!important;color:#fff!important;background:#ed8a35;border-radius:2px;padding:2px;margin:0 0 3px 8px}
+body.page-blogs .blog-detail-meta{font:10px/20px Arial;color:#5d5d5d;margin:3px 0 4px 2px}
+body.page-blogs .blog-detail-meta .date{color:#909ca4}
+body.page-blogs #blogsMain .blog-full-body{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/normal Verdana,Geneva,Arial,sans-serif!important;color:#3f3f3f;margin:0!important;padding:10px 10px 15px 5px!important;overflow:hidden}
+body.page-blogs .blog-full-body img{display:block;width:auto;height:auto;max-width:100%;max-height:none;object-fit:contain;padding:2px;border:1px solid #e8f0f8;background:#fff;margin:0 5px 5px 0}
+body.page-blogs .blog-entry-actions{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:5px;min-height:30px}
+body.page-blogs .blog-vote-box{display:flex;align-items:center;gap:5px;background:#fffbe1;color:#585858;min-height:30px;padding:0 10px 0 12px;font:11px/30px Arial}
+body.page-blogs .blog-vote-box>[data-post-score]{font-size:14px;font-weight:bold;line-height:30px}
+body.page-blogs .blog-share{display:flex;align-items:center;flex-wrap:wrap;gap:8px;height:auto;min-height:20px;margin:2px 0 2px 2px;padding-top:5px;font:10px Arial}
+body.page-blogs .blog-share button{font:10px Arial;border:0;background:#edf3f8;padding:2px 4px}
+body.page-blogs .blog-share input{width:100%;font-size:11px}
+body.page-blogs .blog-entry-tail{display:flex;align-items:center;gap:8px;border-top:1px solid #d8e7f5;padding-top:2px;margin-bottom:17px;font:10px/16px Arial;color:#848484;min-height:18px;flex-wrap:wrap}
+body.page-blogs .blog-rank{display:block;background:#fff6c1;border-bottom:1px solid #ffee8c;color:#848484;padding:2px 5px;font:bold 11px Arial}
+body.page-blogs .blog-comments-link{margin-left:auto;font-size:10px}
+body.page-blogs .blog-vote-state{font-size:10px}
+body.page-blogs .blog-comments{margin:5px 0 0}
+body.page-blogs #blogsMain .blog-comments h2{font:normal 15px/20px 'Trebuchet MS',Arial;color:#708090;border:0;margin:6px 0 3px;padding:0}
+body.page-blogs .blog-comment{font:11px/normal Arial;margin:0 0 2px;border:0;background:#fafcfe}
+body.page-blogs #blogsMain .blog-comment .blog-full-body{color:#777!important;padding:3px 10px 5px!important;font:11px/normal Arial!important}
+body.page-blogs .blog-comment footer{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:3px;background:#fafcfe;border-bottom:1px solid #e9f4fe;color:#6d6d6d;text-align:right;padding:2px 5px 1px 0;font:10px/17px Arial;min-height:20px}
+body.page-blogs .blog-comment footer .blog-vote-icons{margin:0 0 0 5px}
+body.page-blogs .blog-hide-comment{padding:0 2px;background:none;border:0;color:#f55!important;font:14px/17px Arial;cursor:pointer}
+body.page-blogs .blog-add-comment h3{font:normal 15px/20px 'Trebuchet MS',Arial;color:#708090;margin:14px 0 3px;padding:0;border:0}
+body.page-blogs .blog-add-comment .section-form{display:grid;gap:5px;margin:0;padding:0;background:none;border:0;max-width:none}
+body.page-blogs .blog-add-comment label{font:11px Arial}
+body.page-blogs .blog-add-comment textarea{display:block;width:100%;height:90px;margin:4px 0}
+body.page-blogs .blog-delete{padding:0;background:none;border:0;font:10px Arial;margin-bottom:10px}
+/* Preserve the archive's metrics on desktop. Stack columns on narrow screens;
+   avatars retain the same 40/46 and 140/161 boxes at every breakpoint. */
+@media(max-width:980px) and (min-width:761px){body.page-blogs #blogsLayout{column-gap:30px!important}body.page-blogs:is(.blog-detail,.blog-author) #blogsLayout{grid-template-columns:260px minmax(0,1fr)!important;column-gap:20px!important}body.page-blogs .author-blog-banner{max-width:100%;grid-template-columns:minmax(0,1fr) 140px}.author-blog-mark{max-width:100%}}
+@media(max-width:760px){body.page-blogs>.wrap{width:calc(100% - 16px)!important;max-width:none!important}body.page-blogs #blogsMain{padding:12px!important;min-height:640px!important}body.page-blogs #blogsLayout,body.page-blogs:is(.blog-detail,.blog-author) #blogsLayout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:24px!important;padding-top:10px!important}body.page-blogs:is(.blog-detail,.blog-author) #blogsListColumn{grid-column:1!important;grid-row:1!important;border:0!important;padding:0!important}body.page-blogs:is(.blog-detail,.blog-author) #blogsSidebar{grid-column:1!important;grid-row:2!important}body.page-blogs .blogs-heading{flex-wrap:wrap;gap:5px;margin-bottom:5px}body.page-blogs .blogs-heading h1{font-size:24px!important}body.page-blogs .blogs-askme{padding:5px 6px;font-size:11px;white-space:normal}body.page-blogs .blogs-owner-tools{justify-content:flex-start;gap:12px;margin:4px 0;flex-wrap:wrap}body.page-blogs .blogs-owner-tools a,body.page-blogs .blogs-owner-tools button{min-height:32px;display:inline-flex;align-items:center}body.page-blogs .reference-blog-row{margin:10px 0!important}body.page-blogs #blogsMain .blog-excerpt{font-size:12px!important;line-height:16px!important;max-height:67px!important}body.page-blogs .blog-meta{font-size:10px!important;line-height:14px!important}body.page-blogs #blogsMain .blog-copy h3{font-size:14px!important;line-height:18px!important}body.page-blogs .blogs-design-strip{width:100%;max-width:380px}body.page-blogs .blog-portrait-column .blog-vote-icons{height:25px;gap:2px;width:50px}body.page-blogs #blogsMain .blog-portrait-column button.blog-vote-icon{width:23px!important;height:23px!important;min-width:23px!important;min-height:23px!important;font-size:20px!important}body.page-blogs .blog-comment footer .blog-vote-icons{height:32px}body.page-blogs #blogsMain .blog-comment button.blog-vote-icon,body.page-blogs #blogsMain .blog-vote-box button.blog-vote-icon{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;font-size:22px!important}body.page-blogs #blogsMain .blog-full-body{font:14px/1.55 Arial,sans-serif!important;padding:10px 0 15px!important}body.page-blogs #blogsMain .blog-comment .blog-full-body{font:13px/1.5 Arial,sans-serif!important;padding:6px 8px!important}body.page-blogs .blog-entry-actions{gap:8px}body.page-blogs .blog-entry-tail{margin-top:7px}body.page-blogs .blog-share{min-height:30px}body.page-blogs .blog-share button,body.page-blogs .blog-share a{min-height:30px;display:inline-flex;align-items:center}body.page-blogs .blog-vote-box{min-height:40px;padding-left:8px;flex-wrap:wrap}body.page-blogs #blogsMain input,body.page-blogs #blogsMain textarea{font-size:16px!important}body.page-blogs .blog-add-comment textarea{min-height:110px}body.page-blogs #blogsMain button.blog-continue{min-height:40px}body.page-blogs .author-blog-banner{max-width:100%;grid-template-columns:minmax(0,1fr) 140px}body.page-blogs .author-blog-mark{max-width:100%}body.page-blogs .blog-hide-comment{min-width:32px;min-height:32px}body.page-blogs .blog-continue:focus-visible{outline-offset:0}}
+@media(prefers-reduced-motion:reduce){body.page-blogs *,body.page-blogs *:before,body.page-blogs *:after{scroll-behavior:auto!important;transition:none!important}}
+
+body.page-blogs .blog-promo{display:block;width:100%;margin:0 0 12px;overflow:hidden}body.page-blogs .blog-promo img{display:block;width:945px;max-width:100%;height:auto;border:0;margin:0 auto}
+/* The archive header is used only inside Blogs. Account actions remain available. */
+body.page-blogs #tg-shell{width:981px!important;max-width:calc(100% - 24px)!important;margin:0 auto!important;background:none!important;min-height:50px!important;padding:0!important;border:0!important}
+body.page-blogs #tg-shell .tg-community-strip,body.page-blogs #tg-shell .tg-header-games{display:none!important}
+body.page-blogs #tg-shell .tg-shell-top{display:flex!important;align-items:flex-end!important;justify-content:flex-start!important;flex-wrap:nowrap!important;gap:0!important;box-sizing:border-box!important;width:100%!important;max-width:none!important;height:50px!important;min-height:50px!important;margin:0!important;padding:0!important;border:0!important;background:none!important}
+body.page-blogs #tg-shell .tg-shell-logo{display:flex!important;align-items:flex-start!important;align-self:flex-start!important;flex:0 0 230px!important;width:230px!important;height:50px!important;padding:0!important;margin:0!important;font-size:0!important;line-height:0!important;background:none!important;border:0!important;text-shadow:none!important;transform:none!important}
+body.page-blogs #tg-shell .tg-shell-logo:before,body.page-blogs #tg-shell .tg-shell-logo:after{display:none!important}
+body.page-blogs #tg-shell .tg-shell-logo .blogs-tv162{display:block;width:40px!important;height:43px!important;max-width:none!important;margin:0!important}
+body.page-blogs #tg-shell .tg-shell-logo .blogs-logo162{display:block;width:190px!important;height:55px!important;max-width:none!important;margin:0!important}
+body.page-blogs #tg-shell .tg-shell-nav{display:flex!important;position:static!important;flex:0 1 auto!important;flex-wrap:nowrap!important;align-items:flex-end!important;justify-content:flex-end!important;gap:2px!important;width:auto!important;max-width:none!important;min-width:0!important;height:30px!important;margin:20px 0 0 auto!important;padding:0!important;overflow:visible!important;transform:none!important;background:none!important}
+body.page-blogs #tg-shell .tg-shell-nav a{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;min-width:0!important;min-height:30px!important;height:30px!important;padding:6px 7px 8px!important;margin:0!important;border:0!important;border-right:1px solid #93a3b6!important;border-radius:6px 6px 0 0!important;box-shadow:none!important;background:#d2dbe8!important;color:#49759a!important;text-shadow:0 1px 1px #fcfcfc!important;font:bold 14px/16px Arial!important;white-space:nowrap!important}
+body.page-blogs #tg-shell .tg-shell-nav a[aria-current=page]{color:#ff536d!important;background:white!important}
+body.page-blogs #tg-shell .tg-shell-nav a[data-section=home],body.page-blogs #tg-shell .tg-shell-nav a[data-section=minijuegos],body.page-blogs #tg-shell .tg-shell-nav a[data-section=hall-of-fame],body.page-blogs #tg-shell .tg-shell-nav a[data-section=shop],body.page-blogs #tg-shell .tg-shell-nav a[hidden]{display:none!important}
+body.page-blogs #tg-shell [data-section=blogs]{order:1}body.page-blogs #tg-shell [data-section=groups]{order:2}body.page-blogs #tg-shell [data-section=designs]{order:3}body.page-blogs #tg-shell [data-section=mafias]{order:4}body.page-blogs #tg-shell [data-section=games]{order:5}body.page-blogs #tg-shell .blogs-auth162{order:6}
+body.page-blogs #tg-shell .tg-tab-icon{width:13px!important;height:13px!important;margin:0 3px 0 0!important;flex:0 0 13px!important}body.page-blogs #tg-shell .tg-tab-icon svg{width:13px!important;height:13px!important}
+body.page-blogs #tg-shell .tg-account-menu{position:relative!important;align-self:flex-end!important;margin:0 0 0 4px!important;flex:none!important}
+body.page-blogs #tg-shell .tg-account-menu:not(.has-avatar){display:none!important}
+body.page-blogs #tg-shell .tg-menu-panel{left:auto!important;right:0!important;top:100%!important}
+@media(max-width:760px){body.page-blogs #tg-shell{width:calc(100% - 16px)!important;max-width:none!important}body.page-blogs #tg-shell .tg-shell-top{height:auto!important;min-height:50px!important;flex-wrap:wrap!important;align-items:center!important}body.page-blogs #tg-shell .tg-shell-logo{order:0;flex:0 0 230px!important}body.page-blogs #tg-shell .tg-account-menu{order:1;margin-left:auto!important;align-self:center!important}body.page-blogs #tg-shell .tg-shell-nav{order:2;flex:1 1 100%!important;flex-wrap:wrap!important;justify-content:flex-start!important;width:100%!important;height:auto!important;min-height:30px!important;margin:0!important;gap:2px!important;padding-bottom:3px!important}body.page-blogs #tg-shell .tg-shell-nav a{flex:1 0 auto!important;font-size:12px!important;min-height:34px!important;height:34px!important;padding:6px!important;border-radius:4px 4px 0 0!important}body.page-blogs #tg-shell .tg-menu-panel{position:absolute!important;width:230px!important;max-width:calc(100vw - 32px)!important;max-height:65vh!important}}
+
+body.page-blogs .tg-skip{position:absolute!important;left:-10000px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important}body.page-blogs .tg-skip:focus{left:8px!important;top:8px!important;width:auto!important;height:auto!important;z-index:9999;background:white;padding:8px}

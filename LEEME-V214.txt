@@ -1,0 +1,3 @@
+V214 · Chat público de El Duelo
+Corregida la etiqueta accesible que ocupaba una celda y desplazaba el cuadro de texto. Selector arriba, textarea ancho y Enviar a su derecha. Pestañas con el mismo sprite original de Casting, contador y paginación. Adaptación móvil conservada. Inicio exclusivo de admin1 y bots sin cambios.
+Pruebas de API y UI superadas. No se ha podido completar la comprobación visual en navegador por un fallo al descargar Chromium.

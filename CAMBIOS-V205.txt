@@ -1,0 +1,2 @@
+V205: logo sin banda blanca mediante recorte CSS del margen inferior, conservando el descendente del logotipo y la imagen original. Sin dependencia del modo de mezcla.
+Se ha podido descargar y revisar el HTML original de game/48634 y cmain.css v201 del archivo de 2013: proporciones 590/350, retratos de Cornucopia 65x75 y avisos #fffdf4 / #fffadb. Ajustes aplicados manteniendo navegación, Tu estado, arbustos, Mis últimos combates y las reglas actuales.

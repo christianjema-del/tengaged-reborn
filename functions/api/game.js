@@ -1,3 +1,4 @@
+import {withStorageGuard} from '../_shared/storage-guard141.js';
 import { ensureProfileSchema, getSessionUser } from "../_shared/auth.js";
 import { ensureCastingSchema } from "../_shared/casting.js";
 
@@ -427,15 +428,6 @@ async function getGame(db) {
   let state =
     await checkTransitions(db);
 
-  if (body?.action === "eat_apple") {
-    const player = await db.prepare("SELECT status FROM game_players WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, username).first();
-    if (!player || player.status !== "active") return response({ok:false,message:"Solo los jugadores activos pueden comer una manzana."},403);
-    const eaten = await db.prepare(`UPDATE casting_resources SET apples=apples-1, health=MIN(100,health+20)
-      WHERE casting_id=? AND LOWER(username)=LOWER(?) AND apples>0 AND health<100`).bind(CASTING_ID, username).run();
-    if (!eaten.meta.changes) return response({ok:false,message:"No tienes manzanas o ya tienes la salud completa."},400);
-    return response(await getGame(db));
-  }
-
   const players =
     await getPlayers(db);
 
@@ -537,6 +529,15 @@ async function handlePost(db, request, authenticatedUser) {
   let state =
     await checkTransitions(db);
 
+
+  if (body?.action === "eat_apple") {
+    const player = await db.prepare("SELECT status FROM game_players WHERE casting_id=? AND LOWER(username)=LOWER(?)").bind(CASTING_ID, username).first();
+    if (!player || player.status !== "active") return response({ok:false,message:"Solo los jugadores activos pueden comer una manzana."},403);
+    const eaten = await db.prepare(`UPDATE casting_resources SET apples=apples-1, health=MIN(100,health+20)
+      WHERE casting_id=? AND LOWER(username)=LOWER(?) AND apples>0 AND health<100`).bind(CASTING_ID, username).run();
+    if (!eaten.meta.changes) return response({ok:false,message:"No tienes manzanas o ya tienes la salud completa."},400);
+    return response(await getGame(db));
+  }
 
   // =====================================
   // INMUNIDAD
@@ -1053,7 +1054,7 @@ async function handlePost(db, request, authenticatedUser) {
 // CLOUDFLARE
 // ==========================================
 
-export async function onRequest(context) {
+async function handle141_onRequest(context) {
 
   try {
 
@@ -1134,3 +1135,5 @@ export async function onRequest(context) {
   }
 
 }
+
+export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

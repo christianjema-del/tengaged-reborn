@@ -1,0 +1,2 @@
+V226 · Eliminados en Casting
+Puesto debajo del nombre como 20º, sin # ni punto. Avatar eliminado al40% de opacidad, sin filtro gris, igual que Frookies. El nombre y puesto mantienen legibilidad. Incluye invalidación de caché y pruebas UI de ordinales.

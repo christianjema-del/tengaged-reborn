@@ -1,0 +1,17 @@
+EL DUELO — V212
+
+Primera versión funcional basada en game/5051 (25/09/2010) y su ayuda archivada. Rótulo GIF original recuperado. Conserva la cabecera y las secciones de Tengaged Reborn. Diseño responsive con 12 retratos y podio 3.º / 1.º / 2.º.
+
+Acceso: Juegos → Inscríbete → El Duelo. La primera sala se crea como #1 al consultar El Duelo. Empieza automáticamente con 12 usuarios reales; sin bots de relleno. Se abre una nueva sala de espera al llenarse la anterior.
+
+Acuerdo para esta primera versión: gratis, sin requisito de color y sin premios económicos hasta fijar la tabla. No se aplican cargos de 25 T$ ni se inventan premios.
+
+Mecánica: inmunidad por minijuego, puntuaciones privadas; listas reordenables; cadena de salvación desde la persona inmune; último sin salvar nominado, se enfrenta al último elegible de su propia lista. La persona inmune queda protegida. Menor puntuación pierde el duelo, hasta quedar tres para la prueba final. Sin resultado guardado: cero. Empate: guardado antes y después orden de inscripción como desempate estable.
+
+Un intento original de Casting por fase. Reanudar conserva token e inicio, nunca reinicia el plazo. Diez minutos desde que comienza el último intento; límite de seguridad de 24 horas para evitar bloqueo por ausencias. Los juegos concretos se alternan entre los diez minijuegos existentes. Chat público y privado, historial de resultados y cadena, blogs #duelo, imágenes del chat, historial en perfil y juegos activos. El Duelo no tiene votos positivos/negativos en comentarios. Aviso interno de comienzo solo si se marca la opción al inscribirse.
+
+Pruebas: ciclo completo de 12 a 3 y ganador; privacidad; intentos y tokens; 12 inscripciones simultáneas; comienzo único; historial; chats y permisos; notificación única; protocolo original SWF para arrancar/guardar; UI con listas que mantienen borrador al refrescar y podio 3/1/2. Regresiones Hunger, Casting, Frookies, Blogs y perfiles comprobadas.
+
+No se ha verificado igualdad visual píxel a píxel ni una partida real en Safari de iPhone. El ZIP está preparado para desplegar; no se ha desplegado desde aquí.
+
+Fuentes: https://web.archive.org/web/20100925025652/http://www.tengaged.es/game/5051 y ayuda popup help_theduel de la misma captura.

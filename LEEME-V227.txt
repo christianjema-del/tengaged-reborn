@@ -1,0 +1,6 @@
+V227 · Clasificación de Casting8 y cálculo de futuros Castings
+API pública comprobada: final8 usa filas porcentuales antiguas y Oscar3. Se recalcula8 completo desde recursos guardados; Oscar figura inactivo por indicación expresa del administrador.
+Política general: humanos activos antes de inactivos, humanos antes de bots, más llaves primero; a igualdad de llaves, suma manzanas/tics; desafío solo para empates. Actividad reciente: última hora, coherente con la gracia de inactividad. La final clasifica a todo el reparto, incluidos eliminados, sin mezclar puestos anteriores con porcentajes.
+Respaldo del orden anterior y recibos de ajuste227. Se abonan diferencias positivas pendientes, sin repetir ni retirar premios cobrados. Admin1/mod excluidos de ajustes. Historial, ganador y puestos actualizados.
+Pruebas específicas recursos/inactividad y eliminados, motor diario, API económica y regresión reparación192 superadas. Prueba histórica188 obsoleta busca tabla anterior reemplazada por192 y no forma parte de la comprobación actual.
+Requiere publicar y abrir Casting8 para aplicar la reparación remota. No se ha modificado su base desde aquí.

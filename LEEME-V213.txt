@@ -1,0 +1,10 @@
+V213 · El Duelo
+
+Chat y pestañas con el mismo estilo de los otros juegos, contador de comentarios y selector de mensajes privados conectado. Diseño adaptable a móvil.
+Solo admin1 puede completar las plazas con bots e iniciar una partida en espera. Llenar las 12 plazas nunca inicia automáticamente. La comprobación se hace también en el servidor. Las partidas que ya están en curso continúan.
+Los bots no crean perfiles ni historiales ficticios y no reciben mensajes privados. Entrada gratuita conservada.
+Pruebas: ciclo completo del motor; permisos de inicio/bots; API con SQLite y 12 inscripciones simultáneas; puente de minijuegos; chat y privacidad; interfaz; regresiones Hunger y avisos.
+
+Despliegue:
+cd /Users/christianmonzonlorente/Downloads/Tengaged-V213
+npx wrangler pages deploy . --project-name tengaged-reborns

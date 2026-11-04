@@ -1,0 +1,28 @@
+.hunger-main.sponsors-view233 #view-game,.hunger-main.sponsors-view233 #view-results,.hunger-main.sponsors-view233 #arena-controls,.hunger-main.sponsors-view233 #lobby,.hunger-main.sponsors-view233 #view-rules,.hunger-main.sponsors-view233 #arena-reward{display:none!important}
+.hunger-main #sponsor-panel233[hidden]{display:none!important}
+#sponsor-panel233{display:block;min-height:440px;padding:12px 0 24px;color:#666;font:14px/20px Arial,sans-serif}
+#sponsor-panel233 .sponsor-heading233{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:0 0 16px;background:none;border:0;padding:0}
+#sponsor-panel233 h2{font:bold 13px/18px Arial,sans-serif;color:#ff536d;border:0;margin:0;padding:0}
+#sponsor-panel233 #sponsor-back233{padding:3px 8px;font:11px/15px Arial;border:1px solid #e7dfa3;border-radius:0;background:#fff8a5;color:#8b8554;min-height:21px}
+#sponsor-panel233 #sponsor-remaining233{font:14px/20px Arial;margin:0 0 16px}
+#sponsor-panel233 #sponsor-own-tickets233{font:12px/18px Arial;margin:-8px 0 14px;color:#777}
+#sponsor-panel233 .sponsor-columns233{display:grid;grid-template-columns:minmax(0,62fr) minmax(0,36fr);gap:2%;align-items:start}
+#sponsor-panel233 .sponsor-contestants233{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px 0;align-items:start}
+#sponsor-panel233 .sponsor-person233{width:75px;min-width:0;margin:0 auto;text-align:center}
+#sponsor-panel233 .sponsor-person233>img,#sponsor-panel233 .sponsor-winner233>img{display:block;width:75px!important;height:86px!important;object-fit:contain;border:1px solid #afbdc6;box-sizing:border-box;border-radius:0;margin:0 auto 2px;background:#d5e6f4}
+#sponsor-panel233 .sponsor-person-name233{display:block!important;position:static!important;float:none!important;width:auto!important;color:#4682b4!important;font:11px/15px Arial,sans-serif!important;text-align:center!important;margin:0 0 3px!important;padding:0!important;overflow-wrap:anywhere;text-shadow:none!important;transform:none!important;white-space:normal!important}
+#sponsor-panel233 a.sponsor-person-name233{text-decoration:underline!important}
+#sponsor-panel233 .sponsor-person233>button{display:block;width:75px;box-sizing:border-box;padding:2px 3px;margin:2px 0 0;border:1px solid #deded6;border-radius:0;background:#fff9a6;color:#817a45;font:11px/15px Arial;min-height:21px;cursor:pointer}
+#sponsor-panel233 .sponsor-person233>button:disabled{background:#f4f4f4;border-color:#e5e5e5;color:#b5b5b5;opacity:.65;cursor:default}
+#sponsor-panel233 .sponsor-health233{display:block;font:11px/14px Arial;color:#999;margin:2px 0}#sponsor-panel233 .sponsor-health233[hidden]{display:none}
+#sponsor-panel233 .sponsor-winners-side233{padding:0;border:0;background:none;min-width:0}#sponsor-panel233 .sponsor-winners-side233 h2{margin:0 0 8px}
+#sponsor-panel233 #sponsor-winners-status233{font:11px/16px Arial;padding:5px;background:#f7f9fc;border-bottom:1px solid #e7edf1;margin:0 0 8px}#sponsor-panel233 #sponsor-winners-status233:empty{display:none}
+#sponsor-panel233 .sponsor-winners233{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px;align-items:start}#sponsor-panel233 .sponsor-winner233{text-align:center;min-width:0}
+#sponsor-panel233 .sponsor-winner-tickets233{display:block;font:12px/17px Arial;color:#666;margin:0;padding:0;border:0;background:none}
+#sponsor-panel233 #sponsor-permission233{font:12px/18px Arial;margin:15px 0;color:#999}#sponsor-panel233 #sponsor-winners-retry233{font-size:12px}
+@media(max-width:700px){#sponsor-panel233{padding-top:8px}#sponsor-panel233 .sponsor-columns233{grid-template-columns:minmax(0,1fr);gap:25px}#sponsor-panel233 .sponsor-contestants233{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 0}#sponsor-panel233 .sponsor-person233>button{min-height:38px}#sponsor-panel233 .sponsor-winners233{grid-template-columns:repeat(2,minmax(0,1fr));max-width:350px}#sponsor-panel233 #sponsor-back233{min-height:38px}#sponsor-panel233 .sponsor-person-name233{font-size:12px!important;line-height:17px!important}}
+@media(max-width:370px){#sponsor-panel233 .sponsor-contestants233{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* V234: el pollo disponible conserva su color y el botón amarillo. */
+body.classic166 .hunger-main #arena-top #chicken:not(:disabled){background:#fff5ac;border-color:#d8c981;filter:none;opacity:1}
+body.classic166 .hunger-main #arena-top #chicken:not(:disabled) .chicken-art{filter:none;opacity:1}

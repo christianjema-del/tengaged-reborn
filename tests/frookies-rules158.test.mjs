@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {fresh,act,advance,view} from '../functions/_shared/frookies-engine.js';
+const users=Array.from({length:13},(_,i)=>({id:i+1,username:'U'+i}));
+function game(){const s=fresh(3,120000);for(const u of users)act(s,u,{action:'join'},120000);s.players.forEach((p,i)=>p.tie=i);advance(s,s.deadline);return s;}
+const send=(s,i,input,at=s.phaseStartedAt+1000)=>act(s,users[i],{round:s.round,phase:s.phase,...input},at);
+function final(same=true){const s=game();s.players.slice(4).forEach((p,i)=>{p.status='eliminated';p.placement=i+5;});s.round=10;s.previousChallenge146={round:9,scores:{[same?'u0':'u1']:{points:500}}};advance(s,s.deadline);return s;}
+test('nominated human PoV self-saves immediately, requests replacement once and cannot decline or reuse it',()=>{
+ for(const bot of [false]){const s=game();s.players[2].bot=bot;s.previousChallenge146={round:0,scores:{u2:{points:100}}};send(s,0,{action:'nominate',nominees:['U1','U2']});advance(s,s.pending146.at);assert.equal(s.phase,'replacement');assert.equal(s.savedNominee,'U2');assert.equal(s.vetoDecision,'use');assert.deepEqual(s.nominees,['U1']);assert.equal(s.pending146,null);assert.equal(view(s,users[0]).players[0].decisionPending,'Pendiente de nominar al sustituto');assert.equal(view(s,users[2]).players[2].decisionPending,null);const before=JSON.stringify(s);advance(s,s.phaseStartedAt);assert.equal(JSON.stringify(s),before);assert.throws(()=>send(s,2,{action:'veto',target:null}));assert.throws(()=>send(s,0,{action:'replace',target:'U2'}));send(s,0,{action:'replace',target:'U3'});advance(s,s.pending146.at);assert.equal(s.phase,'vote');assert.deepEqual(s.nominees,['U1','U3']);assert.equal(s.events.filter(e=>e.kind==='pov-self-save').length,1);}
+});
+test('existing nominated PoV waiting in veto migrates without restart, fees, result loss or a fresh click',()=>{
+ const s=game();s.phase='veto';s.pov='U2';s.nominees=['U1','U2'];s.pending146={action:'veto',target:null,at:300000};s.scores={u3:{points:1234}};const ops=JSON.stringify(s.ops),roster=JSON.stringify(s.players);advance(s,250000);assert.equal(s.phase,'replacement');assert.equal(s.savedNominee,'U2');assert.equal(s.scores.u3.points,1234);assert.equal(JSON.stringify(s.ops),ops);assert.equal(JSON.stringify(s.players),roster);assert.equal(s.deadline,370000);
+});
+test('HoH/PoV chooses third and fourth in round ten; remaining player advances by elimination, once next minute',()=>{
+ const s=final();assert.equal(s.phase,'final_places');assert.deepEqual(s.finalists,['U0']);assert.equal(view(s,users[0]).players[0].decisionPending,'Pendiente de elegir tercero y cuarto');
+ for(const input of [{third:'U1',fourth:'U1'},{third:'U0',fourth:'U1'},{third:'U1',fourth:'U8'},{third:'U1'}])assert.throws(()=>send(s,0,{action:'final_places',...input}));assert.throws(()=>send(s,1,{action:'final_places',third:'U2',fourth:'U3'}));
+ send(s,0,{action:'final_places',third:'U2',fourth:'U3'});const at=s.pending146.at;advance(s,at-1);assert.equal(s.phase,'final_places');assert.throws(()=>send(s,0,{action:'final_places',third:'U3',fourth:'U2'},at-1));advance(s,at);assert.equal(s.phase,'jury');assert.deepEqual(s.finalists,['U0','U1']);assert.equal(s.players[2].placement,3);assert.equal(s.players[3].placement,4);assert.equal(s.players[1].status,'active');assert.equal(s.deadline,at+4*3600000);const copy=JSON.stringify(s);advance(s,at);assert.equal(JSON.stringify(s),copy);
+});
+test('distinct PoV assigns the two remaining positions and HoH cannot; jury clocks work',()=>{
+ const s=final(false);assert.deepEqual(s.finalists,['U0','U1']);assert.throws(()=>send(s,0,{action:'final_places',third:'U2',fourth:'U3'}));assert.throws(()=>send(s,1,{action:'final_places',third:'U1',fourth:'U3'}));send(s,1,{action:'final_places',third:'U3',fourth:'U2'});advance(s,s.pending146.at);assert.equal(s.players[3].placement,3);assert.equal(s.players[2].placement,4);assert.ok(view(s,users[3]).players[3].decisionPending);send(s,3,{action:'jury',target:'U1'});assert.equal(view(s,users[3]).players[3].decisionPending,null);
+});
+test('old final phases migrate and preserve already saved decisions, standings, roster and prizes',()=>{
+ for(const phase of ['final_partner','final_third']){const s=final();s.phase=phase;s.finalists=phase==='final_partner'?['U0']:['U0','U1'];const ops=JSON.stringify(s.ops);advance(s,s.phaseStartedAt+1000);assert.equal(s.phase,'final_places');assert.equal(JSON.stringify(s.ops),ops);assert.equal(s.players.filter(p=>p.status==='active').length,4);send(s,0,{action:'final_places',third:'U2',fourth:'U3'});advance(s,s.pending146.at);assert.deepEqual(s.finalists,['U0','U1']);}
+ const s=final();s.phase='final_third';s.finalists=['U0','U1'];s.pending146={action:'final_third',target:'U3',at:s.phaseStartedAt+60000};advance(s,s.phaseStartedAt+1000);assert.equal(s.pending146.action,'final_places');advance(s,s.pending146.at);assert.equal(s.players[3].placement,3);assert.equal(s.players[2].placement,4);
+});

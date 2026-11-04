@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
+let now=100000,calls=0;const noop=()=>{};
+const document={body:{},readyState:'loading',addEventListener:noop};
+const c=vm.createContext({URL,Map,Set,AbortController,location:{origin:'https://test.local'},Date:{now:()=>now},setTimeout:()=>1,clearTimeout:noop,addEventListener:noop,document,MutationObserver:class{observe(){}},fetch:async()=>{calls++;throw Error('temporary network failure');}});
+const source=readFileSync(new URL('../user-mentions168.js',import.meta.url),'utf8').replace(/^import .*\n/gm,'');vm.runInContext(source+'\nthis.queue=queue;this.flush=flush;',c);
+const anchor={getAttribute:()=>'/profile?username=Peach',querySelector:()=>null,textContent:'Peach',isConnected:true,dataset:{}};
+c.queue(anchor);await c.flush();assert.equal(calls,1);
+for(let i=0;i<100;i++){c.queue(anchor);await c.flush();}assert.equal(calls,1,'countdown and chat DOM changes must not restart a failed color request');
+now+=60001;c.queue(anchor);await c.flush();assert.equal(calls,2,'a later retry remains possible');
+console.log('PASS: failed mention lookups wait at least 60 seconds instead of retrying on every countdown/chat mutation.');

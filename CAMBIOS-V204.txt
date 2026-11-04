@@ -1,0 +1,4 @@
+V204 — Presentación Hunger según referencia 2013
+Cornucopia sin cabecera adicional, avisos amarillos, iconos y comentarios con proporciones de la referencia; arma y calavera permanecen al final. Lista de muertes con puestos existentes y filas azules. Blogs #hunger e imágenes compartidas en el chat de la página. Navegación propia conservada. Logo sin franja blanca mediante composición CSS de la imagen original. Adaptación móvil con cinco plazas por fila en pantallas pequeñas.
+Se conserva íntegro el HTML de Tu estado, arbustos y Mis últimos combates. Sin cambios de mecánica, premios, flechas o dianas.
+Pruebas: UI Hunger, avisos y flechas/dianas correctos; bloques protegidos sin modificación. No se ha podido abrir el enlace archivado; se ha usado la captura adjunta como referencia. No se ha verificado visualmente en Safari real.

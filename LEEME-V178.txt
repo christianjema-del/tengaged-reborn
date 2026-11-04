@@ -1,0 +1,2 @@
+V178 — Hunger 4: abonar los puestos definitivos con premio mientras la partida sigue activa, usando la misma clave de pago para impedir que se duplique al finalizar. Giovanni, quinto, recibe 20 karma y 20 T$ con los premios dobles. Se aplica al consultar la arena después de publicar esta versión. Incluye cuarto apartado Ruleta diaria, etiqueta Hunger Games 4# EVENTO, premios dobles y cambios anteriores.
+Publicar en Cloudflare; Vercel muestra la actualización automáticamente.

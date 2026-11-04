@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {onRequest as frookies} from '../functions/api/frookies.js';import {onRequest as chat} from '../functions/api/game-chat.js';import {onRequest as mine} from '../functions/api/my-games.js';import {onRequestGet as micro} from '../functions/microgames.js';import {encode,decode} from '../functions/_shared/flash-protocol.js';
+const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE users(id INTEGER PRIMARY KEY,username TEXT,is_admin INTEGER,karma INTEGER DEFAULT 0,t_money INTEGER DEFAULT 0);CREATE TABLE sessions(token_hash TEXT,user_id INTEGER,expires_at TEXT)');
+class Q{constructor(q,a=[]){this.q=q;this.a=a;}bind(...a){return new Q(this.q,a);}async first(){return sql.prepare(this.q).get(...this.a)||null;}async all(){return {results:sql.prepare(this.q).all(...this.a)};}async run(){return {meta:{changes:Number(sql.prepare(this.q).run(...this.a).changes)}};}}
+let chain=Promise.resolve();const db={prepare:q=>new Q(q),batch(qs){const task=chain.then(async()=>{sql.exec('BEGIN');try{const out=[];for(const q of qs)out.push(await q.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}});chain=task.catch(()=>{});return task;}};
+
+import {fresh,act,advance,view} from '../functions/_shared/frookies-engine.js';
+import {correctFrookiesFour180} from '../functions/_shared/frookies-correction180.js';
+const now=Date.now(),admin={id:1,username:'admin1',is_admin:1};
+for(const [id,username,is_admin] of [[1,'admin1',1],[2,'PauCubarsi',0],[3,'Lamine',0],[4,'Peach',0],[5,'Cristi',0]])sql.prepare('INSERT INTO users VALUES(?,?,?,0,100)').run(id,username,is_admin);
+const s=fresh(4,now);s.phase='vote';s.round=3;s.rules158=true;s.phaseStartedAt=now;s.roundStartedAt146=now;s.startedAt=now-600000;s.deadline=now+180000;s.hoh='Lamine';s.pov='Tributo F4 · 6';s.nominees=['Tributo F4 · 3','Tributo F4 · 4'];s.challenge='words';
+s.players=[...['PauCubarsi','Lamine','Peach','Cristi'].map((username,i)=>({id:i+2,username,bot:false,status:i===0?'eliminated':'active',placement:i===0?12:null,eliminatedAt:i===0?now-60000:undefined,tie:i})),...Array.from({length:9},(_,i)=>({id:-401-i,username:'Tributo F4 · '+(i+1),bot:true,status:i===1?'eliminated':'active',placement:i===1?13:null,tie:i}))];
+s.history=[{round:2,nominees:['Tributo F4 · 8','PauCubarsi'],evicted:'PauCubarsi',totals:{'Tributo F4 · 8':3,PauCubarsi:5},at:now-60000}];s.events=[{id:'old-event',kind:'eviction',round:2,nominees:s.history[0].nominees,evicted:'PauCubarsi',text:'PauCubarsi sale de la casa (5 votos).',at:now-60000}];
+await frookies({env:{DB:db},request:new Request('https://test.local/api/frookies')});
+sql.prepare('INSERT INTO frookies_matches(id,state) VALUES(4,?)').run(JSON.stringify(s));
+const get=async()=>{const r=await frookies({env:{DB:db},request:new Request('https://test.local/api/frookies?id=4')});assert.equal(r.status,200);return (await r.json()).match;};
+const restored=await get();assert.equal(restored.players.find(p=>p.username==='PauCubarsi').status,'active');assert.equal(restored.players.find(p=>p.username==='Tributo F4 · 8').placement,12);assert.equal(restored.players.filter(p=>p.status==='active').length,11);assert.deepEqual(restored.nominees,s.nominees);assert.equal(restored.round,3);assert.equal(restored.history[0].evicted,'Tributo F4 · 8');assert.deepEqual(restored.history[0].totals,s.history[0].totals);
+assert.equal(JSON.parse(sql.prepare('SELECT previous_state FROM frookies_correction180 WHERE match_id=4').get().previous_state).players[0].status,'eliminated');
+assert.equal(sql.prepare("SELECT status FROM user_game_history WHERE username='PauCubarsi' AND game_type='FROOKIES' AND game_id='4'").get().status,'active');assert.equal(sql.prepare('SELECT t_money FROM users WHERE id=2').get().t_money,100);
+await get();assert.equal(sql.prepare('SELECT COUNT(*) n FROM frookies_correction180').get().n,1);
+const p=JSON.parse(sql.prepare('SELECT state FROM frookies_matches WHERE id=4').get().state);p.pending146={action:'vote',at:now+60000};p.attempts={lamine:{startedAt:now-1000,duration:60}};
+assert.throws(()=>act(p,{...admin,username:'mod'},{action:'pause',runId:'initial'},now),/Solo admin1/);
+act(p,admin,{action:'pause',runId:'initial'},now);assert.equal(view(p,admin,now).canResume,true);const frozen=JSON.stringify(p);advance(p,now+3600000);assert.equal(JSON.stringify(p),frozen);assert.throws(()=>act(p,{id:3,username:'Lamine'},{action:'vote',target:p.nominees[0]},now+1),/pausada/);
+const deadline=p.deadline,queued=p.pending146.at,attempt=p.attempts.lamine.startedAt;
+act(p,admin,{action:'resume',runId:'initial'},now+3600000);assert.equal(p.deadline,deadline+3600000);assert.equal(p.pending146.at,queued+3600000);assert.equal(p.attempts.lamine.startedAt,attempt+3600000);assert.equal(p.pause180,undefined);assert.equal(p.phase,'vote');
+console.log('PASS actual API: scoped Pau/bot correction, original-state backup, profile history, unchanged balance, one-time repair; admin-only pause, frozen engine and deadlines/attempts shifted on resume.');

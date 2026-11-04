@@ -1,0 +1,53 @@
+V231 — MAFIAS Y PERFILES EN CASTELLANO
+
+PUBLICAR
+Descomprimir y ejecutar desde esta carpeta:
+npx wrangler pages deploy . --project-name tengaged-reborns
+No ejecutar otra vez ajustes de premios: esta versión no cambia karma ni T$.
+
+MAFIAS
+Lista ordenada por puntos, emblemas, miembros, páginas y creaciones recientes.
+Ficha con descripción, lema, presidente, miembros y aspirantes con avatares.
+Se conservan las mafias y miembros existentes. Las tablas nuevas se crean
+al acceder; no es necesario importar SQL ni borrar la base de datos.
+Crear requiere Estrella de TV o una cuenta administrativa.
+Una mafia/candidatura por usuario. Entrada por estrellas, apoyo revocable y
+presidencia por apoyos. Emblemas PNG/JPEG/WebP; edición del presidente.
+Comentarios públicos y privados: aspirantes y visitantes no leen el privado.
+Los puntos de la mafia suman los niveles de tarjeta de los miembros, no sus
+saldos de karma o T$. Los votos no se repiten al pulsar varias veces.
+
+Juego social de la estrella: solo admin1 puede iniciarlo y hacen falta al
+menos dos mafias. Los miembros intentan adivinar quién guarda la estrella
+para robarla a otra mafia. Un intento por hora. El guardián se mantiene oculto
+en el servidor. El cierre semanal sortea la selección entre los inscritos
+de la mafia que conserve la estrella. Se guarda un único resultado por semana.
+Stars aún no está implementado: la selección NO inscribe a nadie en una
+partida real, NO inicia juegos y NO abona premios.
+
+Referencias consultadas: lista archivada 06/01/2024 y BONICOS CLUB (Wayback
+redirige su ficha a 26/02/2024). Se recuperó la cabecera original de la lista.
+La captura pública muestra el requisito de TV, aspirantes, estrellas y regla
+presidencial del 20 %. No permite comprobar todas las reglas del servidor
+original. La admisión (mitad, máximo 20), límite de diez para presidencia,
+el intento por hora y la selección semanal se especifican aquí como reglas
+de esta implementación; no se certifican como una copia del código original.
+
+PERFILES
+Últimas acciones públicas: blogs, comentarios, comentarios de diseños,
+grupos públicos y partidas. Fuentes antiguas ausentes no anulan el listado.
+No se muestran comentarios ocultos, grupos privados ni mensajes privados.
+Enlaces al juego correctos para Casting, Frookies, Hunger y El Duelo.
+Amigos: pulsar Ordenar amigos, arrastrar sus avatares o usar las flechas,
+y Guardar orden. Cancelar no guarda. Compatible con ratón, teclado y táctil.
+Eliminados Más estadísticas y Explora la comunidad, con sus dependencias.
+No se cambia ningún diseño comprado/equipado ni el renderizador de avatares.
+
+VALIDACIÓN
+Pruebas de admisión, privacidad, CSRF, apoyos únicos, edición autorizada,
+sucesión, estrella oculta, inicio de admin1, sorteo idempotente y saldos.
+Pruebas de acciones con tablas antiguas, ocultación y paginación.
+Pruebas de arrastre de escritorio/táctil, cancelación y guardado de amigos.
+Regresión de perfiles, donaciones, amigos, HOF, avatares y auditoría.
+No se ha realizado comparación de píxeles del resultado desplegado ni una
+prueba física en iPhone. Las referencias sí se abrieron e inspeccionaron.

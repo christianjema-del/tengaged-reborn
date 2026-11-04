@@ -1,0 +1,4 @@
+V223 · Nominados de Casting tras bajas por inactividad
+Comprobado en API pública: Casting8 día2, eliminación, seis activos y cero nominados; los bots nominados habían sido eliminados por inactividad.
+El motor repone los huecos con participantes activos según la clasificación real. Con seis/siete activos hay dos nominados; con más, tres. Conserva nominados válidos y reinicia votos cuando cambia la lista, guardando copia de los anteriores. Mantiene día y pruebas; da al menos30 minutos si queda poco plazo. Repara antes de cerrar un día y después de procesar inactividad.
+Pruebas específicas, motor diario y API superadas. Requiere publicar y abrir Casting8 para aplicar en remoto.

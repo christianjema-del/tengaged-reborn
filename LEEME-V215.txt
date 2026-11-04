@@ -1,0 +1,3 @@
+V215 · Burbuja y lista de El Duelo
+Se usa el sprite original the duel del perfil, con posición real superpuesta y estado/número/fecha debajo. Lista: theduel # con fondo original #F3E3DC y enlace azul. Conserva las mecánicas, inicio manual y resto de juegos.
+No incluye todavía cambios en la protección de salud de Hunger ni restauración de PauCubarsi.

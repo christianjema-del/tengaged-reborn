@@ -1,8 +1,10 @@
+import {withStorageGuard} from '../_shared/storage-guard141.js';
 import { ensureProfileSchema, getSessionUser, jsonError } from "../_shared/auth.js";
 
-export async function onRequestPost({ request, env }) {
+async function handle141_onRequestPost({ request, env }) {
   try {
     await ensureProfileSchema(env.DB);
+    if(request.headers.get('Origin')!==new URL(request.url).origin)return jsonError('Origen no permitido.',403);
     const actor = await getSessionUser(request, env.DB);
     if (!actor) return jsonError("Inicia sesión para continuar.", 401);
     if (!actor.is_admin || actor.username.toLowerCase() !== "admin1") return jsonError("No tienes permisos de administración.", 403);
@@ -13,8 +15,9 @@ export async function onRequestPost({ request, env }) {
     const reason = String(body.reason || "").trim().slice(0, 180);
     if (!username || !/^[A-Za-z0-9_]{3,24}$/.test(username)) return jsonError("Indica un nombre de usuario válido.", 400);
 
-    const target = await env.DB.prepare("SELECT id, username FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1").bind(username).first();
+    const target = await env.DB.prepare("SELECT id, username,is_system FROM users WHERE LOWER(username)=LOWER(?) LIMIT 1").bind(username).first();
     if (!target) return jsonError("No existe ese usuario.", 404);
+    if(target.is_system)return jsonError("La cuenta de avisos no se administra como un jugador.",403);
     if (target.id === actor.id && (action === "ban" || action === "unban")) return jsonError("No puedes suspender tu propia cuenta.", 400);
 
     let amount = null;
@@ -31,7 +34,7 @@ export async function onRequestPost({ request, env }) {
       const banned = action === "ban";
       if (banned && !reason) return jsonError("Escribe un motivo para el baneo.", 400);
       statements = [
-        env.DB.prepare("UPDATE users SET is_banned=?, ban_reason=?, banned_at=? WHERE id=?").bind(banned ? 1 : 0, banned ? reason : null, banned ? new Date().toISOString() : null, target.id),
+        env.DB.prepare("UPDATE users SET is_banned=?, ban_reason=?, banned_at=?, ban_until=NULL WHERE id=?").bind(banned ? 1 : 0, banned ? reason : null, banned ? new Date().toISOString() : null, target.id),
         ...(banned ? [
           env.DB.prepare("DELETE FROM sessions WHERE user_id=?").bind(target.id),
           env.DB.prepare("DELETE FROM casting_players WHERE LOWER(username)=LOWER(?)").bind(target.username)
@@ -54,3 +57,5 @@ export async function onRequestPost({ request, env }) {
     return jsonError("No se pudo completar la acción.", 500);
   }
 }
+
+export async function onRequestPost(context){return withStorageGuard(context,handle141_onRequestPost);}

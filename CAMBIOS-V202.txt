@@ -1,0 +1,5 @@
+V202 — Flechas y dianas de Hunger
+Dianas cada 20 minutos en lugar de cada 2. La programación de partidas activas se adapta sin reiniciar el juego. No se generan ráfagas de dianas atrasadas.
+Las dianas dan hasta 3 flechas sin superar 15; si ya tienes 15 o más, no se consume la diana.
+Cornucopia permite seguir acumulando una flecha cada 20 minutos sin el tope de 15. Los patrocinios también pueden superar 15. Se conservan inventarios existentes y todos los cambios anteriores.
+Verificado con pruebas de acumulación, límites de dianas, programación antigua, pausas entre visitas y funcionamiento de Hunger.

@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {DEMO_DESIGNS as old} from '../functions/_shared/demo-designs-original.js';
+import {DEMO_DESIGNS as clean} from '../functions/_shared/demo-designs.js';
+import {cleanDesignLayer} from '../functions/_shared/clean-design-layers.js';
+import {renderAvatar} from '../avatar-art.js';
+for(const i of [0,3,5,7])assert.notEqual(clean[i].image_data,old[i].image_data);
+for(let i=0;i<old.length;i++)assert.equal(cleanDesignLayer(old[i].image_data),clean[i].image_data);
+assert.equal(cleanDesignLayer('custom-image'),'custom-image');
+const svg=renderAvatar({eyeColor:'#123456',mouthColor:'#654321'},{skin:clean[5].image_data,shirt:clean[0].image_data,hair:clean[2].image_data});
+assert.ok(svg.includes('#123456'));
+assert.ok(svg.includes('#654321'));
+assert.ok(!svg.includes(old[0].image_data));
+assert.equal(svg.includes('opacity='),false);
+console.log('PASS: legacy image normalization, custom image preservation and face features over purchased body.');

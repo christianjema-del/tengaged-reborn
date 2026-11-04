@@ -1,0 +1,1 @@
+export function elapsedMinutes(raw){if(raw===null||raw===undefined||!Number.isFinite(Number(raw)))return '—';const n=Math.max(0,Math.floor(Number(raw)));if(n<60)return n+' min';if(n<1440){const h=Math.floor(n/60);return h+(h===1?' hora':' horas');}const d=Math.floor(n/1440);return d+(d===1?' día':' días');}

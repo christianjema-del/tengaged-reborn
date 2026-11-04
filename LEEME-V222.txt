@@ -1,0 +1,4 @@
+V222 · Reparación final de Frookies y tics de El Duelo
+En final4, repara los finalistas desactualizados tras cambiar HoH: finalistas actuales son HoH y PoV. Quita una elección pendiente inválida y da dos minutos para que PoV elija tercero/cuarto. Conserva respaldo de los datos anteriores y no altera la excepción del Frookies4 antiguo.
+Duelo usa exactamente el tic Frookies: carácter ✓, Arial negrita20px/20px, color #94bd78.
+Pruebas: bot finalista residual, selección de ambos bots por PoV, prohibición al HoH, reparación idempotente; regresiones final195, HoH221, estados y UI Duelo superadas. Requiere publicar y cargar Frookies6.

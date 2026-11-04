@@ -1,3 +1,4 @@
+import {withStorageGuard} from '../_shared/storage-guard141.js';
 import { ensureProfileSchema, getSessionUser, jsonError } from "../_shared/auth.js";
 
 const BOT_NAMES = ["bot_cereza", "bot_manzana", "bot_llave", "bot_luna"];
@@ -7,7 +8,7 @@ function randomHex(length = 12) {
   return [...bytes].map(byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
-export async function onRequestPost({ request, env }) {
+async function handle141_onRequestPost({ request, env }) {
   try {
     await ensureProfileSchema(env.DB);
     const admin = await getSessionUser(request, env.DB);
@@ -38,3 +39,5 @@ export async function onRequestPost({ request, env }) {
     return jsonError("No se pudieron crear las cuentas de prueba.", 500);
   }
 }
+
+export async function onRequestPost(context){return withStorageGuard(context,handle141_onRequestPost);}

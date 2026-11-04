@@ -1,0 +1,7 @@
+/* Shopping destination and event label; no game mechanics changed. */
+body.page-shops .shop-destinations .daily-wheel-promo177{display:flex!important;align-items:center!important;justify-content:center!important;gap:16px!important;box-sizing:border-box!important;padding:12px!important;min-height:94px!important;background:linear-gradient(115deg,#fff8d3,#f9e4a8)!important;color:#87621d!important;aspect-ratio:3.8}
+.daily-wheel-icon177{display:block;flex:0 0 62px;width:62px;height:62px;border-radius:50%;background:conic-gradient(#ffdb60 0deg 60deg,#ef7898 60deg 120deg,#9fcde2 120deg 180deg,#ffdb60 180deg 240deg,#ef7898 240deg 300deg,#9fcde2 300deg);border:4px solid white;box-shadow:0 0 0 1px #d4b55a;box-sizing:border-box;position:relative}
+.daily-wheel-icon177:after{content:'';position:absolute;left:21px;top:21px;width:12px;height:12px;border-radius:50%;background:white}
+.daily-wheel-promo177 strong{font:bold 22px/1.15 Arial,sans-serif;overflow-wrap:anywhere}
+body .directory-game-table .game-event177{display:inline-block;color:#ffe78a;background:#51352c;border:1px solid #ddbc5d;border-radius:3px;padding:1px 4px;font:italic 800 10px/1.4 Georgia,serif;letter-spacing:1px;vertical-align:baseline;white-space:nowrap;text-shadow:0 1px #24180c}
+@media(max-width:520px){.daily-wheel-promo177 strong{font-size:18px}.daily-wheel-icon177{flex-basis:50px;width:50px;height:50px}.daily-wheel-icon177:after{left:15px;top:15px}body .directory-game-table .game-event177{font-size:9px;letter-spacing:.5px}}

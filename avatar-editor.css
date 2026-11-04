@@ -1,0 +1,34 @@
+.avatar-editor{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+.avatar-preview-panel,.avatar-controls,.avatar-wardrobe{background:#fff;border:1px solid #d7d7d7;border-radius:8px;padding:14px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.avatar-preview-panel h2{margin:0 0 12px}
+#avatarPreview{min-height:0;aspect-ratio:200 / 230;background:#d9e6f3;border:1px solid #a6bfd4;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden}
+#avatarPreview svg{width:100%;height:100%;display:block}
+#changes{font-weight:700;color:#5c6975;margin:10px 0}
+#saveAvatar{width:100%;margin-bottom:8px;background:#f5c528;color:#231f20;border-color:#d6a30b;font-weight:700}
+.avatar-controls{display:grid;gap:10px}
+.customize-row{display:grid;grid-template-columns:200px 44px 1fr 44px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #ececec}
+.customize-row:last-child{border-bottom:0}
+.customize-label h3{margin:0;font-size:16px;color:#1c1d1e}
+.nav-arrow{width:38px;height:38px;border:1px solid #b7cadb;border-radius:8px;background:#d9e6f3;color:#4d708b;font-weight:700;cursor:pointer}
+.customize-value{font-size:18px;color:#333;display:flex;justify-content:flex-start;align-items:center;min-height:38px}
+.color-row{grid-template-columns:200px 1fr 100px}
+.color-current{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.swatch{width:28px;height:28px;border-radius:6px;border:1px solid rgba(0,0,0,.15);box-sizing:border-box;cursor:pointer}
+.swatch.selected{outline:3px solid #111;outline-offset:2px}
+.color-hex{font-weight:700;color:#555;text-transform:uppercase}
+.avatar-wardrobe{margin-top:18px}
+#equippedLayers,#wardrobe{display:grid;gap:10px}
+.equipped-piece,.wardrobe-card{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #dedede;border-radius:8px;background:#fff;padding:0;overflow:hidden}
+.wardrobe-card{align-items:flex-start;flex-direction:column}
+.wardrobe-title{font-weight:700}.wardrobe-description{margin:0;color:#5a6772}.wardrobe-actions{display:flex;gap:8px}
+@media (max-width:980px){.avatar-editor{grid-template-columns:1fr}.customize-row{grid-template-columns:120px 40px 1fr 40px}.color-row{grid-template-columns:120px 1fr 84px}}
+
+.wardrobe-thumbnail{display:block;width:100%;height:150px;object-fit:contain;background:#eef5f8;border:1px solid #dbe7ec}
+.equipped-thumbnail{width:50px;height:58px;object-fit:contain;background:#eef5f8;flex-shrink:0}
+.wardrobe-card small{display:block;margin:8px 0;color:#536c7a}
+.equipped-piece{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Keep 200px imported layers near their native resolution. */
+#avatarPreview{width:200px;max-width:100%;margin:0 auto;isolation:isolate}
+#avatarPreview svg{opacity:1;filter:none}
+.tryon-inline-avatar{max-width:240px;margin:0 auto}

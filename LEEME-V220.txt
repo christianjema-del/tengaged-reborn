@@ -1,0 +1,4 @@
+V220 · El Duelo: estados de avatar, listas bloqueadas y resultados
+Tic verde durante la prueba general y signo rojo para los dos nominados durante el duelo. Reloj azul en el avatar mientras falta guardar preferencias. Guardar lista bloquea nuevas modificaciones de ese día en el servidor y oculta los controles; una nueva prueba general permite guardar la siguiente lista.
+Cada fase cerrada publica un mensaje automático amarillo con los resultados ordenados. Nombres azules con enlace a perfil y puntos como texto negro. No revela resultados de una fase abierta.
+Pruebas: bloqueo, siguiente día, estados públicos, resultados ordenados, cadena, API y UI superadas. Requiere despliegue para aplicarse.

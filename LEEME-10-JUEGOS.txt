@@ -1,0 +1,5 @@
+10 juegos interactivos originales integrados en las rondas de Casting.
+Orden: wheel, numbers, deal, match, guitar, endurance, maze, snow, words, line.
+Nota técnica: los minijuegos de interacción (excepto wheel/numbers/words) envían puntuación normalizada y requieren validación antitrampas de servidor antes de competición pública. No son copias de código ni gráficos de Regaged.
+Para publicar: bash PUBLICAR.command dentro de la carpeta descomprimida.
+Verificar un CASTING NUEVO o en ronda nueva, porque la selección depende del número de ronda.

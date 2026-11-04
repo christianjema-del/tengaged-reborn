@@ -1,0 +1,2 @@
+V177 — Cuarto apartado Ruleta diaria en la portada de Tiendas, enlazado al funcionamiento existente. Hunger Games 4# EVENTO en la lista de juegos, con etiqueta dorada y tipografía destacada. Incluye V176 y sus premios dobles de Hunger 4.
+Publicar en Cloudflare; el acceso Vercel mostrará la actualización automáticamente.

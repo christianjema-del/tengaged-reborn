@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {fresh as freshCurrent,advance,act} from '../functions/_shared/hunger.js';
+const fresh=(...args)=>({...freshCurrent(...args),rulesVersion:76});
+const start=Date.now()-1000000;
+function setup(){const s=fresh(start,4);s.phase='active';s.manualStart160={by:'admin1',at:start};s.reopening161={at:start};s.startedAt=start;s.tickAt=start;s.players=[{id:1,username:'A',health:70,arrows:0,location:'cornucopia',lastShot:0,search:null,passiveCount:0,passiveDay:0},{id:2,username:'B',health:70,arrows:0,location:'forest',lastShot:0,search:null,passiveCount:0,passiveDay:0}];s.nextDropAt=start+99999999;s.nextBonusAt=start+60000;return s;}
+test('target reward atomic and only once',()=>{const s=setup();advance(s,start+60000,()=>0);const bonus=s.bonuses[0];assert.equal(bonus.kind,'target');const previous=s.players[0].arrows;act(s,{id:1},{action:'claim_bonus',bonusId:bonus.id},start+61000,()=>0.99);assert.equal(s.players[0].arrows,previous+3);assert.throws(()=>act(s,{id:2},{action:'claim_bonus',bonusId:bonus.id},start+62000,()=>0.99));});
+test('legacy poison deals five health, expired rewards rejected',()=>{const s=setup();s.bonuses=[{id:'legacy-poison',kind:'poison',expiresAt:start+120000,claimedBy:null}];advance(s,start+61000,()=>0.99);const hp=s.players[0].health;act(s,{id:1},{action:'claim_bonus',bonusId:'legacy-poison'},start+61000,()=>0.99);assert.equal(s.players[0].health,hp-5);const s2=setup();advance(s2,start+60000,()=>0);const bonus=s2.bonuses[0];assert.throws(()=>act(s2,{id:1},{action:'claim_bonus',bonusId:bonus.id},bonus.expiresAt,()=>0.99));});

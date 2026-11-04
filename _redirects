@@ -1,0 +1,12 @@
+/posts /blogs 200
+/posts/* /blogs 200
+/blog /blogs 200
+/blog/* /blogs 200
+
+/user/:username /profile?username=:username 302
+
+/shopping_game /shops?tab=users 302
+
+/top /hall-of-fame.html 200
+
+/fraternities /mafias.html 200

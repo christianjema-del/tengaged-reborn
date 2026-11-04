@@ -1,0 +1,12 @@
+REGAGED: DIEZ ARCHIVOS SWF ORIGINALES EN CASTING
+
+Este paquete incluye los 10 archivos SWF originales suministrados por el usuario.
+La pantalla de Casting abre el original que corresponde a la ronda, con Ruffle.
+Ruffle se carga a través de unpkg.com y requiere conexión; para funcionamiento sin CDN debe alojarse Ruffle localmente.
+
+LIMITACIÓN IMPORTANTE: no se extraen automáticamente las puntuaciones internas de los SWF.
+El formulario muestra una puntuación manual de prueba de 0 a 100. Como el servidor no verifica esa puntuación, NO es seguro utilizarlo para clasificaciones competitivas reales ni premios.
+Antes de abrir competición pública: modificar el SWF o instrumentar su comunicación de puntuaciones, verificar resultados del lado del servidor y probar los diez juegos en navegadores.
+No se han probado partidas en un navegador real ni en Cloudflare.
+
+Para desplegar: abrir Terminal en esta carpeta y ejecutar bash PUBLICAR.command.

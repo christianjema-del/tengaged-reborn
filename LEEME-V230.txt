@@ -1,0 +1,25 @@
+V230 — SALÓN DE LA FAMA EN CASTELLANO
+Referencia: https://web.archive.org/web/20240622064819/https://tengaged.com/top
+
+Misma estructura de contenido: cuatro avatares grandes, puestos 5–20 en
+filas de ocho, más queridos, menciones, Stars, estilista diario y sidebar.
+Conserva la cabecera de Reborn y adapta la distribución a pantallas móviles.
+Incluye las etiquetas de precios originales, servidas desde assets/hof230.
+Se accede desde HOF o /top. Desplegar esta carpeta en Cloudflare Pages
+con el procedimiento habitual. No hay comando SQL ni ajustes económicos.
+
+Los rankings muestran datos propios, no usuarios de Tengaged.com.
+Stars y fusiones de Survivor permanecen vacíos mientras no existan datos.
+No se confunden victorias de Hunger con fusiones de tribu de Survivor.
+El escaparate rota diariamente entre usuarios con diseños equipados reales;
+enseña las prendas equipadas y sus precios de catálogo (no una venta nueva).
+Más queridos conserva la clasificación existente de votos positivos en blogs.
+La clasificación mensual conserva su fecha de inicio real.
+
+Verificado: referencia abierta y composición revisada; pruebas de API, UI,
+perfiles, prendas y precios, exclusión de baneados y saldos sin cambios.
+El navegador local de pruebas no pudo instalarse, por lo que no se realizó
+una comparación de píxeles de la página implementada.
+
+Incluye las correcciones anteriores y el ajuste económico V229 ya aplicado.
+No volver a ejecutar auditorías antiguas con opciones de reparación.

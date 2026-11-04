@@ -1,0 +1,1 @@
+Hunger: los puestos 5.º y 6.º reciben 10 karma y 10 T$ al finalizar la edición. El 4.º recibe 20 karma y 20 T$. FAQ y reglas actualizadas. Incluye todos los cambios de V155. No modifica saldos ni premios de partidas ya terminadas; su revisión requiere la auditoría actual.

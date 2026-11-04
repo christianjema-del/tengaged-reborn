@@ -1,0 +1,5 @@
+V221 · Salvados, cadena completa y HoH Peach
+Duelo: los activos no nominados conservan el tic verde durante el duelo; los dos nominados mantienen el interrogante rojo.
+El mensaje corto de cadena se amplía usando la ruta real de esa ronda, incluso para avisos ya existentes. Muestra cada salvación y, al final, quién nadie salva y los dos nominados. Enlaces azules a perfiles y texto negro.
+Frookies6 ronda10: sustituye el HoH bot por Peach una única vez, cuando sigue activa la ronda y Peach está activa. Conserva copia de la asignación anterior, no cambia el PoV ni inventa resultados. No modifica ediciones distintas o partidas ya finalizadas. Requiere publicar y cargar Frookies6 para aplicarse; no se ha cambiado directamente el servidor remoto.
+Pruebas de estados, API de chat con aviso anterior, cadena y corrección HoH superadas.

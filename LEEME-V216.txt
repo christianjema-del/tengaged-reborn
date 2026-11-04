@@ -1,0 +1,5 @@
+V216 · Hunger: protección del jugador con desafío guardado
+Mientras siga la lucha, el jugador haya guardado y esté en Cornucopia con comida, los disparos no bajan su salud de 0,01. Recupera 0,01 por minuto durante esa espera. Sin guardar o sin comida no existe esa protección.
+Al cargar Hunger #5 activo se restaura una sola vez PauCubarsi a 30 de salud, quitando la eliminación y su puesto anterior. Se conserva una copia de su registro previo. No se reinicia la partida ni se repiten abonos.
+El cambio requiere publicar esta carpeta en Cloudflare. No se ha modificado la base remota desde aquí.
+Pruebas: disparos repetidos, curación por minuto, ausencia de comida, rival sin guardar, lucha terminada, restauración idempotente; regresiones de combates, reglas, flechas y premios Hunger #4.

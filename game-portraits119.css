@@ -1,0 +1,3 @@
+/* Fill existing game portrait boxes. Width, height and roster geometry stay unchanged. */
+body:is(.page-frookies,.page-hunger,.page-casting-game,.page-casting-vote,.page-casting-challenge,.page-game) img[data-avatar-username]{object-fit:cover!important;object-position:center!important;padding:0!important;background-color:transparent!important}
+body.casting-daily #castPlayers .cast-player img[data-avatar-username],body .hunger-main #public-chat .arena-event-body>.event-person img[data-avatar-username]{object-fit:cover!important;object-position:center!important;padding:0!important;background-color:transparent!important}

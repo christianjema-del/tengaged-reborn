@@ -1,0 +1,22 @@
+CORREGIR LOS EXCESOS CONFIRMADOS DEL INFORME V228
+
+Desde esta carpeta:
+node corregir-economia229.mjs --aplicar
+node revisar-economia228.mjs
+
+Descuenta en total 94 karma y 36 T$, solo de Casting 7 y 8.
+Lamine 25 / 6; Giovanni 10 / 7; PauCubarsi 15 / 4; Cristi 7 / 4;
+AntonioJ 2 / 2; Ricardito 1 / 1; Oscar 9 / 6; Peach 25 / 6.
+No modifica Hunger: Hunger 4 mantiene pagos dobles. No modifica admin1/mod.
+No es necesario desplegar la web para aplicar este ajuste.
+
+Cada ajuste y sus cambios de saldo/recibo son atómicos mediante un trigger.
+La clave única por partida/usuario impide un segundo descuento al repetir.
+Si cambian puestos, recibos o faltan fondos se detiene sin aplicar ese ajuste.
+Los anteriores pueden estar completados: conservar los archivos y repetir el
+mismo comando tras revisar el error. Nunca borrar economy_fix229 para reintentar.
+
+Guarda copias de saldos y recibos fuera de la carpeta de la web, en
+Downloads/Tengaged-Correccion-Economia, y copias previas de cada ajuste en D1.
+Envia el nuevo informe.json tras la revisión. Los saldos totales también
+incluyen compras, ventas, regalos y otros movimientos ajenos a los premios.

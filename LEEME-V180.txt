@@ -1,0 +1,3 @@
+V180 — Frookies #4: corrección única de la expulsión de PauCubarsi, puesto 12, frente al bot Tributo F4 · 8. Devuelve a PauCubarsi a activo y asigna el puesto 12 al bot, conservando votos originales y una copia completa del estado anterior en frookies_correction180. Se aplica al cargar Frookies #4 tras publicar, si la partida sigue en marcha y el bot sigue activo. No reinicia ni cobra la inscripción.
+Pausa y reanudación por admin1 en todas las partidas de Frookies en marcha: se detienen transiciones, decisiones y plazos; el chat público continúa. Al reanudar, se desplazan los plazos de fases, decisiones pendientes e intentos.
+Incluye todas las actualizaciones anteriores. Publicar en Cloudflare y abrir Frookies #4 para aplicar y verificar.

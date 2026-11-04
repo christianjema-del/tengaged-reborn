@@ -1,0 +1,102 @@
+/* V137: shared chat proportions measured from the supplied recording. */
+body #public-chat .game-chat{border:0!important;background:white!important;padding:0!important;margin:0!important;min-width:0!important}
+body #public-chat .game-chat .chat-toolbar{display:none!important}
+body #public-chat .game-chat .chat-pages{display:flex!important;justify-content:flex-end!important;height:0!important;min-height:0!important;position:relative!important;top:-22px!important;margin:0!important;padding:0!important;gap:3px!important;pointer-events:none}
+body #public-chat .game-chat .chat-pages button{pointer-events:auto;background:#eef3f7!important;color:#648da5!important;border:0!important;border-radius:0!important;font:bold 11px/18px Arial!important;min-height:18px!important;min-width:18px!important;padding:0 3px!important}
+body #public-chat .game-chat .chat-pages button[aria-current]{color:#333!important;background:#dce4eb!important}
+body #public-chat .game-chat .chat-form{display:grid!important;grid-template-columns:minmax(0,1fr) 82px!important;gap:8px!important;margin:7px 0!important}
+body #public-chat .game-chat .chat-form textarea{height:78px!important;min-height:78px!important;border-radius:0!important;background:#fffef0!important;border:1px solid #f3eb8b!important;font:14px/19px Arial!important;padding:6px!important}
+body #public-chat .game-chat .chat-compose-actions button{width:82px!important;min-height:28px!important;padding:5px!important;background:linear-gradient(#fff8ae,#ffe875)!important;border:1px solid #efdc77!important;color:#77735d!important;font:12px/16px Arial!important}
+body #public-chat .game-chat .chat-messages>article:not(.arena-event):not(.casting-key-event){margin:0 0 6px!important}
+body #public-chat .game-chat .chat-messages>article:not(.arena-event):not(.casting-key-event)>header{min-height:24px!important;padding:3px 4px!important;background:#f0f4f9!important;gap:4px!important;flex-wrap:nowrap!important}
+body #public-chat .game-chat .chat-messages>article>header>a{font:bold 11px/16px Arial!important;color:#658aa3!important;min-width:0}
+body #public-chat .game-chat .chat-messages>article>header>time{font:10px/16px Arial!important;color:#999!important}
+body #public-chat .game-chat .chat-messages>article:not(.arena-event):not(.casting-key-event)>p{font:13px/17px Arial!important;padding:7px 10px 6px!important}
+body #public-chat .game-chat .comment-votes{gap:5px!important;margin-left:auto!important}
+body #public-chat .game-chat .comment-votes strong{font:12px/18px Arial!important}
+body #public-chat .game-chat .comment-votes button{width:18px!important;min-width:18px!important;height:18px!important;min-height:18px!important;font:bold 19px/18px Arial!important;border-radius:1px!important}
+body #public-chat .game-chat .comment-plus{background:linear-gradient(#b5d6a6,#83b86c)!important}
+body #public-chat .game-chat .comment-minus{background:linear-gradient(#f58b8b,#d34545)!important}
+body #public-chat .game-chat .own-comment-vote{background:#aaa!important;filter:grayscale(1)!important;opacity:1!important}
+body:has(.game-chat) .chat-attach{display:block;font:11px/18px Arial!important;background:none!important;border:0!important;padding:0!important;text-decoration:underline;color:#999!important;margin:2px 0 12px!important;cursor:pointer}
+body #public-chat .game-chat>input[type=url]{box-sizing:border-box;width:100%;margin-bottom:8px}
+body:has(.game-chat) .hunger-chat-tabs,body:has(.game-chat) #castingTabs{display:flex!important;gap:0!important;padding:0!important;height:44px!important;min-height:44px!important;border:1px solid #cbd5df!important;border-bottom:0!important;border-radius:10px 0 0 0!important;background:linear-gradient(90deg,#eaf2fb,white)!important;align-items:end!important}
+body:has(.game-chat) .hunger-chat-tabs>button,body:has(.game-chat) #castingTabs>button{position:relative!important;flex:0 0 125px!important;width:125px!important;height:44px!important;min-height:44px!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;background-color:transparent!important;background-image:url('/assets/regaged/avatars/ui/master.gif')!important;background-repeat:no-repeat!important;border-radius:0!important;color:transparent!important}
+body:has(.game-chat) .hunger-chat-tabs>button:first-child,body:has(.game-chat) #castingTabs>button:first-child{background-position:-374px -111px!important}
+body:has(.game-chat) .hunger-chat-tabs>button:first-child[aria-selected=true],body:has(.game-chat) #castingTabs>button:first-child[aria-selected=true]{background-position:0 -111px!important}
+body:has(.game-chat) .hunger-chat-tabs>button:nth-child(2),body:has(.game-chat) #castingTabs>button:nth-child(2){background-position:-124px -111px!important}
+body:has(.game-chat) .hunger-chat-tabs>button:nth-child(2)[aria-selected=true],body:has(.game-chat) #castingTabs>button:nth-child(2)[aria-selected=true]{background-position:-249px -111px!important}
+body:has(.game-chat) .hunger-chat-tabs .tab-first,body:has(.game-chat) .hunger-chat-tabs .tab-second{color:transparent!important;font-size:0!important}
+body:has(.game-chat) .hunger-chat-tabs small{position:absolute;right:6px;top:4px;font:9px Arial!important;color:#648ba5!important}
+.blue-wait-clock{display:block;position:absolute;top:2px;left:2px;width:13px;height:13px;box-sizing:border-box;border:1px solid white;border-radius:50%;background:radial-gradient(circle at 35% 25%,#9ee8fa,#2bb3dc 65%,#318bb9);box-shadow:0 0 1px #549bbd;z-index:1}
+.blue-wait-clock:before,.blue-wait-clock:after{content:'';position:absolute;left:5px;top:2px;width:1px;height:4px;background:white;transform-origin:bottom}
+.blue-wait-clock:after{transform:rotate(120deg)}
+.frookies-main .fro-player{position:relative}
+.frookies-main .fro-player .fro-evict{display:block;box-sizing:border-box;width:100%;border:1px solid #ecd45b;border-radius:2px;background:linear-gradient(#fff9b9,#ffe66a);font:11px/18px Arial;color:#807a48;padding:0;cursor:pointer}
+.frookies-main .fro-player .fro-evict[aria-pressed=true]{background:#ffdf00;color:#554b00}
+.frookies-main .fro-vote-panel{position:relative;background:#d9def3!important;border:1px solid #bcc7d9!important;border-radius:0!important;padding:24px 7px 6px!important}
+.frookies-main .fro-save-vote{position:absolute;right:6px;top:4px;background:#ffe66a!important;border:1px solid #e6ca51!important;font:11px Arial!important;padding:3px 6px!important}
+@media(max-width:760px){body #public-chat .game-chat .chat-form{grid-template-columns:minmax(0,1fr) 58px!important;gap:5px!important}body #public-chat .game-chat .chat-form textarea{height:64px!important;min-height:64px!important;font:16px/19px Arial!important}body #public-chat .game-chat .chat-compose-actions button{width:58px!important;min-height:32px!important;font-size:11px!important}body #public-chat .game-chat .chat-messages>article>header>a{font-size:11px!important}body #public-chat .game-chat .chat-messages>article>header>time{font-size:9px!important}body #public-chat .game-chat .comment-votes{gap:3px!important}body #public-chat .game-chat .comment-votes strong{font-size:10px!important}body #public-chat .game-chat .comment-votes button{width:22px!important;min-width:22px!important;height:24px!important;min-height:24px!important}body #public-chat .game-chat .chat-messages>article:not(.arena-event):not(.casting-key-event)>p{font:12px/17px Arial!important;padding:6px 7px!important}.frookies-main .fro-player .fro-evict{min-height:32px}}
+
+/* Keep the tab count and pagination above the sprite, without covering clicks. */
+body:has(.game-chat) .hunger-chat-tabs>button>span{transform:none!important;position:static!important;visibility:hidden!important}
+body:has(.game-chat) .hunger-chat-tabs>button small{visibility:visible!important;transform:none!important}
+body #public-chat .game-chat .chat-pages{z-index:3!important}
+body:has(.game-chat) .hunger-chat-tabs>button{display:block!important;min-width:125px!important;background-size:auto!important}
+
+body #public-chat .game-chat .chat-pages{overflow:visible!important;z-index:5!important}
+body #game-column .hunger-chat-tabs>button:first-child[aria-selected=true]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat 0 -111px!important}
+body #game-column .hunger-chat-tabs>button:first-child[aria-selected=false]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat -374px -111px!important}
+body #game-column .hunger-chat-tabs>button:nth-child(2)[aria-selected=true]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat -249px -111px!important}
+body #game-column .hunger-chat-tabs>button:nth-child(2)[aria-selected=false]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat -124px -111px!important}
+body #public-chat .game-chat .chat-audience{grid-column:1/-1;justify-self:start;width:50%;max-width:100%;min-width:150px;border:1px solid #f3eb8b;border-radius:0;background:#fffef0;color:#666;font:12px/18px Arial;padding:2px 4px;margin:0 0 -4px}
+@media(max-width:760px){body #public-chat .game-chat .chat-audience{font-size:16px;width:100%;min-height:28px}}
+
+body #public-chat .game-chat .comment-votes .closed-comment-vote{background:#aaa!important;filter:grayscale(1)!important;opacity:.65!important;cursor:default!important}
+/* V138: bounded, identical chat geometry across every game. */
+body #public-chat .game-chat,body #public-chat .game-chat *{box-sizing:border-box}
+body #public-chat .game-chat{width:100%!important;max-width:100%!important;overflow:visible!important}
+body #public-chat .game-chat .chat-form{width:100%!important;align-items:start!important;grid-template-columns:minmax(0,1fr) minmax(0,13%)!important;column-gap:1.5%!important}
+body #public-chat .game-chat .chat-form textarea{min-width:0!important;max-width:100%!important;width:100%!important;box-shadow:none!important;outline-offset:0!important}
+body #public-chat .game-chat .chat-compose-actions{min-width:0!important;width:100%!important}
+body #public-chat .game-chat .chat-compose-actions button{width:100%!important;max-width:100%!important;min-width:0!important;overflow-wrap:anywhere!important}
+body #public-chat .game-chat .chat-messages>article{max-width:100%!important;min-width:0!important;overflow-wrap:anywhere}
+body #public-chat .game-chat .chat-messages>article:not(.arena-event):not(.casting-key-event)>header{display:grid!important;grid-template-columns:minmax(0,max-content) minmax(0,1fr) max-content!important;align-items:center!important;min-width:0!important;gap:5px!important;overflow:hidden!important;background:#f5f7fa!important}
+body #public-chat .game-chat .chat-messages>article>header>a,body #public-chat .game-chat .chat-messages>article>header>time{min-width:0!important;max-width:100%!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
+body #public-chat .game-chat .comment-votes{max-width:100%!important;gap:6px!important;white-space:nowrap!important}
+body #public-chat .game-chat .comment-votes button{position:static!important;border:0!important;outline:0!important;box-shadow:none!important;border-radius:0!important;flex-shrink:0!important;width:18px!important;min-width:18px!important;height:18px!important;min-height:18px!important}
+body #public-chat .game-chat .comment-votes button[aria-pressed=true]{outline:0!important;box-shadow:none!important;filter:brightness(.9)}
+body #public-chat .game-chat .embedded-media{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;border-radius:0!important}
+body #public-chat .game-chat iframe,body #public-chat .game-chat video,body #public-chat .game-chat img{max-width:100%!important}
+body #castingTabs>button,body #game-column .hunger-chat-tabs>button{box-sizing:border-box!important;flex:0 0 125px!important;width:125px!important;min-width:125px!important;max-width:125px!important;overflow:hidden!important;background-size:auto!important}
+body #castingTabs>button:first-child[aria-selected=true]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat 0 -111px!important}
+body #castingTabs>button:first-child[aria-selected=false]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat -374px -111px!important}
+body #castingTabs>button:nth-child(2)[aria-selected=true]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat -249px -111px!important}
+body #castingTabs>button:nth-child(2)[aria-selected=false]{background:transparent url('/assets/regaged/avatars/ui/master.gif') no-repeat -124px -111px!important}
+body #castingTabs .casting-tab-label{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important}
+body #public-chat .game-chat .chat-attach{max-width:100%!important;white-space:normal!important;text-align:left!important}
+@media(max-width:760px){body #public-chat .game-chat .chat-form{grid-template-columns:minmax(0,1fr) 58px!important;column-gap:5px!important}body #public-chat .game-chat .comment-votes{gap:4px!important}body #public-chat .game-chat .comment-votes strong{font-size:10px!important}body #public-chat .game-chat .chat-messages>article:not(.arena-event):not(.casting-key-event)>header{gap:4px!important;grid-template-columns:minmax(0,max-content) minmax(0,1fr) max-content!important}body #public-chat .game-chat .comment-votes button{width:20px!important;min-width:20px!important;height:22px!important;min-height:22px!important}}
+/* V139: exact 14px waiting-clock GIF supplied by the user. */
+body .blue-wait-clock{width:14px!important;height:14px!important;border:0!important;border-radius:0!important;background:transparent url('/assets/ui/wait-clock.gif') no-repeat center!important;background-size:14px 14px!important;box-shadow:none!important;padding:0!important;line-height:14px!important}
+body .blue-wait-clock:before,body .blue-wait-clock:after{content:none!important;display:none!important}
+
+/* Authenticated owner notices use the automatic-event yellow palette. */
+body #public-chat .game-chat .chat-messages>article.admin-chat-notice{background:#fffdf2!important;border-top:1px solid #e9dd73!important;margin:0 0 6px!important;padding:0!important}
+body #public-chat .game-chat .chat-messages>article.admin-chat-notice>header{display:flex!important;align-items:center;gap:8px!important;padding:4px 7px!important;background:#fff9d6!important;border:0!important;min-height:24px!important}
+body #public-chat .game-chat .chat-messages>article.admin-chat-notice>header>a{color:#806a2d!important;font-weight:bold!important}
+body #public-chat .game-chat .chat-messages>article.admin-chat-notice>p{margin:0!important;padding:12px 10px!important;color:#333!important;font:13px/1.5 Arial!important;overflow-wrap:anywhere!important;white-space:pre-wrap!important}
+
+/* V153: polling never fades the composer; consumed reactions remain opaque grey. */
+body #public-chat .game-chat button:disabled{opacity:1!important}
+body #public-chat .game-chat .comment-votes button:disabled{background:#aaa!important;color:#fff!important;filter:grayscale(1)!important;opacity:1!important;cursor:default!important;box-shadow:none!important;outline:0!important}
+body #public-chat .game-chat .chat-compose-actions button:disabled{color:#8b8878!important;opacity:1!important}
+
+/* V154: unavailable is a logical state, never a transparency effect. */
+body .hunger-main button:disabled,body .hunger-main button:disabled img,body .game-chat button:disabled,body .game-chat button:disabled img{opacity:1!important}
+body.casting-daily button:disabled{opacity:1!important}
+
+/* Classic yellow Casting announcements, with no added update heading. */
+body.casting-daily #public-chat .game-chat .chat-messages>article:is(.casting-system-notice,.casting-nomination-notice,.casting-completion-event){box-sizing:border-box!important;display:block!important;background:#fff9c4!important;border:1px solid #eadb78!important;border-radius:2px!important;margin:8px 0!important;padding:0!important;min-height:0!important;max-width:100%!important;color:#665c35!important;box-shadow:none!important}
+body.casting-daily #public-chat .game-chat .chat-messages>article:is(.casting-system-notice,.casting-nomination-notice,.casting-completion-event)>header{display:block!important;background:#fff5b3!important;border:0!important;padding:4px 10px!important;min-height:0!important;color:#8b8057!important;font:11px/16px Arial!important}
+body.casting-daily #public-chat .game-chat .chat-messages>article:is(.casting-system-notice,.casting-nomination-notice,.casting-completion-event)>.arena-event-body{display:block!important;min-height:0!important;background:#fff9c4!important;padding:10px 12px!important;text-align:left!important;color:#665c35!important;font:12px/18px Arial!important;overflow-wrap:anywhere!important}
+body.casting-daily #public-chat .game-chat .casting-system-notice .arena-event-body>p{margin:0!important;padding:0!important;white-space:pre-wrap!important;color:inherit!important;font:inherit!important}

@@ -1,0 +1,3 @@
+V185 — El ganador del PoV elige tercero y cuarto en todos los Frookies salvo #4, que conserva la regla anterior del HoH por petición explícita. Se actualizan permisos del servidor, decisiones de bots, botones, reloj de decisión y texto de las normas. Se respetan las inmunidades de HoH y PoV.
+No se ejecuta la restitución administrativa pendiente de Peach de V184; Frookies #4 se deja como esté al publicar. Se conserva la mejora de guardado de pruebas durante pausas.
+Incluye las demás actualizaciones anteriores. Publicar en Cloudflare; Vercel mostrará los cambios automáticamente.

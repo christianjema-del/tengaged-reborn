@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {ensureHunger} from '../functions/api/hunger.js';import {hungerSponsorWinners233} from '../functions/_shared/hunger-sponsors233.js';
+const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE users(id INTEGER PRIMARY KEY,username TEXT,is_admin INTEGER,karma INTEGER DEFAULT 0,t_money INTEGER DEFAULT 1000);CREATE TABLE sessions(token_hash TEXT,user_id INTEGER,expires_at TEXT)');class Q{constructor(q,args=[]){this.q=q;this.args=args;}bind(...args){return new Q(this.q,args);}async first(){return sql.prepare(this.q).get(...this.args)||null;}async all(){return {results:sql.prepare(this.q).all(...this.args)};}async run(){return {meta:{changes:Number(sql.prepare(this.q).run(...this.args).changes)}};}}const db={prepare:q=>new Q(q)};
+await ensureHunger(db);
+sql.exec("INSERT INTO users(id,username,is_admin) VALUES(14,'Peach',0),(18,'PauCubarsi',0)");
+const save=sql.prepare('INSERT INTO hunger_history(edition,finished_at,state) VALUES(?,?,?)');
+for(const [edition,id,name] of [[4,14,'Peach'],[6,14,'Peach'],[2,18,'PauCubarsi']])save.run(edition,edition*1000,JSON.stringify({edition,phase:'finished',winnerId:id,winner:name,finishedAt:edition*1000}));
+sql.exec("INSERT INTO hunger_ticket_wallet VALUES('credit-peach',14,10),('spent-peach',14,-5),('credit-pau',18,5),('spent-pau',18,-2)");
+const before=sql.prepare('SELECT * FROM hunger_ticket_wallet').all();
+const winners=await hungerSponsorWinners233(db);
+assert.deepEqual(winners.map(x=>[x.username,x.tickets]),[['Peach',5],['PauCubarsi',3]]);
+assert.deepEqual(sql.prepare('SELECT * FROM hunger_ticket_wallet').all(),before);
+console.log('PASS winners deduplicated, real remaining ticket balances, no wallet mutations.');

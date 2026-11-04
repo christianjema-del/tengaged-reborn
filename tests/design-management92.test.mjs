@@ -1,0 +1,24 @@
+import {onRequest as avatar} from '../functions/api/avatar.js';
+import {ensureDesignManagement} from '../functions/_shared/design-management.js';
+import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {onRequest as designs} from '../functions/api/designs.js';import {ensureProfileSchema} from '../functions/_shared/auth.js';import {ensureCommunitySchema} from '../functions/_shared/community.js';
+const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE users(id INTEGER PRIMARY KEY,username TEXT,email TEXT,password_hash TEXT,is_admin INTEGER,karma INTEGER DEFAULT 0,t_money INTEGER DEFAULT 0);CREATE TABLE sessions(token_hash TEXT,user_id INTEGER,expires_at TEXT)');class Q{constructor(q,a=[]){this.q=q;this.a=a;}bind(...a){return new Q(this.q,a);}async first(){return sql.prepare(this.q).get(...this.a)||null;}async all(){return {results:sql.prepare(this.q).all(...this.a)};}async run(){const r=sql.prepare(this.q).run(...this.a);return {meta:{changes:Number(r.changes),last_row_id:Number(r.lastInsertRowid)}};}}const db={prepare:q=>new Q(q),async batch(items){sql.exec('BEGIN');try{const out=[];for(const q of items)out.push(await q.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}}};
+const hash=async t=>Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t))).toString('hex');
+for(let id=1;id<=3;id++){sql.prepare('INSERT INTO users(id,username,is_admin) VALUES(?,?,?)').run(id,['adminFixture','Cristi','Other'][id-1],id===1?1:0);sql.prepare('INSERT INTO sessions VALUES(?,?,?)').run(await hash(String(id).repeat(64)),id,'2099-01-01');}
+await ensureProfileSchema(db);await ensureCommunitySchema(db);
+// Keep legacy IDs 15–21 free until this fixture seeds its explicit migration rows.
+sql.exec("UPDATE users SET username='admin1' WHERE id=1");
+const expected=[[15,'Roja','shirt'],[16,'Peliii','hair'],[17,'Bigotes','mouth'],[18,'Ojos','profile'],[19,'Ojitos','eyes'],[20,'Fondito','background'],[21,'Pelito 2','hair']];
+for(const [id,title,layer] of expected)sql.prepare("INSERT INTO community_designs(id,user_id,author,title,description,theme_code,price,layer_type) VALUES(?,2,'Cristi',?,'Desc','rose',0,?)").run(id,title,layer);
+await ensureDesignManagement(db);await ensureDesignManagement(db);
+assert.equal(sql.prepare('SELECT COUNT(*) n FROM user_inventory WHERE user_id=2').get().n,7);assert.equal(sql.prepare("SELECT COUNT(*) n FROM user_inventory WHERE user_id=1 AND item_code='userdesign-17'").get().n,1);assert.equal(sql.prepare('SELECT SUM(is_equipped) n FROM user_inventory').get().n,0);
+async function call(id=2,body=null,query=''){const r=await designs({env:{DB:db},request:new Request('https://test.local/api/designs'+query,{method:body?'POST':'GET',headers:{'Content-Type':'application/json',...(id?{Cookie:'session='+String(id).repeat(64)}:{})},...(body?{body:JSON.stringify(body)}:{})})});return {status:r.status,...await r.json()};}
+assert.equal((await call(0,null,'?id=18')).designs.length,0);assert.equal((await call(2,null,'?id=18')).designs[0].withdrawn,1);
+assert.equal((await call(1,{action:'delete',design_id:15})).status,403);
+assert.equal((await call(0,{action:'delete',design_id:15})).status,401);
+let edit={action:'edit',design_id:18,title:'Ojos nuevos',description:'Actualizado',price:10,theme_code:'sky',layer_type:'profile'};
+assert.equal((await call(2,edit)).status,200);assert.equal((await call(2,{action:'restore',design_id:18})).status,409);sql.prepare("UPDATE community_designs SET created_at=datetime('now','-4 days') WHERE id=18").run();assert.equal((await call(2,{action:'restore',design_id:18})).status,200);assert.equal((await call(0,null,'?id=18')).designs[0].title,'Ojos nuevos');
+assert.equal((await call(2,{...edit,title:'x'})).status,400);
+sql.prepare("INSERT INTO design_auctions(design_id,seller_id,starting_bid,ends_at) VALUES(18,2,1,'2099-01-01')").run();assert.equal((await call(2,edit)).status,409);assert.equal((await call(2,{action:'delete',design_id:18})).status,409);sql.exec("UPDATE design_auctions SET status='closed'");assert.equal((await call(2,{action:'delete',design_id:18})).status,200);assert.equal((await call(0,null,'?id=18')).designs.length,0);await ensureCommunitySchema(db);assert.equal(sql.prepare("SELECT COUNT(*) n FROM design_updates WHERE key='wardrobes92'").get().n,1);
+console.log('PASS targeted migration, exact ownership, wardrobe grants, no auto-equip, authorization, editing validation, withdrawal/restoration and auction protection.');
+
+for(const [id,count] of [[1,1],[2,6]]){const r=await avatar({env:{DB:db},request:new Request('https://test.local/api/avatar?format=json',{headers:{Cookie:'session='+String(id).repeat(64)}})});assert.equal(r.status,200);const a=await r.json();assert.equal(a.wardrobe.filter(d=>d.id>=15&&d.id<=21).length,count);assert.ok(a.wardrobe.some(d=>d.id===17&&d.layer_type==='mouth'));}

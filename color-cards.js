@@ -1,0 +1,5 @@
+import {COLOR_LEVELS} from './color-level-catalog.js?v=159';
+// All twenty color levels offered by the shop. Shared by shop and profile.
+export const COLOR_CARDS=Object.freeze(Object.fromEntries(COLOR_LEVELS.map(level=>[level.code,{label:level.label,background:level.image?level.color+' url("'+level.image+'") center / 100% 100% no-repeat':level.color}])));
+export function colorCard(code){return COLOR_CARDS[String(code||'').toLowerCase()]||COLOR_CARDS.white;}
+export function applyColorCard(element,code,body){const normalized=String(code||'').toLowerCase(),valid=Object.hasOwn(COLOR_CARDS,normalized),card=colorCard(normalized);element.style.setProperty('background',card.background,'important');element.dataset.colorCode=valid?normalized:'white';element.title='Tarjeta de color: '+card.label+(valid?'':' · Sin tarjeta equipada');element.setAttribute('aria-label',element.title);if(body){for(const name of [...body.classList])if(name.startsWith('member-color-'))body.classList.remove(name);body.classList.add('member-color-'+(valid?normalized:'white'));}return card;}

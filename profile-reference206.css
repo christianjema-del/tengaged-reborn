@@ -1,0 +1,18 @@
+/* Public profile, archived June 2013. Retain account, moderation and social controls. */
+body.classic166.page-profile #profilePage>.layout.layout{grid-template-columns:minmax(0,550fr) minmax(0,330fr)!important;gap:46px!important}
+body.classic166.page-profile #profilePage .hero.hero{column-gap:20px!important}
+body.classic166.page-profile #profilePage .identity h1{background:none!important;overflow:visible!important;height:auto!important;min-height:36px!important;line-height:34px!important;overflow-wrap:anywhere}
+body.classic166.page-profile #profilePage .bio-card .bio{background:#ffffcc!important;color:#252525!important;border:1px solid #ffff66!important;border-top:0!important;border-radius:0!important;padding:5px!important;font:14px/1.5 Arial,sans-serif!important;overflow-wrap:anywhere}
+body.classic166.page-profile #profilePage .profile-post.profile-post{background:#f3f7fa!important;padding:1px 4px!important;margin-bottom:2px!important;min-height:20px}
+body.classic166.page-profile #profilePage .profile-post.profile-post h3{font:12px/18px Arial,sans-serif!important}
+body.classic166.page-profile #profilePage .profile-post h3>a{display:flex;align-items:flex-start;gap:7px;justify-content:flex-start;overflow-wrap:anywhere}
+body.classic166.page-profile #profilePage .profile-top206{display:inline-block;flex:none;align-self:flex-start;padding:0 5px;margin-left:0;margin-right:3px;background:#ffda02;color:#000;font:bold 12px/18px Arial,sans-serif;white-space:nowrap}
+body.classic166.page-profile #profilePage .profile-post h3>a:focus-visible{outline:2px solid #4682b4;outline-offset:2px}
+@media(max-width:760px){
+ body.classic166.page-profile #profilePage>.layout.layout{grid-template-columns:minmax(0,1fr)!important;gap:18px!important}
+ body.classic166.page-profile #profilePage .hero.hero{column-gap:12px!important}
+ body.classic166.page-profile #profilePage .bio-card .bio{font-size:14px!important}
+ body.classic166.page-profile #profilePage .profile-post.profile-post{min-height:30px;padding:5px!important}
+}
+
+body.classic166.page-profile #bioText>a{overflow-wrap:anywhere;text-decoration:underline}

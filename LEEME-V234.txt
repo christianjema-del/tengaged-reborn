@@ -1,0 +1,2 @@
+V234: botón del pollo amarillo cuando está disponible para entrar en Cornucopia. Imagen original amarilla servida desde la propia web, sin dependencia externa. Conserva los bloqueos durante luchas y cuando la Cornucopia está llena.
+Desplegar: npx wrangler pages deploy . --project-name tengaged-reborns

@@ -1,0 +1,68 @@
+/* Ficha de mafia tengaged.es, captura del 08-02-2015. Solo afecta al detalle. */
+@font-face{font-family:'MafiaIcons232';src:url('/assets/mafias232/fontawesome-3.1.woff') format('woff');font-weight:normal;font-style:normal;font-display:block}
+body.mafia-detail232 .wrap>main{padding:16px!important;font:14px/normal 'Trebuchet MS',Arial!important}
+body.mafia-detail232 .mafia-banner231{height:auto;max-height:33px;object-fit:fill;margin:0 0 5px}
+body.mafia-detail232 .mafia-detail-columns231{display:grid;grid-template-columns:minmax(0,550fr) minmax(0,330fr);gap:60px;align-items:start}
+body.mafia-detail232 .mafia-detail-columns231>div,body.mafia-detail232 .mafia-detail-columns231>aside{min-width:0}
+body.mafia-detail232 .mafia-hero231{display:flex;align-items:flex-start;gap:20px;min-height:165px;padding:0;margin:0;background:none}
+body.mafia-detail232 .mafia-hero231>.mafia-emblem231{width:160px!important;height:160px!important;flex:0 0 160px;object-fit:cover;border:0!important}
+body.mafia-detail232 .mafia-info232{min-width:0;max-width:390px;flex:1;font:22px/25px 'Trebuchet MS',Arial;color:#737373}
+body.mafia-detail232 .mafia-info232 .mafia-name232{display:block!important;background:#e9f1f9!important;color:#222!important;font:bold 24px/29px 'Trebuchet MS',Arial!important;border:0!important;margin:0 0 8px!important;padding:4px!important;overflow-wrap:anywhere;max-width:400px}
+body.mafia-detail232 .mafia-info232 .mafia-motto232{font:14px/18px 'Trebuchet MS',Arial;color:#737373;margin:0 0 4px;overflow-wrap:anywhere;max-width:300px}
+body.mafia-detail232 .mafia-stat232{font:22px/25px 'Trebuchet MS',Arial}
+body.mafia-detail232 .mafia-stat232 strong{background:#eee;color:#424242;font-weight:bold;padding:0 2px}
+body.mafia-detail232 .mafia-support232{display:flex;align-items:center;font:22px/25px 'Trebuchet MS',Arial}
+body.mafia-detail232 .mafia-support232 img{width:20px;height:20px;object-fit:contain;margin-right:4px}
+body.mafia-detail232 .mafia-votes-required232{font:14px/18px 'Trebuchet MS',Arial;color:#737373}
+body.mafia-detail232 .mafia-info232 button{margin:6px 4px 5px 0;font-size:12px;padding:5px 8px;min-height:30px}
+body.mafia-detail232 .mafia-description231{box-sizing:border-box;white-space:normal;background:#ffffcc;border:0;border-left:1px solid #ffff66;border-right:1px solid #ffff66;border-bottom:1px solid #ffff66;border-radius:0;padding:5px;margin:0 0 10px;min-height:0;color:#252525;font:11px/13px 'Trebuchet MS',Arial}
+body.mafia-detail232 .mafia-share232{display:block;color:#6096c6;font:14px/20px 'Trebuchet MS',Arial;margin:0 0 8px}
+body.mafia-detail232 .mafia-bio232{white-space:pre-wrap;overflow-wrap:anywhere;padding:0 4px 8px}
+body.mafia-detail232 section{margin:0 0 8px;padding:0}
+body.mafia-detail232 section>h2{font:bold 18px/22px 'Trebuchet MS',Arial;color:#ff536d;border:0;border-bottom:1px dotted #ffc3c3;margin:6px 0 6px;padding:0}
+body.mafia-detail232 section>h2:before{font-family:'MafiaIcons232';font-weight:normal;font-style:normal;margin-right:4px;speak:none}
+body.mafia-detail232 .mafia-private232>h2:before{content:'\f023'}
+body.mafia-detail232 .mafia-public232>h2:before{content:'\f13e'}
+body.mafia-detail232 .mafia-blogs232>h2:before{content:'\f0e5'}
+body.mafia-detail232 .mafia-private232>p{font:11px/15px 'Trebuchet MS',Arial;padding:10px;margin:0;background:#fffef1;color:#737373}
+body.mafia-detail232 .mafia-public232>a{display:block;font:14px/18px 'Trebuchet MS',Arial;margin:0 0 2px;padding-left:6px;color:#6096c6}
+body.mafia-detail232 .mafia-comments231{font:11px/13px 'Trebuchet MS',Arial;margin:0 0 5px;padding:0;width:100%}
+body.mafia-detail232 .mafia-comments231 li{margin:2px 0 0;padding:1px 0 1px 4px;font:11px/13px 'Trebuchet MS',Arial;color:#515151;background:#f4f8fb;border:0;overflow-wrap:anywhere}
+body.mafia-detail232 .mafia-comments231 li>a{font:11px/13px 'Trebuchet MS',Arial;color:#6096c6;margin-right:2px}
+body.mafia-detail232 .mafia-comments231 li>span{white-space:pre-wrap;padding-left:2px;padding-right:2px}
+body.mafia-detail232 .mafia-comments231 time{display:none}
+body.mafia-detail232 .mafia-detail-columns231>aside>section{margin:0 0 5px}
+body.mafia-detail232 .mafia-detail-columns231>aside>section>h2{font:bold 14px/18px 'Trebuchet MS',Arial;color:#ff536d;margin:6px 0 3px;padding-bottom:1px;border-bottom:1px dotted #ffc3c3}
+body.mafia-detail232 .mafia-president232>h2:before{content:'\f097'}
+body.mafia-detail232 .mafia-detail-columns231>aside>section:nth-child(2)>h2:before{content:'\f00c'}
+body.mafia-detail232 .mafia-detail-columns231>aside>section:nth-child(3)>h2:before{content:'\f110'}
+body.mafia-detail232 .mafia-president-body232{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:start;min-height:66px}
+body.mafia-detail232 .mafia-president-note232{font:9px/10px 'Trebuchet MS',Arial;color:#999}
+body.mafia-detail232 .mafia-president-note232 p{font:9px/10px 'Trebuchet MS',Arial;color:#999;margin:0;padding:0}
+body.mafia-detail232 .mafia-people231{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 0;padding:0 5px 0 0;margin:0;align-items:start}
+body.mafia-detail232 .mafia-person231{box-sizing:border-box;width:100%;max-width:64px;margin:0 auto 2px;text-align:center;min-width:0;overflow:hidden;font:10px/11px 'Trebuchet MS',Arial}
+body.mafia-detail232 .mafia-person231 a{font:10px/11px 'Trebuchet MS',Arial;color:#6096c6;display:block}
+body.mafia-detail232 .mafia-person231 img{display:block;width:40px!important;height:46px!important;object-fit:contain;margin:0 auto;border:0;max-width:none;border-radius:0}
+body.mafia-detail232 .mafia-person231 a span{display:block;font:10px/11px 'Trebuchet MS',Arial;overflow-wrap:anywhere}
+body.mafia-detail232 .mafia-person231 button{box-sizing:border-box;display:block;min-width:0;min-height:12px!important;width:50px;font:10px/12px 'Trebuchet MS',Arial!important;color:#6a6a6a!important;margin:-1px auto 2px;padding:0!important;background:none!important;border:0!important;box-shadow:none}
+body.mafia-detail232 .mafia-person231 button[aria-pressed=true]{color:#b49b24!important;text-decoration:underline}
+body.mafia-detail232 .mafia-pages231:empty{display:none}
+body.mafia-detail232 .mafia-pages231{font:10px/12px 'Trebuchet MS',Arial;margin:0 0 4px;gap:3px}
+body.mafia-detail232 .mafia-pages231 button{min-height:0;padding:2px 4px;font-size:10px}
+body.mafia-detail232 .mafia-raffle232>p{font:10px/13px 'Trebuchet MS',Arial;color:#999;margin:4px 0}
+body.mafia-detail232 .mafia-winner232 small{font:10px/11px 'Trebuchet MS',Arial;color:#999;display:block}
+body.mafia-detail232 .mafia-game-extra232{font:11px/16px 'Trebuchet MS',Arial;margin-top:12px}
+body.mafia-detail232 .mafia-game-extra232 section{margin-top:8px}
+body.mafia-detail232 .mafia-blog232{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;border:0;margin:8px 0 14px;padding:0;min-width:0;font:11px/14px 'Trebuchet MS',Arial}
+body.mafia-detail232 .mafia-blog-avatar232 img{width:40px!important;height:46px!important;object-fit:contain;margin:0;border:0;display:block}
+body.mafia-detail232 .mafia-blog232 h3{font:bold 14px/18px 'Trebuchet MS',Arial;color:#6096c6;margin:0 35px 3px 0;padding:0;border:0}
+body.mafia-detail232 .mafia-blog232 h3 a{color:#6096c6}
+body.mafia-detail232 .mafia-blog-meta232{font:10px/14px 'Trebuchet MS',Arial;color:#999}
+body.mafia-detail232 .mafia-blog-meta232 a{color:#6096c6}
+body.mafia-detail232 .mafia-blog-score232{float:right;font:14px/18px 'Trebuchet MS',Arial;color:#ec5555}
+body.mafia-detail232 .mafia-blog232 p{font:11px/14px 'Trebuchet MS',Arial;color:#626262;margin:4px 0;overflow-wrap:anywhere;white-space:pre-wrap}
+@media(max-width:1000px) and (min-width:701px){body.mafia-detail232 .mafia-detail-columns231{gap:5%}}
+@media(max-width:700px){body.mafia-detail232 .wrap>main{padding:12px!important}body.mafia-detail232 .mafia-detail-columns231{grid-template-columns:minmax(0,1fr);gap:20px}body.mafia-detail232 .mafia-hero231{gap:12px;min-height:132px;margin-bottom:6px}body.mafia-detail232 .mafia-hero231>.mafia-emblem231{width:120px!important;height:120px!important;flex:0 0 120px}body.mafia-detail232 .mafia-info232 .mafia-name232{font-size:21px!important;line-height:25px!important}body.mafia-detail232 .mafia-stat232,body.mafia-detail232 .mafia-support232{font-size:18px;line-height:23px}body.mafia-detail232 .mafia-info232 .mafia-motto232,body.mafia-detail232 .mafia-votes-required232{font-size:12px;line-height:16px}body.mafia-detail232 .mafia-person231 button{min-height:32px!important;min-width:44px!important}body.mafia-detail232 .mafia-president-note232,body.mafia-detail232 .mafia-president-note232 p{font-size:11px;line-height:14px}body.mafia-detail232 .mafia-people231{row-gap:8px}body.mafia-detail232 .mafia-comments231 li,body.mafia-detail232 .mafia-comments231 li>a{font-size:12px;line-height:16px}body.mafia-detail232 .mafia-description231{font-size:12px;line-height:16px}body.mafia-detail232 .mafia-info232 button{min-height:40px}}
+@media(max-width:360px){body.mafia-detail232 .mafia-hero231>.mafia-emblem231{width:100px!important;height:100px!important;flex-basis:100px}body.mafia-detail232 .mafia-info232 .mafia-name232{font-size:18px!important;line-height:22px!important}}
+body.mafia-detail232 .mafia-raffle-controls232{font:10px/14px 'Trebuchet MS',Arial;margin:8px 0 0}
+body.mafia-detail232 .mafia-raffle-controls232 p{font:11px/15px 'Trebuchet MS',Arial;color:#999;margin:4px 0}

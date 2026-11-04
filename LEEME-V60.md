@@ -1,0 +1,1 @@
+V60: aviso único al pulsar arma; no mostrar recogida completada. Disparos con flecha roja y daño causado visible. Bonos interactivos globales: diana +3 flechas, veneno -5 salud, primer clic válido, caducidad 5 minutos, generación cada 10 minutos; servidor valida y controla concurrencia con revisión CAS.

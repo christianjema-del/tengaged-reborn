@@ -1,0 +1,5 @@
+V218 · Hunger 5: PauCubarsi y cazweet
+La protección de Cornucopia con lucha abierta y desafío guardado también cubre el veneno de arbustos; no baja de 0,01 mientras quede comida.
+Reparación única en Hunger 5 activo: busca la última pelea PauCubarsi/cazweet con puntuación guardada de Pau y cierre por eliminación (o aún abierta), restaura a Pau y añade +20 de salud (máximo100), devuelve ambos a Cornucopia, conserva intentos y puntuaciones, retira el cierre incorrecto y reanuda el tiempo que quedaba. Conserva copia del estado previo. Revierte experiencia concedida por el cierre erróneo. No altera combates cerrados por resultados ni interfiere con otra pelea abierta. No se inventan puntuaciones.
+Es necesario publicar y cargar Hunger para aplicar la reparación. No se ha modificado ni verificado el estado remoto desde aquí.
+Pruebas nuevas de arbusto, recuperación, intento guardado intacto, reloj, experiencia e idempotencia; regresiones Hunger216, combates128 y reglas77 superadas. Conserva los cambios de El Duelo217.

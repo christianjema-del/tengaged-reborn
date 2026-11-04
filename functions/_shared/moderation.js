@@ -1,0 +1,3 @@
+export async function expireModeration(db){await db.prepare("UPDATE users SET is_banned=0,ban_reason=NULL,banned_at=NULL,ban_until=NULL WHERE is_banned=1 AND ban_until IS NOT NULL AND datetime(ban_until)<=datetime('now')").run();await db.prepare("UPDATE users SET red_nose_until=NULL,red_nose_reason=NULL WHERE red_nose_until IS NOT NULL AND datetime(red_nose_until)<=datetime('now')").run();}
+export function noseActive(user,now=Date.now()){return !!user?.red_nose_until&&Date.parse(user.red_nose_until)>now;}
+export function addRedNose(svg){return svg.replace('</svg>','<g aria-label="Sanción: nariz roja"><circle cx="100" cy="105" r="9" fill="#ed303b" stroke="#a81b29" stroke-width="2"/><circle cx="97" cy="102" r="3" fill="#ffabb0"/></g></svg>');}

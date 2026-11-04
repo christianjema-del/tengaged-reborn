@@ -1,0 +1,4 @@
+V181 — Frookies: los bots eligen primero otros bots, después usuarios inactivos y al final usuarios activos, respetando las inmunidades. Incluye nominación inicial, sustitución, voto automático y desempate de HoH bot. Las decisiones expresas de usuarios reales no cambian.
+Actividad: mensajes en las últimas 24 horas, actividad de fase y participación en pruebas; margen inicial de 30 minutos.
+Corrección única de la nominación de Frookies #4 ronda 5: sustituye humanos por bots elegibles, guarda el estado anterior en frookies_nomination181 y conserva la pausa. Si la votación ya hubiera empezado en esa ronda, se reinician sus votos para los nuevos nominados. Las rondas posteriores no se reescriben.
+Incluye V180 y todas las actualizaciones anteriores. Publicar en Cloudflare y abrir Frookies #4 para comprobar.

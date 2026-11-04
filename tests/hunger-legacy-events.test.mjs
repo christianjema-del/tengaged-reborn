@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';import {describeHungerEvent} from '../functions/_shared/hunger-events.js';
+const state={players:[{id:1,username:'admin1'},{id:-2,username:'Tributo_02',bot:true}],fights:[{id:'fight-old',attacker:-2,defender:1,winner:1}]};
+let e=describeHungerEvent({text:'admin1 entra en la Cornucopia.'},state);assert.equal(e.actor,'admin1');assert.equal(e.event.kind,'enter');e=describeHungerEvent({text:'Tributo_02 reta a admin1.',kind:'challenge',fight:'fight-old'},state);assert.equal(e.actor,'Tributo_02');assert.equal(e.target,'admin1');assert.equal(e.actorBot,-2);e=describeHungerEvent({text:'Un tributo desconocido dispara una flecha a admin1: −2 de salud.',kind:'arrow',target:1},state);assert.equal(e.actor,null);assert.equal(e.event.damage,2);assert.equal(e.target,'admin1');e=describeHungerEvent({text:'Tributo_02 dispara una flecha a admin1: −3 de salud.',kind:'arrow',target:1},state);assert.equal(e.actor,'Tributo_02');assert.equal(e.event.damage,3);
+console.log('PASS legacy event attribution, bot avatars and preserved anonymous shots.');
+
+e=describeHungerEvent({text:'admin1 recoge Espada.'},state);assert.equal(e.event.weapon,'sword');assert.equal(e.event.kind,'weapon');assert.equal(e.actor,'admin1');

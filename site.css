@@ -1,0 +1,17 @@
+/* Shared compact, classic Tengaged inspired shell. */
+:root{--tg-blue:#69869d;--tg-line:#c5d6e0;--tg-pink:#d27680;--tg-paper:#fff;--tg-bg:#edf3f6}
+body{font-family:Arial,Helvetica,sans-serif!important;color:#5f6c76!important;background:linear-gradient(#b8d8e8 0,#d7e8f0 180px,#edf3f6 420px,#e8eef2 100%)!important}
+.wrap{max-width:1160px!important;margin:0 auto!important;padding:10px 14px 30px!important}
+.head,.header{min-height:72px;padding:13px 18px!important;margin:0!important;background:linear-gradient(#d9ebf6,#a9c6d8)!important;border:1px solid #98b6ca!important;border-bottom:0!important;border-radius:4px 4px 0 0!important;box-shadow:none!important}
+.logo{font-size:30px!important;color:#526f86!important;text-decoration:none!important;text-shadow:0 1px #fff}
+.nav,.site-nav{display:flex!important;flex-wrap:wrap!important;gap:3px!important;min-height:42px;margin:0 0 13px!important;padding:5px 7px!important;background:linear-gradient(#c6d9e5,#a9c3d4)!important;border:1px solid #98b6ca!important;border-radius:0 0 4px 4px!important;box-shadow:none!important}
+.nav a,.site-nav a{padding:8px 11px!important;color:#60798c!important;text-decoration:none!important;font-weight:bold!important;background:linear-gradient(#f8fbfd,#d8e6ee)!important;border:1px solid #bfd0dc!important;border-radius:4px 4px 0 0!important}
+.nav a:hover,.site-nav a:hover,.nav a:focus,.site-nav a:focus{background:#fff!important;color:var(--tg-pink)!important}
+.card{background:#fff!important;border:1px solid var(--tg-line)!important;border-radius:3px!important;box-shadow:0 1px 2px #637d8b14!important}
+.card h1,.card h2,.section-title{color:var(--tg-pink)}
+.button,.btn,button{border-radius:3px!important}
+.hidden{display:none!important}
+.game-history{display:grid;gap:6px}.game-history-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 10px;background:#f7fafb;border:1px solid #e0e8ed}.game-history-row strong{color:#657f94}.game-history-row span{font-size:12px;color:#718491}.game-history-row small{color:#89959d}
+.member-color-green .identity h1{color:#31945c}.member-color-yellow .identity h1{color:#b79515}.member-color-orange .identity h1{color:#d9782a}.member-color-red .identity h1{color:#c64049}.member-color-blue .identity h1{color:#337bb6}.member-color-purple .identity h1{color:#8853ac}
+.shop-panel.hidden{display:none!important}
+@media(max-width:720px){.wrap{padding:8px!important}.head,.header{align-items:flex-start!important;flex-direction:column!important}.game-history-row{grid-template-columns:1fr auto}.game-history-row small{grid-column:1/-1}}

@@ -1,0 +1,2 @@
+V208: tiempo de conexión en Hunger como texto independiente del enlace al perfil. El nombre sigue siendo enlace; los avatares de resultados conservan su enlace. Casting y Frookies ya muestran el tiempo fuera del enlace. Conserva V207.
+Encima de Sponsors, reloj HH:MM:SS desde el inicio del juego. Se actualiza cada segundo; esperando muestra 00:00:00 y al finalizar se congela. El contador del combate sigue en su propia pantalla.

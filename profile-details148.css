@@ -1,0 +1,6 @@
+body.page-profile #profilePage .hero .stat:has(#karma){gap:5px!important;align-items:center!important;flex-wrap:wrap!important}
+body.page-profile #profilePage .hero .profile-karma-rank{display:inline-block!important;background:#ffe000!important;color:#000!important;border:0!important;border-radius:0!important;box-shadow:none!important;font:bold 13px/19px Arial,sans-serif!important;padding:0 5px!important;margin:0!important;white-space:nowrap!important;text-decoration:none!important}
+body.page-profile #profilePage .hero .profile-karma-rank[hidden]{display:none!important}
+body.page-profile #profilePage .hero .profile-played148{flex-direction:row!important;gap:5px!important;align-items:center!important}
+body.page-profile #profilePage .member-level{border-radius:0!important;border:1px solid #d4dee4!important;box-shadow:none!important}
+@media(max-width:440px){body.page-profile #profilePage .hero .profile-karma-rank{font-size:11px!important;line-height:17px!important;padding:0 4px!important}}

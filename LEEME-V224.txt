@@ -1,0 +1,4 @@
+V224 · Diseños de PauCubarsi
+Verificados en API: #101 Moñitos y #100 Pelo Chico pasan de perfil a hair; #99 Hunger Games Chico y #98 Hunger Games Chica pasan a shirt.
+Se conservan imágenes, inventarios, compras y regalos. Copias ya equipadas se mueven a la capa correcta si está libre; nunca se sustituye otra prenda o pelo equipado. Si existe conflicto, el dueño puede elegir la pieza desde el armario y guardar. No se añaden diseños a cuentas que no los tenían. Reparación auditada y ejecutada una vez tras publicar al abrir tiendas/armario/diseños.
+Pruebas específicas con múltiples propietarios, imágenes intactas, conflictos, idempotencia y regresiones de capas e interfaz.

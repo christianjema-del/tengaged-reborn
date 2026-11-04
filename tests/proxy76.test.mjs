@@ -1,0 +1,5 @@
+import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
+class WorkerRequest extends Request{constructor(url,options={}){super(url,{...options,...(options.body?{duplex:'half'}:{})});}}
+let sent;const ctx=vm.createContext({Request:WorkerRequest,Response,Headers,URL,fetch:async request=>{sent=request;return new Response('ok');}});vm.runInContext(readFileSync(new URL('../worker-alternativo/index.js',import.meta.url),'utf8').replace('export default','this.worker='),ctx);
+await ctx.worker.fetch(new Request('https://example.workers.dev/api/castings',{method:'POST',headers:{Origin:'https://example.workers.dev'},body:'{}'}));assert.equal(sent.headers.get('Origin'),'https://tengaged-reborns.pages.dev');await ctx.worker.fetch(new Request('https://example.workers.dev/api/castings',{method:'POST',headers:{Origin:'https://untrusted.example'},body:'{}'}));assert.equal(sent.headers.get('Origin'),'https://untrusted.example');assert.equal(new URL(sent.url).origin,'https://tengaged-reborns.pages.dev');
+console.log('PASS trusted alternate-host POST normalization preserves foreign Origin rejection.');

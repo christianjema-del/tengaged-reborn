@@ -1,0 +1,7 @@
+V200 — Armario de Peach
+
+Cuatro diseños originales: Kendall Braid Buns (pelo), Ojitos (ojos), Pink Sunnies (gafas) y Jersey blanco (ropa). PNG originales 200x230, sin recortar ni recomprimir.
+Se añaden una sola vez al abrir Peach su armario con sesión iniciada. No se equipan automáticamente, no tienen coste y no se publican en las tiendas. Seleccionar las piezas y pulsar Guardar.
+Se conservan todas las modificaciones de V199.
+
+Verificado: propiedad, equipar las cuatro capas juntas, guardar/quitar sin perder inventario, geometría original, no duplicación y no cobro.

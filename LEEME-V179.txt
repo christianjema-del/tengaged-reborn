@@ -1,0 +1,1 @@
+V179 — Avisos automáticos de Casting con recuadro amarillo completo, conservando los mensajes, nominaciones y resultados. Se elimina el encabezado añadido Actualización del juego. Incluye las actualizaciones anteriores de ruleta, EVENTO, premios dobles y pago de Giovanni. Publicar en Cloudflare.

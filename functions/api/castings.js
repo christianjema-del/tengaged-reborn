@@ -1,0 +1,10 @@
+import {withStorageGuard} from '../_shared/storage-guard141.js';
+import {canFillBots} from '../_shared/game-bots.js';
+import {ensureEnrollmentNotifications} from '../_shared/enrollment.js';
+import {ensureProfileSchema,getSessionUser,jsonError} from '../_shared/auth.js';
+import {listing,match,waiting,ensure,reconcilePrevious161} from '../_shared/casting-service.js';
+async function handle141_onRequest({request,env}){try{await ensureProfileSchema(env.DB);const user=await getSessionUser(request,env.DB);const id=Number(new URL(request.url).searchParams.get('id'));if(request.method==='GET'){await reconcilePrevious161(env.DB);return Response.json({ok:true,...(id?{match:await match(env.DB,id,user)}:{matches:await listing(env.DB,user)})},{headers:{'Cache-Control':'no-store'}});}
+if(request.method!=='POST')return jsonError('Método no permitido.',405);if(!user)return jsonError('Inicia sesión para jugar.',401);if(request.headers.get('Origin')!==new URL(request.url).origin)return jsonError('Origen no permitido.',403);if(!Number.isSafeInteger(id)||id<1)return jsonError('Elige una partida válida.',400);const input=await request.json().catch(()=>({}));if(input.action==='fill_bots'&&!canFillBots(user))return jsonError('Solo admin1 puede completar partidas con bots.',403);if(input.action==='join'){const account=await env.DB.prepare('SELECT is_test_bot,is_system FROM users WHERE id=?').bind(user.id).first();if(account?.is_test_bot||account?.is_system)return jsonError('Los Castings reales se reservan a cuentas de usuarios, sin bots de prueba.',403);}if(input.action==='join'&&input.enrollment){await ensure(env.DB);await ensureEnrollmentNotifications(env.DB,'casting');}const result=await match(env.DB,id,user,input);await waiting(env.DB);return Response.json({ok:true,match:result},{headers:{'Cache-Control':'no-store'}});
+}catch(e){console.error('Casting service',e);return jsonError(e.message||'No se pudo cargar el Casting.',400);}}
+
+export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

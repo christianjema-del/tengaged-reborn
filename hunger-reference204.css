@@ -1,0 +1,64 @@
+/* Archived arena proportions. Personal status, bushes and fight history retain their styles. */
+body.classic166 .hunger-main .hunger-title{display:none}
+body.classic166 .hunger-main #arena-top{margin-top:4px;gap:6px;min-height:139px;margin-bottom:15px}
+body.classic166 .hunger-main #slots{width:62%;flex:0 0 62%;background:transparent;border:0}
+body.classic166 .hunger-main #slots .corn-slot{height:auto;min-height:123px}
+body.classic166 .hunger-main #slots .aim,body.classic166 .hunger-main #slots .slot-back,body.classic166 .hunger-main #slots .aim img{height:76px}
+body.classic166 .hunger-main #slots .slot-name{font:bold 11px/14px Arial;color:#4682b4}
+body.classic166 .hunger-main #slots .slot-state{color:#555;font:11px/14px Arial}
+body.classic166 .hunger-main #arena-top .supplies{border:0}
+body.classic166 .hunger-main #arena-top #chicken{width:58px;height:76px;background:#e9e9e9;border:1px solid #ddd}
+body.classic166 .hunger-main #arena-top #food{font:18px/22px Arial;color:#888}
+body.classic166 .hunger-main #arena-top .arena-counter{min-width:62px;width:62px}
+body.classic166 .hunger-main #arena-top .arena-counter strong{height:62px;background-size:60px 60px;font-size:25px}
+body.classic166 .hunger-main #game-column{min-width:0}
+body.classic166 .hunger-main .hunger-chat-tabs{height:44px;border:1px solid #ced9df;border-radius:9px 0 0 0;background:linear-gradient(90deg,#e9f2f8,white)}
+body.classic166 .hunger-main .hunger-chat-tabs button{height:41px;min-height:41px}
+body.classic166 .hunger-main #public-chat .chat-messages>article:not(.arena-event){margin:0 0 6px!important;border:0!important;background:white!important}
+body.classic166 .hunger-main #public-chat .chat-messages>article:not(.arena-event)>header{background:#f2f7fa!important;border:0!important;border-top:1px solid #e1ebf0!important;padding:4px 2px!important;min-height:22px!important}
+body.classic166 .hunger-main #public-chat .chat-messages>article:not(.arena-event)>p{padding:5px 10px!important;margin:0!important;font:13px/1.5 Arial!important;color:#222!important}
+body.classic166 .hunger-main #public-chat .game-notice182 .game-notice-body182{padding:5px 17px 10px!important}
+body.classic166 .hunger-main #public-chat .game-notice182.event-challenge .arena-event-body>.event-action{justify-self:start!important;grid-column:2!important;margin-left:4px!important}
+body.classic166 .hunger-main #hunger-images h2,body.classic166 .hunger-main #hunger-blogs h2,body.classic166 .hunger-main #hunger-deaths h2{font:bold 17px/1.3 Arial;color:#ff536d;border-bottom:1px dotted #ffb7c3;padding:0 0 2px;margin:0 0 6px}
+body.classic166 .hunger-main #hunger-blogs h2 small{font:12px Arial;white-space:nowrap}
+body.classic166 .hunger-main #hunger-image-gallery{display:flex;align-items:flex-end;justify-content:center;gap:9px;min-width:0}
+body.classic166 .hunger-main #hunger-image-gallery a{display:block;flex:0 1 30%;padding:3px;border:1px solid #c9dfed;background:#edf5fa;min-width:0}
+body.classic166 .hunger-main #hunger-image-gallery img{display:block;width:100%;max-height:105px;object-fit:contain}
+body.classic166 .hunger-main #hunger-image-empty{font:11px/1.4 Arial;color:#999}
+body.classic166 .hunger-main #death-list{gap:2px 3px}
+body.classic166 .hunger-main #death-list li{background:#f2f7fa;padding:1px 3px;font:12px/17px Arial;gap:2px}
+body.classic166 .hunger-main #death-list b{font-weight:400;color:#555;width:auto}
+body.classic166 .hunger-main #death-details p{margin:2px 0;background:#f2f7fa;padding:1px 3px;font:12px/17px Arial}
+@media(max-width:760px){
+ body.classic166 .hunger-main #arena-top{flex-wrap:wrap;min-height:0;gap:6px}
+ body.classic166 .hunger-main #slots{width:100%;flex-basis:100%}
+ body.classic166 .hunger-main #arena-top .supplies{max-width:calc(100% - 70px);overflow-x:auto}
+ body.classic166 .hunger-main #slots .slot-name{font-size:9px;overflow-wrap:anywhere}
+ body.classic166 .hunger-main #slots .slot-state{font-size:9px}
+ body.classic166 .hunger-main #slots .corn-slot{min-height:113px}
+ body.classic166 .hunger-main #hunger-image-gallery img{max-height:130px}
+}
+@media(max-width:420px){body.classic166 .hunger-main #slots{grid-template-columns:repeat(5,minmax(0,1fr));row-gap:7px}body.classic166 .hunger-main #slots .corn-slot{min-height:118px}}
+
+/* V205: measured against archived cmain.css v201: 590px / 350px columns. */
+@media(min-width:901px){
+ body.classic166 .hunger-main .hunger-columns{display:grid;grid-template-columns:minmax(0,590fr) minmax(0,350fr);gap:18px}
+ body.classic166 .hunger-main #slots{width:62.1%;flex-basis:62.1%}
+ body.classic166 .hunger-main #slots .aim img{width:65px;max-width:none;height:75px;margin-left:-3px;object-fit:cover}
+ body.classic166 .hunger-main #slots .aim{height:75px;overflow:hidden}
+}
+body.classic166 .hunger-main #chicken:disabled{filter:none!important}
+body.classic166 .hunger-main #public-chat .game-notice182.game-notice182.game-notice182{background:#fffdf4!important;border-top-color:#fff097!important}
+body.classic166 .hunger-main #public-chat .game-notice182.game-notice182.game-notice182>header{background:#fffadb!important}
+body.classic166 .hunger-main #public-chat .game-notice182 .game-notice-body182{background:#fffdf4!important}
+body.classic166 .hunger-main #public-chat .game-notice182 .arena-event-body>.event-person img{width:40px!important;height:46px!important;object-fit:cover}
+body.classic166 .hunger-main #public-chat .game-notice182 .arena-event-body>.event-person a{max-width:none!important;overflow:visible!important;text-overflow:clip!important;white-space:normal!important;overflow-wrap:anywhere}
+body.classic166 .hunger-main #public-chat .game-notice182.event-challenge .arena-event-body>.event-action{width:49px!important;height:49px!important}
+
+/* Connection time is a sibling of the profile link, never part of it. */
+body.classic166 .hunger-main .hunger-player-label>.player-last-seen{display:block;cursor:text;color:#7a8790;text-decoration:none;font-weight:normal}
+body.classic166 .hunger-main .hunger-player-label>a{color:inherit}
+
+/* Override the legacy absolute caption for every descendant, not just direct links. */
+body.classic166 .hunger-main #survival-avatar{position:static!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important}
+body.classic166 .hunger-main #survival-avatar a{position:static!important;inset:auto!important;float:none!important;transform:none!important;display:block!important;width:100%!important;text-align:center!important;font:11px/15px Arial!important;overflow-wrap:anywhere!important}

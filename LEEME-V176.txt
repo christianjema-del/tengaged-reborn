@@ -1,0 +1,9 @@
+V176 — Premios dobles de karma y T$ exclusivamente en Hunger Games #4.
+1º 280 karma / 600 T$
+2º 120 karma / 200 T$
+3º 40 karma / 120 T$
+4º 40 karma / 40 T$
+5º y 6º 20 karma / 20 T$
+Tickets de patrocinio: 5 para el ganador, sin cambios.
+El pago se emite al finalizar, con las claves de operación habituales para impedir duplicados. Las otras ediciones mantienen su tabla normal. Incluye V175.
+Publicar en Cloudflare antes de finalizar la edición; Vercel muestra la actualización automáticamente.

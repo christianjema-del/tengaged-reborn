@@ -1,0 +1,53 @@
+/* Composición /top del 22-06-2024, aislada de las pantallas de juego. */
+body.hof-reference .wrap>main{padding:20px!important;font-family:'Trebuchet MS',Arial,sans-serif!important;color:#666!important}
+body.hof-reference .section-heading{display:block!important;margin:0 0 8px!important;padding:0!important}
+body.hof-reference .section-heading h1{font:bold 26px/31px 'Trebuchet MS',Arial,sans-serif!important;color:#f74d4d!important;margin:0 0 8px!important;padding:0!important;border:0!important}
+body.hof-reference .section-grid{display:grid!important;grid-template-columns:minmax(0,68.5fr) minmax(0,28.5fr)!important;gap:3%!important;align-items:start!important}
+body.hof-reference .section-title,body.hof-reference .section-side h2{font:bold 18px/22px 'Trebuchet MS',Arial,sans-serif!important;color:#f74d4d!important;border:0!important;border-bottom:1px dotted #ffdfdf!important;background:none!important;margin:0 0 8px!important;padding:0!important}
+body.hof-reference .section-side{padding:0!important;border:0!important;background:none!important;min-width:0}
+body.hof-reference .section-side h2 small{display:block;font:normal 11px/16px Arial!important;color:#999}
+body.hof-reference #topHousemates{grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:40px 0!important;margin:38px 0 30px!important}
+body.hof-reference .hof-person{position:relative!important;min-width:0;border:0!important;background:white!important;text-align:center!important;margin:0!important;padding:0!important}
+body.hof-reference .hof-person>a:not(.hof-game230){display:block!important;text-decoration:none!important;color:#4682b4!important;overflow:hidden}
+body.hof-reference .hof-person img{display:block!important;width:calc(100% - 15px)!important;max-width:65px!important;height:auto!important;aspect-ratio:65/75!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;margin:0 auto!important}
+body.hof-reference .hof-person>a>span{display:block!important;font:bold 10px/14px 'Trebuchet MS',Arial!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis!important}
+body.hof-reference #topHousemates>.hof-person:nth-child(-n+4){grid-column:span 2!important;margin:0 0 10px!important}
+body.hof-reference #topHousemates>.hof-person:nth-child(-n+4) img{width:calc(100% - 20px)!important;max-width:140px!important;aspect-ratio:140/161!important}
+body.hof-reference #topHousemates>.hof-person:nth-child(-n+4)>a>span{font:bold 14px/18px 'Trebuchet MS',Arial!important}
+body.hof-reference .hof-place{display:block!important;position:absolute!important;top:0!important;left:10px!important;right:auto!important;z-index:1!important;background:none!important;border:0!important;padding:0!important;font:bold 11px/15px 'Trebuchet MS',Arial!important;color:#2f2f2f!important;text-shadow:none!important;pointer-events:none}
+body.hof-reference #topHousemates>.hof-person:nth-child(-n+4) .hof-place{top:0!important;left:14px!important;font:bold 28px/35px 'Trebuchet MS',Arial!important;color:white!important;text-shadow:0 1px 2px #555!important}
+body.hof-reference .hof-place sup{font-size:55%;vertical-align:super;line-height:0}
+body.hof-reference .hof-card-meta{display:flex!important;justify-content:center!important;align-items:center!important;gap:2px!important;font:11px/15px Arial!important;color:#999!important}
+body.hof-reference .hof-card-meta i{width:10px;height:14px;border:0;border-radius:0;flex:none;display:inline-block}
+body.hof-reference .hof-heart230{color:#888;font-size:12px}
+body.hof-reference .hof-strip{display:grid!important;grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:0!important;margin:0 0 30px!important}
+body.hof-reference .hof-strip .hof-person{grid-column:span 1!important;margin:0!important}
+body.hof-reference .hof-strip>p,body.hof-reference .hof-fashion>p{grid-column:1/-1;font:13px/20px Arial!important;margin:8px 0 20px!important}
+body.hof-reference .hof-game230{display:block;font:11px/16px Arial;text-decoration:none;color:#4682b4}
+body.hof-reference .hof-month-row,body.hof-reference .hof-win{display:grid!important;grid-template-columns:90px minmax(0,1fr)!important;gap:6px!important;align-items:center;border:0!important;background:none!important;padding:0!important;margin:12px 0 20px!important}
+body.hof-reference .hof-month-row>a,body.hof-reference .hof-win>a{display:block;text-align:center;text-decoration:none;color:#4682b4!important}
+body.hof-reference .hof-month-row img,body.hof-reference .hof-win img{display:block;width:65px!important;height:75px!important;object-fit:contain;margin:0 auto;background:transparent!important}
+body.hof-reference .hof-month-row a>span,body.hof-reference .hof-win a>span{display:block;font:bold 12px/16px 'Trebuchet MS',Arial;overflow-wrap:anywhere}
+body.hof-reference .hof-month-row strong{font:bold 32px/38px 'Trebuchet MS',Arial!important;color:#b6b6b6!important;text-align:center}
+body.hof-reference .hof-win strong{font:bold 18px/23px 'Trebuchet MS',Arial!important;color:#b6b6b6!important;text-align:center;white-space:pre-line}
+body.hof-reference .section-side>section{margin-bottom:22px}
+body.hof-reference .section-side p{font:12px/18px Arial;color:#999}
+body.hof-reference #hofMonthSince{font:10px/14px Arial;margin:3px 0 8px}
+body.hof-reference .hof-fashion{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,200px) minmax(0,1fr);gap:5px 15px;min-height:270px;margin:0 0 30px;padding:10px 5px}
+body.hof-reference .hof-model230{grid-column:2;grid-row:1/span 4;align-self:start;text-align:center;padding-top:10px;min-width:0}
+body.hof-reference .hof-model230>a{display:block;color:#4682b4;font-weight:bold;text-decoration:none}
+body.hof-reference .hof-model230 img{display:block;width:100%;max-width:200px;height:auto;aspect-ratio:200/230;object-fit:contain;margin:auto}
+body.hof-reference .hof-model230 span{display:block;font:14px/20px 'Trebuchet MS',Arial}
+body.hof-reference .hof-ticket230{box-sizing:border-box;position:relative;align-self:start;min-height:70px;text-align:center;padding:6px 14px 7px 8px;background:#fffde1;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%);font:12px/16px 'Trebuchet MS',Arial}
+body.hof-reference .hof-ticket230.left{grid-column:1}
+body.hof-reference .hof-ticket230.right{grid-column:3;clip-path:polygon(8% 0,100% 0,100% 100%,8% 100%,0 50%);padding:6px 8px 7px 14px}
+body.hof-reference .hof-ticket230>a{color:#8d9da9;text-decoration:underline;font-weight:bold;overflow-wrap:anywhere}
+body.hof-reference .hof-ticket230 .hof-price230{display:block;font:26px/28px 'Trebuchet MS',Arial;color:#aaa}
+body.hof-reference .hof-ticket230 .hof-designer230{font:10px/14px 'Trebuchet MS',Arial;color:#72838b}
+body.hof-reference .hof-complete{font:12px/20px Arial;color:#4682b4;margin:20px 0}
+body.hof-reference #rankNotice{margin:0 0 8px;font:12px/18px Arial}body.hof-reference #rankNotice:empty{display:none}
+@media(max-width:700px){body.hof-reference .wrap>main{padding:14px!important}body.hof-reference .section-grid{grid-template-columns:minmax(0,1fr)!important;gap:24px!important}body.hof-reference #topHousemates{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:24px 0!important}body.hof-reference .hof-strip{grid-template-columns:repeat(4,minmax(0,1fr))!important;row-gap:20px!important}body.hof-reference #topHousemates>.hof-person:nth-child(-n+4){margin:0!important}body.hof-reference .hof-fashion{grid-template-columns:minmax(0,1fr) minmax(90px,140px) minmax(0,1fr);gap:6px}body.hof-reference .hof-ticket230{padding:6px!important;font-size:10px}body.hof-reference .hof-ticket230 .hof-price230{font-size:18px}body.hof-reference .section-side{display:grid;grid-template-columns:1fr 1fr;gap:15px}body.hof-reference .hof-month-row{grid-template-columns:70px minmax(0,1fr)!important}body.hof-reference .hof-month-row strong{font-size:24px!important}}
+@media(max-width:400px){body.hof-reference .section-side{display:block}body.hof-reference .hof-fashion{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}body.hof-reference .hof-model230{grid-column:1/-1;grid-row:auto}body.hof-reference .hof-ticket230.left{grid-column:1}body.hof-reference .hof-ticket230.right{grid-column:2}}
+/* Etiquetas originales archivadas: se sirven desde la web, sin depender de Wayback. */
+body.hof-reference .hof-ticket230{clip-path:none;background:transparent url('/assets/hof230/ticket.png') no-repeat center/100% 100%;min-height:81px}
+body.hof-reference .hof-ticket230.right{clip-path:none;background-image:url('/assets/hof230/ticket-right.png')}

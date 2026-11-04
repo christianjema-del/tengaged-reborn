@@ -1,0 +1,9 @@
+MODO PRUEBAS DE LOS DIEZ JUEGOS ORIGINALES
+
+Abre /casting-game?id=1 después de publicar. Si está finalizado, aparecerá un selector para jugar a cualquiera de los 10 archivos SWF originales con Ruffle.
+
+NO reinicia la base de datos, NO altera al ganador, NO guarda puntuaciones y NO modifica otros Castings.
+
+Para publicar desde esta carpeta: bash PUBLICAR.command
+
+Ruffle requiere conexión a Internet desde el navegador. Algunos SWF pueden presentar incompatibilidades de emulación.

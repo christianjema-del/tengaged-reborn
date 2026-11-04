@@ -1,0 +1,4 @@
+name = "tengaged-reborn-acceso"
+main = "index.js"
+compatibility_date = "2026-09-13"
+workers_dev = true

@@ -1,0 +1,6 @@
+Font Awesome 3.1 — Dave Gandy.
+Fuente original de los iconos: SIL Open Font License 1.1.
+https://fontawesome.com/license/free
+Obtenida del recurso enlazado en la referencia:
+https://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css
+La fuente se sirve localmente y sus estilos se limitan a la ficha de mafia.

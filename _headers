@@ -1,0 +1,24 @@
+/*.html
+  Cache-Control: no-cache, must-revalidate
+/
+  Cache-Control: no-cache, must-revalidate
+/mobile.html
+  Cache-Control: no-store
+/diagnostico.html
+  Cache-Control: no-store
+
+/vendor/ruffle/*.wasm
+  Content-Type: application/wasm
+/vendor/ruffle/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/posts
+  Cache-Control: no-cache, must-revalidate
+/posts/*
+  Cache-Control: no-cache, must-revalidate
+/blog/*
+  Cache-Control: no-cache, must-revalidate
+/blogs
+  Cache-Control: no-cache, must-revalidate
+/safari-compat162.js
+  Cache-Control: no-cache, must-revalidate

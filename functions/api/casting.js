@@ -1,7 +1,8 @@
+import {withStorageGuard} from '../_shared/storage-guard141.js';
 import { ensureProfileSchema, getSessionUser, jsonError } from "../_shared/auth.js";
 import { ensureCastingSchema, listCastingPlayers } from "../_shared/casting.js";
 
-export async function onRequest(context) {
+async function handle141_onRequest(context) {
 
   const request = context.request;
   const db = context.env.DB;
@@ -44,6 +45,9 @@ export async function onRequest(context) {
     if (request.method === "POST") {
 
       const username = authenticatedUser.username;
+      const room=await db.prepare('SELECT status FROM casting_rooms WHERE casting_id=1').first();
+      if(room?.status==='started')return jsonError('La partida ya ha comenzado. La inscripción está cerrada.',409);
+
 
 
       /* =========================
@@ -217,3 +221,5 @@ export async function onRequest(context) {
   }
 
 }
+
+export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

@@ -1,0 +1,1 @@
+V210: protección de avisos de flecha contra enlaces ajenos al evento, incluso si se añaden después del renderizado. Solo se permiten enlaces de actor confirmado y destinatario dentro de sus retratos. Contención visual de paneles para impedir que nombres de otras zonas sobresalgan sobre el chat. Sin cambios de mecánica ni historial.

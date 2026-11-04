@@ -1,7 +1,8 @@
+import {withStorageGuard} from '../_shared/storage-guard141.js';
 import { ensureProfileSchema, getSessionUser, jsonError } from "../_shared/auth.js";
 import { ensureCastingSchema, listCastingPlayers } from "../_shared/casting.js";
 
-export async function onRequest(context) {
+async function handle141_onRequest(context) {
 
   const request = context.request;
   const db = context.env.DB;
@@ -200,3 +201,5 @@ export async function onRequest(context) {
 
   }
 }
+
+export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

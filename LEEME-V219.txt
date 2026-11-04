@@ -1,0 +1,4 @@
+V219 · Mecánica El Duelo y lista arrastrable
+Día1: prueba de todos y preferencias. Mejor resultado inicia la cadena, sin inmunidad. Cada salvado elige al primero disponible de su lista. Quien nadie salva se enfrenta al último activo de su propia lista, incluido quien inició la cadena. Día2: solo dos nominados juegan. Tras eliminar al de menor resultado, todos los supervivientes juegan de nuevo; tres finalistas conservan la prueba final. No se recalculan resultados cerrados.
+Lista: flechas, arrastrar/soltar con ratón o arrastrar desde el asa táctil; Guardar lista confirma el orden. Mantiene borrador durante las consultas automáticas.
+Pruebas: cadena y nominación del primero, fases y elegibilidad, ratón y táctil, persistencia del borrador, ciclo completo, API y página de prueba. Incluye las correcciones anteriores de Hunger.

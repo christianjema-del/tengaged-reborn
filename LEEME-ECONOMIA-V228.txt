@@ -1,0 +1,14 @@
+REVISION SOLO LECTURA DE KARMA Y T$
+
+Ejecutar en el Mac con la sesión de Cloudflare ya autorizada:
+node revisar-economia228.mjs
+
+No hace falta publicar esta versión para revisar la base remota. No usar --reparar: este programa no admite pagos ni descuentos. Todas las consultas son SELECT simples y paginadas20 filas; no usa UNION y evita el error7500.
+
+Incluye todos los usuarios reales (también admin1 y mod), Casting/Frookies/Hunger y El Duelo sin premios económicos, recibos de pago y tablas de correcciones/prize_audit189. Comprueba Hunger4 doble, pagos pendientes, recibos duplicados, pagos superiores al premio actual y recibos sin puesto actual.
+
+Guarda fuera de la web en Tengaged-Revision-Economia/fecha: instantanea.json, informe.json, usuarios.csv y RESUMEN.txt. No copia contraseñas ni sesiones; retira mensajes privados de los estados. Si falla conserva lectura-parcial.json. Enviar informe.json para revisar incidencias.
+
+Un recibo superior al premio actual puede ser un premio anterior conservado cuando se corrigieron puestos; no demuestra duplicidad. Esta revisión no reconstruye cada compra/venta o transferencia ni certifica todo el saldo contable histórico: los registros disponibles pueden no contener cada movimiento. La lectura remota no es una única transacción; conviene confirmar incidencias si hay juegos activos.
+
+No se ha podido ejecutar la revisión real desde el entorno de preparación: hace falta la sesión Wrangler del propietario. Las pruebas automatizadas usan casos simulados de recibos dobles, faltantes, excesos, duplicados por mayúsculas y Hunger4.

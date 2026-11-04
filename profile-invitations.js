@@ -1,0 +1,4 @@
+import {api} from '/market-ui.js?v=170';
+const get=id=>document.getElementById(id);
+async function load(){try{const me=await window.TengagedSession;if(!me)return;const target=new URLSearchParams(location.search).get('username');if(target&&target.toLowerCase()!==me.username.toLowerCase())return;const data=await api('/api/invitations');get('profileInvitations').hidden=false;get('profileInviteCount').textContent=String(data.total);get('profileInviteLink').value=data.url;get('profileInviteCopy').onclick=async()=>{try{await navigator.clipboard.writeText(data.url);get('profileInviteNotice').textContent='Enlace copiado.';}catch{get('profileInviteLink').focus();get('profileInviteLink').select();get('profileInviteNotice').textContent='Selecciona y copia tu enlace.';}};}catch{get('profileInviteNotice').textContent='No se pudieron cargar las invitaciones.';}}
+load();

@@ -1,0 +1,45 @@
+/* Reference palette and dimensions at CSS-pixel scale: shared by every game. */
+body #public-chat .game-chat .chat-messages>article.game-notice182.game-notice182.game-notice182{box-sizing:border-box!important;display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;margin:0 0 6px!important;padding:0!important;border:0!important;border-top:1px solid #eddf84!important;border-radius:0!important;background:#fffdf6!important;box-shadow:none!important;overflow:visible!important}
+body #public-chat .game-chat .chat-messages>article.game-notice182.game-notice182.game-notice182>header{box-sizing:border-box!important;display:block!important;min-height:21px!important;height:auto!important;margin:0!important;padding:3px 7px!important;background:#fefadc!important;border:0!important;line-height:15px!important}
+body #public-chat .game-chat .chat-messages>article.game-notice182.game-notice182.game-notice182>header>time{position:static!important;display:block!important;color:#999!important;font:10px/15px Arial,sans-serif!important;float:none!important;margin:0!important}
+body #public-chat .game-chat .game-notice182.game-notice182>.game-notice-body182{display:block!important;box-sizing:border-box!important;min-width:0!important;max-width:100%!important;padding:9px 10px 14px!important;background:#fffdf6!important;color:#62696e!important;text-align:left!important;font:12px/18px Arial,sans-serif!important;overflow-wrap:anywhere!important}
+body #public-chat .game-chat .game-notice182 .game-notice-title182{display:block!important;margin:0 0 6px!important;padding:0!important;color:#292929!important;font:bold 12px/19px Arial,sans-serif!important;text-decoration:none!important;float:none!important}
+body #public-chat .game-chat .game-notice182 .game-notice-content182{box-sizing:border-box!important;max-width:100%!important;min-width:0!important;background:transparent!important;color:#62696e!important;text-align:left!important}
+body #public-chat .game-chat .game-notice182 .game-notice-content182:not(.casting-key-drop):not(.arena-event-body){padding:0!important;min-height:0!important}
+body #public-chat .game-chat .game-notice182 .game-notice-content182>p,body #public-chat .game-chat .game-notice182 .game-notice-message182{font:12px/18px Arial,sans-serif!important;color:#62696e!important;margin:0!important;padding:0!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
+body #public-chat .game-chat .game-notice182 .casting-key-drop{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;margin:8px 0 0!important;padding:0!important;min-height:0!important;border:0!important;background:transparent!important}
+body #public-chat .game-chat .game-notice182 .casting-key-drop button{max-width:100%!important;flex:0 0 auto!important}
+body #public-chat .game-chat .game-notice182 .casting-key-drop img{max-width:100%!important;object-fit:contain!important}
+body #public-chat .game-chat .game-notice182 .arena-event-body{background:transparent!important}
+body #public-chat .game-chat .game-notice182 .event-description{grid-column:1/-1!important}
+@media(pointer:coarse){body #public-chat .game-chat .game-notice182 .casting-key-drop button{min-width:44px!important;min-height:44px!important}}
+
+/* V196: Hunger has one readable message, beside the illustration, never a second caption. */
+body .hunger-main #public-chat .game-chat .game-notice182 .arena-event-body.game-notice-content182{display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:10px!important;padding:0!important;min-height:0!important}
+body .hunger-main #public-chat .game-chat .game-notice182 .arena-event-body>.event-person{flex:0 0 50px!important;width:50px!important;align-self:center!important}
+body .hunger-main #public-chat .game-chat .game-notice182 .arena-event-body>.event-description{position:static!important;display:block!important;flex:1 1 180px!important;min-width:0!important;width:auto!important;max-width:100%!important;margin:0!important;align-self:center!important;overflow-wrap:anywhere!important}
+body .hunger-main #public-chat .game-chat .game-notice182 .event-action,body .hunger-main #public-chat .game-chat .game-notice182 .event-arrow-damage{flex:0 0 auto!important}
+@media(max-width:520px){body .hunger-main #public-chat .game-chat .game-notice182 .arena-event-body{column-gap:8px!important;row-gap:10px!important}body .hunger-main #public-chat .game-chat .game-notice182 .arena-event-body>.event-description{flex-basis:160px!important}}
+
+body .hunger-main #public-chat .game-chat .game-notice182.event-arrow .arena-event-body.game-notice-content182,body .hunger-main #public-chat .game-chat .game-notice182.event-challenge .arena-event-body.game-notice-content182{display:grid!important;width:100%!important;grid-template-columns:50px minmax(0,1fr) auto 50px!important;align-items:center!important}
+body .hunger-main #public-chat .game-chat .game-notice182.event-arrow .arena-event-body>.event-arrow-damage{grid-column:3!important;grid-row:1!important;position:static!important}
+@media(max-width:520px){body .hunger-main #public-chat .game-chat .game-notice182.event-arrow .arena-event-body.game-notice-content182,body .hunger-main #public-chat .game-chat .game-notice182.event-challenge .arena-event-body.game-notice-content182{grid-template-columns:45px minmax(0,1fr) auto 45px!important}}
+
+body .hunger-main #public-chat .game-chat .game-notice182.event-challenge .arena-event-body>.event-person:last-child{grid-column:4!important;grid-row:1!important;justify-self:end!important}
+
+/* V201: single-actor notices keep their illustration at the far right. */
+body .hunger-main #public-chat .game-chat .game-notice182.event-collect .arena-event-body.game-notice-content182,
+body .hunger-main #public-chat .game-chat .game-notice182.event-weapon .arena-event-body.game-notice-content182,
+body .hunger-main #public-chat .game-chat .game-notice182.event-death .arena-event-body.game-notice-content182{width:100%!important;flex-wrap:nowrap!important}
+body .hunger-main #public-chat .game-chat .game-notice182.event-collect .arena-event-body.game-notice-content182>.event-weapon,
+body .hunger-main #public-chat .game-chat .game-notice182.event-weapon .arena-event-body.game-notice-content182>.event-weapon,
+body .hunger-main #public-chat .game-chat .game-notice182.event-death .arena-event-body.game-notice-content182>.event-action{margin-left:auto!important;margin-right:0!important;flex:0 0 auto!important}
+
+/* Keep external captions from overlapping adjacent game notices. */
+body .hunger-main #public-chat .chat-messages>article.game-notice182.game-notice182.game-notice182{position:relative!important;isolation:isolate;overflow:hidden!important}
+body .hunger-main #public-chat .game-notice182.event-arrow .arena-event-body>a{display:none!important}
+body .hunger-main #public-chat .game-notice182 .event-person,body .hunger-main #public-chat .game-notice182 .event-person>a{position:static!important;float:none!important;transform:none!important}
+
+/* Paint containment stops off-panel captions leaking over chat cards. */
+body .hunger-main #public-chat .game-notice182 .game-notice-body182{contain:paint!important;position:relative!important}
+body .hunger-main #survival-panel,body .hunger-main #fight-history,body .hunger-main #private-chat,body .hunger-main #fight-page{contain:paint;position:relative}

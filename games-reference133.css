@@ -1,0 +1,35 @@
+/* Screenshot proportions and format colours, with Tengaged Reborn labels. */
+body.games-reference .reality-directory{padding:16px!important}
+body.games-reference .reality-directory>h1{font-size:26px!important;line-height:1.2!important;margin-bottom:18px!important}
+body.games-reference .stars-line{min-height:48px;padding-bottom:12px!important;margin-bottom:12px!important}
+body.games-reference .stars-line img{width:164px!important;max-height:none}
+body.games-reference .stars-line small{font:12px Arial;color:#999}
+body.games-reference .directory-columns{grid-template-columns:minmax(0,62fr) minmax(0,36fr)!important;gap:2%!important}
+body.games-reference .directory-promos{gap:8px!important;margin-bottom:16px!important}
+body.games-reference .competition-links{padding:14px 10px;font:12px/23px Arial}
+body.games-reference .reality-directory h2{font-size:19px!important;line-height:24px!important;margin-bottom:5px!important}
+body.games-reference .reference-enroll{margin:9px 0 24px!important}
+body.games-reference .reference-enroll img{max-width:none;width:100%}
+body.games-reference .directory-game-table{font:12px/18px 'Trebuchet MS',Arial!important;margin-top:5px!important}
+body.games-reference .directory-game-table td{font-size:12px!important;padding:3px 4px!important;color:#606060;background:#f6f8f9!important}
+body.games-reference .directory-game-table td:first-child{font-weight:700!important}
+body.games-reference .directory-game-table td:nth-child(2),body.games-reference .directory-game-table td:nth-child(3){font-weight:700;white-space:nowrap}
+body.games-reference .directory-game-table td:last-child{font-size:11px!important;color:#929292!important}
+body.games-reference .directory-game-table td.type-cell.casting,body.games-reference .directory-game-table td.type-cell.fasting{background:#a9cfe4!important}
+body.games-reference .directory-game-table td.type-cell.casting a,body.games-reference .directory-game-table td.type-cell.fasting a{color:#153b70!important}
+body.games-reference .directory-game-table td.type-cell.frookies,body.games-reference .directory-game-table td.type-cell.rookies{background:#f18db1!important}
+body.games-reference .directory-game-table td.type-cell.frookies a,body.games-reference .directory-game-table td.type-cell.rookies a{color:#672d3b!important}
+body.games-reference .directory-game-table td.type-cell.survivor{background:#64b66a!important}
+body.games-reference .directory-game-table td.type-cell.survivor a{color:#1c4823!important}
+body.games-reference .directory-game-table td.type-cell.hunger{background:#111!important}
+body.games-reference .directory-game-table td.type-cell.hunger a{color:#ead383!important}
+body.games-reference .directory-game-table td.type-cell.stars{background:#285f9b!important}
+body.games-reference .directory-game-table td.type-cell.stars a{color:#fff08a!important}
+body.games-reference .directory-game-table td:first-child a:hover{text-decoration:underline}
+body.games-reference .directory-message header{font:12px/21px Arial!important;background:#f5f8fa!important;border-top:1px solid #e1e4e6;padding:0 3px!important}
+body.games-reference .directory-message header>a:last-of-type{font-weight:700}
+body.games-reference .directory-message time{font-size:11px}
+body.games-reference .directory-message p{font:13px/18px Arial!important;padding:7px 10px 13px!important}
+body.games-reference .directory-archive>summary{color:#548ba6;cursor:pointer;font-weight:700;margin-bottom:8px}
+@media(max-width:700px){body.games-reference .directory-columns{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}body.games-reference .directory-columns>aside{grid-row:1}body.games-reference .reality-directory>h1{font-size:22px!important}body.games-reference .reality-directory h2{font-size:18px!important}body.games-reference .reference-enroll img{max-width:380px}body.games-reference .directory-game-table td{font-size:12px!important;padding:5px 3px!important}body.games-reference .directory-game-table td:last-child{font-size:10px!important}body.games-reference .directory-message p{font-size:12px!important;line-height:17px!important;padding:6px 7px 10px!important}}
+@media(max-width:360px){body.games-reference .directory-game-table td{font-size:11px!important}body.games-reference .directory-game-table td:last-child{font-size:9px!important}}

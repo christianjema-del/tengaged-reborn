@@ -1,0 +1,2 @@
+V211: corregida causa del nombre flotante: regla antigua .survival-person a posicionaba el nombre absoluto. Tu estado vuelve a usar enlace directo y se fuerza flujo normal para todo enlace del avatar. Nombre debajo del retrato y encima del corazón/salud.
+Casting diario: debajo de manzana muestra salud real del usuario, no manzanas recogidas. Eliminado texto Salud separado encima de Votar. Inventario de manzanas y cálculos de clasificaciones sin cambios.

@@ -1,0 +1,14 @@
+TENGAGED REBORN V233 — PATROCINADORES DE HUNGER
+
+Sponsors abre un panel dentro de la página: tributos con Salud y Flechas a la izquierda; Últimos ganadores a la derecha.
+Cada ganador muestra su avatar, su nombre azul enlazado al perfil y los tickets disponibles en texto.
+El saldo procede del registro real de tickets y descuenta los gastados. No se conceden premios adicionales.
+Se conserva el funcionamiento de los regalos y se solicita confirmación con su coste antes de enviarlos.
+El panel se adapta a móvil y conserva las imágenes durante las actualizaciones.
+Pruebas: interfaz Hunger, panel Sponsors, saldos de ganadores y gasto idempotente de tickets.
+No requiere ejecutar SQL ni repetir auditorías de premios.
+
+Despliegue desde esta carpeta:
+npx wrangler pages deploy . --project-name tengaged-reborns
+
+Esta entrega contiene los archivos preparados; no ha sido desplegada desde ChatGPT.

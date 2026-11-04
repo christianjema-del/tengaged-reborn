@@ -1,0 +1,34 @@
+V232 — FICHA DE MAFIA CON EL ESTILO TENGAGED.ES 2015
+Referencia abierta y revisada:
+https://web.archive.org/web/20150208104622/http://www.tengaged.es/banda/catalans
+
+PUBLICACIÓN
+npx wrangler pages deploy . --project-name tengaged-reborns
+No hace falta importar SQL ni ejecutar ajustes económicos.
+
+La ficha recupera la composición de dos columnas, emblema 160x160,
+nombre negro con fondo azul, lema y cifras, descripción amarilla,
+comentarios compactos, blogs con avatar y extracto, y la columna de
+presidente, miembros, aspirantes y ganador del sorteo.
+Se incluyen los iconos Font Awesome originales, servidos desde la web.
+Todo el texto de interfaz se mantiene en castellano.
+
+Las imágenes, nombres, descripción, apoyos y resultados son los propios
+de cada mafia de Reborn. No se copian usuarios, votos ni premios históricos.
+El contador del encabezado muestra tus apoyos dados y los usuarios actuales
+de la mafia; no simula el 0/24 de la captura con datos inventados.
+
+Se conservan las reglas y permisos V231, la privacidad de los comentarios,
+las solicitudes de ingreso, la edición del presidente, los votos únicos,
+y el juego/sorteo semanal. Los controles adicionales quedan desplegables.
+Stars sigue pendiente de implementación: el sorteo no inscribe en un juego real.
+No cambia karma, T$, avatares equipados, ni otras secciones de la web.
+En móvil se apilan las columnas y se amplían los controles de votación.
+
+Pruebas: permisos y privacidad, votos y admisión, presidencia y sucesión,
+inicio admin1, estrella oculta/sorteo único, blogs con puntos ponderados,
+comentarios ocultos excluidos del recuento, interfaz con texto seguro,
+avatares y acciones de perfil. Referencia visual inspeccionada.
+El navegador de comprobación no tiene acceso al servidor local; no se ha
+realizado una comparación de píxeles del resultado desplegado ni prueba
+física en un iPhone.

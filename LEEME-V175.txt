@@ -1,0 +1,1 @@
+V175: se elimina la fila móvil Chat / Tu estado / Luchas y sus manejadores. Se conservan los apartados y las acciones del juego. Incluye los cambios de V174. Publicar en Cloudflare; Vercel muestra los cambios automáticamente.

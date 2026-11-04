@@ -1,0 +1,1 @@
+V70: puntuación total del desafío = puntos base + bonificación ya existente de experiencia/equipo/salud; la recompensa de XP por victoria sigue siendo +2 atacante y +1 defensor (no se añade al resultado base). Arbustos: botones activos también durante lucha, respuesta explícita. Comida: segunda reserva automática de 300 cuando se agota la primera de 100; señalización en icono.

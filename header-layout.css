@@ -1,0 +1,109 @@
+/* V82: common header, final cascade layer on every page. */
+body #tg-shell{display:block!important;width:100%!important;max-width:none!important;padding:0!important;margin:0!important;border:0!important;background:#97bed5!important;overflow:visible!important;position:sticky!important;top:0!important;z-index:1000!important;box-shadow:none!important}
+body #tg-shell .tg-community-strip{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:5px 14px!important;box-sizing:border-box!important;overflow-wrap:anywhere!important;text-align:center!important}
+body #tg-shell .tg-shell-top{display:grid!important;grid-template-columns:170px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-items:center!important;gap:3px 14px!important;width:calc(100% - 28px)!important;max-width:980px!important;min-width:0!important;min-height:0!important;margin:0 auto!important;padding:6px 0!important;box-sizing:border-box!important;overflow:visible!important}
+body #tg-shell .tg-shell-logo{grid-column:1!important;grid-row:1!important;justify-self:start!important;align-self:center!important;max-width:100%!important;min-width:0!important;font-size:22px!important;line-height:1.05!important;white-space:nowrap!important;margin:0!important;padding:0 0 0 28px!important}
+body #tg-shell .tg-shell-nav{grid-column:2!important;grid-row:1!important;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;justify-content:flex-end!important;align-items:center!important;align-content:center!important;gap:3px 12px!important;min-width:0!important;width:100%!important;max-width:100%!important;min-height:34px!important;margin:0!important;padding:0!important;overflow:visible!important;white-space:normal!important;border:0!important;background:transparent!important;box-sizing:border-box!important}
+body #tg-shell .tg-shell-nav>a,body #tg-shell .tg-shell-nav>a:first-child{display:block!important;flex:0 0 auto!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:6px 0!important;border:0!important;border-radius:0!important;font:bold 11px/16px Arial,Helvetica,sans-serif!important;letter-spacing:0!important;white-space:nowrap!important;text-overflow:clip!important;overflow:visible!important;color:#253f50!important;text-decoration:none!important;background:transparent!important;transform:none!important;box-sizing:border-box!important}
+body #tg-shell .tg-shell-nav>a:hover,body #tg-shell .tg-shell-nav>a[aria-current=page]{color:#ed5c76!important;background:none!important;text-decoration:none!important}
+body #tg-shell .tg-shell-account{grid-column:1/-1!important;grid-row:2!important;display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;align-items:center!important;min-width:0!important;max-width:100%!important;gap:3px 10px!important;margin:0!important;padding:0!important;font:10px/16px Arial,Helvetica,sans-serif!important;overflow:visible!important}
+body #tg-shell .tg-shell-account>a,body #tg-shell .tg-shell-account>button{flex:0 0 auto!important;max-width:100%!important;white-space:normal!important;font:10px/16px Arial!important;margin:0!important;padding:2px 0!important;color:#3d6076!important}
+body #tg-shell #tg-session-state{display:block!important;max-width:100%!important;min-width:0!important;overflow-wrap:anywhere!important;font:10px/16px Arial!important}
+body #tg-shell .tg-shell-nav>a:focus-visible,body #tg-shell .tg-shell-account>a:focus-visible,body #tg-shell .tg-shell-account>button:focus-visible{outline:2px solid #386f92!important;outline-offset:2px!important}
+body .active-games-strip{box-sizing:border-box!important;width:calc(100% - 28px)!important;max-width:980px!important;min-width:0!important;margin:0 auto!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:5px 8px!important;padding:6px 12px!important;overflow:visible!important}
+body .active-games-strip>a{display:inline-block!important;max-width:100%!important;overflow-wrap:anywhere!important;white-space:normal!important}
+@media(max-width:900px){body #tg-shell .tg-shell-top{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;gap:4px!important}body #tg-shell .tg-shell-logo{grid-column:1!important;grid-row:1!important}body #tg-shell .tg-shell-nav{grid-column:1!important;grid-row:2!important;justify-content:flex-start!important;min-height:0!important;gap:2px 14px!important}body #tg-shell .tg-shell-account{grid-column:1!important;grid-row:3!important;gap:2px 9px!important}body #tg-shell .tg-shell-nav>a{font-size:12px!important;line-height:18px!important;padding:5px 0!important}}
+@media(max-width:480px){body #tg-shell .tg-shell-top{width:calc(100% - 24px)!important;padding:7px 0!important}body #tg-shell .tg-shell-logo{font-size:22px!important}body #tg-shell .tg-shell-nav{gap:1px 15px!important}body #tg-shell .tg-shell-nav>a{font-size:12px!important;line-height:18px!important;padding:7px 0!important}body #tg-shell .tg-shell-account>a,body #tg-shell .tg-shell-account>button{font-size:10px!important;line-height:15px!important;padding:3px 0!important}body #tg-shell #tg-session-state{flex-basis:100%!important;font-size:10px!important}body .active-games-strip{width:calc(100% - 16px)!important;padding:7px 9px!important;font-size:11px!important}}
+/* Embedded competition pages must not acquire a header from these overrides. */
+body.embedded-game #tg-shell,body.embedded-game .active-games-strip{display:none!important}
+
+body #tg-shell .tg-shell-logo small{display:block!important;font:7px/9px Arial!important;letter-spacing:2px!important;margin:0!important;text-align:right!important}body #tg-shell .tg-shell-logo:before{top:3px!important}
+
+body .active-games-strip[hidden],body #tg-shell .tg-shell-account [hidden]{display:none!important}
+
+body #tg-shell #tg-online{display:inline-block;margin-left:12px;font-weight:bold;white-space:nowrap}body #tg-shell #tg-online[hidden]{display:none!important}@media(max-width:480px){body #tg-shell #tg-online{margin-left:8px}}
+
+/* V88: menú de cuenta alineado a la derecha, con navegación nativa. */
+body #tg-shell .tg-shell-top{grid-template-columns:170px minmax(0,1fr) 34px!important}
+body #tg-shell .tg-account-menu{grid-column:3;grid-row:1;position:relative;align-self:center;justify-self:end;min-width:0;color:#5587a1}
+body #tg-shell .tg-account-menu>summary{display:flex;list-style:none;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid #c8d8de;border-radius:50%;background:#fff;color:#526b78;cursor:pointer;font:14px Arial;user-select:none}
+body #tg-shell .tg-account-menu>summary::-webkit-details-marker{display:none}
+body #tg-shell .tg-account-menu>summary:focus-visible{outline:2px solid #2c6582;outline-offset:2px}
+body #tg-shell .tg-account-menu[open]>summary{background:#f7fbfd;color:#ed5c76}
+body #tg-shell .tg-menu-panel{position:absolute!important;right:0!important;top:calc(100% + 8px)!important;display:block!important;width:260px!important;max-width:calc(100vw - 24px)!important;max-height:calc(100vh - 150px);overflow-y:auto!important;overscroll-behavior:contain;margin:0!important;padding:10px 0!important;border:1px solid #d4e0e6!important;background:#fff!important;box-shadow:0 5px 13px #314f6826;z-index:1100;text-align:left!important;white-space:normal!important}
+body #tg-shell .tg-account-menu:not([open])>.tg-menu-panel{display:none!important}
+body #tg-shell .tg-menu-panel a,body #tg-shell .tg-menu-panel button{display:block!important;width:100%!important;box-sizing:border-box!important;padding:7px 16px!important;margin:0!important;background:none!important;border:0!important;border-radius:0!important;font:bold 14px/1.4 Arial!important;color:#3783aa!important;text-align:left!important;text-decoration:none!important;cursor:pointer;white-space:normal!important;overflow-wrap:anywhere}
+body #tg-shell .tg-menu-panel a:hover,body #tg-shell .tg-menu-panel button:hover{background:#eff7fb!important}
+body #tg-shell .tg-menu-panel a:focus-visible,body #tg-shell .tg-menu-panel button:focus-visible{outline:2px solid #3d7ea0;outline-offset:-2px}
+body #tg-shell #tg-menu-welcome{margin:0!important;padding:3px 16px 7px!important;color:#478f3b;font:bold 14px/1.5 Arial;overflow-wrap:anywhere}
+body #tg-shell .tg-menu-user{padding-bottom:7px;border-bottom:1px solid #e1e9ed;margin-bottom:7px}
+body #tg-shell .tg-menu-panel [hidden]{display:none!important}
+body #tg-shell #tg-menu-error{padding:4px 16px;color:#a34f4f;font:12px/1.5 Arial}
+@supports(height:100dvh){body #tg-shell .tg-menu-panel{max-height:calc(100dvh - 150px)}}
+@media(max-width:900px){body #tg-shell .tg-shell-top{grid-template-columns:minmax(0,1fr) 34px!important}body #tg-shell .tg-account-menu{grid-column:2;grid-row:1}body #tg-shell .tg-shell-nav,body #tg-shell .tg-shell-account{grid-column:1/-1!important}}
+@media(pointer:coarse){body #tg-shell .tg-account-menu>summary{width:40px;height:40px}body #tg-shell .tg-shell-top{grid-template-columns:170px minmax(0,1fr) 42px!important}body #tg-shell .tg-menu-panel a,body #tg-shell .tg-menu-panel button{min-height:42px;padding:10px 16px!important}}
+@media(max-width:900px) and (pointer:coarse){body #tg-shell .tg-shell-top{grid-template-columns:minmax(0,1fr) 42px!important}}
+
+body #tg-shell .tg-session-data{display:none!important}body #tg-shell .tg-shell-top{grid-template-rows:auto!important}@media(max-width:900px){body #tg-shell .tg-shell-top{grid-template-rows:auto auto!important}}
+
+/* V89: desplegable compacto y accesos de partida en el borde de la cabecera. */
+body #tg-shell .tg-shell-top{position:relative;grid-template-rows:auto auto!important;row-gap:0!important}
+body #tg-shell .tg-account-menu{position:static!important}
+body #tg-shell .tg-menu-panel{top:100%!important;width:224px!important;padding:7px 0!important;max-height:calc(100vh - 110px)}
+body #tg-shell .tg-menu-panel a,body #tg-shell .tg-menu-panel button{font:700 13px/1.25 Arial!important;padding:5px 13px!important;min-height:0!important}
+body #tg-shell #tg-menu-welcome{padding:3px 13px 5px!important;font:700 13px/1.3 Arial!important}
+body #tg-shell .tg-menu-user{padding-bottom:5px;margin-bottom:5px}
+body #tg-shell .tg-header-games{grid-column:2/4;grid-row:2;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;justify-content:flex-end!important;align-items:center!important;justify-self:end;gap:6px 14px!important;width:auto!important;max-width:100%!important;margin:0!important;padding:2px 0 1px!important;border:0!important;background:none!important;min-width:0}
+body #tg-shell .tg-header-games[hidden]{display:none!important}
+body #tg-shell .tg-header-games a{font:700 10px/16px Arial!important;color:#315f78!important;white-space:nowrap;text-decoration:none;padding:0!important;margin:0!important;background:none!important;border:0!important}
+body #tg-shell .tg-header-games a:hover{text-decoration:underline}
+@supports(height:100dvh){body #tg-shell .tg-menu-panel{max-height:calc(100dvh - 110px)}}
+@media(max-width:900px){body #tg-shell .tg-shell-top{grid-template-rows:auto auto auto!important}body #tg-shell .tg-header-games{grid-column:1/-1;grid-row:3;gap:6px 12px!important}body #tg-shell .tg-menu-panel{max-height:calc(100vh - 170px)}}
+@media(pointer:coarse){body #tg-shell .tg-menu-panel a,body #tg-shell .tg-menu-panel button{min-height:34px!important;padding:7px 13px!important}body #tg-shell .tg-header-games a{min-height:28px;display:inline-flex;align-items:center;font-size:11px!important}}
+
+/* Ubicación señalada: lista vertical a la derecha del desplegable, fuera del contenido. */
+body #tg-shell .tg-header-games{flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;gap:3px!important;padding:7px 0!important}
+@media(min-width:1200px){body #tg-shell .tg-shell-top{grid-template-rows:auto!important}body #tg-shell .tg-header-games{position:absolute!important;left:calc(100% + 10px)!important;right:auto!important;top:100%!important;width:94px!important;max-width:none!important;grid-column:auto;grid-row:auto;justify-self:start}}
+@media(max-width:1199px){body #tg-shell .tg-header-games{position:static!important;align-items:flex-end!important;justify-self:end;max-width:100%!important}body #tg-shell .tg-header-games a{font-size:10px!important}}
+
+/* V90: pestañas clásicas y partidas en recuadros junto al borde de la página. */
+body #tg-shell{background:linear-gradient(#7ea8bf,#9dbed0)!important;border-bottom:0!important}
+body #tg-shell .tg-shell-top{grid-template-rows:34px 38px!important;gap:0 4px!important;padding:4px 0 0!important;align-items:end!important}
+body #tg-shell .tg-shell-logo{grid-row:1!important;grid-column:1!important;font-size:23px!important;align-self:start!important}
+body #tg-shell .tg-shell-logo small{font-size:6px!important;line-height:7px!important}
+body #tg-shell .tg-shell-nav{grid-row:2!important;grid-column:1/3!important;gap:3px!important;align-self:end!important;align-items:stretch!important;justify-content:stretch!important;flex-wrap:nowrap!important;min-height:38px!important}
+body #tg-shell .tg-shell-nav>a,body #tg-shell .tg-shell-nav>a:first-child{display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;flex:1 1 auto!important;min-width:0!important;margin:0!important;padding:7px 7px 8px!important;border:1px solid #bfd1dd!important;border-bottom:0!important;border-radius:7px 7px 0 0!important;background:linear-gradient(#e2ebf2,#d0dde8)!important;font:700 12px/20px Arial!important;color:#5e8298!important;box-shadow:inset 0 1px #f5f8fa!important;white-space:nowrap!important}
+body #tg-shell .tg-shell-nav>a:hover,body #tg-shell .tg-shell-nav>a[aria-current=page]{background:#f8fbfd!important;color:#d87c8b!important}
+body #tg-shell .tg-tab-icon{display:inline-flex;flex:0 0 17px;width:17px;height:17px;align-items:center;justify-content:center;opacity:.86}
+body #tg-shell .tg-tab-icon svg{display:block;width:17px;height:17px}
+body #tg-shell .tg-account-menu{grid-row:2!important;grid-column:3!important;align-self:center!important;margin:0 0 4px 2px}
+body #tg-shell .tg-header-games{padding:0!important;gap:2px!important;left:100%!important;align-items:stretch!important}
+body #tg-shell .tg-header-games a{display:block!important;width:100%!important;box-sizing:border-box!important;min-height:27px!important;margin:0!important;padding:5px 7px!important;background:#f7f9fa!important;border:1px solid #d6e0e6!important;border-left:3px solid #becfda!important;color:#7e8e9b!important;font:400 12px/16px Arial!important;white-space:normal!important;overflow-wrap:anywhere;text-decoration:none!important}
+body #tg-shell .tg-header-games a:hover{background:#fff!important;color:#d07b89!important;border-left-color:#d7929e!important}
+@media(min-width:1200px){body #tg-shell .tg-header-games{width:min(144px,calc((100vw - 980px)/2 - 7px))!important;max-width:144px!important}}
+@media(min-width:901px) and (max-width:1199px){body #tg-shell .tg-shell-top{grid-template-rows:34px 38px auto!important}body #tg-shell .tg-header-games{grid-row:3!important;left:auto!important;width:138px!important}}
+@media(max-width:900px){body #tg-shell .tg-shell-top{grid-template-rows:auto auto auto!important;row-gap:3px!important}body #tg-shell .tg-shell-logo{grid-row:1!important;grid-column:1!important;min-height:31px!important}body #tg-shell .tg-account-menu{grid-column:2!important;grid-row:1!important}body #tg-shell .tg-shell-nav{grid-column:1/-1!important;grid-row:2!important;flex-wrap:wrap!important;gap:3px!important}body #tg-shell .tg-shell-nav>a,body #tg-shell .tg-shell-nav>a:first-child{flex:1 1 29%!important;min-height:34px!important;border-bottom:1px solid #bfd1dd!important;border-radius:5px!important;padding:5px!important;font-size:12px!important}body #tg-shell .tg-header-games{grid-column:1/-1!important;grid-row:3!important;left:auto!important;width:138px!important;max-width:100%!important;align-items:stretch!important;margin:0 0 3px!important}body #tg-shell .tg-header-games a{min-height:29px!important;font-size:12px!important}}
+@media(pointer:coarse){body #tg-shell .tg-shell-nav>a,body #tg-shell .tg-shell-nav>a:first-child{min-height:38px!important}body #tg-shell .tg-header-games a{min-height:34px!important;padding:8px 7px!important}}
+
+/* V91: reservar espacio real para partidas; escala compacta sin zoom del navegador. */
+@media(min-width:901px){body #tg-shell .tg-shell-top,body:not(.embedded-game)>.wrap{width:min(980px,calc(100% - 176px))!important;max-width:980px!important;margin-left:max(14px,calc((100vw - 1124px)/2))!important;margin-right:auto!important}body #tg-shell .tg-shell-top{grid-template-rows:31px 34px!important}body #tg-shell .tg-shell-nav{min-height:34px!important}body #tg-shell .tg-shell-nav>a,body #tg-shell .tg-shell-nav>a:first-child{font-size:11px!important;line-height:18px!important;padding:6px 5px!important;min-height:34px!important}body #tg-shell .tg-header-games{position:absolute!important;left:100%!important;right:auto!important;top:100%!important;width:144px!important;max-width:144px!important;padding:0!important;margin:0!important;grid-column:auto!important;grid-row:auto!important;align-items:stretch!important}}
+body #tg-shell .tg-shell-logo{font-size:22px!important}
+body #tg-shell .tg-menu-panel{width:205px!important;padding:5px 0!important}
+body #tg-shell .tg-menu-panel a,body #tg-shell .tg-menu-panel button{font-size:12px!important;line-height:16px!important;padding:5px 11px!important}
+body #tg-shell #tg-menu-welcome{font-size:12px!important;padding:4px 11px!important}
+body #tg-shell .tg-header-games a{font-size:11px!important;line-height:16px!important;min-height:26px!important;padding:4px 7px!important}
+body #tg-shell .tg-header-games .tg-game-empty{font:11px/1.4 Arial;color:#6b8493;padding:5px 7px;background:#eef4f7;border:1px solid #d4e0e6}
+@media(min-width:901px) and (max-width:1100px){body #tg-shell .tg-tab-icon{display:none!important}}
+@media(max-width:900px){body #tg-shell .tg-shell-top{width:calc(100% - 20px)!important;margin:0 10px!important;grid-template-rows:auto auto auto!important}body #tg-shell .tg-header-games{position:static!important;left:auto!important;top:auto!important;width:138px!important;max-width:100%!important;grid-column:1/-1!important;grid-row:3!important;justify-self:end!important;margin:0 0 4px!important}body #tg-shell .tg-shell-nav>a,body #tg-shell .tg-shell-nav>a:first-child{font-size:11px!important;min-height:32px!important;padding:4px!important}body #tg-shell .tg-tab-icon{width:14px;height:14px;flex-basis:14px}body #tg-shell .tg-tab-icon svg{width:14px;height:14px}body #tg-shell .tg-menu-panel{max-width:calc(100vw - 20px)!important}body #tg-shell .tg-header-games a{min-height:30px!important;padding:6px 7px!important}}
+@media(pointer:coarse){body #tg-shell .tg-menu-panel a,body #tg-shell .tg-menu-panel button{min-height:40px!important;padding:10px 11px!important}body #tg-shell .tg-account-menu>summary{width:38px;height:38px}}
+/* Unread mail stays visible even while the navigation menu is closed. */
+body #tg-shell .tg-account-menu>summary{position:relative;overflow:visible!important}body #tg-shell .tg-arrow-unread{position:absolute;top:-7px;right:-8px;display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:12px;background:#e94e68;color:#fff;box-shadow:0 0 0 2px #fff;font:bold 11px/20px Arial;pointer-events:none;white-space:nowrap}body #tg-shell .tg-arrow-unread[hidden]{display:none!important}body #tg-shell #tg-menu-unread{display:inline-flex;min-width:18px;justify-content:center;margin-left:5px;color:#d74161;font-weight:bold}body #tg-shell #tg-menu-unread[hidden]{display:none!important}
+
+/* V110: equipped account portrait beside the dropdown chevron. */
+body #tg-shell .tg-shell-top{grid-template-columns:170px minmax(0,1fr) 58px!important}
+body #tg-shell .tg-account-menu.has-avatar>summary{width:56px!important;height:40px!important;gap:5px;background:transparent!important;border:0!important;border-radius:0;color:#fff!important}
+body #tg-shell #tg-menu-avatar{display:block!important;flex:0 0 36px!important;width:36px!important;height:36px!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;box-sizing:border-box!important;border:2px solid #fff!important;border-radius:50%!important;object-fit:cover!important;object-position:center 30%!important;background:#d9e7f1!important}
+body #tg-shell #tg-menu-avatar[hidden]{display:none!important}
+body #tg-shell .has-avatar .tg-menu-chevron{font:18px/1 Arial;flex:none}
+body #tg-shell .has-avatar .tg-arrow-unread{right:9px;top:-4px}
+@media(max-width:900px){body #tg-shell .tg-shell-top{grid-template-columns:minmax(0,1fr) 58px!important}}
