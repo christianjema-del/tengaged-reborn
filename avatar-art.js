@@ -60,6 +60,8 @@ export function renderAvatar(raw={},overlays={}){
  content+=overlays.shirt?image('shirt'):overlays.skin?'':baseLayer(s,'shirt');
  const hair=overlays.hair?image('hair'):baseLayer(s,'hair');
  content+=head(['mouth','eyes','glasses'].map(slot=>overlays[slot]?image(slot):baseLayer(s,slot)).join('')+`<g clip-path="url(#avatarHeadClip)">${hair}</g>`);
+ // El adorno va sobre el pelo y sigue a la cabeza.
+ if(overlays.hair_ornament)content+=head(image('hair_ornament'));
  // Bajo el cuello el pelo se estrecha igual pero conserva su largo: las melenas siguen llegando al borde.
  content+=`<g transform="translate(${centerX} 0) scale(${scale} 1) translate(${-centerX} 0)"><g clip-path="url(#avatarBodyClip)">${hair}</g></g>`;
  return root(content);

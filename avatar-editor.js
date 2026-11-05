@@ -1,17 +1,17 @@
 import {isPhotoAvatar} from '/full-avatar115.js?v=159';
 import {request as fetch} from '/http.js?v=170';
 import {invalidateAvatar} from '/avatar-display.js?v=159';
-import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '/avatar-art.js?v=247';
+import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '/avatar-art.js?v=248';
 import {$,el,api,post,buttonTask,loginLink} from '/market-ui.js?v=170';
 const partRows=[['body','Cuerpo'],['hair','Pelo'],['eyes','Ojos'],['mouth','Boca'],['glasses','Gafas'],['shirt','Ropa']];
 const colorRows=[['skin','Tono de piel',skinPalette],['shirtColor','Color de ropa',featurePalette],['eyeColor','Color de ojos',featurePalette],['mouthColor','Color de boca',featurePalette],['hairColor','Color de pelo',featurePalette],['glassesColor','Color de gafas',featurePalette],['background','Color de fondo',featurePalette]];
-const labels=Object.fromEntries([...partRows,...colorRows.map(([k,l])=>[k,l]),['background','Fondo'],['skin','Cuerpo']]);
+const labels=Object.fromEntries([...partRows,...colorRows.map(([k,l])=>[k,l]),['background','Fondo'],['skin','Cuerpo'],['hair_ornament','Adorno del pelo']]);
 const ADMIN1_OUTFIT_ID=900000001;
 let settings,saved,overlays={},user,dirty=false,selection={},savedSelection={},inventory=[],saving=false;
 let wardrobeCategory='all';
 const wardrobeTabs=[['all','Todos'],['background','Fondos'],['skin','Piel'],['shirt','Ropa'],['eyes','Ojos'],['glasses','Gafas'],['hair','Pelo'],['hair_ornament','Adornos del pelo'],['mouth','Boca'],['accessory','Accesorios'],['tattoo','Tatuajes / cicatrices']];
 const paletteState=new Map();
-const imageCache=new Map(),layers=['skin','shirt','eyes','mouth','hair','glasses','background'];
+const imageCache=new Map(),layers=['skin','shirt','eyes','mouth','hair','hair_ornament','glasses','background'];
 const sameLayers=(a,b)=>layers.every(k=>(a[k]||null)===(b[k]||null));
 function statLabel(part){
   const label=partRows.find(([k])=>k===part)?.[1]||part;

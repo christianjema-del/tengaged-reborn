@@ -57,7 +57,7 @@ async function handle141_onRequest({request,env}){
  }
  const title=String(body.title||'').trim(),description=String(body.description||'').trim(),theme=String(body.theme_code||''),price=Number(body.price||0);
  if(title.length<3||title.length>60||description.length>240||!DESIGN_THEMES.has(theme)||!Number.isSafeInteger(price)||price<0||price>100000)return jsonError('Revisa el título, la descripción y el precio (0–100.000 T$).',400);
- const layer=String(body.layer_type||'profile');if(!['profile','skin','shirt','eyes','mouth','hair','glasses','background'].includes(layer))return jsonError('Categoría no válida.',400);
+ const layer=String(body.layer_type||'profile');if(!['profile','skin','shirt','eyes','mouth','hair','hair_ornament','glasses','background'].includes(layer))return jsonError('Categoría no válida.',400);
  const image=body.image_data||(editing?.image_data)||null;if(layer!=='profile'&&!image)return jsonError('Sube una imagen para esta pieza del avatar.',400);try{decodeDesignImage(image);}catch(e){return jsonError(e.message,400);}
  if(editing){
  if(layer!==editing.layer_type && await db.prepare("SELECT user_id FROM user_inventory WHERE item_code=? AND user_id<>? LIMIT 1").bind('userdesign-'+editing.id,user.id).first())return jsonError('No puedes cambiar la categoría de una pieza que otros usuarios ya tienen.',409);

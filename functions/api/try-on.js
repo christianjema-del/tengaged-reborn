@@ -24,7 +24,7 @@ async function handle141_onRequest({request,env}) {
     const full=decodeDesignImage(cleanDesignLayer(item.image_data));if(!full)return jsonError('Este diseño no tiene imagen.',404);
     return new Response(full.bytes,{headers:{'Content-Type':full.type,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
   }
-  if(!['skin','shirt','eyes','mouth','hair','glasses','background'].includes(item.layer_type))return jsonError('Capa no compatible.',400);
+  if(!['skin','shirt','eyes','mouth','hair','hair_ornament','glasses','background'].includes(item.layer_type))return jsonError('Capa no compatible.',400);
   overlays[item.layer_type]=cleanDesignLayer(item.image_data);
   // A skin selection replaces the entire original base avatar. Other purchased
   // overlays remain, but default features must not be drawn over the selected body.
