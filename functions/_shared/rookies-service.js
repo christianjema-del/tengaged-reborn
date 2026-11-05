@@ -1,11 +1,13 @@
 import {gamePrize} from '../../prize-catalog.js';
-import {COLOR_LEVEL_BY_CODE} from '../../color-level-catalog.js';
+import {COLOR_LEVELS,COLOR_LEVEL_BY_CODE} from '../../color-level-catalog.js';
 import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensureProfileSchema} from './auth.js';
 import {ensureGameHistorySchema} from './games.js';
 import {blogVotePower} from './blog-vote-power.js';
 import {freshRookies,advanceRookies,actRookies,rookiesView,setActivity,CAPACITY,BET_MULTIPLIERS} from './rookies-engine.js';
 const BET_DAYS=2,MINIMUM_COLOR=COLOR_LEVEL_BY_CODE.yellow.power;
+// Cada tarjeta suma 2 T$ a lo que se puede apostar por partida: amarilla 2, naranja 4, verde claro 6...
+export const betLimit=power=>2*Math.max(0,COLOR_LEVELS.findIndex(level=>level.power===power));
 export async function ensureRookies(db){
  await ensureProfileSchema(db);await ensureGameHistorySchema(db);
  if(await schemaReady170(db,'rookies249'))return;
@@ -72,13 +74,16 @@ export async function rookiesBets(db,id,user){
  await ensureRookies(db);const row=await db.prepare('SELECT state FROM rookies_matches WHERE id=?').bind(id).first();if(!row)throw Error('No existe esa partida de Rookies.');const s=JSON.parse(row.state);
  const totals=(await db.prepare('SELECT target_id,username,SUM(amount) AS amount FROM rookies_bets WHERE match_id=? GROUP BY target_id,username ORDER BY amount DESC').bind(id).all()).results;
  const blocked=!user?'Inicia sesión para apostar.':s.players.some(p=>p.id===user.id)?'No puedes apostar en una partida en la que juegas.':null;
- const open=s.phase==='day'&&s.day<=BET_DAYS,color=user?await blogVotePower(db,user.id):1;
- return {id,phase:s.phase,day:s.day,open,canBet:open&&!blocked&&color>=MINIMUM_COLOR,reason:!open?'Las apuestas solo están abiertas durante el día 1 y el día 2.':blocked||(color<MINIMUM_COLOR?'Necesitas nivel de color amarillo o superior.':null),players:s.players.map(p=>({id:p.id,username:p.username,placement:p.placement,status:p.status,total:totals.filter(t=>t.target_id===p.id).reduce((n,t)=>n+Number(t.amount),0),bets:totals.filter(t=>t.target_id===p.id).map(t=>({username:t.username,amount:Number(t.amount)}))}))};
+ const open=s.phase==='day'&&s.day<=BET_DAYS,color=user?await blogVotePower(db,user.id):1,limit=betLimit(color);
+ const spent=user?Number((await db.prepare('SELECT COALESCE(SUM(amount),0) AS n FROM rookies_bets WHERE match_id=? AND user_id=?').bind(id,user.id).first())?.n||0):0;
+ const reason=!open?'Las apuestas solo están abiertas durante el día 1 y el día 2.':blocked||(color<MINIMUM_COLOR?'Necesitas nivel de color amarillo o superior.':spent>=limit?'Ya has apostado todo lo que permite tu tarjeta en esta partida ('+limit+' T$).':null);
+ return {id,phase:s.phase,day:s.day,open,canBet:!reason,reason,limit,spent,players:s.players.map(p=>({id:p.id,username:p.username,bot:!!p.bot,placement:p.placement,status:p.status,hoh:p.id===s.hoh,nominated:s.nominees.includes(p.id),total:totals.filter(t=>t.target_id===p.id).reduce((n,t)=>n+Number(t.amount),0),bets:totals.filter(t=>t.target_id===p.id).map(t=>({username:t.username,amount:Number(t.amount)}))}))};
 }
 export async function placeBet(db,id,user,target){
  const info=await rookiesBets(db,id,user);if(!info.canBet)throw Error(info.reason||'Ahora no puedes apostar.');
  const housemate=info.players.find(p=>p.id===Number(target));if(!housemate||housemate.status!=='active')throw Error('Concursante no válido.');
- try{await db.prepare('INSERT INTO rookies_bets(match_id,user_id,username,target_id,amount) VALUES(?,?,?,?,1)').bind(id,user.id,user.username,housemate.id).run();}
+ // El tope va en la propia inserción para que varias pulsaciones a la vez no lo superen.
+ try{const done=await db.prepare('INSERT INTO rookies_bets(match_id,user_id,username,target_id,amount) SELECT ?,?,?,?,1 WHERE (SELECT COALESCE(SUM(amount),0) FROM rookies_bets WHERE match_id=? AND user_id=?)<?').bind(id,user.id,user.username,housemate.id,id,user.id,info.limit).run();if(!done.meta.changes)throw Error('Ya has apostado todo lo que permite tu tarjeta en esta partida ('+info.limit+' T$).');}
  catch(e){if(String(e.message).includes('ROOKIES_BALANCE'))throw Error('No tienes T$ suficientes.');throw e;}
  return rookiesBets(db,id,user);
 }

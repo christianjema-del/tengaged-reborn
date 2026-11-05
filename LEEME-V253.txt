@@ -1,0 +1,1 @@
+V253 — Apuestas de Rookies: tablero rehecho con avatares, estado y lista de apostantes. Límite por partida según la tarjeta de color (amarilla 2 T$, naranja 4 T$, y 2 T$ más por cada color superior). Las apuestas ya hechas no cambian.

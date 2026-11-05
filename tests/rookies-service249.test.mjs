@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {createHash} from 'node:crypto';
 import {ensureProfileSchema} from '../functions/_shared/auth.js';
-import {ensureRookies,rookiesMatch,rookiesBets,placeBet,waitingRookies,rookiesListing} from '../functions/_shared/rookies-service.js';
+import {ensureRookies,rookiesMatch,rookiesBets,placeBet,waitingRookies,rookiesListing,betLimit} from '../functions/_shared/rookies-service.js';
 import {onRequest as api} from '../functions/api/rookies.js';
 import {DAY_MS,FINALE_MS} from '../functions/_shared/rookies-engine.js';
 const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE users(id INTEGER PRIMARY KEY,username TEXT,email TEXT,password_hash TEXT,is_admin INTEGER DEFAULT 0,karma INTEGER DEFAULT 0,created_at TEXT DEFAULT CURRENT_TIMESTAMP);CREATE TABLE sessions(token_hash TEXT,user_id INTEGER,expires_at TEXT);CREATE TABLE game_chat(id INTEGER PRIMARY KEY,room TEXT,user_id INTEGER,body TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP);CREATE TABLE user_inventory(user_id INTEGER,item_code TEXT,is_equipped INTEGER DEFAULT 0);CREATE TABLE shop_items(code TEXT,theme_code TEXT,category TEXT)');
@@ -9,7 +9,8 @@ let queue=Promise.resolve();const db={prepare:q=>new Q(q),batch:list=>{const nex
 await ensureProfileSchema(db);await ensureRookies(db);
 const money=id=>sql.prepare('SELECT t_money m,karma k FROM users WHERE id=?').get(id);
 for(let id=1;id<=16;id++)sql.prepare('INSERT INTO users(id,username,t_money,is_admin) VALUES(?,?,10,?)').run(id,id===16?'admin1':'U'+id,id===16?1:0);
-sql.exec("INSERT INTO shop_items VALUES('color-card-yellow','yellow','Tarjetas de color');INSERT INTO user_inventory VALUES(14,'color-card-yellow',1)");
+for(const id of [17,18])sql.prepare('INSERT INTO users(id,username,t_money) VALUES(?,?,10)').run(id,'U'+id);
+sql.exec("INSERT INTO shop_items VALUES('color-card-yellow','yellow','Tarjetas de color'),('color-card-orange','orange','Tarjetas de color'),('color-card-gold','gold','Tarjetas de color');INSERT INTO user_inventory VALUES(14,'color-card-gold',1),(17,'color-card-yellow',1),(18,'color-card-orange',1)");
 const users=Array.from({length:13},(_,i)=>({id:i+1,username:'U'+(i+1)})),bettor={id:14,username:'U14'},white={id:15,username:'U15'},admin={id:16,username:'admin1',is_admin:1};
 await waitingRookies(db);const id=(await rookiesListing(db,null)).find(g=>g.phase==='waiting').id;
 for(const u of users)await rookiesMatch(db,id,u,{action:'join'});
@@ -20,6 +21,10 @@ await assert.rejects(()=>placeBet(db,id,white,2),/amarillo/,'blanco no apuesta')
 await assert.rejects(()=>placeBet(db,id,null,2),/Inicia sesión/);
 const results=await Promise.allSettled(Array.from({length:14},()=>placeBet(db,id,bettor,1)));
 assert.equal(results.filter(r=>r.status==='fulfilled').length,10,'no se gasta más de lo que se tiene');assert.equal(money(14).m,0);
+const yellow={id:17,username:'U17'},orange={id:18,username:'U18'};assert.deepEqual([1,2,3,4,12].map(betLimit),[0,2,4,6,22],'cada tarjeta suma 2 T$');
+const capped=await Promise.allSettled(Array.from({length:5},()=>placeBet(db,id,yellow,3)));assert.equal(capped.filter(r=>r.status==='fulfilled').length,2,'la amarilla apuesta 2 T$ aunque pulse a la vez');assert.equal(money(17).m,8);
+assert.match(capped.find(r=>r.status==='rejected').reason.message,/2 T\$/);const usedUp=await rookiesBets(db,id,yellow);assert.equal(usedUp.canBet,false);assert.equal(usedUp.spent,2);
+for(const target of [3,4,5,6])await placeBet(db,id,orange,target);await assert.rejects(()=>placeBet(db,id,orange,7),/4 T\$/,'la naranja apuesta 4 T$ repartidos');assert.equal(money(18).m,6);
 const info=await rookiesBets(db,id,bettor);assert.equal(info.players.find(p=>p.id===1).total,10);assert.equal(info.canBet,true);
 sql.exec('UPDATE users SET t_money=2 WHERE id=14');await placeBet(db,id,bettor,2);await placeBet(db,id,bettor,2);
 // El usuario 1 es con diferencia el más activo: gana la partida.
