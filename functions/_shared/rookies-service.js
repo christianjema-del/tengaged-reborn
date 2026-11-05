@@ -4,6 +4,7 @@ import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensureProfileSchema} from './auth.js';
 import {ensureGameHistorySchema} from './games.js';
 import {blogVotePower} from './blog-vote-power.js';
+import {roomPosis} from './chat-posis.js';
 import {freshRookies,advanceRookies,actRookies,rookiesView,setActivity,CAPACITY,BET_MULTIPLIERS,DAY_MS} from './rookies-engine.js';
 const BET_DAYS=2,MINIMUM_COLOR=COLOR_LEVEL_BY_CODE.yellow.power;
 // Cada tarjeta suma 2 T$ a lo que se puede apostar por partida: amarilla 2, naranja 4, verde claro 6...
@@ -51,7 +52,7 @@ async function betWrites(db,s,id,payload){
  }
  return writes;
 }
-async function loadActivity(db,s,id){const rows=(await db.prepare('SELECT user_id,COUNT(*) AS n FROM game_chat WHERE room=? GROUP BY user_id').bind('rookies:'+id).all()).results;setActivity(s,Object.fromEntries(rows.map(r=>[r.user_id,r.n])));}
+async function loadActivity(db,s,id){const {totals}=await roomPosis(db,'rookies:'+id);setActivity(s,Object.fromEntries(totals));}
 export async function rookiesMatch(db,id,user,input=null,now=Date.now()){
  await ensureRookies(db);
  for(let n=0;n<32;n++){

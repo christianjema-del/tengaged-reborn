@@ -29,11 +29,9 @@ const info=await rookiesBets(db,id,bettor);assert.equal(info.players.find(p=>p.i
 sql.exec('UPDATE users SET t_money=2 WHERE id=14');await placeBet(db,id,bettor,2);await placeBet(db,id,bettor,2);
 const profile=await profileBets(db,14,1,Date.now());assert.deepEqual(profile.open,[id],'el perfil ofrece la partida abierta');sql.prepare('INSERT INTO rookies_matches(state) VALUES(?)').run(JSON.stringify({phase:'day',day:1,deadline:Date.now()+1000,players:[]}));const second=sql.prepare('SELECT MAX(id) n FROM rookies_matches').get().n;assert.deepEqual((await profileBets(db,14,1,Date.now())).open,[id,second],'aparecen todas las partidas abiertas');assert.deepEqual((await profileBets(db,14,1,Date.now()+2*DAY_MS)).open,[],'un día 1 caducado hace dos días ya no está abierto');sql.prepare('DELETE FROM rookies_matches WHERE id=?').run(second);assert.deepEqual(profile.items.map(x=>[x.amount,x.target,x.matchId,x.status]),[[2,'U2',id,'playing'],[10,'U1',id,'playing']]);
 assert.equal((await profileBets(db,18,1,Date.now())).items.length,4);assert.deepEqual((await profileBets(db,15,1,Date.now())).items,[],'sin apuestas');assert.equal((await profileBets(db,14,99,Date.now())).page,1,'la página se limita');
-// El usuario 1 es con diferencia el más activo: gana la partida.
-for(let n=0;n<40;n++)sql.prepare('INSERT INTO game_chat(room,user_id,body) VALUES(?,1,?)').run('rookies:'+id,'hola');
-for(let n=0;n<20;n++)sql.prepare('INSERT INTO game_chat(room,user_id,body) VALUES(?,2,?)').run('rookies:'+id,'hola');
-for(let n=0;n<10;n++)sql.prepare('INSERT INTO game_chat(room,user_id,body) VALUES(?,3,?)').run('rookies:'+id,'hola');
-for(let n=0;n<5;n++)sql.prepare('INSERT INTO game_chat(room,user_id,body) VALUES(?,4,?)').run('rookies:'+id,'hola');
+// El usuario 1 tiene con diferencia mas positivos: gana la partida. Se alternan comentarios para no contar como spam.
+sql.exec('CREATE TABLE IF NOT EXISTS game_chat_votes(message_id,user_id,value)');
+for(const [uid,n] of [[1,8],[2,6],[3,4],[4,2]]){const m=sql.prepare('INSERT INTO game_chat(room,user_id,body) VALUES(?,?,?)').run('rookies:'+id,uid,'hola').lastInsertRowid;for(let v=0;v<n;v++)sql.prepare('INSERT INTO game_chat_votes VALUES(?,?,1)').run(m,100+v);}
 let at=t,m;for(let i=0;i<12;i++){at+=DAY_MS;m=(await rookiesMatch(db,id,null,null,at)).match;if(m.phase==='finale')break;}
 assert.equal(m.phase,'finale');await assert.rejects(()=>placeBet(db,id,bettor,1),/día 1/,'apuestas cerradas');
 const before=money(14).m;await Promise.all(Array.from({length:6},()=>rookiesMatch(db,id,null,null,at+FINALE_MS)));await rookiesMatch(db,id,null,null,at+FINALE_MS+1);
