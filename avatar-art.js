@@ -44,14 +44,23 @@ function baseLayer(s,slot){
  const rgb=[0,2,4].map(i=>parseInt(color.slice(1+i,3+i),16)/255);
  return `<defs><filter id="${id}" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feComponentTransfer>${['R','G','B'].map((c,i)=>`<feFunc${c} type="linear" slope="1" intercept="${rgb[i]}"/>`).join('')}</feComponentTransfer></filter></defs><image data-original-layer="${slot}" data-tint="${color}" href="${src}" xlink:href="${src}" width="200" height="230" preserveAspectRatio="none" filter="url(#${id})"/>`;
 }
+export const AVATAR_HEAD=Object.freeze({scale:0.9,centerX:100,neck:156});
 export function renderAvatar(raw={},overlays={}){
  const s=normalizeAvatar(raw);
  const root=content=>`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 230" width="200" height="230" role="img" aria-label="Avatar personalizado">${content}</svg>`;
  if(isPhotoAvatar(overlays.skin))return root(`<image href="${overlays.skin}" xlink:href="${overlays.skin}" width="200" height="230" preserveAspectRatio="xMidYMid slice"/>`).replace('<svg ','<svg data-avatar-mode="photo" ');
  const image=slot=>{if(!overlays[slot])return '';const fit=placementForDesign(overlays[slot]);return `<image data-owned-layer="${slot}" href="${overlays[slot]}" xlink:href="${overlays[slot]}" x="${fit.x}" y="${fit.y}" width="${fit.width}" height="${fit.height}" preserveAspectRatio="none"/>`;};
  let content=`<rect width="200" height="230" fill="${s.background}"/>${image('background')}`;
- if(overlays.skin){content+=image('skin');if(overlays._fullBody)return root(content);content+=image('shirt');}
- else content+=baseLayer(s,'body')+(overlays.shirt?image('shirt'):baseLayer(s,'shirt'));
- for(const slot of ['mouth','eyes','glasses','hair'])content+=overlays[slot]?image(slot):baseLayer(s,slot);
+ if(overlays.skin&&overlays._fullBody)return root(content+image('skin'));
+ // Cabeza al 90 %: la piel trae cabeza y cuerpo juntos, así que se parte por el cuello.
+ // La barbilla no se mueve y se conserva el orden de las capas.
+ const {neck,centerX,scale}=AVATAR_HEAD,head=inner=>`<g transform="translate(${centerX} ${neck}) scale(${scale}) translate(${-centerX} ${-neck})">${inner}</g>`,skin=overlays.skin?image('skin'):baseLayer(s,'body');
+ content+=`<defs><clipPath id="avatarHeadClip"><rect x="-60" y="-60" width="320" height="${neck+60}"/></clipPath><clipPath id="avatarBodyClip"><rect x="-60" y="${neck}" width="320" height="${290-neck}"/></clipPath></defs>`;
+ content+=`<g clip-path="url(#avatarBodyClip)">${skin}</g>`+head(`<g clip-path="url(#avatarHeadClip)">${skin}</g>`);
+ content+=overlays.shirt?image('shirt'):overlays.skin?'':baseLayer(s,'shirt');
+ const hair=overlays.hair?image('hair'):baseLayer(s,'hair');
+ content+=head(['mouth','eyes','glasses'].map(slot=>overlays[slot]?image(slot):baseLayer(s,slot)).join('')+`<g clip-path="url(#avatarHeadClip)">${hair}</g>`);
+ // Bajo el cuello el pelo se estrecha igual pero conserva su largo: las melenas siguen llegando al borde.
+ content+=`<g transform="translate(${centerX} 0) scale(${scale} 1) translate(${-centerX} 0)"><g clip-path="url(#avatarBodyClip)">${hair}</g></g>`;
  return root(content);
 }

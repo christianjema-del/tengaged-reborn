@@ -1,0 +1,1 @@
+V247 — Avatares por capas: cabeza al 90 % (AVATAR_HEAD en avatar-art.js), con la barbilla fija y el mismo orden de capas. Por debajo del cuello el pelo se estrecha pero conserva su largo. Las fotos y los avatares de cuerpo entero no cambian. Para revertirlo, poner scale a 1.
