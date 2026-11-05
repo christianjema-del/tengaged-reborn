@@ -15,7 +15,12 @@ export async function profileActivity231(db,target,page=1,size=15){
  if(tables.has('design_comments')&&tables.has('community_designs')){parts.push("SELECT 'design_comment',d.id,d.title,c.created_at FROM design_comments c JOIN community_designs d ON d.id=c.design_id WHERE c.user_id=?"+(tables.has('withdrawn_designs')?' AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=d.id)':''));args.push(target.id);}
  if(tables.has('user_game_history')){parts.push("SELECT 'game',game_id,game_type,joined_at FROM user_game_history WHERE LOWER(username)=LOWER(?)");args.push(target.username);}
  if(!parts.length)return {activity:[],total:0,activity_error:null};
- const union='SELECT NULL AS kind,NULL AS ref,NULL AS label,NULL AS at WHERE 0 UNION ALL '+parts.join(' UNION ALL '),total=Number((await db.prepare('SELECT COUNT(*) AS n FROM ('+union+')').bind(...args).first()).n);
- const activity=(await db.prepare('SELECT * FROM ('+union+') ORDER BY at DESC,kind,ref DESC LIMIT ? OFFSET ?').bind(...args,size,(page-1)*size).all()).results;
+ // D1 limita los SELECT compuestos: cada fuente se consulta aparte y se mezcla aquí.
+ const limit=page*size,settled=await Promise.allSettled(parts.map((part,i)=>db.prepare('WITH source(kind,ref,label,at) AS ('+part+') SELECT * FROM source ORDER BY at DESC LIMIT ?').bind(args[i],limit).all()));
+ const ok=settled.filter(x=>x.status==='fulfilled');if(!ok.length)throw settled[0].reason;
+ for(const x of settled)if(x.status==='rejected')console.error('Profile activity source',x.reason);
+ const stamp=x=>String(x.at||'').replace('T',' ');
+ const merged=ok.flatMap(x=>x.value.results).sort((a,b)=>stamp(b).localeCompare(stamp(a))||String(a.kind).localeCompare(String(b.kind))||String(b.ref).localeCompare(String(a.ref),undefined,{numeric:true}));
+ const total=merged.length,activity=merged.slice((page-1)*size,page*size);
  return {activity,total,activity_error:null};
 }

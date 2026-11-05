@@ -1,0 +1,1 @@
+V244 — Perfil: Últimas Acciones vuelve a cargar. La consulta superaba el límite de SELECT compuestos de Cloudflare D1; ahora cada fuente se consulta por separado y se mezcla por fecha. Si una fuente falla, las demás se muestran. No modifica datos.
