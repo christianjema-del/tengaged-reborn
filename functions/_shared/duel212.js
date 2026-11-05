@@ -1,12 +1,13 @@
 import {canFillBots} from './game-bots.js';
 import {CASTING_MINIGAMES} from '../../minigame-catalog.js';
 import {BASE_CHALLENGE_SECONDS} from './challenge-time.js';
-const HOURS24=86400000,GRACE=600000;
+export const PHASE_MS=4*3600000;
+const GRACE=600000;
 export const duelAlive=s=>s.players.filter(p=>p.status==='active');
 export function freshDuel(id,now=Date.now()){return {id,version:219,phase:'waiting',round:0,stage:0,createdAt:now,startedAt:null,finishedAt:null,players:[],runs:{},lists:{},events:[],history:[],whispers:[],welcomes:[],fee:0};}
 function log(s,text,now){s.events.push({id:s.events.length+1,text,at:now});}
 export function duelEligible(s){return s.phase==='immunity'||s.phase==='final'?duelAlive(s):s.phase==='duel'?duelAlive(s).filter(p=>s.nominees.includes(p.id)):[];}
-function stage(s,phase,now){s.phase=phase;if(phase!=='duel')s.nominees=[];s.stage++;s.runs={};s.flashData=null;s.deadline=now+HOURS24;s.challenge=Object.keys(CASTING_MINIGAMES)[(s.id+s.stage-2)%Object.keys(CASTING_MINIGAMES).length];for(const p of duelEligible(s).filter(p=>p.bot))s.runs[p.id]={saved:true,score:0,startedAt:now,savedAt:now,duration:BASE_CHALLENGE_SECONDS};log(s,phase==='final'?'Los tres finalistas compiten por la victoria.':phase==='duel'?'Comienza el duelo de eliminación.':'Día '+s.round+': prueba de clasificación y listas de preferencias.',now);}
+function stage(s,phase,now){s.phase=phase;if(phase!=='duel')s.nominees=[];s.stage++;s.runs={};s.flashData=null;s.deadline=now+PHASE_MS;s.challenge=Object.keys(CASTING_MINIGAMES)[(s.id+s.stage-2)%Object.keys(CASTING_MINIGAMES).length];for(const p of duelEligible(s).filter(p=>p.bot))s.runs[p.id]={saved:true,score:0,startedAt:now,savedAt:now,duration:BASE_CHALLENGE_SECONDS};log(s,phase==='final'?'Los tres finalistas compiten por la victoria.':phase==='duel'?'Comienza el duelo de eliminación.':'Día '+s.round+': prueba de clasificación y listas de preferencias.',now);}
 function score(s,p){return s.runs[p.id]?.saved?s.runs[p.id].score:0;}
 function ranked(s,players){return [...players].sort((a,b)=>score(s,b)-score(s,a)||Number(!!a.bot)-Number(!!b.bot)||(s.runs[a.id]?.savedAt??Infinity)-(s.runs[b.id]?.savedAt??Infinity)||a.joinedAt-b.joinedAt||s.players.indexOf(a)-s.players.indexOf(b));}
 export function advanceDuel(s,now=Date.now()){

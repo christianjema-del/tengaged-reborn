@@ -1,0 +1,1 @@
+V261 — El Duelo: cada día dura 4 horas en lugar de 24. Al terminar el plazo cambia de día igualmente y quien no haya jugado saca 0 puntos.
