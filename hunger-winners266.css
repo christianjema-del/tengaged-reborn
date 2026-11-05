@@ -1,0 +1,6 @@
+/* Mismo apartado que Ganadores en El Duelo, con el ganador solo. */
+body .hunger-main #hunger-winners{border:1px solid #e3edf3;padding:8px;margin:0 0 18px;background:#fff}body .hunger-main #hunger-winners[hidden]{display:none}
+body .hunger-main #hunger-winners h2{margin:0 0 8px;padding:0;border:0;background:none;text-align:center;color:#333;font:26px/32px Arial}
+#hunger-podium{display:flex;justify-content:center;text-align:center}
+.hunger-winner-person{min-width:0;width:100px;text-align:center}.hunger-winner-person img{display:block;width:75px;max-width:75px;aspect-ratio:65/75;object-fit:cover;margin:auto;background:#edf4f9}
+.hunger-winner-person>a{display:block;margin:4px 0 0;color:#4682b4;font:bold 11px/14px Arial;overflow-wrap:anywhere}.hunger-winner-person>b{display:block;color:#666;font:13px/20px Arial}

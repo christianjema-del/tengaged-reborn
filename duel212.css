@@ -73,3 +73,6 @@ body #duel-main .duel-person{position:relative}body #duel-main .duel-person>.due
 
 /* Exact Frookies safe tick typography and colour. */
 body #duel-main .duel-person>b.fro-safe{font:bold 20px/20px Arial;color:#94bd78}
+/* Puestos con el mismo aspecto que en Casting y Frookies. */
+body #duel-main .duel-person>b.duel-place,body #duel-main #duel-podium .duel-person>b.duel-place{font:13px/20px Arial!important;color:#666!important}
+body #duel-main #duel-podium .duel-person>small{display:none!important}
