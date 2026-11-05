@@ -1,0 +1,1 @@
+V265 — Menú: al estrecharse la página, las partidas activas salen en fila debajo del menú en lugar de en columna.

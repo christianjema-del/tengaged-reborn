@@ -46,6 +46,8 @@ body.classic166 #tg-shell #tg-header-games>a{display:block!important;box-sizing:
 body.classic166 #tg-shell #tg-header-games>a:focus-visible{outline:2px solid #49759a;outline-offset:1px}
 
 @media(min-width:1320px){body.classic166 #tg-shell #tg-header-games{position:absolute!important;left:100%!important;right:auto!important;top:100%!important;width:140px!important;max-width:140px!important;margin:0!important}}
+/* Sin hueco a la derecha de la pagina, los juegos van en fila y no empujan el contenido. */
+@media(max-width:1319px){body.classic166 #tg-shell #tg-header-games{flex-flow:row wrap!important;justify-content:flex-end!important;align-items:stretch!important}body.classic166 #tg-shell #tg-header-games>a{width:auto!important;white-space:nowrap!important;overflow-wrap:normal!important}}
 
 /* Original logo has opaque white padding; blend it into the header. */
 body.classic166 #tg-shell .tg-shell-logo .blogs-logo162{mix-blend-mode:normal;clip-path:polygon(0 0,100% 0,100% 90.9%,56.3% 90.9%,55.8% 92.7%,54.7% 94.5%,53.7% 96.4%,51.6% 100%,31.6% 100%,29.5% 96.4%,28.4% 94.5%,27.4% 92.7%,26.8% 90.9%,0 90.9%)}
