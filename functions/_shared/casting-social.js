@@ -3,11 +3,7 @@ import {applyChatHealth142,restoreCastingThree142} from './casting-health142.js'
 import {roomPosis} from './chat-posis.js';
 export function applyGreenTicks(s,rows){
  const totals=new Map(rows.map(r=>[r.username.toLowerCase(),Number(r.total)||0]));
- for(const p of s.players){p.checks=totals.get(p.username.toLowerCase())||0;
- // Never award the same milestone twice by removing and restoring a vote.
- const earned=Math.max(0,Math.floor(p.checks/3000));p.tickPackagesEarned??=Math.max((p.packages||[]).length,0);p.packages??=[];
- while(p.tickPackagesEarned<earned){p.tickPackagesEarned++;p.packages.push({id:crypto.randomUUID(),kind:crypto.getRandomValues(new Uint32Array(1))[0]%2?'key':'apple',at:Date.now(),claimedAt:null});}
- }
+ for(const p of s.players)p.checks=totals.get(p.username.toLowerCase())||0;
 }
 export async function syncCastingSocial(db,s){
  if(s.phase==='finished'&&(s.id!==4||s.positionRecovery146||s.positionRecovery161))return;

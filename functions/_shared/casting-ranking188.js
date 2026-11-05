@@ -15,7 +15,11 @@ export function activeCasting188(s,p,at=Date.now()){
 }
 export function resourceOrder188(s,players,final=false,at=Date.now()){
  hydrateApples188(s);
- return players.map(p=>({username:p.username,keys:num(p.keys),apples:num(p.apples),checks:num(p.checks),score:num(p.keys)+num(p.apples)+num(p.checks),challengeScore:final?(p.performanceDays?num(p.performanceTotal)/p.performanceDays:0):num(s.flashScores?.[key(p)]?.points),bot:!!p.bot,chatProtected:activeCasting188(s,p,at),tie:num(p.tie)})).sort((a,b)=>Number(a.bot)-Number(b.bot)||Number(b.chatProtected)-Number(a.chatProtected)||b.keys-a.keys||b.score-a.score||b.challengeScore-a.challengeScore||a.tie-b.tie||a.username.localeCompare(b.username));
+ const rows=players.map(p=>({username:p.username,keys:num(p.keys),apples:num(p.apples),checks:num(p.checks),challengeScore:final?(p.performanceDays?num(p.performanceTotal)/p.performanceDays:0):num(s.flashScores?.[key(p)]?.points),bot:!!p.bot,chatProtected:activeCasting188(s,p,at),tie:num(p.tie)}));
+ // Cada recurso se compara por posicion entre los jugadores: 70% llaves, 25% tics y 5% desafios.
+ const rank=(row,field)=>rows.length<=1?1:(rows.filter(r=>r[field]<row[field]).length+(rows.filter(r=>r[field]===row[field]).length-1)/2)/(rows.length-1);
+ for(const r of rows)r.score=Math.round((rank(r,'keys')*70+rank(r,'checks')*25+rank(r,'challengeScore')*5)*1000)/1000;
+ return rows.sort((a,b)=>Number(a.bot)-Number(b.bot)||Number(b.chatProtected)-Number(a.chatProtected)||b.score-a.score||b.keys-a.keys||b.checks-a.checks||b.challengeScore-a.challengeScore||a.tie-b.tie||a.username.localeCompare(b.username));
 }
 export function repairCastingSeven188(s,now=Date.now()){
  if(s.id!==7||s.phase!=='finished'||s.positionRecovery188)return false;
