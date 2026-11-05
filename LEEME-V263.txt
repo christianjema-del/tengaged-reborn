@@ -1,0 +1,1 @@
+V263 — Juegos: todas las listas usan las mismas columnas y letra que las partidas finalizadas, y el duelo #2 lleva la etiqueta EVENTO.
