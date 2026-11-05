@@ -60,7 +60,7 @@ export async function play(host,kind,questions,done,options={}){
   try{if(!document.querySelector('link[data-wof-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/wof-touch236.css?v=236';style.dataset.wofTouch='true';document.head.append(style);}const {installWofTouch}=await import('/wof-touch236.js?v=236');disposeTouch=installWofTouch(container,player);}catch(error){console.warn('Wheel touch keys:',error);}
  }
  if(mobileGuitar){
-  try{if(!document.querySelector('link[data-guitar-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/guitar-touch238.css?v=239';style.dataset.guitarTouch='true';document.head.append(style);}const {installGuitarTouch}=await import('/guitar-touch238.js?v=239');disposeTouch=installGuitarTouch(container,player);}catch(error){console.warn('Guitar touch buttons:',error);}
+  try{if(!document.querySelector('link[data-guitar-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/guitar-touch238.css?v=245';style.dataset.guitarTouch='true';document.head.append(style);}const {installGuitarTouch}=await import('/guitar-touch238.js?v=245');disposeTouch=installGuitarTouch(container,player);}catch(error){console.warn('Guitar touch buttons:',error);}
  }
  return ()=>{disposeTouch?.();player.remove();};
  }catch(err){status.textContent='No se pudo abrir el juego original: '+(err?.message||err);button.disabled=true;throw err;}

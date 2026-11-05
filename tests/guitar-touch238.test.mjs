@@ -4,7 +4,7 @@ import {inflateSync} from 'node:zlib';
 const flash=readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),touch=readFileSync(new URL('../guitar-touch238.js',import.meta.url),'utf8');
 assert.match(flash,/kind==='guitar'&&window\.matchMedia\?\.\('\(any-pointer: coarse\) and \(max-width: 1024px\)'\)/,'botones solo en pantallas táctiles');
 assert.match(flash,/installGuitarTouch\(container,player\)/);
-assert.match(touch,/stopPropagation/,'una pulsación fuera del reproductor no debe quitarle el foco a Ruffle');
+assert.match(touch,/stopPropagation/,'una pulsación en el botón no debe quitarle el foco a Ruffle');assert.ok(touch.indexOf('restoreFocus(player);window.dispatchEvent')>0,'cada pulsación recupera el foco antes de enviar la tecla');assert.match(touch,/Pulsa JUGAR/);
 for(const code of [49,50,51,52,53])assert.ok(touch.includes(','+code+','),'tecla '+code);
 const raw=readFileSync(new URL('../original-games/swf/Guitar.swf',import.meta.url));assert.equal(raw.subarray(0,3).toString(),'CWS');
 const body=Buffer.concat([raw.subarray(0,8),inflateSync(raw.subarray(8))]);assert.equal(body.readUInt32LE(4),body.length,'longitud de cabecera');

@@ -1,0 +1,1 @@
+V245 — Guitar en móvil: un toque fuera de los botones (por ejemplo, al desplazar la página) dejaba al reproductor sin foco y los botones dejaban de responder. Ahora cada pulsación recupera el foco antes de enviar la nota. La ayuda dice "Pulsa JUGAR". No cambia reglas, notas ni puntuaciones.
