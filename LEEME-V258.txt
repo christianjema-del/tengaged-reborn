@@ -1,0 +1,1 @@
+V258 — Juegos: la lista de últimos juegos adopta el aspecto de la referencia, con nombres en minúscula, colores por juego, tablas con borde y tiempo transcurrido.
