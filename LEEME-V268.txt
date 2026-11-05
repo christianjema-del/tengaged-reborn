@@ -1,0 +1,1 @@
+V268 — Hunger: quien lucha no muestra Atacar, quien recoge un arma muestra ARMA y no puede esconderse, y el botón pasa a ser Esconderme en amarillo.
