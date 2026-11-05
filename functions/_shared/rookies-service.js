@@ -4,7 +4,7 @@ import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensureProfileSchema} from './auth.js';
 import {ensureGameHistorySchema} from './games.js';
 import {blogVotePower} from './blog-vote-power.js';
-import {freshRookies,advanceRookies,actRookies,rookiesView,setActivity,CAPACITY,BET_MULTIPLIERS} from './rookies-engine.js';
+import {freshRookies,advanceRookies,actRookies,rookiesView,setActivity,CAPACITY,BET_MULTIPLIERS,DAY_MS} from './rookies-engine.js';
 const BET_DAYS=2,MINIMUM_COLOR=COLOR_LEVEL_BY_CODE.yellow.power;
 // Cada tarjeta suma 2 T$ a lo que se puede apostar por partida: amarilla 2, naranja 4, verde claro 6...
 export const betLimit=power=>2*Math.max(0,COLOR_LEVELS.findIndex(level=>level.power===power));
@@ -93,7 +93,8 @@ const PROFILE_BETS=8;
 export async function profileBets(db,userId,page=1,now=Date.now()){
  await ensureRookies(db);
  const count=Number((await db.prepare('SELECT COUNT(*) AS n FROM (SELECT 1 FROM rookies_bets WHERE user_id=? GROUP BY match_id,target_id)').bind(userId).first())?.n||0),pages=Math.max(1,Math.ceil(count/PROFILE_BETS)),current=Math.min(pages,Math.max(1,Math.floor(Number(page)||1)));
- const open=(await db.prepare("SELECT id FROM rookies_matches WHERE json_extract(state,'$.phase')='day' AND (json_extract(state,'$.day')=1 OR (json_extract(state,'$.day')=2 AND json_extract(state,'$.deadline')>?)) ORDER BY id DESC LIMIT 1").bind(now).first())?.id||null;
+ // El estado guardado puede ir retrasado: un día 1 caducado sigue abierto si aún estaría en el día 2.
+ const open=(await db.prepare("SELECT id FROM rookies_matches WHERE json_extract(state,'$.phase')='day' AND ((json_extract(state,'$.day')=1 AND json_extract(state,'$.deadline')+?>?) OR (json_extract(state,'$.day')=2 AND json_extract(state,'$.deadline')>?)) ORDER BY id LIMIT 20").bind(DAY_MS,now,now).all()).results.map(r=>r.id);
  const rows=(await db.prepare('SELECT match_id,target_id,SUM(amount) AS amount,MAX(id) AS last FROM rookies_bets WHERE user_id=? GROUP BY match_id,target_id ORDER BY last DESC LIMIT ? OFFSET ?').bind(userId,PROFILE_BETS,(current-1)*PROFILE_BETS).all()).results;
  const ids=[...new Set(rows.map(r=>r.match_id))],marks=ids.map(()=>'?').join(',');
  const states=new Map(ids.length?(await db.prepare('SELECT id,state FROM rookies_matches WHERE id IN ('+marks+')').bind(...ids).all()).results.map(r=>[r.id,JSON.parse(r.state)]):[]);

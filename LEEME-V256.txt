@@ -1,0 +1,1 @@
+V256 — Perfil: "Apostar ahora" muestra todas las partidas de Rookies abiertas a apuestas, no solo la más reciente, y descarta las que ya caducaron aunque nadie haya entrado en ellas.

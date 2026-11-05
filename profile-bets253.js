@@ -11,7 +11,7 @@ function row(x){const li=el('li'),who=el('span','','who'),game=el('span','en ','
  li.append(who,game,state);return li;}
 function render(d){
  $('profileBetsTitle').textContent=d.self?'Mis apuestas':'Sus apuestas';pager(d.page,d.pages);
- const open=$('profileBetsOpen');open.hidden=!d.open;open.replaceChildren();if(d.open)open.append(el('span','Apostar ahora:'),link('#'+d.open,'/rookies-bets.html?id='+d.open));
+ const open=$('profileBetsOpen');open.hidden=!d.open.length;open.replaceChildren();if(d.open.length){const games=el('span','','games');games.append(...d.open.map(id=>link('#'+id,'/rookies-bets.html?id='+id)));open.append(el('span','Apostar ahora:'),games);}
  const list=$('profileBetsList');list.replaceChildren(...d.items.map(row));$('profileBetsEmpty').hidden=!!d.items.length;
 }
 async function load(page=1){const mine=++request;try{const q=new URLSearchParams({page});if(username)q.set('username',username);const r=await fetch('/api/profile-bets?'+q,{cache:'no-store',credentials:'include'}),d=await r.json();if(mine!==request)return;if(!r.ok||!d.ok)throw Error(d.message);render(d);$('profileBetsCard').hidden=false;}catch{if(mine===request)$('profileBetsCard').hidden=true;}}
