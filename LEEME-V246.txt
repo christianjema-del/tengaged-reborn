@@ -1,0 +1,1 @@
+V246 — El Duelo paga premios a los tres primeros: 30K-60T$, 15K-35T$ y 10K-20T$. Se abonan al terminar la partida, en el mismo lote que guarda su estado, con registro en duel_results para impedir pagos dobles. Los bots no cobran. Las partidas en curso cobran al terminar. La tabla de premios de Preguntas frecuentes incluye la columna EL DUELO.

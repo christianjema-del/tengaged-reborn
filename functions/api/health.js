@@ -1,4 +1,4 @@
 import {withStorageGuard} from '../_shared/storage-guard141.js';
-async function handle141_onRequest(){return Response.json({ok:true,version:245,build:"V245-GUITAR-BOTONES",timestamp:new Date().toISOString()},{headers:{"Cache-Control":"no-store"}});}
+async function handle141_onRequest(){return Response.json({ok:true,version:246,build:"V246-DUELO-PREMIOS",timestamp:new Date().toISOString()},{headers:{"Cache-Control":"no-store"}});}
 
 export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}
