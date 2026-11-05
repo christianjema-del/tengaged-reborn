@@ -1,0 +1,3 @@
+V250 — Rookies clásico: 13 concursantes, días de 24 horas, HoH y PoV por actividad, nominaciones al día siguiente, reparto de puntos, PoV secreto, final de cinco y final de cuatro de 4 horas. El orden final lo decide la actividad en el chat de toda la partida. Entrada gratuita y premios Rookies Slow.
+Apuestas: días 1 y 2, 1 T$ por pulsación, no para inscritos ni por debajo de amarillo. Pagos: ×2, ×1,75, ×1,50, ×1,25 y ×1 del 1.º al 5.º.
+Motor: functions/_shared/rookies-engine.js. Servicio: rookies-service.js. Páginas: rookies.html y rookies-bets.html.
