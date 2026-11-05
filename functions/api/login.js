@@ -2,17 +2,21 @@ import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {claimDailyReward} from '../_shared/daily-rewards.js';
 import {expireModeration} from '../_shared/moderation.js';
 import { ensureProfileSchema, ADMIN_USERNAME } from "../_shared/auth.js";
+import {ensurePasswordReset} from '../_shared/password-reset.js';
 
 async function handle141_onRequestPost({ request, env, waitUntil }) {
   const body = await request.json().catch(() => ({}));
   const username = String(body.username || '').trim(); const password = String(body.password || '');
-  await ensureProfileSchema(env.DB);await expireModeration(env.DB);
+  await ensureProfileSchema(env.DB);await ensurePasswordReset(env.DB);await expireModeration(env.DB);
   const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
   const hex = [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');
   const u = await env.DB.prepare('SELECT id,username,karma,is_admin,is_moderator,is_banned,is_system,t_money FROM users WHERE username=? AND password_hash=?').bind(username,hex).first();
   if(u?.is_system)return Response.json({error:'La cuenta Tengaged es automática y no permite iniciar sesión.'},{status:403});
   if (!u) return Response.json({error:'Usuario o contraseña incorrectos'}, {status:401});
   if (u.is_banned) return Response.json({error:'Esta cuenta está suspendida. Contacta con administración.'}, {status:403});
+  const reset=await env.DB.prepare('SELECT must_change_password,temporary_password_until FROM users WHERE id=?').bind(u.id).first();
+  if(reset?.must_change_password&&!(Date.parse(reset.temporary_password_until)>Date.now()))return Response.json({error:'Tu contraseña temporal ha caducado. Pide a administración una nueva.'},{status:403});
+  u.must_change_password=!!reset?.must_change_password;
   // Bootstrap the named owner account only after its existing password has
   // been verified. The browser can never grant itself administrator access.
   if (u.username.toLowerCase() === ADMIN_USERNAME) {

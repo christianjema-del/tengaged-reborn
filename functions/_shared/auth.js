@@ -81,7 +81,7 @@ export async function getSessionUser(request, db) {
   try {
     if(!session.last_seen_at||Date.now()-Date.parse(session.last_seen_at.replace(' ','T')+(session.last_seen_at.endsWith('Z')?'':'Z'))>60000)await db.prepare("UPDATE users SET last_seen_at=CURRENT_TIMESTAMP WHERE id=? AND (last_seen_at IS NULL OR last_seen_at < datetime('now','-30 seconds'))").bind(session.id).run();
   } catch (error) { if (!/no such column/i.test(String(error.message || error))) console.warn("Activity heartbeat:",error); }
-  return { id: session.id, username: session.username, is_admin: Boolean(session.is_admin), is_moderator:Boolean(session.is_moderator) };
+  return { id: session.id, username: session.username, is_admin: Boolean(session.is_admin), is_moderator:Boolean(session.is_moderator), must_change_password:Boolean(session.must_change_password) };
 }
 
 export function jsonError(message, status) {

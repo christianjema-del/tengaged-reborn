@@ -1,0 +1,3 @@
+const $=id=>document.getElementById(id);
+window.TengagedSession?.then(user=>{if(!user)location.replace('/');else if(!user.must_change_password)location.replace('/');});
+$('changeForm').onsubmit=async event=>{event.preventDefault();const button=event.target.querySelector('button');button.disabled=true;$('changeNotice').textContent='';try{const r=await fetch('/api/change-password',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('newPassword').value,confirm:$('confirmPassword').value})}),d=await r.json();if(!r.ok||!d.ok)throw Error(d.message||d.error||'No se pudo cambiar la contraseña.');location.replace('/');}catch(e){$('changeNotice').textContent=e.message;button.disabled=false;}};

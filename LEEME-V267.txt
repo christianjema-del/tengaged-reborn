@@ -1,0 +1,1 @@
+V267 — Administración: admin1 puede restablecer la contraseña de un usuario con una contraseña temporal de 24 horas. Al entrar con ella, el usuario debe elegir una nueva.
