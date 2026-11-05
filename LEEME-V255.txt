@@ -1,0 +1,1 @@
+V255 — Rookies aparece en el menú de Juegos como #Rookies N y enlaza a su partida desde el menú, la burbuja del perfil, Últimas acciones y los mensajes de juegos y comunidad. Los mensajes de El Duelo en comunidad también enlazan a su partida.

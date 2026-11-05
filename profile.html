@@ -222,12 +222,12 @@ import {applyColorCard} from "/color-cards.js?v=159";
       const historyRoot=byId('gameHistory'),games=profile.games||[],pages=Math.max(1,Math.ceil(games.length/7));historyPage=Math.max(0,Math.min(historyPage,pages-1));historyRoot.replaceChildren();
       for(const game of games.slice(historyPage*7,historyPage*7+7)){
        const kind=String(game.game_type).toUpperCase(),active=game.status==='active',row=document.createElement('a');row.className='game-history-row'+(active?' active':'')+' game-kind-'+kind.toLowerCase()+(kind==='HUNGER'?' hunger':'');
-       row.href=kind==='HUNGER'?'/hunger.html'+(active?'':'?edition='+encodeURIComponent(game.game_id)):kind==='CASTING'?'/casting-game.html?id='+encodeURIComponent(game.game_id):kind==='FROOKIES'?'/frookies.html?id='+encodeURIComponent(game.game_id):kind==='DUEL'?'/duel.html?id='+encodeURIComponent(game.game_id):'/games.html';
+       row.href=kind==='HUNGER'?'/hunger.html'+(active?'':'?edition='+encodeURIComponent(game.game_id)):kind==='CASTING'?'/casting-game.html?id='+encodeURIComponent(game.game_id):kind==='FROOKIES'?'/frookies.html?id='+encodeURIComponent(game.game_id):kind==='DUEL'?'/duel.html?id='+encodeURIComponent(game.game_id):kind==='ROOKIES'?'/rookies.html?id='+encodeURIComponent(game.game_id):'/games.html';
        const token=document.createElement('div');token.className='game-token';const placement=String(game.placement||'');
        const match=placement.match(/(?:Puesto\s*)?(\d+)/i);const position=/ganador/i.test(placement)?'1':match?match[1]:null;
        if(position){token.append(document.createTextNode(position));const suffix=document.createElement('sup');suffix.textContent='º';token.append(suffix);}else token.textContent=active?'Entrar':'Fin';
        if(/ganador/i.test(placement)||/^1(?:º|st)?$/.test(placement))token.classList.add('winner');
-       const title=document.createElement('strong');title.textContent=(kind==='CASTING'?'Casting':kind==='HUNGER'?'Hunger':kind==='DUEL'?'El Duelo':kind)+' #'+game.game_id;
+       const title=document.createElement('strong');title.textContent=(kind==='CASTING'?'Casting':kind==='HUNGER'?'Hunger':kind==='DUEL'?'El Duelo':kind==='ROOKIES'?'Rookies':kind)+' #'+game.game_id;
        const status=document.createElement('span');status.textContent=active?'En curso':placement||'Finalizada';
        const date=document.createElement('small');date.textContent=safeDate(kind==='CASTING'?(game.created_at||game.joined_at):game.joined_at);
        applyGameEmblem(token,kind);
@@ -414,5 +414,5 @@ loadProfileAvatar(profile.username);
     }
     byId('profileRetry').onclick=openProfile;addEventListener('online',openProfile);openProfile();
   </script>
-<script type="module" src="/admin-workbench.js?v=170"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=231"></script><script type="module" src="/profile-extras.js?v=231"></script><script type="module" src="/profile-classic166.js?v=243"></script><script type="module" src="/profile-bets253.js?v=253"></script></body>
+<script type="module" src="/admin-workbench.js?v=170"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=231"></script><script type="module" src="/profile-extras.js?v=231"></script><script type="module" src="/profile-classic166.js?v=255"></script><script type="module" src="/profile-bets253.js?v=253"></script></body>
 </html>
