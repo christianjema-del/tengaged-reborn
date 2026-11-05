@@ -11,7 +11,8 @@ const log=(s,text,at,kind='notice',extra={})=>{s.events.unshift({id:crypto.rando
 export function fresh(id=0,now=Date.now()){return {id,version:134,rules146:true,runId:'initial',phase:'waiting',round:0,createdAt:now,lobbyEndsAt:null,deadline:null,players:[],events:[],ops:[],receipts:[],welcomes:[],hoh:null,pov:null,previousHoh:null,nominees:[],ballots:{},juryVotes:{},history:[],attempts:{},scores:{},whispers:[],challenge:null};}
 function stage(s,phase,at){s.activitySince180=null;s.pending146=null;s.phase=phase;s.phaseStartedAt=at;s.deadline=at+(DURATIONS[phase]||FINALE_MS);}
 function socialRank(s,p){const a=s.activity?.[k(p)]||{};return (a.positiveVoters||0)*3+(a.positives||0)+Math.min(5,a.messages||0);}
-function order(s,ps){return ps.slice().sort((a,b)=>socialRank(s,b)-socialRank(s,a)||a.tie-b.tie||k(a).localeCompare(k(b)));}
+// Un bot nunca queda por delante de un usuario real.
+export function order(s,ps){return ps.slice().sort((a,b)=>Number(!!a.bot)-Number(!!b.bot)||socialRank(s,b)-socialRank(s,a)||a.tie-b.tie||k(a).localeCompare(k(b)));}
 export function eligibleHoh194(s){const outgoing=k(s.hoh||s.previousHoh||s.history?.at(-1)?.hoh);return live(s).filter(p=>k(p)!==outgoing);}
 function startRound(s,at){
  const previous=s.round?{round:s.round,challenge:s.challenge,scores:{...s.scores},attempts:{...s.attempts}}:null;
@@ -81,6 +82,7 @@ const legacyFinalHoh185=s=>Number(s.id)===4&&!s.finalEntry195;
 export function finalChooser185(s){return legacyFinalHoh185(s)?s.hoh:s.pov;}
 function finalPlaces(s,third,fourth,at){
  if(!validPlaces158(s,third,fourth))throw Error('Elige tercero y cuarto distintos, respetando la inmunidad del HoH y del PoV.');
+ if(get(s,third)?.bot&&!get(s,fourth)?.bot)throw Error('Un bot no puede quedar por delante de un usuario real.');
  eliminate(s,third,at,3);eliminate(s,fourth,at,4);s.finalists=live(s).map(p=>p.username);
  stage(s,'jury',at);log(s,(legacyFinalHoh185(s)?'El HoH':'El PoV')+' asigna el tercer puesto a '+third+' y el cuarto a '+fourth+'.',at,'final-places',{third,fourth,round:s.round});log(s,'Finalistas: '+s.finalists.join(' y ')+'. El jurado tiene cuatro horas.',at,'finalists',{finalists:[...s.finalists]});
 }
