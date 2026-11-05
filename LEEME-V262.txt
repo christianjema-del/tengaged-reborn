@@ -1,0 +1,1 @@
+V262 — Juegos: las partidas finalizadas se ven siempre, sin desplegable, con flechas de página al estilo de la web.
