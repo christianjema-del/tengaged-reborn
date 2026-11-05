@@ -23,6 +23,7 @@ export async function ensureRookies(db){
   'CREATE TABLE IF NOT EXISTS user_stats(username TEXT PRIMARY KEY,games_played INTEGER DEFAULT 0,wins INTEGER DEFAULT 0,points INTEGER DEFAULT 0,created_at TEXT)'
  ])await db.prepare(sql).run();
  await markSchema170(db,'rookies249');
+ if(!await schemaReady170(db,'rookies253')){await db.prepare('CREATE INDEX IF NOT EXISTS rookies_bets_user ON rookies_bets(user_id,match_id,target_id)').run();await markSchema170(db,'rookies253');}
 }
 export async function waitingRookies(db){await ensureRookies(db);await db.prepare("INSERT OR IGNORE INTO rookies_matches(state) SELECT ? WHERE NOT EXISTS(SELECT 1 FROM rookies_matches WHERE json_extract(state,'$.phase')='waiting')").bind(JSON.stringify(freshRookies(0))).run();}
 export async function rookiesListing(db,user){await waitingRookies(db);return (await db.prepare('SELECT id,state FROM rookies_matches ORDER BY id DESC LIMIT 50').all()).results.map(row=>{const s=JSON.parse(row.state);return {id:row.id,phase:s.phase,round:s.day,createdAt:s.createdAt,finishedAt:s.finishedAt,players:s.players.length,capacity:CAPACITY,mine:!!s.players.find(p=>p.id===user?.id)};});}
@@ -86,4 +87,17 @@ export async function placeBet(db,id,user,target){
  try{const done=await db.prepare('INSERT INTO rookies_bets(match_id,user_id,username,target_id,amount) SELECT ?,?,?,?,1 WHERE (SELECT COALESCE(SUM(amount),0) FROM rookies_bets WHERE match_id=? AND user_id=?)<?').bind(id,user.id,user.username,housemate.id,id,user.id,info.limit).run();if(!done.meta.changes)throw Error('Ya has apostado todo lo que permite tu tarjeta en esta partida ('+info.limit+' T$).');}
  catch(e){if(String(e.message).includes('ROOKIES_BALANCE'))throw Error('No tienes T$ suficientes.');throw e;}
  return rookiesBets(db,id,user);
+}
+const PROFILE_BETS=8;
+// Apuestas de un usuario para su perfil: una fila por concursante y partida.
+export async function profileBets(db,userId,page=1,now=Date.now()){
+ await ensureRookies(db);
+ const count=Number((await db.prepare('SELECT COUNT(*) AS n FROM (SELECT 1 FROM rookies_bets WHERE user_id=? GROUP BY match_id,target_id)').bind(userId).first())?.n||0),pages=Math.max(1,Math.ceil(count/PROFILE_BETS)),current=Math.min(pages,Math.max(1,Math.floor(Number(page)||1)));
+ const open=(await db.prepare("SELECT id FROM rookies_matches WHERE json_extract(state,'$.phase')='day' AND (json_extract(state,'$.day')=1 OR (json_extract(state,'$.day')=2 AND json_extract(state,'$.deadline')>?)) ORDER BY id DESC LIMIT 1").bind(now).first())?.id||null;
+ const rows=(await db.prepare('SELECT match_id,target_id,SUM(amount) AS amount,MAX(id) AS last FROM rookies_bets WHERE user_id=? GROUP BY match_id,target_id ORDER BY last DESC LIMIT ? OFFSET ?').bind(userId,PROFILE_BETS,(current-1)*PROFILE_BETS).all()).results;
+ const ids=[...new Set(rows.map(r=>r.match_id))],marks=ids.map(()=>'?').join(',');
+ const states=new Map(ids.length?(await db.prepare('SELECT id,state FROM rookies_matches WHERE id IN ('+marks+')').bind(...ids).all()).results.map(r=>[r.id,JSON.parse(r.state)]):[]);
+ const payouts=new Map(ids.length?(await db.prepare('SELECT match_id,target_id,payout FROM rookies_bet_payouts WHERE user_id=? AND match_id IN ('+marks+')').bind(userId,...ids).all()).results.map(r=>[r.match_id+':'+r.target_id,Number(r.payout)]):[]);
+ const items=rows.map(r=>{const s=states.get(r.match_id),target=s?.players.find(p=>p.id===r.target_id),payout=payouts.get(r.match_id+':'+r.target_id)||0,finished=s?.phase==='finished';return {matchId:r.match_id,amount:Number(r.amount),target:target?.username||'—',bot:!!target?.bot,status:!finished?'playing':payout>0?'won':'lost',payout};});
+ return {open,page:current,pages,items};
 }

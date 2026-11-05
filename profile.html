@@ -71,7 +71,7 @@
     .avatar-dialog-foot .avatar-editor-actions{margin:0}
     @media(max-width:760px){.avatar-dialog{max-height:90vh}.avatar-options{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-option .avatar-art{width:62px;height:62px}}
   </style>
-<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"></head>
+<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=253"></head>
 <body><script src="/shell.js?v=212"></script>
   <div class="wrap">
     <div class="tg-legacy-shell" hidden><header class="head"><a class="logo" href="/">tengaged<b>.es</b> reborn</a><span id="sessionLabel">Perfil de usuario</span></header></div>
@@ -125,6 +125,7 @@
         <aside><a href="/enroll.html" class="enroll-promo profile-enroll" aria-label="Inscríbete en un juego: Casting, Stars, Rookies o Survivor"><img src="/assets/reference/enroll.gif" alt="Inscríbete · Casting, Stars, Rookies y Survivor"></a>
           <section class="card profile-donations166"><h2 class="side-card-title">Donaciones</h2><div id="profileDonations166" role="status">Cargando donaciones…</div><button id="profileDonate166" type="button" class="button" hidden>Donar 0,1 T$ gratis</button><p id="profileDonationNotice166" role="status"></p></section><section id="profileInvitations" class="card" hidden><h2 class="side-card-title">Invitaciones</h2><div class="profile-invite-box">Invitaciones registradas: <strong id="profileInviteCount">0</strong></div><p class="profile-invite-note">Comparte tu enlace para invitar a nuevos jugadores a Tengaged Reborn.</p><div class="profile-invite-controls"><input id="profileInviteLink" readonly aria-label="Tu enlace de invitación"><button type="button" id="profileInviteCopy">Copiar</button></div><p id="profileInviteNotice" role="status"></p></section><section class="card profile-mafia" aria-labelledby="mafiaTitle"><h2 class="side-card-title" id="mafiaTitle">Mafia</h2><div id="profileMafia" class="profile-mafia-content"><p>Este usuario todavía no pertenece a ninguna mafia.</p></div></section><section class="card friend-card"><h2 class="side-card-title" id="friendsTitle">Amigos</h2><div id="profileCommunity" class="profile-community"><p>Cargando amigos…</p></div></section>
           <section class="card"><h2 class="side-card-title">Grupos</h2><div id="profileGroups" class="side-card-body profile-links"></div></section>
+          <section id="profileBetsCard" class="card" hidden><div class="profile-bets-head"><h2 class="side-card-title" id="profileBetsTitle">Apuestas</h2><nav id="profileBetsPager" aria-label="Páginas de apuestas"></nav></div><div id="profileBetsOpen" hidden></div><ul id="profileBetsList"></ul><p id="profileBetsEmpty" hidden>Todavía no hay apuestas.</p></section>
           
           <section class="card"><h2 class="side-card-title">Sus diseños</h2><div id="profileDesigns" class="profile-designs">Cargando diseños…</div></section>
         </aside>
@@ -413,5 +414,5 @@ loadProfileAvatar(profile.username);
     }
     byId('profileRetry').onclick=openProfile;addEventListener('online',openProfile);openProfile();
   </script>
-<script type="module" src="/admin-workbench.js?v=170"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=231"></script><script type="module" src="/profile-extras.js?v=231"></script><script type="module" src="/profile-classic166.js?v=243"></script></body>
+<script type="module" src="/admin-workbench.js?v=170"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=231"></script><script type="module" src="/profile-extras.js?v=231"></script><script type="module" src="/profile-classic166.js?v=243"></script><script type="module" src="/profile-bets253.js?v=253"></script></body>
 </html>

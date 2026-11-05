@@ -1,0 +1,1 @@
+V254 — Perfil: nuevo bloque de apuestas de Rookies debajo de Grupos, con la partida abierta para apostar y el historial real del usuario (jugando, ganó o perdió).
