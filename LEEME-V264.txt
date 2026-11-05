@@ -1,0 +1,1 @@
+V264 — Perfil: un usuario baneado muestra BANEADO/BORRADO debajo de sus datos, sin el motivo.

@@ -71,13 +71,12 @@
     .avatar-dialog-foot .avatar-editor-actions{margin:0}
     @media(max-width:760px){.avatar-dialog{max-height:90vh}.avatar-options{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-option .avatar-art{width:62px;height:62px}}
   </style>
-<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=256"></head>
+<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=264"></head>
 <body><script src="/shell.js?v=212"></script>
   <div class="wrap">
     <div class="tg-legacy-shell" hidden><header class="head"><a class="logo" href="/">tengaged<b>.es</b> reborn</a><span id="sessionLabel">Perfil de usuario</span></header></div>
     <div class="tg-legacy-shell" hidden><nav class="nav" aria-label="Navegación principal"><a href="/">Inicio</a><a href="/blogs.html">Blogs</a><a href="/games.html">Juegos</a><a href="/hunger.html">Hunger Games</a><a href="/hall-of-fame.html">Hall of Fame</a><a href="/designs.html">Diseños</a><a href="/shops.html">Tiendas</a><a href="/profile.html" id="myProfileLink" class="hidden">Mi perfil</a></nav></div>
     <main id="profilePage" aria-busy="true"><p id="profileLoadState" role="status">Cargando perfil…</p><button id="profileRetry" type="button" class="plain-btn" hidden>Reintentar perfil</button>
-      <div id="bannedNotice" class="card banned hidden"></div>
       <dialog id="avatarDialog" class="avatar-dialog" aria-labelledby="avatarEditorTitle">
         <div class="avatar-dialog-head"><h2 id="avatarEditorTitle">Elige tu avatar</h2><button type="button" id="closeAvatarEditor" class="avatar-close" aria-label="Cerrar">×</button></div>
         <div class="avatar-dialog-body"><p>Selecciona uno de los avatares básicos. Puedes volver a cambiarlo cuando quieras.</p><div id="avatarOptions" class="avatar-options" role="group" aria-label="Avatares disponibles"></div></div>
@@ -96,6 +95,7 @@
           
           <div class="stat"><strong id="lastSeenStat">—</strong></div>
           <div id="joinedStatBox" class="stat hidden"><strong id="joinedStat">—</strong><span>Registro:</span></div>
+          <div id="bannedNotice" class="profile-banned hidden">BANEADO/BORRADO</div>
         </div>
         <div class="profile-badges"><span id="redNoseBadge" class="badge hidden">Nariz roja</span><span id="testBotBadge" class="badge hidden">Cuenta de prueba</span></div><nav class="profile-action-bar" aria-label="Acciones del perfil"><a id="profileTweet166" class="profile-share166" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener noreferrer">Tweet</a><span id="profileFriendControls"></span><a id="profileMessageButton" class="profile-square-button" href="/mail.html" aria-label="Enviar mensaje" title="Enviar mensaje" hidden><span aria-hidden="true">✉</span></a><a id="profileGiftLink" class="profile-square-button profile-gift-button" href="/gifts.html" aria-label="Ver regalos recibidos" title="Ver regalos recibidos"><span class="profile-heart" aria-hidden="true">♥</span><span id="profileGiftCount" class="profile-gift-count" aria-hidden="true">—</span></a></nav>
       </section>
@@ -321,7 +321,6 @@ loadProfileAvatar(profile.username);
       byId("memberSince").textContent = date;
       byId("accountStatus").textContent = profile.is_banned ? "Baneado" : "Activo";
       byId("bannedNotice").classList.toggle("hidden", !profile.is_banned);
-      byId("bannedNotice").textContent = profile.is_banned ? "Cuenta baneada · " + profile.ban_reason : "";
       byId("banButton").classList.toggle("hidden", profile.is_banned || isSelf);
       byId("unbanButton").classList.toggle("hidden", !profile.is_banned || isSelf);
       byId("profilePage").classList.remove("hidden");byId("profilePage").setAttribute("aria-busy","false");byId("profileLoadState").textContent="";byId("profileRetry").hidden=true;byId("errorBox").classList.add("hidden");
