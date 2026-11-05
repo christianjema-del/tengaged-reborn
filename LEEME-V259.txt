@@ -1,0 +1,1 @@
+V259 — Casting: quien siga activo en un Casting no puede unirse a otro hasta que lo expulsen o ese Casting termine.
