@@ -1,7 +1,7 @@
 import {request as fetch} from '/http.js?v=170';
 import {setAvatar} from '/avatar-display.js?v=159';
 const chatStyle=document.createElement('link');chatStyle.rel='stylesheet';chatStyle.href='/game-chat137.css?v=179';document.head?.append(chatStyle);
-const noticeStyle182=document.createElement('link');noticeStyle182.rel='stylesheet';noticeStyle182.href='/game-notices182.css?v=210';document.head?.append(noticeStyle182);
+const noticeStyle182=document.createElement('link');noticeStyle182.rel='stylesheet';noticeStyle182.href='/game-notices182.css?v=258';document.head?.append(noticeStyle182);
 const hunger=location.pathname.includes('hunger'),castingPage=location.pathname.includes('casting-game');
 const root=document.createElement('section');root.className='game-chat';root.innerHTML=`<div class="chat-toolbar"><h2>Comentarios públicos <span class="chat-total">0</span></h2><span class="chat-live"><i></i> En directo</span></div><nav class="chat-pages" aria-label="Páginas de comentarios"></nav><form class="chat-form"><select class="chat-audience" aria-label="Destinatarios del comentario"><option value="public">Todos los participantes</option><option value="private">Mensaje privado…</option></select><label for="gameComment" class="visually-hidden">Escribe un comentario</label><textarea id="gameComment" maxlength="500" rows="3" required disabled placeholder="Escribe un comentario…"></textarea><div class="chat-compose-actions"><button disabled>Enviar</button><small class="chat-counter">0 / 500</small></div></form><p class="chat-status" role="status"></p><div class="chat-messages" role="log" aria-label="Comentarios de la partida" aria-live="polite"></div>`;
 const host=document.querySelector('#public-chat')||document.querySelector('#phaseBox')?.parentElement||document.querySelector('#players')?.parentElement?.parentElement;if(host)host.append(root);
@@ -60,9 +60,8 @@ function finishNotice182(row,m){
  const body=document.createElement('div');body.className='game-notice-body182';
  title.className=(title.className||'')+' game-notice-title182';
  content.className=(content.className||'')+' game-notice-content182';
- // Llave o manzana: solo los cinco iconos, sin cabecera ni texto visible.
- if(kind==='casting-key'){body.append(content);row.className+=(row.className.includes('arena-event')?'':' arena-event')+' game-notice182';row.replaceChildren(body);return row;}
- if(room.startsWith('hunger:')&&m.event&&!m.admin_notice)body.append(content);else body.append(title,content);
+ // Llave o manzana: mismo aviso que el resto, con su hora y solo los cinco iconos, sin titulo.
+ if(kind==='casting-key'||(room.startsWith('hunger:')&&m.event&&!m.admin_notice))body.append(content);else body.append(title,content);
  row.className+=(row.className.includes('arena-event')?'':' arena-event')+' game-notice182';
  row.replaceChildren(header,body);return row;
 }

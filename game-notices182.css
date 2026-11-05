@@ -7,8 +7,8 @@ body #public-chat .game-chat .game-notice182 .game-notice-title182{display:block
 body #public-chat .game-chat .game-notice182 .game-notice-content182{box-sizing:border-box!important;max-width:100%!important;min-width:0!important;background:transparent!important;color:#62696e!important;text-align:left!important}
 body #public-chat .game-chat .game-notice182 .game-notice-content182:not(.casting-key-drop):not(.arena-event-body){padding:0!important;min-height:0!important}
 body #public-chat .game-chat .game-notice182 .game-notice-content182>p,body #public-chat .game-chat .game-notice182 .game-notice-message182{font:12px/18px Arial,sans-serif!important;color:#62696e!important;margin:0!important;padding:0!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
-body #public-chat .game-chat .game-notice182 .casting-key-drop{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;margin:8px 0 0!important;padding:0!important;min-height:0!important;border:0!important;background:transparent!important}
-body #public-chat .game-chat .game-notice182 .casting-key-drop button{max-width:100%!important;flex:0 0 auto!important}
+body #public-chat .game-chat .game-notice182 .casting-key-drop{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;gap:clamp(10px,5vw,36px)!important;margin:0!important;padding:0!important;min-height:0!important;border:0!important;background:transparent!important}
+body #public-chat .game-chat .game-notice182 .casting-key-drop button{max-width:100%!important;flex:0 1 auto!important;min-width:0!important;width:auto!important}
 body #public-chat .game-chat .game-notice182 .casting-key-drop img{max-width:100%!important;object-fit:contain!important}
 body #public-chat .game-chat .game-notice182 .arena-event-body{background:transparent!important}
 body #public-chat .game-chat .game-notice182 .event-description{grid-column:1/-1!important}

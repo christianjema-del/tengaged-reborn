@@ -1,0 +1,1 @@
+V257 — Casting: el aviso de llave o manzana recupera el recuadro amarillo y el tiempo de los demás avisos, con los cinco iconos en una fila, separados y centrados.
