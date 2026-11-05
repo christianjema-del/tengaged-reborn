@@ -11,7 +11,7 @@ const log=(s,text,at,kind='notice',extra={})=>{s.events.push({id:s.events.length
 const dayCount=(s,p)=>Math.max(0,(s.activity[p.id]||0)-(s.activityBase[p.id]||0));
 // Más activos primero; el desempate fijado al inscribirse evita favoritismos.
 const mostActive=(s,list)=>list.slice().sort((a,b)=>dayCount(s,b)-dayCount(s,a)||a.tie-b.tie);
-export function freshRookies(id=0,now=Date.now()){return {id,version:1,phase:'waiting',day:0,createdAt:now,startedAt:null,finishedAt:null,deadline:null,players:[],hoh:null,previousHoh:null,pov:null,nominees:[],hohPicks:[],ballots:{},saved:null,events:[],history:[],activity:{},activityBase:{},welcomes:[],fee:0};}
+export function freshRookies(id=0,now=Date.now()){return {id,version:1,phase:'waiting',day:0,createdAt:now,startedAt:null,finishedAt:null,deadline:null,players:[],hoh:null,previousHoh:null,pov:null,nominees:[],hohPicks:[],ballots:{},saved:null,events:[],history:[],activity:{},activityBase:{},welcomes:[],whispers:[],fee:0};}
 export function setActivity(s,counts){for(const [id,n] of Object.entries(counts))s.activity[id]=Number(n)||0;}
 function chooseHoh(s,at,finale=false){
  const blocked=new Set([s.hoh,...(finale?[]:s.hohPicks)].filter(Boolean)),pool=alive(s).filter(p=>!blocked.has(p.id)),hoh=mostActive(s,pool.length?pool:alive(s))[0];
@@ -54,6 +54,11 @@ export function actRookies(s,user,input,now=Date.now()){
  if(action==='join'){const enrollment=enrollmentOptions(input);if(s.phase!=='waiting')throw Error('La inscripción está cerrada.');if(p)return;if(s.players.length>=CAPACITY)throw Error('No quedan plazas.');s.players.push({id:user.id,username:user.username,bot:false,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff),...(enrollment?{notifyOnStart:enrollment.notifyOnStart}:{})});if(enrollment)s.welcomes.push({username:user.username,body:enrollment.welcome,at:now});return;}
  if(action==='fill_bots'){if(!canFillBots(user)||s.phase!=='waiting')throw Error('Solo admin1 puede completar con bots.');let n=1;while(s.players.length<CAPACITY){const id=-(s.id*100+n);s.players.push({id,username:'Bot '+s.id+' · '+n++,bot:true,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff)});}return;}
  if(action==='start'){if(!startAdmin172(user)||s.phase!=='waiting'||s.players.length<CAPACITY)throw Error('Solo admin1 puede iniciar con las 13 plazas completas.');authorizeStart172(s,user,'rookies',now);advanceRookies(s,now);return;}
+ if(action==='whisper'){
+  if(!p||p.status!=='active'||!['day','finale'].includes(s.phase))throw Error('Ahora no puedes enviar mensajes privados.');
+  const to=s.players.find(q=>q.id===Number(input.to)),body=String(input.body||'').trim();if(!to||to.bot||to.id===p.id||to.status!=='active'||!body||body.length>500)throw Error('Mensaje privado no válido.');
+  if((s.whispers||=[]).some(w=>w.from===p.id&&now-w.at<3000))throw Error('Espera tres segundos.');s.whispers.push({id:crypto.randomUUID(),from:p.id,to:to.id,body,at:now});s.whispers=s.whispers.slice(-500);return;
+ }
  if(s.phase!=='day'||!p||p.status!=='active')throw Error('Ahora no puedes hacer esta acción.');
  if(action==='nominate'){
   if(p.id!==s.hoh)throw Error('Solo el HoH puede nominar.');const picks=[...new Set((input.targets||[]).map(Number))];
@@ -78,5 +83,7 @@ export function rookiesView(s,user,now=Date.now()){
   players:s.players.map(p=>({id:p.id,username:p.username,bot:!!p.bot,status:p.status,placement:p.placement,hoh:p.id===s.hoh,nominated:s.nominees.includes(p.id)})),
   nominees:s.nominees.map(id=>({id,username:byId(s,id)?.username})),points:s.nominees.map((_,i)=>i+1),
   me:me?{id:me.id,status:me.status,isHoh:active&&me.id===s.hoh,isPov:active&&s.phase==='day'&&me.id===s.pov,nominated,canVote:active&&s.phase==='day'&&s.nominees.length>0&&!nominated,ballot:s.ballots[me.id]||null,picks:me.id===s.hoh?s.hohPicks:[],saved:me.id===s.pov?s.saved:null}:null,
+  events:s.events.map(({id,text,at,kind})=>({id,text,at,kind})),
+  whispers:me?(s.whispers||[]).filter(w=>w.from===me.id||w.to===me.id).map(w=>({id:w.id,from:byId(s,w.from)?.username,to:byId(s,w.to)?.username,body:w.body,at:w.at})):[],
   history:s.history.map(({day,rows})=>({day,rows}))};
 }

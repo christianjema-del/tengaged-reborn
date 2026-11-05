@@ -1,0 +1,1 @@
+V251 — Rookies usa la estructura y los estilos de la página de Frookies: cabecera, concursantes, pestañas, panel de apuestas e Historia del juego. Añade mensajes privados. No cambia reglas, premios ni apuestas.

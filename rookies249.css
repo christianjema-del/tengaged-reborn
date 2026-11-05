@@ -1,12 +1,8 @@
-#rookies-main h1,#bets-main h1{font:bold 20px Arial;color:#3a6ea5;margin:0 0 4px}
-#rookies-state{color:#c23;font:bold 13px Arial}#rookies-clock{color:#777;font:12px Arial;margin-left:6px}
-#rookies-players{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:4px;margin:10px 0;text-align:center}
-.rookies-person{min-width:0;font:11px Arial}.rookies-person img{display:block;width:100%;max-width:52px;height:auto;margin:0 auto;background:#e8eff5}.rookies-person a{display:block;color:#4682b4;font-weight:bold;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rookies-person small{display:block;color:#555;font:bold 12px Arial}.rookies-person.out img{opacity:.45}.rookies-tag{color:#2d8a3e!important;font-size:10px!important}.rookies-tag.nominated{color:#c23!important}
-.rookies-columns{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
-.ingame-infoBox{display:flex;justify-content:space-between;align-items:center;background:#fffbdb;border:1px solid #fff2a6;padding:6px 8px;font:12px Arial;margin-bottom:10px}
-.btnAction{display:inline-block;background:#ffe88a;border:1px solid #eedc7a;border-radius:4px;color:#555!important;font:bold 12px Arial;padding:5px 12px;text-decoration:none}
-#rookies-actions form{background:#f4f8fb;padding:8px;margin:8px 0}#rookies-actions h2{font:bold 15px Arial;color:#ff536d;margin:0 0 6px}#rookies-actions h3{font:bold 13px Arial;margin:0 0 4px}#rookies-actions p{font:12px Arial;margin:0 0 6px}#rookies-actions label{display:block;font:12px Arial;margin:3px 0}
-#rookies-podium{text-align:center;font:bold 18px Arial}
+.rookies-header h1{color:#34495e!important}.rookies-header h1 span{color:#ff536e}
+.rookies-betting{border:1px solid #dde7ee;background:#fafcfd;padding:10px!important;margin-bottom:14px}.rookies-betting h2{font:bold 14px Arial!important;color:#333!important;margin:0 0 6px!important;border:0!important}
+.rookies-bets-link{display:block;text-align:center;background:linear-gradient(#fff,#dfeaf3);border:1px solid #9fb6c8;color:#222!important;font:bold 13px Arial;padding:7px;text-decoration:none}
+#rooAdmin{margin:0 0 8px}#rooAdmin button,#rooAdmin a{margin-right:4px}#rooNotice:empty{display:none}.fro-player .fro-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bets-main{font:12px Arial}#bets-main h1{font:bold 20px Arial;color:#3a6ea5;margin:0 0 4px}.btnAction{display:inline-block;background:#ffe88a;border:1px solid #eedc7a;border-radius:4px;color:#555!important;font:bold 12px Arial;padding:5px 12px;text-decoration:none}
 .rookies-result{font:12px Arial;margin:2px 0}.rookies-result a{color:#4682b4;text-decoration:none;display:inline-block;min-width:110px}.rookies-result b{display:inline-block;background:#222;color:#fff;padding:0 4px;margin:0 3px}.rookies-out{background:#222;color:#fff23c;font:bold 10px Arial;padding:1px 4px;margin-left:8px}
 .bets-rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0}.bets-rules p{border:1px solid #bfe0bf;border-radius:4px;font:12px/16px Arial;margin:0;padding:6px 8px}
 #bets-game{float:right}#bets-notice{color:#a33;font:12px Arial;min-height:15px}
@@ -14,34 +10,5 @@
 .bets-col{min-width:0;text-align:center;font:11px Arial}.bets-col>a{display:block;color:#4682b4;font-weight:bold;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.betTotal{background:#fffbdb;border:1px solid #fff2a6;color:#424242;font:bold 22px Arial;margin:3px 0}
 .bet-add{width:100%;font:bold 11px Arial;padding:4px 0;cursor:pointer}.bets{list-style:none;margin:3px 0 0;padding:2px 0;min-height:60px}.bets li{font:10px Arial;overflow-wrap:anywhere}.bets li b{display:block}.bets-col.out .bets{background:#f7c5cf}
 @media(max-width:760px){#rookies-players{grid-template-columns:repeat(5,minmax(0,1fr))}.rookies-columns,.bets-rules{grid-template-columns:minmax(0,1fr)}#bets-board{grid-template-columns:repeat(3,minmax(0,1fr))}.rookies-person a,.bets-col>a{font-size:12px}}
-#rookies-main #public-chat .chat-pages{position:absolute!important;top:-26px!important;right:8px!important;min-height:0!important;margin:0!important;gap:10px!important}
-#rookies-main #public-chat .chat-pages button{padding:0!important;border:0!important;border-radius:0!important;min-width:10px!important;min-height:20px!important;background:none!important;box-shadow:none!important;font:bold 12px/20px Arial!important;color:#4986a4!important}
-#rookies-main #public-chat .chat-pages button[aria-current=page]{color:#999!important;text-decoration:underline!important}
-#rookies-main .game-chat .chat-form{display:grid!important;grid-template-columns:minmax(0,1fr) 82px!important;gap:6px!important;margin:9px 0 10px!important}
-#rookies-main .game-chat .chat-form textarea{min-height:74px!important;height:74px;padding:7px!important;border:1px solid #ffe342!important;border-radius:4px!important;background:#fffdf2!important;font:14px/20px Arial!important;color:#333!important;box-shadow:none!important}
-#rookies-main .game-chat .chat-form textarea::placeholder{color:#aaa;opacity:1}
-#rookies-main .game-chat .chat-compose-actions button{width:82px!important;min-height:33px!important;height:33px!important;padding:5px 8px!important;border:1px solid #d6dfe7!important;border-radius:4px!important;background:#f5f8fb!important;color:#859bad!important;font:13px/20px Arial!important}
-#rookies-main .game-chat .chat-compose-actions button:disabled{opacity:1!important;color:#91a2b2!important}
-#rookies-main .game-chat .chat-messages>article:not(.casting-key-event):not(.arena-event){margin:0 0 8px!important}
-#rookies-main .game-chat .chat-messages>article:not(.casting-key-event):not(.arena-event)>header{min-height:22px!important;padding:3px 4px!important;gap:10px!important;background:#f1f6fa!important;border-top:1px solid #e3edf4!important}
-#rookies-main .game-chat .chat-messages>article>header>a{font:bold 12px/15px Arial!important;color:#2784b2!important}
-#rookies-main .game-chat .chat-messages>article>header>time{font:bold 10px/15px Arial!important;color:#999!important}
-#rookies-main .game-chat .chat-messages>article:not(.casting-key-event):not(.arena-event)>p{font:13px/20px Arial!important;padding:4px 10px 2px!important;margin:0!important;color:#222!important}
-#rookies-main #public-chat .chat-pages{position:static!important;justify-content:flex-end!important;padding-top:3px;min-height:24px!important}
-#rookies-main .game-chat .chat-form{grid-template-columns:minmax(0,1fr) 65px!important}
-#rookies-main .game-chat .chat-form textarea{font-size:16px!important;height:74px;min-height:74px!important}
-#rookies-main .game-chat .chat-compose-actions button{width:65px!important;min-height:36px!important}
-#rookies-main .chat-toolbar{display:none!important}
-#rookies-main .chat-counter{display:none}
-#rookies-main #public-chat .chat-form>label{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
-#rookies-main #public-chat .chat-form>.chat-audience{grid-column:1/-1!important;grid-row:1!important;width:50%!important;min-width:0!important;justify-self:start;background:#fffdf2;border:1px solid #ffe342;border-radius:4px}
-#rookies-main #public-chat .chat-form>textarea{grid-column:1!important;grid-row:2!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}
-#rookies-main #public-chat .chat-form>.chat-compose-actions{grid-column:2!important;grid-row:2!important;align-self:start!important;width:100%!important;min-width:0!important}
-#rookies-main #public-chat .chat-compose-actions button{width:100%!important;min-width:0!important;background:linear-gradient(#fff8ae,#ffe875)!important;border:1px solid #efdc77!important;color:#77735d!important}
-#rookies-main #public-chat .chat-pages{gap:3px!important;top:-22px!important;right:0!important}
-#rookies-main #public-chat .chat-pages button{background:#e8eff5!important;min-width:18px!important;height:20px!important;text-align:center!important}
-#rookies-main #public-chat .chat-pages button[aria-current=page]{background:#dce5ed!important;color:#333!important}
-#rookies-main #public-chat .chat-form>.chat-audience{width:100%!important;font-size:16px!important}
-#rookies-main #public-chat .chat-pages{position:static!important}
-#rookies-main .game-chat .chat-attach{display:block!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;padding:0!important;margin:9px 0 16px!important;color:#999!important;text-decoration:underline!important;text-align:left!important;font:11px/16px Arial!important;min-height:0!important}
-#rookies-main .game-chat{min-width:0}#rookies-main .chat-form select{max-width:100%}
+.frookies-main #rooHistory .fro-story-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:5px;background:#f7f7f8;border-bottom:1px solid white;padding:5px 4px;font:11px/16px Arial;color:#555}
+body .frookies-main .fro-header.rookies-header{display:flex!important;align-items:center;gap:12px;background:linear-gradient(90deg,#d4e6f6,#fff)!important;padding:6px 8px!important;min-height:52px}body .frookies-main .fro-header.rookies-header time{position:static!important;margin-left:auto}body .frookies-main .fro-header.rookies-header>img{display:block!important;width:150px!important;height:auto!important;max-width:40vw;object-fit:contain}
