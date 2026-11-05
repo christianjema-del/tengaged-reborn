@@ -1,0 +1,1 @@
+V249 — Menciones: el perfil, el Trending de blogs y el Hall of Fame cuentan las @menciones del título, del texto y de los comentarios visibles. Antes solo se buscaban en publicaciones, y las menciones reales estaban en comentarios. Se admiten nombres con tildes y eñe. No modifica datos.
