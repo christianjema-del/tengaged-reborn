@@ -1,0 +1,1 @@
+V276 — Minijuegos: el juego y el ranking ya están en la misma página, sin marco interno, y cada prueba muestra su Top 10 con el aspecto del Salón de la Fama: avatar, nombre y resultado.
