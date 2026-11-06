@@ -1,3 +1,4 @@
+import {syncAvatarPreview} from '/avatar-preview290.js?v=290';
 // Página propia para escribir o editar un blog, con fotos del dispositivo.
 import {$,el,api,post,buttonTask,loginLink} from '/market-ui.js?v=170';
 import {link,avatar} from '/community-ui.js?v=170';
@@ -30,6 +31,7 @@ form.onsubmit=e=>{
   const data=new FormData(form),text=String(data.get('body')||'').trim(),body=[text,photos.map(photoToken).join('\n')].filter(Boolean).join('\n\n');
   if(!body){$('blogNotice').textContent='Escribe el texto o adjunta una foto.';return;}
   const title=String(data.get('title')).trim(),result=await post('/api/blog',editId?{action:'edit',post_id:editId,title,body}:{title,body});
+  await syncAvatarPreview(author,{force:true}).catch(()=>{});
   location.assign(blogHref162({author,title,id:editId||result.id}));
  },$('blogNotice'));
 };
