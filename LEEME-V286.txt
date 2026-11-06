@@ -1,0 +1,1 @@
+V286 — Enlaces compartidos: todas las páginas muestran miniatura del avatar de Randomize y su título. Blogs, perfiles, diseños y partidas usan su título propio.
