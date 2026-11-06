@@ -1,0 +1,1 @@
+V288 — Administración: el panel adopta el diseño de la web, con títulos rosas, recuadros azules, pestañas y botones amarillos. No cambia ninguna función.
