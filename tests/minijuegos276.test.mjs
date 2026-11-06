@@ -4,4 +4,5 @@ assert.ok(!/<iframe/i.test(page),'sin marcos internos');assert.equal((page.match
 for(const id of ['title','notice','start','board','ranking','rankingMessage','rankings'])assert.match(page,new RegExp('id="'+id+'"'));
 assert.match(api,/LIMIT 10`/,'el ranking devuelve diez');assert.match(js,/setAvatar\(img,p\.username\)/);assert.match(js,/slice\(0,10\)/);
 assert.match(read('minijuego.html'),/location\.replace\('\/minijuegos\.html'/,'el enlace antiguo sigue funcionando');
+assert.match(js,/recordDate\(p\.updated_at\)/,'cada resultado muestra la fecha del récord');assert.match(js,/Europe\/Madrid/);
 console.log('PASS Minijuegos: una sola página, diez pruebas y Top 10 con avatar, nombre y resultado.');

@@ -5,11 +5,18 @@ import {api,el,$} from '/market-ui.js?v=170';
 const DEFAULT_KIND='guitar',links=[...document.querySelectorAll('.competition')],NOTICE='Estás jugando al minijuego original. Cuando termine y envíe su resultado, aparecerá en el ranking.';
 const kindOf=url=>{const kind=new URL(url,location.href).searchParams.get('juego');return Object.hasOwn(CASTING_MINIGAMES,kind)?kind:DEFAULT_KIND;};
 let kind=kindOf(location.href),dispose=null,lastSignature='',loadId=0;
+// La base guarda la fecha en UTC; se muestra en horario de España: «6 nov 2026».
+function recordDate(value){
+ const date=new Date(String(value||'').replace(' ','T').replace(/Z?$/,'Z'));
+ if(Number.isNaN(date.getTime()))return '';
+ const part=type=>new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',[type]:type==='month'?'short':'numeric'}).format(date).replace('.','');
+ return part('day')+' '+part('month')+' '+part('year');
+}
 function person(p,place){
  const box=el('article',undefined,'mini-person'),rank=el('b',undefined,'mini-place'),link=el('a'),img=el('img');
  rank.append(document.createTextNode(String(place)),el('sup','º'));
  link.href='/profile.html?username='+encodeURIComponent(p.username);link.title=p.username;img.alt=p.username;img.loading='lazy';setAvatar(img,p.username);link.append(img,el('span',p.username));
- box.append(rank,link,el('strong',p.score.toLocaleString('es-ES')+' pts'));return box;
+ box.append(rank,link,el('strong',p.score.toLocaleString('es-ES')+' pts'));const when=recordDate(p.updated_at);if(when)box.append(el('small',when));return box;
 }
 async function ranking(){
  const wanted=kind;

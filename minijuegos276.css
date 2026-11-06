@@ -14,6 +14,7 @@ html body.page-minijuegos .competition-screen{min-width:0;background:none!import
 .page-minijuegos .mini-person a span{display:block;font:bold 10px/14px 'Trebuchet MS',Arial;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .page-minijuegos .mini-person:nth-child(-n+4) a span{font:bold 14px/18px 'Trebuchet MS',Arial}
 .page-minijuegos .mini-person strong{display:block;font:11px/15px Arial;color:#999}
+.page-minijuegos .mini-person small{display:block;font:10px/14px Arial;color:#b0b0b0;white-space:nowrap}
 .page-minijuegos .mini-place{position:absolute;top:0;left:10px;z-index:1;font:bold 11px/15px 'Trebuchet MS',Arial;color:#2f2f2f;pointer-events:none}
 .page-minijuegos .mini-person:nth-child(-n+4) .mini-place{left:14px;font:bold 28px/35px 'Trebuchet MS',Arial;color:#fff;text-shadow:0 1px 2px #555}
 .page-minijuegos .mini-place sup{font-size:55%;vertical-align:super;line-height:0}
