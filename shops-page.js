@@ -150,11 +150,11 @@ function shopDetails271(content,info,mine){
  const status=el('div',undefined,'shop-cycle');status.append(el('strong',mine.active?'Tu tienda está destacada':'Tu tienda no ocupa un puesto destacado'),el('span','Nueva rotación dentro de '+liveCountdown(info.cycle.ends_at)+' · 5 puestos'));content.append(status);
  if(viewer.username.toLowerCase()==='admin1'){
   const adminPanel=el('div',undefined,'shop-cycle'),close=el('button','Cerrar ronda de pruebas ahora','market-btn');
-  adminPanel.append(el('p','Herramienta de prueba para admin1. Cierra el ciclo actual, adjudica los 5 escaparates por puja y comienza otro de 48 horas. No devuelve las pujas.'),close);
+  adminPanel.append(el('p','Herramienta de prueba para admin1. Cierra el ciclo actual, adjudica los 5 escaparates por puja y comienza otro de 48 horas. Solo cobra las pujas ganadoras.'),close);
   close.onclick=()=>{if(!confirm('¿Cerrar ahora la ronda y adjudicar los escaparates?'))return;buttonTask(close,async()=>{const r=await post('/api/player-shops',{action:'admin_close_cycle'});$('shopNotice').textContent=r.message;await manage();},$('shopNotice'));};
   content.append(adminPanel);
  }
- const bids=[...info.shops].sort((a,b)=>b.bid-a.bid),rank=bids.findIndex(x=>x.id===mine.id)+1;content.append(el('p',`Tu puja actual: ${mine.bid} T$ · Posición provisional: ${rank}/${info.shops.length}. Las cinco mayores pujas consiguen escaparate en el siguiente cambio. Las pujas son costes de promoción no reembolsables.`));
+ const bids=[...info.shops].sort((a,b)=>b.bid-a.bid),rank=bids.findIndex(x=>x.id===mine.id)+1;content.append(el('p',`Tu puja actual: ${mine.bid} T$ · Posición provisional: ${rank}/${info.shops.length}. Las cinco mayores pujas consiguen escaparate en el siguiente cambio. Solo se cobra la puja si tu tienda sube al escaparate: necesitas tener ese saldo cuando acabe la ronda.`));
  const bidForm=el('form',undefined,'section-form'),label=el('label','Puja total (T$)'),bid=el('input'),bidBtn=el('button','Subir mi puja','market-btn');bid.type='number';bid.step='1';bid.min=String(mine.bid+1);bid.value=String(mine.bid+1);label.append(bid);bidForm.append(label,bidBtn);bidForm.onsubmit=e=>{e.preventDefault();buttonTask(bidBtn,async()=>{const r=await post('/api/player-shops',{action:'bid',amount:Number(bid.value)});$('shopNotice').textContent=r.message;await manage();await window.TengagedRefreshSession();},$('shopNotice'));};content.append(bidForm);
 }
 function shopTable271(headers,rows){

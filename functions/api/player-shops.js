@@ -5,6 +5,7 @@ import {ensureProfileSchema,getSessionUser,jsonError} from '../_shared/auth.js';
 import {ensureCommunitySchema} from '../_shared/community.js';
 import {decodeDesignImage} from '../_shared/design-images.js';
 const PERIOD=48*3600;
+const SHOP_PLACES=5;
 const STOCK_LIMIT=20;
 const CYCLE_SOLD=`((SELECT COUNT(*) FROM player_shop_sales z WHERE z.shop_id=? AND z.created_at>=datetime(?,'unixepoch'))+(SELECT COUNT(*) FROM player_shop_gifts z WHERE z.shop_id=? AND z.created_at>=datetime(?,'unixepoch')))`;
 const CYCLE_POSTED=`((SELECT COALESCE(SUM(st.quantity),0) FROM player_shop_stock st WHERE st.shop_id=? AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=st.design_id))+${CYCLE_SOLD})`;
@@ -72,7 +73,9 @@ async function schema(db){
  UPDATE users SET t_money=t_money+NEW.price WHERE id=(SELECT owner_id FROM player_shops WHERE id=NEW.shop_id);
  UPDATE player_shop_stock SET quantity=quantity-1 WHERE shop_id=NEW.shop_id AND design_id=NEW.design_id;
  END`).run();
- // A bid charges only the positive increment, in the same database statement.
+ // A bid is only a promise: it is charged when the shop wins a place, never while bidding.
+ const oldBidTriggers=(await db.prepare("SELECT name FROM sqlite_master WHERE type='trigger' AND (name IN ('tengaged_shop_bid_insert_charge','tengaged_shop_bid_update_charge') OR (name='tengaged_shop_bid_update_guard' AND sql LIKE '%NEW.amount-OLD.amount%'))").all()).results||[];
+ if(oldBidTriggers.length)await db.batch(oldBidTriggers.map(t=>db.prepare('DROP TRIGGER IF EXISTS '+t.name)));
  await db.prepare(`CREATE TRIGGER IF NOT EXISTS tengaged_shop_bid_insert_guard
  BEFORE INSERT ON player_shop_bids BEGIN
  SELECT CASE WHEN NEW.amount<1 OR NOT EXISTS (
@@ -82,38 +85,34 @@ async function schema(db){
  AND c.ends_at>CAST(strftime('%s','now') AS INTEGER)
  ) THEN RAISE(ABORT,'Puja no válida o saldo insuficiente') END;
  END`).run();
- await db.prepare(`CREATE TRIGGER IF NOT EXISTS tengaged_shop_bid_insert_charge
- AFTER INSERT ON player_shop_bids BEGIN
- UPDATE users SET t_money=t_money-NEW.amount
- WHERE id=(SELECT owner_id FROM player_shops WHERE id=NEW.shop_id);
- END`).run();
  await db.prepare(`CREATE TRIGGER IF NOT EXISTS tengaged_shop_bid_update_guard
  BEFORE UPDATE OF amount ON player_shop_bids BEGIN
  SELECT CASE WHEN NEW.amount<=OLD.amount OR NEW.shop_id<>OLD.shop_id
  OR NEW.cycle_id<>OLD.cycle_id OR NOT EXISTS(
  SELECT 1 FROM player_shops sh JOIN users u ON u.id=sh.owner_id
  JOIN player_shop_cycles c ON c.id=NEW.cycle_id
- WHERE sh.id=NEW.shop_id AND u.t_money>=NEW.amount-OLD.amount AND c.settled=0
+ WHERE sh.id=NEW.shop_id AND u.t_money>=NEW.amount AND c.settled=0
  AND c.ends_at>CAST(strftime('%s','now') AS INTEGER)
  ) THEN RAISE(ABORT,'Nueva puja no válida o saldo insuficiente') END;
  END`).run();
- await db.prepare(`CREATE TRIGGER IF NOT EXISTS tengaged_shop_bid_update_charge
- AFTER UPDATE OF amount ON player_shop_bids BEGIN
- UPDATE users SET t_money=t_money-(NEW.amount-OLD.amount)
- WHERE id=(SELECT owner_id FROM player_shops WHERE id=NEW.shop_id);
- END`).run();
+}
+async function settleCycle(db,c){
+ // Places go to the five highest bids whose owner can still pay; only they are charged.
+ // Everything runs in one batch and only while the round is unsettled, so nobody pays twice.
+ const open='(SELECT settled FROM player_shop_cycles WHERE id=?)=0';
+ const bids=(await db.prepare(`SELECT b.shop_id,b.amount,s.owner_id,u.t_money FROM player_shop_bids b JOIN player_shops s ON s.id=b.shop_id JOIN users u ON u.id=s.owner_id WHERE b.cycle_id=? ORDER BY b.amount DESC,b.updated_at ASC`).bind(c.id).all()).results||[];
+ const winners=bids.filter(b=>Number(b.t_money)>=Number(b.amount)).slice(0,SHOP_PLACES),steps=[db.prepare(`UPDATE player_shops SET active=0 WHERE ${open}`).bind(c.id)];
+ for(const w of winners)steps.push(
+  db.prepare(`UPDATE player_shops SET active=1 WHERE id=? AND ${open} AND (SELECT t_money FROM users WHERE id=?)>=?`).bind(w.shop_id,c.id,w.owner_id,w.amount),
+  db.prepare(`UPDATE users SET t_money=t_money-? WHERE id=? AND t_money>=? AND ${open}`).bind(w.amount,w.owner_id,w.amount,c.id));
+ steps.push(db.prepare('UPDATE player_shop_cycles SET settled=1 WHERE id=?').bind(c.id));
+ await db.batch(steps);
 }
 async function cycle(db){
  let now=Math.floor(Date.now()/1000), c=await db.prepare('SELECT * FROM player_shop_cycles ORDER BY id DESC LIMIT 1').first();
  if(!c){await db.prepare('INSERT INTO player_shop_cycles(opens_at,ends_at) VALUES(?,?)').bind(now,now+PERIOD).run(); c=await db.prepare('SELECT * FROM player_shop_cycles ORDER BY id DESC LIMIT 1').first();}
  for(let i=0;i<20&&now>=c.ends_at;i++){
-  if(!c.settled){
-    // Positions are awarded to the five shops with the highest bids for the completed window.
-    // Bids are paid immediately and are not refunded: a bid is a promotion fee.
-    await db.prepare('UPDATE player_shops SET active=0').run();
-    await db.prepare(`UPDATE player_shops SET active=1 WHERE id IN (SELECT b.shop_id FROM player_shop_bids b JOIN player_shops s ON s.id=b.shop_id WHERE b.cycle_id=? ORDER BY b.amount DESC,b.updated_at ASC LIMIT 5)`).bind(c.id).run();
-    await db.prepare('UPDATE player_shop_cycles SET settled=1 WHERE id=?').bind(c.id).run();
-  }
+  if(!c.settled)await settleCycle(db,c);
   await db.prepare('INSERT INTO player_shop_cycles(opens_at,ends_at) VALUES(?,?)').bind(c.ends_at,c.ends_at+PERIOD).run();
   c=await db.prepare('SELECT * FROM player_shop_cycles ORDER BY id DESC LIMIT 1').first();
  }
@@ -280,7 +279,7 @@ async function handle141_onRequest({request,env}){
    } catch (error) {
      return jsonError('No se pudo registrar la puja. Comprueba tu saldo y la ronda activa.',409);
    }
-   return Response.json({ok:true,message:'Puja registrada. El importe pagado no se reembolsa; se usa para competir por el próximo escaparate.'});
+   return Response.json({ok:true,message:'Puja registrada. Solo se te cobrará si tu tienda sube al escaparate.'});
   }
   return jsonError('Acción desconocida.',400);
  }catch(e){console.error('Player shops',e);return jsonError('No se pudo completar la operación de tienda.',500);}
