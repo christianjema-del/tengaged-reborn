@@ -2,6 +2,7 @@ import {COLOR_LEVELS} from '/color-level-catalog.js?v=159';
 import {request as fetch} from '/http.js?v=170';
 import {colorCard} from '/color-cards.js?v=159';
 import {$,el,api,post,preview,profileLink,date,buttonTask,loginLink,empty} from '/market-ui.js?v=170';
+import {setAvatar} from '/avatar-display.js?v=159';
 const params=new URLSearchParams(location.search),tab=['home','users','auctions','cards','manage','wheel'].includes(params.get('tab'))?params.get('tab'):'home',owner=params.get('owner')||'';let viewer=null,designs=[],accountState=null,shopInventory=new Set();
 for(const link of document.querySelectorAll('[data-market-tab]'))if(link.dataset.marketTab===tab)link.setAttribute('aria-current','page');
 async function balance(){const d=await api('/api/shop');$('shopBalance').textContent=d.signed_in?`Tu saldo: ${Number(d.balance).toLocaleString('es-ES')} T$ · ${Number(d.karma).toLocaleString('es-ES')} karma`:'Explora las tiendas. Inicia sesión para comprar o pujar.';return d;}
@@ -127,19 +128,22 @@ async function users(){
  }main.append(shoppingActivity169(info));if(/^#producto-\d+$/.test(location.hash))document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start'});
 }
 
-async function manage(){const info=await api('/api/player-shops'),content=storeLayout('Gestionar mi tienda','users');content.append(el('h2','Mi tienda y pujas','section-title'));
- if(!viewer){content.append(loginLink('Inicia sesión para crear una tienda'));return;}
- if(viewer.username.toLowerCase()==='admin1'){
-  const setupBox=el('div',undefined,'shop-cycle');
-  const setup=el('button','Preparar primera tienda de prueba','market-btn');
-  setupBox.append(el('p','Crea la tienda de admin1 y añade hasta 3 diseños existentes, con 5 unidades a 10 T$ cada uno. No altera los saldos ni repite el inventario al pulsarlo de nuevo.'),setup);
-  setup.onclick=()=>buttonTask(setup,async()=>{
-    const r=await post('/api/player-shops',{action:'admin_setup_first_shop'});
-    await manage();$('shopNotice').textContent=r.message;
-  },$('shopNotice'));
-  content.append(setupBox);
- }
- const mine=info.shops.find(s=>s.id===info.mine);const form=el('form',undefined,'section-form');const title=el('label','Nombre de la tienda'),name=el('input'),description=el('label','Descripción'),desc=el('textarea'),save=el('button',mine?'Guardar cambios':'Crear tienda','market-btn');name.maxLength=40;name.minLength=3;name.required=true;name.value=mine?.name||'';desc.maxLength=250;desc.value=mine?.description||'';title.append(name);description.append(desc);form.append(title,description,save);form.onsubmit=e=>{e.preventDefault();buttonTask(save,async()=>{const r=await post('/api/player-shops',{action:mine?'edit':'create',name:name.value,description:desc.value});$('shopNotice').textContent=r.message;await manage();},$('shopNotice'));};content.append(form);if(!mine)return;
+let manageView271='stock';
+function adminSetup271(content){
+ if(viewer.username.toLowerCase()!=='admin1')return;
+ const setupBox=el('div',undefined,'shop-cycle'),setup=el('button','Preparar primera tienda de prueba','market-btn');
+ setupBox.append(el('p','Crea la tienda de admin1 y añade hasta 3 diseños existentes, con 5 unidades a 10 T$ cada uno. No altera los saldos ni repite el inventario al pulsarlo de nuevo.'),setup);
+ setup.onclick=()=>buttonTask(setup,async()=>{const r=await post('/api/player-shops',{action:'admin_setup_first_shop'});await manage();$('shopNotice').textContent=r.message;},$('shopNotice'));
+ content.append(setupBox);
+}
+function shopForm271(mine){
+ const form=el('form',undefined,'section-form'),title=el('label','Nombre de la tienda'),name=el('input'),description=el('label','Descripción'),desc=el('textarea'),save=el('button',mine?'Guardar cambios':'Crear tienda','market-btn');
+ name.maxLength=40;name.minLength=3;name.required=true;name.value=mine?.name||'';desc.maxLength=250;desc.value=mine?.description||'';title.append(name);description.append(desc);form.append(title,description,save);
+ form.onsubmit=e=>{e.preventDefault();buttonTask(save,async()=>{const r=await post('/api/player-shops',{action:mine?'edit':'create',name:name.value,description:desc.value});$('shopNotice').textContent=r.message;await manage();},$('shopNotice'));};
+ return form;
+}
+function shopDetails271(content,info,mine){
+ adminSetup271(content);content.append(shopForm271(mine));
  const appearance=el('form',undefined,'section-form'),imageLabel=el('label','Imagen de la tienda (50 × 50; PNG, JPG o WebP, máximo 256 KB)'),file=el('input'),saveLogo=el('button','Guardar imagen','market-btn');file.type='file';file.accept='image/png,image/jpeg,image/webp';file.required=true;imageLabel.append(file);appearance.append(imageLabel,saveLogo);
  if(mine.has_logo){const logo=el('img');logo.src='/api/player-shops?image='+mine.id;logo.alt=mine.name;logo.width=50;logo.height=50;appearance.append(logo);const remove=el('button','Quitar imagen','plain-btn');remove.type='button';remove.onclick=()=>buttonTask(remove,async()=>{const r=await post('/api/player-shops',{action:'set_logo',image_data:null});await manage();$('shopNotice').textContent=r.message;},$('shopNotice'));appearance.append(remove);}
  appearance.onsubmit=e=>{e.preventDefault();buttonTask(saveLogo,async()=>{const chosen=file.files[0];if(!chosen)throw Error('Selecciona una imagen.');if(chosen.size>262144)throw Error('La imagen debe ocupar como máximo 256 KB.');const image_data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('No se pudo leer la imagen.'));reader.readAsDataURL(chosen);});const r=await post('/api/player-shops',{action:'set_logo',image_data});await manage();$('shopNotice').textContent=r.message;},$('shopNotice'));};content.append(appearance);
@@ -152,19 +156,65 @@ async function manage(){const info=await api('/api/player-shops'),content=storeL
  }
  const bids=[...info.shops].sort((a,b)=>b.bid-a.bid),rank=bids.findIndex(x=>x.id===mine.id)+1;content.append(el('p',`Tu puja actual: ${mine.bid} T$ · Posición provisional: ${rank}/${info.shops.length}. Las cinco mayores pujas consiguen escaparate en el siguiente cambio. Las pujas son costes de promoción no reembolsables.`));
  const bidForm=el('form',undefined,'section-form'),label=el('label','Puja total (T$)'),bid=el('input'),bidBtn=el('button','Subir mi puja','market-btn');bid.type='number';bid.step='1';bid.min=String(mine.bid+1);bid.value=String(mine.bid+1);label.append(bid);bidForm.append(label,bidBtn);bidForm.onsubmit=e=>{e.preventDefault();buttonTask(bidBtn,async()=>{const r=await post('/api/player-shops',{action:'bid',amount:Number(bid.value)});$('shopNotice').textContent=r.message;await manage();await window.TengagedRefreshSession();},$('shopNotice'));};content.append(bidForm);
- content.append(el('h2','Productos de mi tienda','section-title'));
- const sales=el('section',undefined,'shop-cycle');
- sales.append(el('h3','Últimas ventas'),el('p','Saldo actual: '+Number(info.balance||0).toLocaleString('es-ES')+' T$'));
+}
+function shopTable271(headers,rows){
+ const table=el('table',undefined,'shop-table271'),head=el('tr');for(const h of headers)head.append(el('th',h));const thead=el('thead'),tbody=el('tbody');thead.append(head);
+ for(const cells of rows){const tr=el('tr');for(const cell of cells){const td=el('td');td.append(cell);tr.append(td);}tbody.append(tr);}
+ table.append(thead,tbody);return table;
+}
+function shopSales271(content,info){
+ content.append(el('p','Saldo actual: '+Number(info.balance||0).toLocaleString('es-ES')+' T$','shop-stock-count271'),el('h2','Últimas ventas y regalos','shop-title271'));
  const recent=info.recent_sales||[];
- if(!recent.length)sales.append(el('p','Aún no hay ventas registradas en esta tienda.'));
- else for(const item of recent){
-   sales.append(el('p',item.buyer+(item.recipient?' regaló a '+item.recipient+' «':' compró «')+item.title+'» por '+Number(item.price).toLocaleString('es-ES')+' T$ · '+date(item.created_at)));
+ if(!recent.length){content.append(el('p','Aún no hay ventas registradas en esta tienda.'));return;}
+ content.append(shopTable271(['Diseño','Operación','Precio','Fecha'],recent.map(item=>[item.title,item.recipient?item.buyer+' regaló a '+item.recipient:item.buyer+' compró',Number(item.price).toLocaleString('es-ES')+' T$',date(item.created_at)])));
+}
+function shopStock271(content,info,mine,designs){
+ const limit=Number(info.stock_limit||20),posted=Number(info.stock_posted||0),left=Math.max(0,limit-posted),sold=new Map((info.my_sold||[]).map(x=>[x.design_id,Number(x.sold)])),products=info.products.filter(x=>x.shop_id===mine.id).sort((a,b)=>(b.quantity>0)-(a.quantity>0));
+ const count=el('p',undefined,'shop-stock-count271');count.append(el('span','Stock publicado: '),el('b',posted+'/'+limit),el('span','Restante: '),el('b',String(left)));
+ const labs=el('a','Juego de diseños','shop-labs271');labs.href='/designs.html';content.append(count,labs,el('h2','Elige un diseño','shop-title271'));
+ const form=el('form',undefined,'shop-stock-form271'),picker=el('div',undefined,'shop-picker271'),price=el('input'),qty=el('input'),perm=el('input'),add=el('button','Añadir stock','shop-yellow271'),cancel=el('button','Cancelar','shop-cancel271');picker.id='shopPicker271';
+ let chosen=null;
+ const sync=()=>{add.disabled=!chosen||!perm.checked||!left;};
+ const pick=(design,card)=>{chosen=design;for(const c of picker.children)c.setAttribute('aria-pressed',String(c===card));const current=products.find(p=>p.design_id===design?.id);if(current)price.value=String(current.price);sync();};
+ for(const d of designs){
+  const card=el('button',undefined,'shop-design271'),art=el('span',undefined,'shop-design-art271'),image=preview({id:d.id,title:d.title,has_image:d.has_image,theme_code:d.theme_code});
+  card.type='button';card.setAttribute('aria-pressed','false');art.append(...image.childNodes);card.append(art,el('span',d.title,'shop-design-name271'));card.onclick=()=>pick(d,card);picker.append(card);
  }
- content.append(sales);
-
- const creations=await api('/api/designs?owner='+encodeURIComponent(viewer.username));const stock=el('form',undefined,'section-form'),selectLabel=el('label','Mi diseño'),sel=el('select'),qLabel=el('label','Existencias'),qty=el('input'),pLabel=el('label','Precio por unidad (T$)'),price=el('input'),add=el('button','Añadir / actualizar producto','market-btn');for(const d of creations.designs){const opt=el('option',d.title);opt.value=String(d.id);sel.append(opt);}qty.type='number';qty.min='1';qty.max='100';qty.value='5';price.type='number';price.min='0';price.max='100000';price.value='20';selectLabel.append(sel);qLabel.append(qty);pLabel.append(price);stock.append(selectLabel,qLabel,pLabel,add);add.disabled=!creations.designs.length;stock.onsubmit=e=>{e.preventDefault();buttonTask(add,async()=>{const r=await post('/api/player-shops',{action:'stock',design_id:Number(sel.value),quantity:Number(qty.value),price:Number(price.value)});$('shopNotice').textContent=r.message;await manage();},$('shopNotice'));};content.append(stock);
- if(!creations.designs.length){const go=el('a','Publicar mi primer diseño →','collection-link');go.href='/designs.html';content.append(go);}
- const grid=el('div',undefined,'design-grid');for(const d of info.products.filter(x=>x.shop_id===mine.id)){const card=shopProduct(d,mine),remove=el('button','Retirar','market-btn');remove.onclick=()=>buttonTask(remove,async()=>{const r=await post('/api/player-shops',{action:'remove',design_id:d.design_id});$('shopNotice').textContent=r.message;await manage();},$('shopNotice'));card.append(remove);grid.append(card);}content.append(grid);
+ if(!designs.length){const go=el('a','Publicar mi primer diseño →','collection-link');go.href='/designs.html';picker.append(go);}
+ price.type='number';price.min='0';price.max='100000';price.step='1';price.value='20';price.required=true;
+ qty.type='number';qty.min='1';qty.max=String(Math.max(1,left));qty.step='1';qty.value='1';qty.required=true;
+ const fields=el('div',undefined,'shop-fields271'),priceLabel=el('label','Precio (T$)'),qtyLabel=el('label','Número de artículos');priceLabel.append(price);qtyLabel.append(qty);fields.append(priceLabel,qtyLabel);
+ const rules=el('p',undefined,'shop-rules271');for(const text of ['Stock mínimo: 1','Espera de compra: 0 horas máximo','Retraso de regalo: 0 horas'])rules.append(el('span',text));
+ const permission=el('label',undefined,'shop-permission271');perm.type='checkbox';perm.onchange=sync;permission.append(perm,el('span','Tengo permiso para vender este diseño.'));
+ const actions=el('div',undefined,'shop-actions271');cancel.type='button';cancel.onclick=()=>{perm.checked=false;price.value='20';qty.value='1';pick(null,null);};actions.append(add,cancel);
+ form.append(picker,fields,rules,permission,actions);sync();
+ form.onsubmit=e=>{e.preventDefault();buttonTask(add,async()=>{if(!chosen)throw Error('Elige un diseño.');const r=await post('/api/player-shops',{action:'stock',design_id:chosen.id,quantity:Number(qty.value),price:Number(price.value)});await manage();$('shopNotice').textContent=r.message;},$('shopNotice'));};
+ content.append(form,el('h2','Stock actual','shop-title271'));
+ if(!products.length){content.append(el('p','Todavía no hay diseños en tu tienda.'));return;}
+ content.append(shopTable271(['Diseño','Precio','Restante','Vendidos',''],products.map(d=>{const remove=el('button','Retirar','shop-remove271');remove.type='button';remove.onclick=()=>buttonTask(remove,async()=>{const r=await post('/api/player-shops',{action:'remove',design_id:d.design_id});await manage();$('shopNotice').textContent=r.message;},$('shopNotice'));return [d.title,Number(d.price).toLocaleString('es-ES')+' T$',String(d.quantity),String(sold.get(d.design_id)||0),remove];})));
+}
+function shopManager271(info,mine,designs){
+ document.body.classList.add('classic-shopping169');
+ const layout=el('div',undefined,'shop-manage271'),side=el('aside',undefined,'shop-side271'),main=el('section',undefined,'shop-main271'),show=view=>{manageView271=view;$('shopNotice').textContent='';shopManager271(info,mine,designs);};
+ const banner=el('div',undefined,'shop-banner271'),pics=el('div',undefined,'shop-banner-pics271'),portrait=el('img'),product=info.products.find(x=>x.shop_id===mine.id&&x.has_image);setAvatar(portrait,mine.owner);portrait.alt=mine.owner;pics.append(portrait);
+ if(mine.has_logo||product){const image=el('img');image.src=mine.has_logo?'/api/player-shops?image='+mine.id:'/api/design-image?id='+product.design_id;image.alt=mine.name;pics.append(image);}
+ banner.append(el('strong',mine.name),pics);
+ const ownerImage=el('img'),ownerLink=el('a',undefined,'shop-owner-pic271');setAvatar(ownerImage,mine.owner);ownerImage.alt=mine.owner;ownerLink.href='/profile.html?username='+encodeURIComponent(mine.owner);ownerLink.append(ownerImage);
+ const status=el('p','Estado: ');status.append(el('b',mine.active?'abierta':'fuera de escaparate',mine.active?'shop-open271':'shop-closed271'));
+ const total=(label,value)=>{const p=el('p',label+': ','shop-total271');p.append(el('b',Number(value||0).toLocaleString('es-ES')),' T$');return p;};
+ const help=el('a','Ayuda del juego de tiendas');help.href='/help.html#tiendas';const gestion=el('button','Gestionar tienda','shop-yellow271');gestion.type='button';gestion.onclick=()=>show('details');const addLink=el('a','Añadir stock');addLink.href='#shopPicker271';addLink.onclick=e=>{e.preventDefault();show('stock');};
+ side.append(banner,el('p','Propiedad de:'),profileLink(mine.owner),ownerLink,status,total('Total tienda',mine.lifetime_value),total('Total juego',mine.cycle_value),help,gestion,addLink);
+ const head=el('div',undefined,'shop-head271'),visit=el('a','Ver tienda','shop-yellow271');visit.href=shopURL169(mine);head.append(el('h1','Gestionar '+mine.name),visit);
+ const tabs=el('nav',undefined,'shop-tabs271');tabs.setAttribute('aria-label','Gestión de la tienda');for(const [view,label]of [['details','Detalles de la tienda'],['stock','Stock'],['sales','Ventas y regalos']]){const a=el('a',label);a.href='#'+view;if(view===manageView271)a.setAttribute('aria-current','page');a.onclick=e=>{e.preventDefault();show(view);};tabs.append(a);}
+ main.append(head,tabs);layout.append(side,main);$('shopContent').replaceChildren(layout);
+ if(manageView271==='details')shopDetails271(main,info,mine);else if(manageView271==='sales')shopSales271(main,info);else shopStock271(main,info,mine,designs);
+}
+async function manage(){
+ const info=await api('/api/player-shops'),mine=viewer?info.shops.find(s=>s.id===info.mine):null;
+ if(mine){const creations=await api('/api/designs?owner='+encodeURIComponent(viewer.username));shopManager271(info,mine,creations.designs);return;}
+ const content=storeLayout('Gestionar mi tienda','users');content.append(el('h2','Mi tienda y pujas','section-title'));
+ if(!viewer){content.append(loginLink('Inicia sesión para crear una tienda'));return;}
+ adminSetup271(content);content.append(shopForm271(null));
 }
 
 function cards(data){

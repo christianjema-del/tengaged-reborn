@@ -1,0 +1,63 @@
+/* Shop manager: stock screen for shop owners. Scoped to .shop-manage271. */
+.shop-manage271{display:grid;grid-template-columns:172px minmax(0,1fr);gap:18px;color:#6b7c8c;font:12px/1.4 Verdana,Arial,sans-serif}
+.shop-manage271 *{box-sizing:border-box;min-width:0}
+.shop-manage271 a{color:#2f6ea5;text-decoration:none}.shop-manage271 a:hover{text-decoration:underline}
+.shop-manage271 a:focus-visible,.shop-manage271 button:focus-visible{outline:2px solid #4682b4;outline-offset:2px}
+.shop-side271{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.shop-side271 p{margin:0}
+.shop-banner271{display:flex;flex-direction:column;justify-content:space-between;width:100%;height:133px;padding:9px 13px 0;border-radius:4px;background:#8f454c;overflow:hidden}
+.shop-banner271 strong{color:#fff;font:bold 13px/1.2 'Trebuchet MS',Arial,sans-serif;text-shadow:0 1px 1px #0006;overflow-wrap:anywhere}
+.shop-banner-pics271{display:flex;justify-content:space-between;gap:10px}
+.shop-banner-pics271 img{display:block;flex:0 1 66px;width:66px;height:76px;object-fit:cover;object-position:top;background:#d4d3e3;border:1px solid #bcbbd0;border-bottom:0}
+.shop-owner-pic271{display:block;width:52px;height:60px;margin:0 0 10px;background:#d3e5f5;border:1px solid #a9bccd}
+.shop-owner-pic271 img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.shop-open271{color:#4c8c2f}.shop-closed271{color:#c0504d}
+.shop-side271>p:nth-of-type(2){margin-bottom:10px}
+.shop-total271 b{color:#555}
+.shop-side271>.shop-total271+a{margin-top:12px}
+.shop-manage271 .shop-yellow271{display:inline-block;width:auto;min-height:0;margin:0;padding:6px 9px;background:#fff09a;border:1px solid #eedc7a;border-radius:4px;box-shadow:none;color:#6b6a3c;font:12px/1.2 Verdana,Arial,sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer}
+.shop-manage271 .shop-yellow271:hover:not(:disabled){background:#ffe88a;text-decoration:none}
+.shop-manage271 .shop-yellow271:disabled{opacity:.55;cursor:default}
+.shop-head271{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.shop-head271 h1{flex:1;margin:0;padding:0;border:0;color:#f44b52;font:bold 24px/1.2 'Trebuchet MS',Arial,sans-serif;overflow-wrap:anywhere}
+.shop-tabs271{display:flex;flex-wrap:wrap;gap:4px 15px;margin:24px 0 0;padding:0 0 7px;border-bottom:1px solid #dfe3e7}
+.shop-manage271 .shop-tabs271 a[aria-current=page]{color:#f44b52;font-weight:bold}
+.shop-stock-count271{display:flex;flex-wrap:wrap;gap:0 5px;margin:24px 0 0;padding:0 0 7px;border-bottom:1px solid #e6e9ec;color:#8493a0}
+.shop-stock-count271 span:nth-of-type(2){margin-left:6px}
+.shop-labs271{display:block;margin-top:1px;text-align:right}
+.shop-manage271 h2.shop-title271{display:inline-block;margin:6px 0 19px;padding:0 0 2px;border:0;border-bottom:1px dotted #ffb3bf;color:#f44b52;font:bold 18px/1.25 'Trebuchet MS',Arial,sans-serif}
+.shop-picker271{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,171px));gap:9px;max-height:520px;overflow-y:auto;margin:0 0 33px}
+.shop-manage271 .shop-design271{display:block;width:auto;height:125px;min-height:0;margin:0;padding:8px;background:#fff;border:1px solid #dfe4e9;border-radius:3px;box-shadow:none;color:#5e7183;font:12px/1.2 Verdana,Arial,sans-serif;text-align:center;cursor:pointer}
+.shop-manage271 .shop-design271:hover{background:#fafcfe}
+.shop-manage271 .shop-design271[aria-pressed=true]{background:#fdf9e9;border:2px solid #dcc05e;padding:7px}
+.shop-design-art271{display:block;width:62px;height:71px;margin:0 auto 6px;background:#f3f7fb;border-block:3px solid #dbe7f3;overflow:hidden}
+.shop-design-art271 img,.shop-design-art271 svg{display:block;width:100%;height:100%;object-fit:contain}
+.shop-design-name271{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shop-fields271{display:grid;grid-template-columns:repeat(2,minmax(0,285px));gap:4px;margin:0 0 10px}
+.shop-fields271 label{display:block;margin:0;color:#6b7c8c;font:12px Verdana,Arial,sans-serif}
+.shop-manage271 .shop-fields271 input{display:block;width:100%;height:32px;margin:7px 0 0;padding:0 7px;background:#fff;border:1px solid #ccd3da;border-radius:3px;color:#444;font:12px Verdana,Arial,sans-serif}
+.shop-rules271{display:flex;flex-wrap:wrap;gap:2px 10px;margin:0 0 13px;color:#7c8a97;font-size:10px}
+.shop-manage271 label.shop-permission271{display:flex;align-items:center;gap:7px;margin:0 0 17px;color:#6b7c8c;font:12px Verdana,Arial,sans-serif;cursor:pointer}
+.shop-manage271 .shop-permission271 input{flex:none;width:14px;height:14px;margin:0;padding:0}
+.shop-actions271{display:flex;align-items:center;gap:8px;margin:0 0 17px}
+.shop-manage271 .shop-cancel271{width:auto;min-height:0;margin:0;padding:6px 9px;background:#f2f5f8;border:1px solid #d6dde3;border-radius:4px;box-shadow:none;color:#5e7183;font:12px/1.2 Verdana,Arial,sans-serif;cursor:pointer}
+.shop-table271{width:100%;border-collapse:collapse;font-size:11px}
+.shop-table271 th{padding:7px;border-bottom:1px solid #cfd6dc;color:#6b7c8c;font-weight:normal;text-align:left}
+.shop-table271 td{padding:7px;border-bottom:1px solid #eceff2;color:#5e7183;overflow-wrap:anywhere}
+.shop-table271 tbody tr:nth-child(even) td{background:#f8fafb}
+.shop-table271 th:first-child{width:46%}
+.shop-table271 th:not(:first-child),.shop-table271 td:not(:first-child){white-space:nowrap;overflow-wrap:normal}
+.shop-table271 td:last-child{text-align:right}
+.shop-manage271 .shop-remove271{width:auto;min-height:0;margin:0;padding:0;background:none;border:0;box-shadow:none;color:#2f6ea5;font:11px Verdana,Arial,sans-serif;cursor:pointer}
+.shop-manage271 .shop-remove271:hover{text-decoration:underline}
+.shop-main271>.section-form,.shop-main271>.shop-cycle{margin-top:14px}
+@media(max-width:720px){
+.shop-manage271{grid-template-columns:minmax(0,1fr);gap:20px}
+.shop-banner271{max-width:172px}
+.shop-head271 h1{font-size:21px}
+.shop-fields271{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.shop-picker271{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-height:none;overflow:visible}
+.shop-manage271 .shop-fields271 input{height:40px;font-size:16px}
+.shop-table271{font-size:10px}.shop-table271 th:first-child{width:auto}
+.shop-table271 th,.shop-table271 td{padding:7px 3px}
+}

@@ -1,0 +1,1 @@
+V271 — Tiendas: nueva pantalla para gestionar la tienda (Detalles, Stock, Ventas y regalos) y subir stock eligiendo el diseño. Añadir stock suma unidades, con un máximo de 20 unidades por ronda.
