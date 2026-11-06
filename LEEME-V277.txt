@@ -1,0 +1,1 @@
+V277 — Ranking de Minijuegos: las puntuaciones de Frookies entran al terminar la partida y las de El Duelo al cerrar cada prueba, porque son privadas hasta entonces. Se han añadido las que faltaban de todos los juegos anteriores.

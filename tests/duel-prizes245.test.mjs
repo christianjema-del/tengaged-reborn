@@ -28,5 +28,7 @@ match(3,[person(5,'Eva'),person(6,'Fran'),person(7,'Gala'),person(8,'Hugo',{stat
 await Promise.all(Array.from({length:6},()=>duelMatch(db,3,null)));await duelMatch(db,3,null);
 assert.deepEqual({...money('Eva')},{karma:60,t_money:120});assert.deepEqual({...money('Fran')},{karma:30,t_money:70});assert.deepEqual({...money('Gala')},{karma:20,t_money:40});assert.deepEqual({...money('Hugo')},{karma:0,t_money:0},'el cuarto tampoco cobra');
 assert.deepEqual(gamePrize('duel',1),{karma:30,money:60},'el premio general no cambia');
+// Al cerrar una prueba, sus puntuaciones entran en el ranking una sola vez.
+{const closed=sql.prepare("SELECT result_key,user_id,kind,score FROM minigame_result_ledger WHERE result_key LIKE 'duel:1:%' ORDER BY user_id").all();assert.ok(closed.length>=3,'la final de El Duelo entra en el ranking');for(const r of closed){assert.match(r.result_key,/^duel:1:\d+:\d+:[a-z]+$/);assert.ok(r.score>0);}const best=sql.prepare("SELECT best_score,plays FROM minigame_scores WHERE user_id=1").get();assert.equal(best.best_score,300);assert.equal(best.plays,1,'pago y ranking se aplican una vez');}
 const faq=readFileSync(new URL('../faq.html',import.meta.url),'utf8');assert.ok(faq.indexOf('ROOKIES SLOW')<faq.indexOf('EL DUELO')&&faq.indexOf('EL DUELO')<faq.indexOf('SUPERVIVIENTES'));for(const cell of ['30K-60T$','15K-35T$','10K-20T$'])assert.ok(faq.includes('<td>'+cell+'</td>'));
 console.log('PASS El Duelo: premios de los tres primeros, pago único con lecturas simultáneas, bots sin cobro y tabla de premios.');

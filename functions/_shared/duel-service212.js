@@ -2,7 +2,8 @@ import {gamePrize} from '../../prize-catalog.js';
 import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensureProfileSchema} from './auth.js';
 import {ensureGameHistorySchema} from './games.js';
-import {freshDuel,advanceDuel,actDuel,duelView} from './duel212.js';
+import {freshDuel,advanceDuel,actDuel,duelView,duelChallenge} from './duel212.js';
+import {ensureSharedScores} from './minigame-scores.js';
 import {gameData} from './flash-data.js';
 // Premio a los tres primeros humanos por puesto real. Se abona en el mismo lote que guarda la partida;
 // la clave de duel_results y el estado pending impiden pagar dos veces.
@@ -50,6 +51,10 @@ export async function duelMatch(db,id,user,input=null,bridge=false,game=null,now
   const payload=JSON.stringify(s);
   if(payload!==row.state){
    const writes=[db.prepare('UPDATE duel_matches SET state=?,revision=revision+1 WHERE id=? AND revision=?').bind(payload,id,row.revision)];
+   // Las puntuaciones son privadas hasta cerrar la prueba: entonces pasan al ranking.
+   const closed=s.history.slice(JSON.parse(row.state).history?.length||0).flatMap(h=>h.scores.filter(x=>x.id>0&&x.score>0).map(x=>({stage:h.stage,...x})));
+   if(closed.length)await ensureSharedScores(db);
+   for(const x of closed){const kind=duelChallenge(id,x.stage);writes.push(db.prepare('INSERT OR IGNORE INTO minigame_result_ledger(result_key,user_id,kind,score) SELECT ?,?,?,? WHERE EXISTS(SELECT 1 FROM duel_matches WHERE id=? AND state=?)').bind('duel:'+id+':'+x.stage+':'+x.id+':'+kind,x.id,kind,Math.round(x.score),id,payload));}
    for(const p of s.players.filter(p=>!p.bot))writes.push(db.prepare("INSERT INTO user_game_history(username,game_type,game_id,status,placement,joined_at,finished_at) SELECT ?,'DUEL',?,?,?,?,? WHERE EXISTS(SELECT 1 FROM duel_matches WHERE id=? AND state=?) ON CONFLICT DO UPDATE SET status=excluded.status,placement=excluded.placement,finished_at=excluded.finished_at").bind(p.username,String(id),s.phase==='finished'?'finished':p.status==='eliminated'?'eliminated':'active',p.placement?'Puesto '+p.placement:null,new Date(p.joinedAt).toISOString(),p.eliminatedAt||s.finishedAt?new Date(p.eliminatedAt||s.finishedAt).toISOString():null,id,payload));
    writes.push(...duelPrizeWrites(db,s,id,payload));
    const result=await db.batch(writes);if(!result[0].meta.changes)continue;

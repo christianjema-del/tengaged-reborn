@@ -61,7 +61,7 @@ import {encode,decode} from '../functions/_shared/flash-protocol.js';
 async function bridge(payload){const u=new URL('https://test.local/microgames');u.searchParams.set('data',encode(payload));const response=await microgames({env:{DB:db},request:new Request(u,{headers:{Origin:u.origin,Cookie:'session='+String(2).padStart(64,'0')}})});return {status:response.status,...decode(await response.text())};}
 const head={context:'game',contextId:'1',subcontext:'duel',subcontextId:'1'};const begin=await bridge({type:'WOF',function:'requestGameData',header:head});assert.equal(begin.error,0);assert.ok(begin.header.code);
 const resumed=JSON.parse(sql.prepare('SELECT state FROM duel_matches WHERE id=1').get().state);resumed.runs[2].startedAt-=2000;sql.prepare('UPDATE duel_matches SET state=? WHERE id=1').run(JSON.stringify(resumed));
-const end=await bridge({type:'WOF',function:'requestSaveGameData',header:{...head,code:begin.header.code},data:{points:1234}});assert.equal(end.error,0);assert.equal(end.recorded,true);assert.equal((await duelMatch(db,1,{id:2})).match.me.score,1234);
+const end=await bridge({type:'WOF',function:'requestSaveGameData',header:{...head,code:begin.header.code},data:{points:1234}});assert.equal(end.error,0);assert.equal(end.recorded,true);assert.equal((await duelMatch(db,1,{id:2})).match.me.score,1234);assert.equal(sql.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE name='minigame_result_ledger'").get().n,0,'la puntuacion sigue privada durante la prueba');
 console.log('PASS original SWF encoded bridge starts and records a real Duel attempt');
 d=await call(duel,'api/duel',0);const lobby=d.matches.find(m=>m.phase==='waiting').id;
 assert.equal((await call(duel,'api/duel?id='+lobby,1,{action:'join',notifyOnStart:true})).status,200);
