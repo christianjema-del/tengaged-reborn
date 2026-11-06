@@ -4,7 +4,7 @@ const blogs=read('blogs.html'),write=read('blog-escribir.html'),page=read('blogs
 assert.match(rookies,/Esta partida admite apuestas<a id="rooBets" class="btnAction"[^>]*>Apuestas<\/a>/);assert.match(read('game-chat.js'),/rookies-results-date/);
 assert.match(read('hunger.html'),/<h2>Ganador!!<\/h2>/);
 assert.match(profile,/profile-mafia-box278/);assert.match(read('functions/api/mafias.js'),/AS votes FROM mafia_members mm/);
-assert.ok(!blogs.includes('blogComposer'),'la portada ya no incluye el formulario');assert.match(blogs,/Recientes<\/span><a id="writeBlogTop"[^>]*href="\/blog-escribir\.html"/);assert.ok(!blogs.includes('blogOwnerTools'),'sin Actualizar, Mi blog ni Escribir sobre el RSS');assert.match(page,/blog-pencil-menu/);assert.ok(!page.includes('voteControls(c,'),'sin tics en los comentarios');
+assert.ok(!blogs.includes('blogComposer'),'la portada ya no incluye el formulario');assert.match(blogs,/Recientes<\/span><a id="writeBlogTop"[^>]*href="\/blog-escribir\.html"/);assert.ok(!blogs.includes('blogOwnerTools'),'sin Actualizar, Mi blog ni Escribir sobre el RSS');assert.match(page,/blog-pencil-menu/);assert.ok(!page.includes('voteControls(c,'),'sin tics en los comentarios');assert.ok(!page.includes('commentScore'),'sin corazón en los comentarios');
 for(const piece of ['name="title"','name="body"','type="file"','accept="image/*"','>Publicar<'])assert.ok(write.includes(piece),piece);
 assert.match(page,/'Editar','\/blog-escribir\.html\?editar='/);assert.match(page,/action\('Eliminar'/);assert.match(api,/b\.action==='edit'/);assert.match(api,/user_id=\? OR \?=1/);
 console.log('PASS Puesta a punto: Rookies, Hunger, Mafias y Blogs.');
