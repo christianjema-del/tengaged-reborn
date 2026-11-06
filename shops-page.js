@@ -169,12 +169,12 @@ function shopSales271(content,info){
  content.append(shopTable271(['Diseño','Operación','Precio','Fecha'],recent.map(item=>[item.title,item.recipient?item.buyer+' regaló a '+item.recipient:item.buyer+' compró',Number(item.price).toLocaleString('es-ES')+' T$',date(item.created_at)])));
 }
 function shopStock271(content,info,mine,designs){
- const limit=Number(info.stock_limit||20),posted=Number(info.stock_posted||0),left=Math.max(0,limit-posted),sold=new Map((info.my_sold||[]).map(x=>[x.design_id,Number(x.sold)])),products=info.products.filter(x=>x.shop_id===mine.id).sort((a,b)=>(b.quantity>0)-(a.quantity>0));
- const count=el('p',undefined,'shop-stock-count271');count.append(el('span','Stock publicado: '),el('b',posted+'/'+limit),el('span','Restante: '),el('b',String(left)));
+ const posted=Number(info.stock_posted||0),sold=new Map((info.my_sold||[]).map(x=>[x.design_id,Number(x.sold)])),products=info.products.filter(x=>x.shop_id===mine.id).sort((a,b)=>(b.quantity>0)-(a.quantity>0));
+ const count=el('p',undefined,'shop-stock-count271');count.append(el('span','Stock publicado: '),el('b',String(posted)));
  const labs=el('a','Juego de diseños','shop-labs271');labs.href='/designs.html';content.append(count,labs,el('h2','Elige un diseño','shop-title271'));
  const form=el('form',undefined,'shop-stock-form271'),picker=el('div',undefined,'shop-picker271'),price=el('input'),qty=el('input'),perm=el('input'),add=el('button','Añadir stock','shop-yellow271'),cancel=el('button','Cancelar','shop-cancel271');picker.id='shopPicker271';
  let chosen=null;
- const sync=()=>{add.disabled=!chosen||!perm.checked||!left;};
+ const sync=()=>{add.disabled=!chosen||!perm.checked;};
  const pick=(design,card)=>{chosen=design;for(const c of picker.children)c.setAttribute('aria-pressed',String(c===card));const current=products.find(p=>p.design_id===design?.id);if(current)price.value=String(current.price);sync();};
  for(const d of designs){
   const card=el('button',undefined,'shop-design271'),art=el('span',undefined,'shop-design-art271'),image=preview({id:d.id,title:d.title,has_image:d.has_image,theme_code:d.theme_code});
@@ -182,7 +182,7 @@ function shopStock271(content,info,mine,designs){
  }
  if(!designs.length){const go=el('a','Publicar mi primer diseño →','collection-link');go.href='/designs.html';picker.append(go);}
  price.type='number';price.min='0';price.max='100000';price.step='1';price.value='20';price.required=true;
- qty.type='number';qty.min='1';qty.max=String(Math.max(1,left));qty.step='1';qty.value='1';qty.required=true;
+ qty.type='number';qty.min='1';qty.step='1';qty.value='1';qty.required=true;
  const fields=el('div',undefined,'shop-fields271'),priceLabel=el('label','Precio (T$)'),qtyLabel=el('label','Número de artículos');priceLabel.append(price);qtyLabel.append(qty);fields.append(priceLabel,qtyLabel);
  const rules=el('p',undefined,'shop-rules271');for(const text of ['Stock mínimo: 1','Espera de compra: 0 horas máximo','Retraso de regalo: 0 horas'])rules.append(el('span',text));
  const permission=el('label',undefined,'shop-permission271');perm.type='checkbox';perm.onchange=sync;permission.append(perm,el('span','Tengo permiso para vender este diseño.'));

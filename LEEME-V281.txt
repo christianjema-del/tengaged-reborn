@@ -1,0 +1,1 @@
+V281 — Tiendas: se elimina por ahora el límite de stock. Se puede publicar cualquier número de unidades por ronda. El panel muestra el stock publicado sin máximo ni restante.

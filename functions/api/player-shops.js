@@ -6,7 +6,6 @@ import {ensureCommunitySchema} from '../_shared/community.js';
 import {decodeDesignImage} from '../_shared/design-images.js';
 const PERIOD=48*3600;
 const SHOP_PLACES=5;
-const STOCK_LIMIT=20;
 const CYCLE_SOLD=`((SELECT COUNT(*) FROM player_shop_sales z WHERE z.shop_id=? AND z.created_at>=datetime(?,'unixepoch'))+(SELECT COUNT(*) FROM player_shop_gifts z WHERE z.shop_id=? AND z.created_at>=datetime(?,'unixepoch')))`;
 const CYCLE_POSTED=`((SELECT COALESCE(SUM(st.quantity),0) FROM player_shop_stock st WHERE st.shop_id=? AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=st.design_id))+${CYCLE_SOLD})`;
 async function schema(db){
@@ -163,7 +162,7 @@ async function handle141_onRequest({request,env}){
      WHERE buyer.is_banned=0 AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=d.id)
      ORDER BY z.created_at DESC,z.id DESC LIMIT 10`).all()).results||[];
    const inventory=u?(await db.prepare("SELECT item_code FROM user_inventory WHERE user_id=?").bind(u.id).all()).results.map(x=>x.item_code):[];
-   return Response.json({ok:true,shops:shops.results||[],products:products.results||[],cycle:{id:c.id,ends_at:c.ends_at,opens_at:c.opens_at,slots:5},mine:mine?.id||null,balance:Number(balance?.t_money||0),recent_sales,stock_posted,stock_limit:STOCK_LIMIT,my_sold,public_gifts,public_sales,inventory,signed_in:!!u},{headers:{'Cache-Control':'no-store'}});
+   return Response.json({ok:true,shops:shops.results||[],products:products.results||[],cycle:{id:c.id,ends_at:c.ends_at,opens_at:c.opens_at,slots:5},mine:mine?.id||null,balance:Number(balance?.t_money||0),recent_sales,stock_posted,my_sold,public_gifts,public_sales,inventory,signed_in:!!u},{headers:{'Cache-Control':'no-store'}});
   }
   if(request.method!=='POST')return jsonError('Método no permitido.',405);
   if(!u)return jsonError('Inicia sesión para administrar tu tienda.',401);
@@ -257,10 +256,9 @@ async function handle141_onRequest({request,env}){
   }
   if(act==='stock'){
    const id=Number(body.design_id),qty=Number(body.quantity),price=Number(body.price);
-   if(!Number.isSafeInteger(id)||id<1||!Number.isInteger(qty)||qty<1||qty>STOCK_LIMIT||!Number.isInteger(price)||price<0||price>100000)return jsonError('Elige diseño, precio y existencias válidos.',400);
+   if(!Number.isSafeInteger(id)||id<1||!Number.isSafeInteger(qty)||qty<1||!Number.isInteger(price)||price<0||price>100000)return jsonError('Elige diseño, precio y existencias válidos.',400);
    const own=await db.prepare('SELECT id FROM community_designs WHERE id=? AND user_id=? AND NOT EXISTS(SELECT 1 FROM withdrawn_designs WHERE design_id=community_designs.id)').bind(id,u.id).first();if(!own)return jsonError('Solo puedes vender tus propios diseños.',403);
-   const added=await db.prepare(`INSERT INTO player_shop_stock(shop_id,design_id,quantity,price) SELECT ?,?,?,? WHERE ${CYCLE_POSTED}+?<=${STOCK_LIMIT} ON CONFLICT(shop_id,design_id) DO UPDATE SET quantity=quantity+excluded.quantity,price=excluded.price`).bind(shop.id,id,qty,price,shop.id,shop.id,c.opens_at,shop.id,c.opens_at,qty).run();
-   if(!added.meta?.changes)return jsonError('Solo puedes publicar '+STOCK_LIMIT+' unidades de stock por ronda.',409);
+   await db.prepare('INSERT INTO player_shop_stock(shop_id,design_id,quantity,price) VALUES(?,?,?,?) ON CONFLICT(shop_id,design_id) DO UPDATE SET quantity=quantity+excluded.quantity,price=excluded.price').bind(shop.id,id,qty,price).run();
    return Response.json({ok:true,message:'Stock añadido.'});
   }
   if(act==='remove'){
