@@ -1,0 +1,1 @@
+V275 — Casting: todos los bots mueren al terminar el día 2, después de la expulsión. Si quedan cinco usuarios o menos, la partida termina en ese momento.
