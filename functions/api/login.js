@@ -3,6 +3,7 @@ import {claimDailyReward} from '../_shared/daily-rewards.js';
 import {expireModeration} from '../_shared/moderation.js';
 import { ensureProfileSchema, ADMIN_USERNAME } from "../_shared/auth.js";
 import {ensurePasswordReset} from '../_shared/password-reset.js';
+import {ipBlocked,recordIp} from '../_shared/user-ips.js';
 
 async function handle141_onRequestPost({ request, env, waitUntil }) {
   const body = await request.json().catch(() => ({}));
@@ -14,6 +15,7 @@ async function handle141_onRequestPost({ request, env, waitUntil }) {
   if(u?.is_system)return Response.json({error:'La cuenta Tengaged es automática y no permite iniciar sesión.'},{status:403});
   if (!u) return Response.json({error:'Usuario o contraseña incorrectos'}, {status:401});
   if (u.is_banned) return Response.json({error:'Esta cuenta está suspendida. Contacta con administración.'}, {status:403});
+  if (u.username.toLowerCase() !== ADMIN_USERNAME && await ipBlocked(env.DB,request,env)) return Response.json({error:'El acceso desde esta conexión está bloqueado. Contacta con administración.'}, {status:403});
   const reset=await env.DB.prepare('SELECT must_change_password,temporary_password_until FROM users WHERE id=?').bind(u.id).first();
   if(reset?.must_change_password&&!(Date.parse(reset.temporary_password_until)>Date.now()))return Response.json({error:'Tu contraseña temporal ha caducado. Pide a administración una nueva.'},{status:403});
   u.must_change_password=!!reset?.must_change_password;
@@ -29,6 +31,7 @@ async function handle141_onRequestPost({ request, env, waitUntil }) {
   const thx=[...new Uint8Array(th)].map(b=>b.toString(16).padStart(2,'0')).join('');
   const exp = '9999-12-31T23:59:59.999Z';
   await env.DB.prepare('INSERT INTO sessions(user_id,token_hash,expires_at) VALUES(?,?,?)').bind(u.id,thx,exp).run();
+  await recordIp(env.DB,request,env,u.id);
   if(waitUntil)waitUntil(claimDailyReward(env.DB,u).catch(error=>console.error('Login daily reward',error)));
   return new Response(JSON.stringify({ok:true,user:u}),{headers:{'Content-Type':'application/json','Cache-Control':'no-store','Set-Cookie':`session=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=34560000`}});
 }

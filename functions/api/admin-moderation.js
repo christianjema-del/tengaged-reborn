@@ -3,6 +3,7 @@ import {expireModeration} from '../_shared/moderation.js';
 import {ensureProfileSchema,getSessionUser,jsonError} from '../_shared/auth.js';
 import {ensureCommunitySchema} from '../_shared/community.js';
 import {ensureStaffSchema,isOwner,isStaff,removableSanctions} from '../_shared/staff.js';
+import {accountDetails} from '../_shared/user-ips.js';
 async function handle141_onRequest({request,env}){try{
  const db=env.DB;await ensureStaffSchema(db);await expireModeration(db);const actor=await getSessionUser(request,db);if(!isStaff(actor))return jsonError('No tienes permisos de moderación.',403);
  const owner=isOwner(actor),url=new URL(request.url);if(!['GET','POST'].includes(request.method))return jsonError('Método no permitido.',405);if(request.method==='POST'&&request.headers.get('Origin')!==url.origin)return jsonError('Origen no permitido.',403);
@@ -13,7 +14,7 @@ async function handle141_onRequest({request,env}){try{
  if(request.method==='GET'){
   const audit=(await db.prepare('SELECT l.id,l.actor_user_id,a.username AS actor,l.action,l.amount,l.reason,l.created_at FROM admin_audit_log l LEFT JOIN users a ON a.id=l.actor_user_id WHERE l.target_user_id=? ORDER BY l.id DESC LIMIT 50').bind(target.id).all()).results;
   if(!owner){target.t_money=null;}
-  return Response.json({ok:true,user:target,audit:owner?audit:audit.filter(e=>!['give_t_money','take_t_money','give_karma','take_karma'].includes(e.action)),capabilities:{owner,moderate:!protectedTarget&&target.id!==actor.id,economy:owner&&!target.is_system,roles:owner&&!target.is_system&&!target.is_admin,removeBan:!protectedTarget&&remove.ban,removeNose:!protectedTarget&&remove.nose,maxHours:owner?8760:168}},{headers:{'Cache-Control':'no-store'}});
+  return Response.json({ok:true,user:target,account:owner?await accountDetails(db,target):null,audit:owner?audit:audit.filter(e=>!['give_t_money','take_t_money','give_karma','take_karma'].includes(e.action)),capabilities:{owner,moderate:!protectedTarget&&target.id!==actor.id,economy:owner&&!target.is_system,roles:owner&&!target.is_system&&!target.is_admin,removeBan:!protectedTarget&&remove.ban,removeNose:!protectedTarget&&remove.nose,maxHours:owner?8760:168}},{headers:{'Cache-Control':'no-store'}});
  }
  if(target.is_system)return jsonError('La cuenta de avisos está protegida.',403);
  const action=String(input.action||''),reason=String(input.reason||'').trim();if(!reason||reason.length>180)return jsonError('Escribe un motivo de entre 1 y 180 caracteres.',400);

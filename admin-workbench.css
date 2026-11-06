@@ -6,7 +6,7 @@
 .staff-heading p{margin:2px 0 0;color:var(--staff-muted);font-size:11px}
 .staff-heading a{font:bold 11px var(--staff-font);color:var(--staff-blue-text)}
 #staffApp section>h2{margin:0 0 10px;padding:0 1px 3px;border-bottom:1px dotted var(--staff-pink-line);color:var(--staff-pink);font:bold 18px/22px var(--staff-font)}
-.staff-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 14px}
+.staff-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0 0 14px}
 .staff-stats>div{display:flex;flex-direction:column;padding:8px 10px;background:var(--staff-blue-soft);border:1px solid var(--staff-blue);border-radius:4px}
 .staff-stats strong{color:var(--staff-blue-text);font:bold 22px/1.2 var(--staff-font)}
 .staff-stats span{color:var(--staff-text);font-size:11px}
@@ -88,7 +88,8 @@
 .staff-back{display:none}
 @media(max-width:760px){
 .staff-layout{grid-template-columns:1fr;gap:14px}
-.staff-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.staff-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.staff-ip-action{min-height:36px}.staff-ip-user{min-height:34px}
 .staff-directory #staffUserList{max-height:300px;overflow-y:auto}
 .staff-heading{align-items:flex-start}
 .staff-main-tabs button,.staff-detail-tabs button{flex:1 1 auto;min-height:40px;padding:8px 7px}
@@ -100,3 +101,15 @@
 .staff-back{display:inline-flex;align-items:center;min-height:40px;margin:0 0 10px;padding:7px 11px;background:var(--staff-blue-soft);border:1px solid var(--staff-blue);border-radius:3px;color:var(--staff-blue-text);font:bold 12px var(--staff-font);cursor:pointer}
 .staff-selection,.staff-directory{scroll-margin-top:12px}
 }
+
+.staff-hint{margin:0 0 8px;color:var(--staff-muted);font-size:11px}
+#staffMulti h2:not(:first-child){margin-top:18px}
+.staff-ip-row{margin-bottom:3px;padding:6px 8px;background:var(--staff-blue-row)}
+.staff-ip-row p{margin:3px 0 0;overflow-wrap:anywhere}
+.staff-ip-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.staff-ip-head code{color:var(--staff-blue-text);font:bold 12px monospace;overflow-wrap:anywhere}
+.staff-ip-head time{color:var(--staff-muted);font-size:10px}
+.staff-ip-action{margin-left:auto;padding:3px 7px;background:linear-gradient(#fff9b7,#fff092);border:1px solid var(--staff-yellow-line);border-radius:3px;color:#6b6230;font:bold 11px var(--staff-font);cursor:pointer}
+.staff-ip-flag{margin-left:auto;color:var(--staff-pink);font:bold 11px var(--staff-font)}
+.staff-ip-users{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.staff-ip-user{padding:2px 7px;background:#fff;border:1px solid var(--staff-blue);border-radius:3px;color:var(--staff-blue-text);font:bold 11px var(--staff-font);cursor:pointer}

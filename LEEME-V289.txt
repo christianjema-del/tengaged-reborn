@@ -1,0 +1,1 @@
+V289 — admin1: IP por cuenta, cuentas que comparten IP, pestaña Multicuentas, bloqueo de IP, ficha de cuenta, búsqueda por email o IP y más estadísticas.
