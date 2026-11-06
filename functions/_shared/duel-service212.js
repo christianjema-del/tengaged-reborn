@@ -6,12 +6,17 @@ import {freshDuel,advanceDuel,actDuel,duelView} from './duel212.js';
 import {gameData} from './flash-data.js';
 // Premio a los tres primeros humanos por puesto real. Se abona en el mismo lote que guarda la partida;
 // la clave de duel_results y el estado pending impiden pagar dos veces.
+// Una partida puede llevar premios propios en s.prizes ([karma,T$] por puesto); si no, usa el catalogo.
+function matchPrize(s,place){
+ if(!s.prizes)return gamePrize('duel',place);
+ const [karma=0,money=0]=s.prizes[place-1]||[];return {karma,money};
+}
 function duelPrizeWrites(db,s,id,payload){
  if(s.phase!=='finished')return [];
  const writes=[],same='EXISTS(SELECT 1 FROM duel_matches WHERE id=? AND state=?)',pending='EXISTS(SELECT 1 FROM duel_results WHERE match_id=? AND user_id=? AND pending=1) AND '+same;
  for(const p of s.players){
   if(p.bot||!(p.id>0)||!Number.isInteger(p.placement))continue;
-  const prize=gamePrize('duel',p.placement);if(!prize.karma&&!prize.money)continue;
+  const prize=matchPrize(s,p.placement);if(!prize.karma&&!prize.money)continue;
   writes.push(db.prepare('INSERT OR IGNORE INTO duel_results(match_id,user_id,username,placement,karma,money) SELECT ?,?,?,?,?,? WHERE '+same).bind(id,p.id,p.username,p.placement,prize.karma,prize.money,id,payload));
   writes.push(db.prepare('UPDATE users SET karma=COALESCE(karma,0)+?,t_money=COALESCE(t_money,0)+? WHERE id=? AND '+pending).bind(prize.karma,prize.money,p.id,id,p.id,id,payload));
   writes.push(db.prepare('INSERT INTO user_stats(username,games_played,wins,points,created_at) SELECT ?,0,?,?,CURRENT_TIMESTAMP WHERE '+pending+' ON CONFLICT(username) DO UPDATE SET wins=COALESCE(wins,0)+excluded.wins,points=COALESCE(points,0)+excluded.points').bind(p.username,p.placement===1?1:0,prize.karma,id,p.id,id,payload));

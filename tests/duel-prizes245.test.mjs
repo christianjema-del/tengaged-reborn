@@ -21,5 +21,12 @@ const stats=sql.prepare("SELECT wins,points FROM user_stats WHERE username='Ana'
 // Un bot en el podio no cobra y no quita el premio del puesto a los humanos.
 match(2,[{id:-1,username:'Bot',bot:true,status:'active',placement:null},person(2,'Bea'),person(3,'Cris')],[[-1,900],[2,200],[3,100]]);await duelMatch(db,2,null);
 assert.deepEqual({...money('Bea')},{karma:35,t_money:170},'Bea segunda');assert.equal(sql.prepare('SELECT COUNT(*) n FROM duel_results WHERE match_id=2').get().n,2);
+// Una partida con premios propios paga esos premios, una sola vez, y las demas siguen con el catalogo.
+for(const [id,name] of [[5,'Eva'],[6,'Fran'],[7,'Gala'],[8,'Hugo']])sql.prepare('INSERT INTO users(id,username,t_money,karma) VALUES(?,?,0,0)').run(id,name);
+match(3,[person(5,'Eva'),person(6,'Fran'),person(7,'Gala'),person(8,'Hugo',{status:'eliminated',placement:4})],[[5,300],[6,200],[7,100]]);
+{const row=JSON.parse(sql.prepare('SELECT state FROM duel_matches WHERE id=3').get().state);row.prizes=[[60,120],[30,70],[20,40]];sql.prepare('UPDATE duel_matches SET state=? WHERE id=3').run(JSON.stringify(row));}
+await Promise.all(Array.from({length:6},()=>duelMatch(db,3,null)));await duelMatch(db,3,null);
+assert.deepEqual({...money('Eva')},{karma:60,t_money:120});assert.deepEqual({...money('Fran')},{karma:30,t_money:70});assert.deepEqual({...money('Gala')},{karma:20,t_money:40});assert.deepEqual({...money('Hugo')},{karma:0,t_money:0},'el cuarto tampoco cobra');
+assert.deepEqual(gamePrize('duel',1),{karma:30,money:60},'el premio general no cambia');
 const faq=readFileSync(new URL('../faq.html',import.meta.url),'utf8');assert.ok(faq.indexOf('ROOKIES SLOW')<faq.indexOf('EL DUELO')&&faq.indexOf('EL DUELO')<faq.indexOf('SUPERVIVIENTES'));for(const cell of ['30K-60T$','15K-35T$','10K-20T$'])assert.ok(faq.includes('<td>'+cell+'</td>'));
 console.log('PASS El Duelo: premios de los tres primeros, pago único con lecturas simultáneas, bots sin cobro y tabla de premios.');
