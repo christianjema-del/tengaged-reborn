@@ -52,13 +52,13 @@ async function betWrites(db,s,id,payload){
  }
  return writes;
 }
-async function loadActivity(db,s,id){const {totals}=await roomPosis(db,'rookies:'+id);setActivity(s,Object.fromEntries(totals));}
+async function loadActivity(db,s,id){const {rows}=await roomPosis(db,'rookies:'+id);setActivity(s,rows);}
 export async function rookiesMatch(db,id,user,input=null,now=Date.now()){
  await ensureRookies(db);
  for(let n=0;n<32;n++){
   const row=await db.prepare('SELECT id,revision,state FROM rookies_matches WHERE id=?').bind(id).first();if(!row)throw Error('No existe esa partida de Rookies.');
   const s=JSON.parse(row.state);s.id=id;
-  // Los votos del chat solo hacen falta al cerrar un día: así no se consulta en cada carga.
+  // El chat solo hace falta al cerrar un día: así no se consulta en cada carga.
   if(s.phase!=='waiting'&&s.phase!=='finished'&&now>=s.deadline)await loadActivity(db,s,id);
   advanceRookies(s,now);if(input)actRookies(s,user,input,now);
   const payload=JSON.stringify(s);

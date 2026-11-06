@@ -1,0 +1,3 @@
+V273 — Rookies: el HoH, el PoV y los nominados de relleno se deciden con la actividad real del día que acaba de cerrar.
+
+Antes, la actividad se ponía a cero justo antes de usarla, así que el HoH y los dos nominados de relleno salían de un sorteo. Ahora gana quien más comenta y, si hay empate, quien tiene más tics. Los usuarios van por delante de los bots, y los comentarios de spam o escritos fuera de plazo no cuentan.

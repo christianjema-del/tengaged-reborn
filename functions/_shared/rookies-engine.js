@@ -2,30 +2,42 @@
 import {startAdmin172,authorizeStart172,validStart172} from './manual-start172.js';
 import {canFillBots} from './game-bots.js';
 import {enrollmentOptions} from './enrollment.js';
+import {commentPosis,validComments} from './chat-posis.js';
 export const CAPACITY=13,DAY_MS=86400000,FINALE_MS=4*3600000;
 export const BET_MULTIPLIERS=Object.freeze([2,1.75,1.5,1.25,1]);
 const random=n=>crypto.getRandomValues(new Uint32Array(1))[0]%n;
 export const alive=s=>s.players.filter(p=>p.status==='active');
 const byId=(s,id)=>s.players.find(p=>p.id===Number(id));
 const log=(s,text,at,kind='notice',extra={})=>{s.events.push({id:s.events.length+1,text,at,kind,...extra});};
-const dayCount=(s,p)=>Math.max(0,(s.activity[p.id]||0)-(s.activityBase[p.id]||0));
-// Más activos primero; el desempate fijado al inscribirse evita favoritismos.
-const mostActive=(s,list)=>list.slice().sort((a,b)=>dayCount(s,b)-dayCount(s,a)||a.tie-b.tie);
-export function freshRookies(id=0,now=Date.now()){return {id,version:1,phase:'waiting',day:0,createdAt:now,startedAt:null,finishedAt:null,deadline:null,players:[],hoh:null,previousHoh:null,pov:null,nominees:[],hohPicks:[],ballots:{},saved:null,events:[],history:[],activity:{},activityBase:{},welcomes:[],whispers:[],fee:0};}
-export function setActivity(s,counts){for(const [id,n] of Object.entries(counts))s.activity[id]=Number(n)||0;}
+const chatTime=value=>Date.parse(String(value).replace(' ','T').replace(/Z?$/,'Z'));
+const dayStart=(s,day)=>s.startedAt+(day-1)*DAY_MS;
+// Comentarios válidos (sin spam) y tics recibidos por una persona entre dos momentos.
+function activityOf(s,p,from,to){
+ const rows=(s.chatLog||[]).filter(row=>row.user_id===p.id&&row.at>=from&&row.at<to);
+ return {comments:rows.length,tics:rows.reduce((n,row)=>n+row.posis,0)};
+}
+const byActivity=(a,b)=>b.comments-a.comments||b.tics-a.tics;
+// Gana quien más comenta; si empatan, quien tiene más tics. Después, los usuarios antes que los bots.
+function mostActive(s,list,day){
+ const from=dayStart(s,day),scores=new Map(list.map(p=>[p.id,activityOf(s,p,from,from+DAY_MS)]));
+ return list.slice().sort((a,b)=>byActivity(scores.get(a.id),scores.get(b.id))||Number(!!a.bot)-Number(!!b.bot)||a.tie-b.tie);
+}
+export function freshRookies(id=0,now=Date.now()){return {id,version:1,phase:'waiting',day:0,createdAt:now,startedAt:null,finishedAt:null,deadline:null,players:[],hoh:null,previousHoh:null,pov:null,nominees:[],hohPicks:[],ballots:{},saved:null,events:[],history:[],welcomes:[],whispers:[],fee:0};}
+// Registro temporal del chat: advanceRookies lo borra para no guardarlo en la partida.
+export function setActivity(s,rows){s.chatLog=validComments(rows).map(row=>({user_id:row.user_id,at:chatTime(row.created_at),posis:commentPosis(Number(row.score)||0)}));}
 function chooseHoh(s,at,finale=false){
- const blocked=new Set([s.hoh,...(finale?[]:s.hohPicks)].filter(Boolean)),pool=alive(s).filter(p=>!blocked.has(p.id)),hoh=mostActive(s,pool.length?pool:alive(s))[0];
+ const blocked=new Set([s.hoh,...(finale?[]:s.hohPicks)].filter(Boolean)),pool=alive(s).filter(p=>!blocked.has(p.id)),hoh=mostActive(s,pool.length?pool:alive(s),s.day-1)[0];
  s.previousHoh=s.hoh;s.hoh=hoh.id;log(s,(finale?'Último HoH: ':'HoH del día '+s.day+': ')+hoh.username+'.',at,'hoh',{hoh:hoh.username,day:s.day});
 }
 function startDay(s,at){
  const nominated=s.hohPicks.filter(id=>byId(s,id)?.status==='active'),players=alive(s);
- s.day++;s.activityBase={...s.activity};s.ballots={};s.saved=null;s.pov=null;
+ s.day++;s.ballots={};s.saved=null;s.pov=null;
  if(players.length<=4){s.nominees=[];s.hohPicks=[];chooseHoh(s,at,true);s.phase='finale';s.deadline=at+FINALE_MS;log(s,'Final de cuatro: los resultados llegarán en cuatro horas.',at,'finale');return;}
  s.phase='day';s.deadline=at+DAY_MS;chooseHoh(s,at);s.hohPicks=[];
  if(s.day===1){s.nominees=[];return;}
- const wanted=players.length===5?3:4,chosen=nominated.filter(id=>id!==s.hoh).slice(0,2),others=mostActive(s,players.filter(p=>p.id!==s.hoh&&!chosen.includes(p.id))).reverse();
+ const wanted=players.length===5?3:4,chosen=nominated.filter(id=>id!==s.hoh).slice(0,2),others=mostActive(s,players.filter(p=>p.id!==s.hoh&&!chosen.includes(p.id)),s.day-1).reverse();
  while(chosen.length<wanted&&others.length)chosen.push(others.shift().id);s.nominees=chosen;
- const pov=mostActive(s,players.filter(p=>p.id!==s.hoh))[0];s.pov=pov?.id??null;
+ const pov=mostActive(s,players.filter(p=>p.id!==s.hoh),s.day-1)[0];s.pov=pov?.id??null;
  log(s,'Nominados del día '+s.day+': '+chosen.map(id=>byId(s,id).username).join(', ')+'.',at,'nominations',{nominees:chosen.map(id=>byId(s,id).username),day:s.day});
 }
 export function votersOf(s){return alive(s).filter(p=>!s.nominees.includes(p.id));}
@@ -34,20 +46,21 @@ function closeDay(s,at){
  if(!s.nominees.length){if(s.hohPicks.length<2)autoPicks(s);return startDay(s,at);}
  botBallots(s);
  const total=Object.fromEntries(s.nominees.map(id=>[id,0]));for(const ballot of Object.values(s.ballots))for(const [id,points] of Object.entries(ballot))if(id in total)total[id]+=points;
- const saved=s.saved,ranked=s.nominees.filter(id=>id!==saved).map(id=>byId(s,id)).sort((a,b)=>total[b.id]-total[a.id]||dayCount(s,a)-dayCount(s,b)||a.tie-b.tie),out=ranked.slice(0,s.nominees.length===4?2:1);
+ const saved=s.saved,calm=mostActive(s,s.nominees.map(id=>byId(s,id)),s.day).reverse(),ranked=s.nominees.filter(id=>id!==saved).map(id=>byId(s,id)).sort((a,b)=>total[b.id]-total[a.id]||calm.indexOf(a)-calm.indexOf(b)),out=ranked.slice(0,s.nominees.length===4?2:1);
  let place=alive(s).length;for(const p of out){p.status='eliminated';p.placement=place--;p.eliminatedAt=at;}
  const rows=s.nominees.map(id=>({username:byId(s,id).username,points:total[id],out:out.some(p=>p.id===id)})).sort((a,b)=>b.points-a.points);
  s.history.push({day:s.day,hoh:s.hoh,pov:s.pov,saved,rows});log(s,'Resultados del día '+s.day,at,'rookies-results',{rows,day:s.day});
  if(s.hohPicks.length<2)autoPicks(s);startDay(s,at);
 }
-function autoPicks(s){const pool=alive(s).filter(p=>p.id!==s.hoh&&!s.hohPicks.includes(p.id)),least=mostActive(s,pool).reverse();while(s.hohPicks.length<2&&least.length)s.hohPicks.push(least.shift().id);}
+function autoPicks(s){const pool=alive(s).filter(p=>p.id!==s.hoh&&!s.hohPicks.includes(p.id)),least=mostActive(s,pool,s.day).reverse();while(s.hohPicks.length<2&&least.length)s.hohPicks.push(least.shift().id);}
 function finish(s,at){
- const total=p=>s.activity[p.id]||0,order=alive(s).sort((a,b)=>total(b)-total(a)||(b.id===s.hoh)-(a.id===s.hoh)||a.tie-b.tie);
+ const scores=new Map(alive(s).map(p=>[p.id,activityOf(s,p,s.startedAt,at)])),order=alive(s).sort((a,b)=>byActivity(scores.get(a.id),scores.get(b.id))||(b.id===s.hoh)-(a.id===s.hoh)||a.tie-b.tie);
  order.forEach((p,i)=>{p.placement=i+1;p.status='finished';});s.phase='finished';s.finishedAt=at;s.deadline=null;s.winner=order[0]?.username||null;log(s,s.winner+' gana Rookies #'+s.id+'.',at,'winner');
 }
 export function advanceRookies(s,now=Date.now()){
  if(s.phase==='waiting'){if(s.players.length===CAPACITY&&validStart172(s,'rookies')){s.startedAt=now;startDay(s,now);}return;}
  for(let n=0;n<40&&s.phase!=='finished'&&now>=s.deadline;n++){const at=s.deadline;if(s.phase==='finale')finish(s,at);else closeDay(s,at);}
+ delete s.chatLog;
 }
 export function actRookies(s,user,input,now=Date.now()){
  const action=input.action,p=s.players.find(q=>q.id===user.id);
