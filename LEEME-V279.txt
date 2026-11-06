@@ -1,0 +1,6 @@
+V279 — Puesta a punto.
+Rookies: aviso de apuestas y resultados de expulsión con el diseño clásico, en castellano. Se puede apostar el doble del valor de la tarjeta: la negra permite 20 T$.
+Casting: la salud por comentarios sube al recoger una llave o una manzana, igual que los tics.
+Hunger: la sección de ganadores se titula Ganador!!
+Mafias: bloque del perfil con nombre, cargo, votos y emblema.
+Blogs: Escribir un blog junto a Recientes, página propia para escribir con fotos, y opciones de editar y eliminar.

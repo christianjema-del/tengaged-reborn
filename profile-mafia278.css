@@ -1,0 +1,6 @@
+/* Bloque de mafia del perfil: nombre, cargo y votos, con el emblema a la derecha. */
+body.page-profile #profilePage .profile-mafia-box278{position:relative;display:block;margin:0;padding:8px 40px 6px 8px;background:#ffffee;border-bottom:1px solid #e6e8eb;font:11px/15px Arial,sans-serif;color:#555}
+body.page-profile #profilePage .profile-mafia-box278 a{display:block;color:#4682b4;text-decoration:underline;font-weight:400}
+body.page-profile #profilePage .profile-mafia-box278 strong{display:block;font:bold 12px/15px Arial,sans-serif;color:#444}
+body.page-profile #profilePage .profile-mafia-box278 span{display:block}
+body.page-profile #profilePage .profile-mafia-box278 img{position:absolute;top:8px;right:6px;width:20px;height:20px;object-fit:cover}

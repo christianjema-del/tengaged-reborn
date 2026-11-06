@@ -12,10 +12,21 @@ export function applyChatHealth142(s,rows,now=Date.now()){
    if(p.bot&&!lastAt){p.health=Math.max(1,p.health-Math.max(0,due-(p.idleCharged||0)));p.idleCharged=due;}
    else {p.idleCharged=due;if(lastId&&lastAt>=now-60000)p.health=Math.min(100,p.health+1);}
   }else if(lastId>Number(p.healthChatCursor142||0)){
-   p.healthChatCursor142=lastId;if(lastAt>=(s.startedAt||0)){p.health=Math.min(100,Math.max(0,p.health)+1);p.idleCharged=0;}
+   // El comentario quita la inactividad al momento; la salud sube al recoger una llave o una manzana.
+   p.healthPaid278??=Number(p.healthChatCursor142||0);p.healthChatCursor142=lastId;if(lastAt>=(s.startedAt||0))p.idleCharged=0;
   }
  }
  s.healthRuleVersion=142;
+}
+// Suma +1 de salud por cada comentario que aun no se haya contado.
+export function applyPendingHealth278(s,rows){
+ const time=value=>Date.parse(String(value).replace(' ','T').replace(/Z?$/,'Z'));
+ for(const p of s.players){
+  if(p.status!=='active'||p.bot)continue;
+  const base=Number(p.healthPaid278??p.healthChatCursor142??0),mine=rows.filter(r=>r.username.toLowerCase()===key(p)&&Number(r.id)>base&&time(r.created_at)>=(s.startedAt||0));
+  p.healthPaid278=Math.max(base,...mine.map(r=>Number(r.id)));
+  if(mine.length)p.health=Math.min(100,Math.max(0,p.health)+mine.length);
+ }
 }
 export function restoreCastingThree142(s,now=Date.now()){
  if(s.id!==3||s.healthRecovery142||s.phase==='waiting'||s.phase==='finished')return false;

@@ -49,7 +49,7 @@ async function handle({request,env}){try{
  }
  }else if(request.method!=='GET')return jsonError('Método no permitido.',405);
  const username=url.searchParams.get('username'),target=username?await db.prepare('SELECT id FROM users WHERE LOWER(username)=LOWER(?)').bind(username).first():me;
- const membership=target?await db.prepare('SELECT m.id,m.name,m.description,m.emblem231,mm.role FROM mafia_members mm JOIN mafias m ON m.id=mm.mafia_id WHERE mm.user_id=?').bind(target.id).first():null;
+ const membership=target?await db.prepare('SELECT m.id,m.name,m.description,m.emblem231,mm.role,(SELECT COUNT(*) FROM mafia_votes231 v WHERE v.mafia_id=m.id AND v.target_id=mm.user_id AND EXISTS(SELECT 1 FROM mafia_members q WHERE q.user_id=v.voter_id AND q.mafia_id=m.id)) AS votes FROM mafia_members mm JOIN mafias m ON m.id=mm.mafia_id WHERE mm.user_id=?').bind(target.id).first():null;
  const own=me?await db.prepare('SELECT * FROM mafia_members WHERE user_id=?').bind(me.id).first():null;
  const all=(await db.prepare(`SELECT m.id,m.name,m.description,m.motto231,m.emblem231,m.created_at,u.username AS founder,COUNT(p.id) AS members,COALESCE(SUM(CASE WHEN p.id IS NOT NULL THEN ${pointExpr231.replaceAll('u.id','p.id')} ELSE 0 END),0) AS points FROM mafias m JOIN users u ON u.id=m.founder_id LEFT JOIN mafia_members mm ON mm.mafia_id=m.id AND mm.role<>'aspirant' LEFT JOIN users p ON p.id=mm.user_id AND COALESCE(p.is_banned,0)=0 AND COALESCE(p.is_system,0)=0 AND COALESCE(p.is_test_bot,0)=0 GROUP BY m.id ORDER BY points DESC,members DESC,m.id`).all()).results;
  const page=Math.max(1,Math.floor(Number(url.searchParams.get('page'))||1)),recent=[...all].sort((a,b)=>b.id-a.id).slice(0,20);

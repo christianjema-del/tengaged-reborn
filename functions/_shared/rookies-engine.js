@@ -41,11 +41,12 @@ function startDay(s,at){
  log(s,'Nominados del día '+s.day+': '+chosen.map(id=>byId(s,id).username).join(', ')+'.',at,'nominations',{nominees:chosen.map(id=>byId(s,id).username),day:s.day});
 }
 export function votersOf(s){return alive(s).filter(p=>!s.nominees.includes(p.id));}
-function botBallots(s){const values=s.nominees.map((_,i)=>i+1);for(const p of votersOf(s).filter(p=>p.bot&&!s.ballots[p.id])){const left=values.slice(),ballot={};for(const id of s.nominees)ballot[id]=left.splice(random(left.length),1)[0];s.ballots[p.id]=ballot;}}
+function botBallots(s){const values=s.nominees.map((_,i)=>i);for(const p of votersOf(s).filter(p=>p.bot&&!s.ballots[p.id])){const left=values.slice(),ballot={};for(const id of s.nominees)ballot[id]=left.splice(random(left.length),1)[0];s.ballots[p.id]=ballot;}}
 function closeDay(s,at){
  if(!s.nominees.length){if(s.hohPicks.length<2)autoPicks(s);return startDay(s,at);}
  botBallots(s);
- const total=Object.fromEntries(s.nominees.map(id=>[id,0]));for(const ballot of Object.values(s.ballots))for(const [id,points] of Object.entries(ballot))if(id in total)total[id]+=points;
+ const total=Object.fromEntries(s.nominees.map(id=>[id,0]));// Los votos antiguos iban de 1 a 4: se pasan a la escala actual, que empieza en 0.
+ for(const ballot of Object.values(s.ballots)){const low=Math.min(...Object.values(ballot));for(const [id,points] of Object.entries(ballot))if(id in total)total[id]+=points-low;}
  const saved=s.saved,calm=mostActive(s,s.nominees.map(id=>byId(s,id)),s.day).reverse(),ranked=s.nominees.filter(id=>id!==saved).map(id=>byId(s,id)).sort((a,b)=>total[b.id]-total[a.id]||calm.indexOf(a)-calm.indexOf(b)),out=ranked.slice(0,s.nominees.length===4?2:1);
  let place=alive(s).length;for(const p of out){p.status='eliminated';p.placement=place--;p.eliminatedAt=at;}
  const rows=s.nominees.map(id=>({username:byId(s,id).username,points:total[id],out:out.some(p=>p.id===id)})).sort((a,b)=>b.points-a.points);
@@ -79,7 +80,7 @@ export function actRookies(s,user,input,now=Date.now()){
  }
  if(action==='vote'){
   if(!s.nominees.length)throw Error('Hoy no hay votación.');if(s.nominees.includes(p.id))throw Error('Los nominados no pueden votar.');
-  const ballot=input.ballot||{},values=s.nominees.map(id=>Number(ballot[id])),wanted=s.nominees.map((_,i)=>i+1);
+  const ballot=input.ballot||{},values=s.nominees.map(id=>Number(ballot[id])),wanted=s.nominees.map((_,i)=>i);
   if(Object.keys(ballot).length!==s.nominees.length||[...values].sort((a,b)=>a-b).join()!==wanted.join())throw Error('Asigna cada valor de puntos una sola vez.');
   s.ballots[p.id]=Object.fromEntries(s.nominees.map((id,i)=>[id,values[i]]));return;
  }
@@ -94,7 +95,7 @@ export function rookiesView(s,user,now=Date.now()){
  return {id:s.id,phase:s.phase,day:s.day,now,deadline:s.deadline,startedAt:s.startedAt,finishedAt:s.finishedAt,winner:s.winner||null,capacity:CAPACITY,canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<CAPACITY,
   hoh:hoh?.username||null,
   players:s.players.map(p=>({id:p.id,username:p.username,bot:!!p.bot,status:p.status,placement:p.placement,hoh:p.id===s.hoh,nominated:s.nominees.includes(p.id)})),
-  nominees:s.nominees.map(id=>({id,username:byId(s,id)?.username})),points:s.nominees.map((_,i)=>i+1),
+  nominees:s.nominees.map(id=>({id,username:byId(s,id)?.username})),points:s.nominees.map((_,i)=>i),
   me:me?{id:me.id,status:me.status,isHoh:active&&me.id===s.hoh,isPov:active&&s.phase==='day'&&me.id===s.pov,nominated,canVote:active&&s.phase==='day'&&s.nominees.length>0&&!nominated,ballot:s.ballots[me.id]||null,picks:me.id===s.hoh?s.hohPicks:[],saved:me.id===s.pov?s.saved:null}:null,
   events:s.events.map(({id,text,at,kind})=>({id,text,at,kind})),
   whispers:me?(s.whispers||[]).filter(w=>w.from===me.id||w.to===me.id).map(w=>({id:w.id,from:byId(s,w.from)?.username,to:byId(s,w.to)?.username,body:w.body,at:w.at})):[],

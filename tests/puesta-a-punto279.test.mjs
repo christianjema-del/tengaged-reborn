@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+const read=f=>readFileSync(new URL('../'+f,import.meta.url),'utf8');
+const blogs=read('blogs.html'),write=read('blog-escribir.html'),page=read('blogs-page.js'),api=read('functions/api/blog.js'),rookies=read('rookies.html'),profile=read('profile.html');
+assert.match(rookies,/Esta partida admite apuestas<a id="rooBets" class="btnAction"[^>]*>Apuestas<\/a>/);assert.match(read('game-chat.js'),/rookies-results-date/);
+assert.match(read('hunger.html'),/<h2>Ganador!!<\/h2>/);
+assert.match(profile,/profile-mafia-box278/);assert.match(read('functions/api/mafias.js'),/AS votes FROM mafia_members mm/);
+assert.ok(!blogs.includes('blogComposer'),'la portada ya no incluye el formulario');assert.match(blogs,/Recientes<\/span><a id="writeBlogTop"[^>]*href="\/blog-escribir\.html"/);assert.match(page,/blogOwnerTools'\)\.hidden=!personal/);
+for(const piece of ['name="title"','name="body"','type="file"','accept="image/*"','>Publicar<'])assert.ok(write.includes(piece),piece);
+assert.match(page,/'Editar','\/blog-escribir\.html\?editar='/);assert.match(page,/action\('Eliminar'/);assert.match(api,/b\.action==='edit'/);assert.match(api,/user_id=\? OR \?=1/);
+console.log('PASS Puesta a punto: Rookies, Hunger, Mafias y Blogs.');

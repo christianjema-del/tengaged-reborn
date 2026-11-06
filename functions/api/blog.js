@@ -66,6 +66,11 @@ async function handle141_onRequest({request,env}){try{
   if(post.user_id===me.id)return fail('No puedes votar tu propia entrada.',403);if(!post.open)return fail('La votación de esta entrada ha terminado.',409);
   return lockedVote162(db,'blog_votes','post_id',id,me,Number(b.value));
  }
+ if(b.action==='edit'){
+  const id=number(b.post_id),result=await db.prepare('UPDATE blog_posts SET title=?,body=? WHERE id=? AND (user_id=? OR ?=1)').bind(text(b.title,3,80),text(b.body,1,3000),id,me.id,me.is_admin?1:0).run();
+  if(!result.meta.changes)return fail('No tienes permiso para editar esta entrada.',403);
+  return ok({id,message:'Entrada actualizada.'});
+ }
  const result=await db.prepare(`INSERT INTO blog_posts(user_id,author,title,body,initial_points159) VALUES(?,?,?,?,${PUBLICATION_POINTS_SQL159})`).bind(me.id,me.username,text(b.title,3,80),text(b.body,1,3000),me.id).run();return ok({id:result.meta.last_row_id,message:'Entrada publicada.'});
  }catch(e){return fail(e.message||'No se pudo completar la acción.');}}
 

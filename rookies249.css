@@ -1,8 +1,11 @@
 .rookies-header h1{color:#34495e!important}.rookies-header h1 span{color:#ff536e}
-.rookies-betting{border:1px solid #dde7ee;background:#fafcfd;padding:10px!important;margin-bottom:14px}.rookies-betting h2{font:bold 14px Arial!important;color:#333!important;margin:0 0 6px!important;border:0!important}
-.rookies-bets-link{display:block;text-align:center;background:linear-gradient(#fff,#dfeaf3);border:1px solid #9fb6c8;color:#222!important;font:bold 13px Arial;padding:7px;text-decoration:none}
+.rookies-info-box{display:flow-root;box-sizing:border-box;margin:5px 0 14px;padding:9px 5px 5px;background:#f6fff8;border:1px solid #407d4d;border-radius:4px;color:#5d5d5d;font:11px Verdana,Geneva,Arial,Helvetica,sans-serif}
+.rookies-info-box .btnAction{float:right;margin-top:-5px;padding:5px 6px;min-width:50px;box-sizing:content-box;text-align:center;background:#fff1a1;border:1px solid #ffe54f;border-radius:4px;color:#566672!important;font:bold 11px 'Trebuchet MS',trebuchet,Verdana,Arial,sans-serif;text-decoration:none}
 body #rooAdmin button,body #rooAdmin a{display:block;box-sizing:border-box;width:100%;margin:0 0 8px;padding:8px;background:#ffe88a;border:1px solid #eedc7a;border-radius:4px;color:#555!important;font:bold 13px Arial;text-align:center;text-decoration:none;cursor:pointer}body #rooAdmin button:hover,body #rooAdmin a:hover{background:#ffdf5e}body #rooAdmin [hidden]{display:none}#rooNotice{font:12px Arial;margin:0 0 8px}#rooNotice:empty{display:none}.fro-player .fro-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rookies-result{font:12px Arial;margin:2px 0}.rookies-result a{color:#4682b4;text-decoration:none;display:inline-block;min-width:110px}.rookies-result b{display:inline-block;background:#222;color:#fff;padding:0 4px;margin:0 3px}.rookies-out{background:#222;color:#fff23c;font:bold 10px Arial;padding:1px 4px;margin-left:8px}
+.game-chat .rookies-results-row{display:block!important;border:0!important;background:none!important;padding:0!important;margin:4px 0 0!important}
+.game-chat .rookies-results-date{background:#fffadb;color:#515151;font:11px/14px Verdana,Geneva,Arial,sans-serif;padding:2px 10px 3px 2px}
+.game-chat .rookies-results-body{background:#fffdf4;color:#252525;font:10px/18px Verdana,Geneva,Arial,sans-serif;padding:5px 5px 5px 10px}
+.game-chat .rookies-result a{color:#4682b4;text-decoration:none;font-weight:400}.rookies-result b{background:#252525;color:#fff;font-weight:400;padding:1px;margin:0 4px 0 6px}.rookies-out{background:#252525;color:#fff2a6;padding:1px;margin-left:20px}
 .frookies-main #rooHistory .fro-story-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:5px;background:#f7f7f8;border-bottom:1px solid white;padding:5px 4px;font:11px/16px Arial;color:#555}
 body .frookies-main .fro-header.rookies-header{display:flex!important;align-items:center;gap:12px;background:linear-gradient(90deg,#d4e6f6,#fff)!important;padding:6px 8px!important;min-height:52px}body .frookies-main .fro-header.rookies-header time{position:static!important;margin-left:auto}body .frookies-main .fro-header.rookies-header>img{display:block!important;width:150px!important;height:auto!important;max-width:40vw;object-fit:contain}
 .btnAction{display:inline-block;background:#ffe88a;border:1px solid #eedc7a;border-radius:4px;color:#555!important;font:bold 12px Arial;padding:5px 9px;text-decoration:none}
@@ -19,3 +22,11 @@ body .bets-box .bet-add{display:block;width:calc(100% - 6px);margin:0 3px 3px;pa
 .bets-col.eliminated .bets:not(:empty){background:#f7c5cf;padding:3px 0 14px;margin-bottom:-4px}
 @media(max-width:1000px){#bets-board{grid-template-columns:repeat(13,minmax(74px,1fr));overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:6px}}
 @media(max-width:760px){.bets-rules{grid-template-columns:minmax(0,1fr)}body .bets-box .bet-add{font-size:12px;min-height:40px}}
+/* Votación dentro del recuadro rojo: cada nominado con sus números en botones azules. */
+.frookies-main .fro-actions .roo-vote-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px dotted #ffc3c3}
+.frookies-main .fro-actions .roo-vote-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:bold 12px/16px 'Trebuchet MS',Arial,sans-serif;color:#555}
+.frookies-main .fro-actions .roo-vote-points{display:flex;flex:none;gap:4px}
+.frookies-main .fro-actions .roo-vote-point{width:30px;height:28px;margin:0;padding:0;background:#eaf3fa;border:1px solid #4682b4;border-radius:3px;color:#2f6da3;font:bold 13px/26px 'Trebuchet MS',Arial,sans-serif;cursor:pointer}
+.frookies-main .fro-actions .roo-vote-point:hover{background:#dcebf6}
+.frookies-main .fro-actions .roo-vote-point[aria-pressed=true]{background:#4682b4;color:#fff}
+.frookies-main .fro-actions .roo-vote-save{display:block;margin:10px 0 2px;padding:6px 14px;background:#fff1a1;border:1px solid #ffe54f;border-radius:4px;color:#566672;font:bold 13px 'Trebuchet MS',Arial,sans-serif;cursor:pointer}

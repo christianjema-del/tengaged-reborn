@@ -1,5 +1,5 @@
 import {gamePrize} from '../../prize-catalog.js';
-import {COLOR_LEVELS,COLOR_LEVEL_BY_CODE} from '../../color-level-catalog.js';
+import {COLOR_LEVEL_BY_CODE} from '../../color-level-catalog.js';
 import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensureProfileSchema} from './auth.js';
 import {ensureGameHistorySchema} from './games.js';
@@ -7,8 +7,8 @@ import {blogVotePower} from './blog-vote-power.js';
 import {roomPosis} from './chat-posis.js';
 import {freshRookies,advanceRookies,actRookies,rookiesView,setActivity,CAPACITY,BET_MULTIPLIERS,DAY_MS} from './rookies-engine.js';
 const BET_DAYS=2,MINIMUM_COLOR=COLOR_LEVEL_BY_CODE.yellow.power;
-// Cada tarjeta suma 2 T$ a lo que se puede apostar por partida: amarilla 2, naranja 4, verde claro 6...
-export const betLimit=power=>2*Math.max(0,COLOR_LEVELS.findIndex(level=>level.power===power));
+// Se puede apostar por partida el doble de lo que vale el voto de la tarjeta: amarilla 4, naranja 6... negra 20.
+export const betLimit=power=>2*Math.max(0,Number(power)||0);
 export async function ensureRookies(db){
  await ensureProfileSchema(db);await ensureGameHistorySchema(db);
  if(await schemaReady170(db,'rookies249'))return;

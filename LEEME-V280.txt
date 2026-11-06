@@ -1,0 +1,1 @@
+V280 — Rookies: la votación se hace dentro del recuadro rojo, con los puntos 0, 1, 2 y 3 en botones azules junto a cada nominado. El botón Guardar aparece al repartir todos los puntos.
