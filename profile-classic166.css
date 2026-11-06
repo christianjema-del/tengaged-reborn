@@ -28,3 +28,6 @@ body.classic166.page-profile #profilePage .profile-name168 h1{flex:0 1 auto!impo
 body.classic166.page-profile #profilePage .profile-name168 #roleBadge{position:static!important;display:inline-flex;align-items:center;flex:0 0 auto;margin:0!important;padding:2px 5px!important;font:9px/13px Arial!important;border:1px solid #d8c6eb!important;border-radius:2px;background:#efe4fa!important;color:#82579b!important;white-space:nowrap}
 body.classic166.page-profile #profilePage .profile-name168 #roleBadge.hidden{display:none!important}
 @media(max-width:760px){body.classic166.page-profile #profilePage .profile-name168{padding-right:0;gap:2px 5px}body.classic166.page-profile #profilePage .hero .identity h1{white-space:normal!important;overflow-wrap:anywhere!important;line-height:25px!important}}
+
+/* V283: autor y fecha de cada mención en una sola línea. */
+body.classic166 #profileMentions .activity-entry small a{display:inline!important}

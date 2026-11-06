@@ -107,6 +107,11 @@ function shoppingActivity169(info){
  }if(!list.children.length)list.append(el('li',isGift?'Todavía no hay regalos.':'Todavía no hay compradores.'));section.append(list);columns.append(section);
  }return columns;
 }
+let activityTimer282=null;
+function liveActivity282(info){
+ const signature=d=>JSON.stringify([d.public_gifts,d.public_sales]);let last=signature(info);clearInterval(activityTimer282);
+ activityTimer282=setInterval(async()=>{if(document.hidden)return;const shown=document.querySelector('.shopping-activity169');if(!shown){clearInterval(activityTimer282);return;}try{const data=await api('/api/player-shops?activity=1'),next=signature(data);if(next===last)return;last=next;shown.replaceWith(shoppingActivity169(data));}catch{}},15000);
+}
 function shoppingStore169(shop,products,index){
  const card=el('li',undefined,'shopping-store169'),header=el('div',undefined,'shopping-store-head169'),facade=shopAnchor169(shop);facade.className='shopping-facade169 facade-'+index%5;facade.setAttribute('aria-label','Entrar en '+shop.name);const icon=el('span','▰');icon.setAttribute('aria-hidden','true');facade.replaceChildren(icon);if(shop.has_logo){const image=el('img');image.src='/api/player-shops?image='+shop.id;image.alt=shop.name;image.width=50;image.height=50;facade.replaceChildren(image);facade.className='shopping-facade169 has-logo';}
  const details=el('div',undefined,'shopping-store-title169');details.append(shopAnchor169(shop),el('p'));details.children[1].append('diseños de ',profileLink(shop.owner));const values=el('p');values.append('Valor tienda: ',el('strong',Number(shop.lifetime_value||0).toLocaleString('es-ES',{minimumFractionDigits:1})),' T$ · Valor juego: ',el('strong',Number(shop.cycle_value||0).toLocaleString('es-ES',{minimumFractionDigits:1})),' T$');details.append(values);header.append(facade,details);card.append(header);
@@ -125,7 +130,7 @@ async function users(){
  const heading=shoppingHeading169('🛒 Tiendas');heading.append(el('span','Tiendas abiertas · ronda #'+(info.cycle.id||1),'shopping-heading-info169'));main.append(heading);
  const active=info.shops.filter(s=>s.active),list=el('ol',undefined,'shopping-stores169');for(const [i,shop]of active.entries())list.append(shoppingStore169(shop,info.products.filter(d=>d.shop_id===shop.id),i));if(!active.length)list.append(el('li','Todavía no hay tiendas abiertas. Crea tu tienda y puja para conseguir un escaparate.','shopping-empty169'));main.append(list);
  const inactive=info.shops.filter(s=>!s.active);if(inactive.length){const fold=el('details',undefined,'shopping-pending169');fold.append(el('summary','Tiendas fuera de escaparate ('+inactive.length+')'));const pending=el('ol',undefined,'shopping-stores169');for(const [i,shop]of inactive.entries())pending.append(shoppingStore169(shop,info.products.filter(d=>d.shop_id===shop.id),i));fold.append(pending);main.append(fold);}
- }main.append(shoppingActivity169(info));if(/^#producto-\d+$/.test(location.hash))document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start'});
+ }main.append(shoppingActivity169(info));liveActivity282(info);if(/^#producto-\d+$/.test(location.hash))document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start'});
 }
 
 let manageView271='stock';

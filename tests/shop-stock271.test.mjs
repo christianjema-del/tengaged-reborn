@@ -37,4 +37,6 @@ data=await call(null,1);assert.equal(data.stock_posted,1510);assert.deepEqual(da
 sql.exec('INSERT INTO withdrawn_designs(design_id) VALUES(1002)');
 assert.equal((await call(null,1)).stock_posted,10);
 assert.equal((await call(null,2)).stock_posted,0);
+const live=await shops({request:new Request('https://test.local/api/player-shops?activity=1'),env:{DB:db}}).then(r=>r.json());
+assert.deepEqual(Object.keys(live).sort(),['ok','public_gifts','public_sales']);assert.deepEqual(live.public_gifts,[]);assert.equal(live.public_sales[0].buyer,'Buyer');
 console.log('shop stock ok');

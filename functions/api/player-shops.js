@@ -117,11 +117,31 @@ async function cycle(db){
  }
  return c;
 }
+async function publicActivity(db){
+ const public_gifts=(await db.prepare(`SELECT z.id,z.shop_id,z.design_id,z.created_at,z.message,d.title,
+   CASE WHEN d.image_data IS NULL THEN 0 ELSE 1 END AS has_image,d.theme_code,
+   buyer.username AS buyer,recipient.username AS recipient,s.name AS shop_name,owner.username AS shop_owner
+   FROM player_shop_gifts z JOIN community_designs d ON d.id=z.design_id
+   JOIN player_shops s ON s.id=z.shop_id JOIN users owner ON owner.id=s.owner_id
+   JOIN users buyer ON buyer.id=z.buyer_id JOIN users recipient ON recipient.id=z.recipient_id
+   WHERE buyer.is_banned=0 AND recipient.is_banned=0 AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=d.id)
+   ORDER BY z.created_at DESC,z.id DESC LIMIT 10`).all()).results||[];
+ const public_sales=(await db.prepare(`SELECT z.id,z.shop_id,z.design_id,z.created_at,d.title,
+   CASE WHEN d.image_data IS NULL THEN 0 ELSE 1 END AS has_image,d.theme_code,
+   buyer.username AS buyer,s.name AS shop_name,owner.username AS shop_owner
+   FROM player_shop_sales z JOIN community_designs d ON d.id=z.design_id
+   JOIN player_shops s ON s.id=z.shop_id JOIN users owner ON owner.id=s.owner_id JOIN users buyer ON buyer.id=z.buyer_id
+   WHERE buyer.is_banned=0 AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=d.id)
+   ORDER BY z.created_at DESC,z.id DESC LIMIT 10`).all()).results||[];
+ return {public_gifts,public_sales};
+}
 async function handle141_onRequest({request,env}){
  try{
   const db=env.DB;await ensureProfileSchema(db);await ensureCommunitySchema(db);await schema(db);await ensureGiftNotifications(db);const c=await cycle(db),u=await getSessionUser(request,db);
   if(request.method==='GET'){
-   const imageID=Number(new URL(request.url).searchParams.get('image'));
+   const search=new URL(request.url).searchParams;
+   if(search.get('activity'))return Response.json({ok:true,...await publicActivity(db)},{headers:{'Cache-Control':'no-store'}});
+   const imageID=Number(search.get('image'));
    if(imageID){
     if(!Number.isSafeInteger(imageID)||imageID<1)return new Response('Imagen no encontrada',{status:404});
     const row=await db.prepare('SELECT image_data FROM player_shop_appearance WHERE shop_id=?').bind(imageID).first();
@@ -146,21 +166,7 @@ async function handle141_onRequest({request,env}){
      ORDER BY 2 DESC LIMIT 30`).bind(mine.id,mine.id).all()).results:[];
    const stock_posted=mine?Number((await db.prepare(`SELECT ${CYCLE_POSTED} AS posted`).bind(mine.id,mine.id,c.opens_at,mine.id,c.opens_at).first()).posted):0;
    const my_sold=mine?(await db.prepare(`SELECT design_id,COUNT(*) AS sold FROM (SELECT design_id FROM player_shop_sales WHERE shop_id=? UNION ALL SELECT design_id FROM player_shop_gifts WHERE shop_id=?) GROUP BY design_id`).bind(mine.id,mine.id).all()).results:[];
-   const public_gifts=(await db.prepare(`SELECT z.id,z.shop_id,z.design_id,z.created_at,z.message,d.title,
-     CASE WHEN d.image_data IS NULL THEN 0 ELSE 1 END AS has_image,d.theme_code,
-     buyer.username AS buyer,recipient.username AS recipient,s.name AS shop_name,owner.username AS shop_owner
-     FROM player_shop_gifts z JOIN community_designs d ON d.id=z.design_id
-     JOIN player_shops s ON s.id=z.shop_id JOIN users owner ON owner.id=s.owner_id
-     JOIN users buyer ON buyer.id=z.buyer_id JOIN users recipient ON recipient.id=z.recipient_id
-     WHERE buyer.is_banned=0 AND recipient.is_banned=0 AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=d.id)
-     ORDER BY z.created_at DESC,z.id DESC LIMIT 10`).all()).results||[];
-   const public_sales=(await db.prepare(`SELECT z.id,z.shop_id,z.design_id,z.created_at,d.title,
-     CASE WHEN d.image_data IS NULL THEN 0 ELSE 1 END AS has_image,d.theme_code,
-     buyer.username AS buyer,s.name AS shop_name,owner.username AS shop_owner
-     FROM player_shop_sales z JOIN community_designs d ON d.id=z.design_id
-     JOIN player_shops s ON s.id=z.shop_id JOIN users owner ON owner.id=s.owner_id JOIN users buyer ON buyer.id=z.buyer_id
-     WHERE buyer.is_banned=0 AND NOT EXISTS(SELECT 1 FROM withdrawn_designs w WHERE w.design_id=d.id)
-     ORDER BY z.created_at DESC,z.id DESC LIMIT 10`).all()).results||[];
+   const {public_gifts,public_sales}=await publicActivity(db);
    const inventory=u?(await db.prepare("SELECT item_code FROM user_inventory WHERE user_id=?").bind(u.id).all()).results.map(x=>x.item_code):[];
    return Response.json({ok:true,shops:shops.results||[],products:products.results||[],cycle:{id:c.id,ends_at:c.ends_at,opens_at:c.opens_at,slots:5},mine:mine?.id||null,balance:Number(balance?.t_money||0),recent_sales,stock_posted,my_sold,public_gifts,public_sales,inventory,signed_in:!!u},{headers:{'Cache-Control':'no-store'}});
   }
