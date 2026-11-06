@@ -30,3 +30,9 @@ body .bets-box .bet-add{display:block;width:calc(100% - 6px);margin:0 3px 3px;pa
 .frookies-main .fro-actions .roo-vote-point:hover{background:#dcebf6}
 .frookies-main .fro-actions .roo-vote-point[aria-pressed=true]{background:#4682b4;color:#fff}
 .frookies-main .fro-actions .roo-vote-save{display:block;margin:10px 0 2px;padding:6px 14px;background:#fff1a1;border:1px solid #ffe54f;border-radius:4px;color:#566672;font:bold 13px 'Trebuchet MS',Arial,sans-serif;cursor:pointer}
+
+/* V281: resumen del día en recuadro azul. */
+.frookies-main .rookies-day-box{margin:0 0 12px;padding:9px 12px;background:#eaf3fa;border:1px solid #4682b4;border-radius:4px;color:#3f5361;overflow-wrap:anywhere}
+.frookies-main .rookies-day-box h2{margin:0 0 6px;padding:0 0 5px;border-bottom:1px dotted #9dc0da;color:#2f6da3}
+.frookies-main .rookies-day-box p{margin:6px 0 0;color:#3f5361}
+.frookies-main .rookies-day-box p:empty{display:none}

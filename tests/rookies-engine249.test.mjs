@@ -14,6 +14,7 @@ assert.throws(()=>actRookies(s,nominee,{action:'vote',ballot},t0+DAY_MS),/nomina
 const voter=votersOf(s)[0];assert.throws(()=>actRookies(s,voter,{action:'vote',ballot:{...ballot,[s.nominees[0]]:1}},t0+DAY_MS),/una sola vez/);
 assert.equal(rookiesView(s,voter).me.isPov,voter.id===s.pov);assert.ok(!JSON.stringify(rookiesView(s,{id:s.hoh})).includes('"pov"'),'el PoV es secreto');
 const expected=Object.fromEntries(s.nominees.map((id,i)=>[id,i]));for(const p of votersOf(s))actRookies(s,p,{action:'vote',ballot:expected},t0+DAY_MS);
+const voted=votersOf(s)[0];assert.equal(rookiesView(s,voted,t0+DAY_MS).me.canVote,false);assert.deepEqual(rookiesView(s,voted,t0+DAY_MS).me.ballot,expected);assert.throws(()=>actRookies(s,voted,{action:'vote',ballot:expected},t0+DAY_MS),/Ya has guardado/);
 const [,,third,fourth]=s.nominees;const pov=s.players.find(p=>p.id===s.pov);
 if(s.nominees.includes(pov.id))assert.equal(rookiesView(s,pov).me.canVote,false);actRookies(s,pov,{action:'save',target:fourth},t0+DAY_MS);
 assert.throws(()=>actRookies(s,hoh.id===pov.id?{id:s.players.find(p=>p.id!==pov.id).id}:hoh,{action:'save',target:fourth},t0+DAY_MS),/PoV/);

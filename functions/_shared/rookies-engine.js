@@ -79,7 +79,7 @@ export function actRookies(s,user,input,now=Date.now()){
   if(picks.length!==2||picks.some(id=>id===p.id||byId(s,id)?.status!=='active'))throw Error('Elige a dos concursantes activos, sin incluirte.');s.hohPicks=picks;return;
  }
  if(action==='vote'){
-  if(!s.nominees.length)throw Error('Hoy no hay votación.');if(s.nominees.includes(p.id))throw Error('Los nominados no pueden votar.');
+  if(!s.nominees.length)throw Error('Hoy no hay votación.');if(s.nominees.includes(p.id))throw Error('Los nominados no pueden votar.');if(s.ballots[p.id])throw Error('Ya has guardado tus votos.');
   const ballot=input.ballot||{},values=s.nominees.map(id=>Number(ballot[id])),wanted=s.nominees.map((_,i)=>i);
   if(Object.keys(ballot).length!==s.nominees.length||[...values].sort((a,b)=>a-b).join()!==wanted.join())throw Error('Asigna cada valor de puntos una sola vez.');
   s.ballots[p.id]=Object.fromEntries(s.nominees.map((id,i)=>[id,values[i]]));return;
@@ -96,7 +96,7 @@ export function rookiesView(s,user,now=Date.now()){
   hoh:hoh?.username||null,
   players:s.players.map(p=>({id:p.id,username:p.username,bot:!!p.bot,status:p.status,placement:p.placement,hoh:p.id===s.hoh,nominated:s.nominees.includes(p.id)})),
   nominees:s.nominees.map(id=>({id,username:byId(s,id)?.username})),points:s.nominees.map((_,i)=>i),
-  me:me?{id:me.id,status:me.status,isHoh:active&&me.id===s.hoh,isPov:active&&s.phase==='day'&&me.id===s.pov,nominated,canVote:active&&s.phase==='day'&&s.nominees.length>0&&!nominated,ballot:s.ballots[me.id]||null,picks:me.id===s.hoh?s.hohPicks:[],saved:me.id===s.pov?s.saved:null}:null,
+  me:me?{id:me.id,status:me.status,isHoh:active&&me.id===s.hoh,isPov:active&&s.phase==='day'&&me.id===s.pov,nominated,canVote:active&&s.phase==='day'&&s.nominees.length>0&&!nominated&&!s.ballots[me.id],ballot:s.ballots[me.id]||null,picks:me.id===s.hoh?s.hohPicks:[],saved:me.id===s.pov?s.saved:null}:null,
   events:s.events.map(({id,text,at,kind})=>({id,text,at,kind})),
   whispers:me?(s.whispers||[]).filter(w=>w.from===me.id||w.to===me.id).map(w=>({id:w.id,from:byId(s,w.from)?.username,to:byId(s,w.to)?.username,body:w.body,at:w.at})):[],
   history:s.history.map(({day,rows})=>({day,rows}))};

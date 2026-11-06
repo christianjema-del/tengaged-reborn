@@ -1,0 +1,1 @@
+V282 — Logo sin franja blanca. Rookies: resumen del día en recuadro azul y reparto de puntos de una sola vez; al guardar desaparece el recuadro y el servidor rechaza cambiarlo.
