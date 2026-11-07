@@ -10,10 +10,12 @@ export function installMazeTouch(host,player){
  function release(){if(repeat)clearInterval(repeat);repeat=null;if(held)emit('keyup',held);held=null;for(const b of bar.children)b.setAttribute('aria-pressed','false');}
  function press(key){if(held===key)return;release();if(!media.matches)return;held=key;emit('keydown',key);repeat=setInterval(()=>{if(held)emit('keydown',held,true);},85);}
  for(const [key,label,glyph] of [['ArrowUp','Arriba','↑'],['ArrowLeft','Izquierda','←'],['ArrowDown','Abajo','↓'],['ArrowRight','Derecha','→']]){
-  const b=document.createElement('button');b.type='button';b.textContent=glyph;b.dataset.direction=key;b.setAttribute('aria-label',label);b.setAttribute('aria-pressed','false');
-  b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||!media.matches)return;e.preventDefault();e.stopPropagation();drag=null;press(key);b.setAttribute('aria-pressed','true');try{b.setPointerCapture?.(e.pointerId);}catch{}},options);
+  const b=document.createElement('button');b.type='button';b.dataset.glyph=glyph;b.dataset.direction=key;b.setAttribute('aria-label',label);b.setAttribute('aria-pressed','false');
+  b.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||!media.matches)return;e.preventDefault();e.stopPropagation();window.getSelection?.()?.removeAllRanges();drag=null;press(key);b.setAttribute('aria-pressed','true');try{b.setPointerCapture?.(e.pointerId);}catch{}},options);
   b.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();press(key);}},options);b.addEventListener('keyup',release,options);b.addEventListener('lostpointercapture',release,options);bar.append(b);
  }
+ // Una pulsación larga no debe seleccionar la flecha ni abrir el menú del navegador.
+ for(const type of ['touchstart','contextmenu','selectstart','dragstart'])bar.addEventListener(type,e=>{if(e.cancelable)e.preventDefault();},{...options,passive:false});
  const frame=player.parentElement,oldTouchAction=frame.style.touchAction;frame.style.touchAction='none';
  frame.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&media.matches)drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};},{...options,capture:true});
  frame.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;const x=e.clientX-drag.x,y=e.clientY-drag.y;if(Math.max(Math.abs(x),Math.abs(y))<7){if(drag.moved)release();return;}drag.moved=true;e.preventDefault();e.stopPropagation();press(Math.abs(x)>Math.abs(y)?x>0?'ArrowRight':'ArrowLeft':y>0?'ArrowDown':'ArrowUp');},{...options,capture:true,passive:false});

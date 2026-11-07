@@ -1,0 +1,1 @@
+V292 — Maze: las flechas del móvil ya no se seleccionan al mantener pulsado. Snow Flakes: física más fluida (más inercia, caída suave, más alcance del puntero, tope de velocidad) y zona de caja más amplia, en StarFlakes292.swf.

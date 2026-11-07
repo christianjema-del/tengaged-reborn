@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {inflateSync} from 'node:zlib';
+function tags(bytes){const body=inflateSync(bytes.subarray(8)),bits=body[0]>>3;let pos=Math.ceil((5+bits*4)/8)+4;const out=[];while(pos<body.length){const raw=body.readUInt16LE(pos);pos+=2;const code=raw>>6;let size=raw&63;if(size===63){size=body.readUInt32LE(pos);pos+=4;}out.push([code,body.subarray(pos,pos+size)]);pos+=size;if(!code)break;}return out;}
+const a=tags(readFileSync(new URL('../original-games/swf/StarFlakes.swf',import.meta.url))),b=tags(readFileSync(new URL('../original-games/swf/StarFlakes292.swf',import.meta.url)));
+assert.equal(a.length,b.length);let changed=0;for(let i=0;i<a.length;i++){assert.equal(a[i][0],b[i][0]);if(!a[i][1].equals(b[i][1])){assert.equal(a[i][0],82,'solo cambia la física del código AS3');changed++;}}assert.equal(changed,1);
+const code=b.find(([id])=>id===82)[1],old=a.find(([id])=>id===82)[1],f=v=>{const x=Buffer.alloc(8);x.writeDoubleLE(v);return x;};
+assert.ok(old.includes(f(.12))&&old.includes(f(.9)));assert.ok(code.includes(f(.05))&&code.includes(f(.96)));assert.ok(!code.includes(f(.12))&&!code.includes(f(.9)));assert.equal(code.length,old.length+18);
+assert.match(readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),/snow:'StarFlakes292'/);console.log('PASS Snow Flakes solo cambia la física: caída suave, más alcance y tope de velocidad.');

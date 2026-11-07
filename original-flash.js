@@ -1,5 +1,5 @@
 // Mismos archivos SWF utilizados por Casting y por Minijuegos, embebidos con Ruffle.
-const FILES={wheel:'Wof',numbers:'Numbers',deal:'Deal',match:'MatchThree',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'StarFlakes',words:'Words',line:'LineBalls'};
+const FILES={wheel:'Wof',numbers:'Numbers',deal:'Deal',match:'MatchThree',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'StarFlakes292',words:'Words',line:'LineBalls'};
 const LABELS={wheel:'Wheel of Fortune',numbers:'Numbers',deal:'Deal or No Deal',match:'Match Three',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'Snow Flakes',words:'Words',line:'Line Balls'};
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e};
 function loadRuffle(){
@@ -54,7 +54,7 @@ export async function play(host,kind,questions,done,options={}){
  diag.textContent=options.competitive?'Prueba oficial de la ronda '+options.round+'. Todos los participantes juegan al mismo minijuego.':'';
  let disposeTouch=null;
  if(mobileMaze){
-  try{if(!document.querySelector('link[data-maze-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/maze-touch153.css?v=159';style.dataset.mazeTouch='true';document.head.append(style);}const {installMazeTouch}=await import('/maze-touch153.js?v=159');disposeTouch=installMazeTouch(host,player);}catch(error){console.warn('Maze touch controls:',error);}
+  try{if(!document.querySelector('link[data-maze-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/maze-touch153.css?v=292';style.dataset.mazeTouch='true';document.head.append(style);}const {installMazeTouch}=await import('/maze-touch153.js?v=292');disposeTouch=installMazeTouch(host,player);}catch(error){console.warn('Maze touch controls:',error);}
  }
  if(mobileWheel){
   try{if(!document.querySelector('link[data-wof-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/wof-touch236.css?v=236';style.dataset.wofTouch='true';document.head.append(style);}const {installWofTouch}=await import('/wof-touch236.js?v=236');disposeTouch=installWofTouch(container,player);}catch(error){console.warn('Wheel touch keys:',error);}
