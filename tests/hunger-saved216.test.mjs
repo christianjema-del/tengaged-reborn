@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {fresh,act,advance,restorePau216} from '../functions/_shared/hunger.js';
 const t=Date.now(),users=[1,2,3].map(id=>({id,username:'User'+id}));
 function arena(){const s=fresh(t,8);for(const u of users)act(s,u,{action:'join'},t);s.phase='active';s.startedAt=s.tickAt=t;s.nextDropAt=s.nextBonusAt=t+1e9;for(const p of s.players){p.health=100;p.arrows=50;p.location='forest';}act(s,users[1],{action:'enter'},t);act(s,users[0],{action:'attack',target:2},t);s.fights[0].runs[1]={saved:true,score:1000};return s;}
-{const s=arena(),p=s.players[0],f=s.fights[0];p.health=1;for(let i=0;i<5;i++)act(s,users[2],{action:'shoot',target:1},t+1000+i*1000,()=>.99);assert.equal(p.health,.01);assert.equal(p.eliminatedAt,undefined);assert.equal(f.endedAt,undefined);advance(s,t+60000,()=>.5);assert.equal(p.health,.02);assert.equal(f.endedAt,undefined);assert.equal(s.phase,'active');}
+{const s=arena(),p=s.players[0],f=s.fights[0];p.health=1;for(let i=0;i<5;i++)act(s,users[2],{action:'shoot',target:1},t+1000+i*1000,()=>.99);assert.equal(p.health,.01);assert.equal(p.eliminatedAt,undefined);assert.equal(f.endedAt,undefined);advance(s,t+60000,()=>.5);assert.equal(p.health,.11);assert.equal(f.endedAt,undefined);assert.equal(s.phase,'active');}
 {const s=arena(),p=s.players[0];p.health=1;s.food=0;s.foodStage=2;act(s,users[2],{action:'shoot',target:1},t+1000,()=>.99);assert.ok(p.eliminatedAt);}
 {const s=arena(),p=s.players[1];p.health=1;act(s,users[2],{action:'shoot',target:2},t+1000,()=>.99);assert.ok(p.eliminatedAt);}
 {const s=arena(),p=s.players[0];p.health=1;s.fights[0].endedAt=t;p.location='forest';act(s,users[2],{action:'shoot',target:1},t+1000,()=>.99);assert.ok(p.eliminatedAt);}

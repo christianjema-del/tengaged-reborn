@@ -55,6 +55,20 @@ export function upgrade(s,now){if(s.version===40){
 function enter(s,p){if(p.location!=='cornucopia'&&inCorn(s).length>=10)throw Error('La Cornucopia tiene sus diez plazas ocupadas.');p.location='cornucopia';}
 function eliminate(s,p,at,by,cause){if(!p||p.eliminatedAt)return;p.placement=alive(s).filter(x=>x!==p).length+1;delete p.arrowDeathPending;p.collect=null;p.eliminatedAt=at;p.eliminatedBy=by||null;p.deathCause=cause;settleEditionFourPrizes178(s);log(s,`${p.username} queda en el puesto ${p.placement}.`,at,{kind:'death',target:p.id,actor:by||null,cause});if(by){const killer=get(s,by);if(killer)killer.kills++;}const f=fighting(s,p);if(f){const survivor=get(s,p.id===f.attacker?f.defender:f.attacker);const arrowWin=cause==='arrow'&&by===survivor?.id&&survivor?.health>0;if(arrowWin)f.arrowVictory=true;closeFight(s,f,at,arrowWin||(isWiki(s)&&survivor?.health>0&&f.runs[survivor.id]?.saved)?survivor.id:null,'elimination');}}
 function settleArrowDeaths(s,at){for(const p of s.players){if(!p.arrowDeathPending)continue;if(p.health>0){delete p.arrowDeathPending;continue;}if(p.location!=='cornucopia'||s.food<0.1){const by=p.arrowDeathPending.by;eliminate(s,p,at,by,'arrow');}}}
+// V294: quien guarda su desafío de combate y sigue en la Cornucopia con comida
+// recupera 0,1 por minuto, igual que quien solo come. Antes recibía 0,01. Una sola
+// vez se abona la diferencia (0,09 por minuto) a los combates de Hunger #8 que
+// estaban abiertos al publicarse, desde que cada jugador guardó hasta el último minuto calculado.
+const SAVED_FOOD_FIX294={8:['8-42','8-43']};
+export function repairSavedFightFood294(s){
+ if(s.savedFood294||!SAVED_FOOD_FIX294[s.edition]||!Number.isFinite(s.startedAt)||!Number.isFinite(s.tickAt))return;
+ s.savedFood294={at:s.tickAt,changes:[]};
+ for(const id of SAVED_FOOD_FIX294[s.edition]){const f=s.fights.find(x=>x.id===id);if(!f)continue;
+  for(const [pid,run] of Object.entries(f.runs||{})){const p=get(s,Number(pid));if(!p||!run?.saved||!Number.isFinite(run.recordedAt)||!isHungerAlive(p)||p.location!=='cornucopia')continue;
+   const until=Math.min(s.tickAt,f.endedAt??Infinity),minutes=Math.max(0,Math.floor((until-s.startedAt)/TICK_MS)-Math.floor((run.recordedAt-s.startedAt)/TICK_MS));
+   const before=p.health,after=rounded(Math.min(100,before+minutes*0.09));p.health=after;
+   s.savedFood294.changes.push({fight:id,player:p.id,username:p.username,savedAt:run.recordedAt,until,minutes,before,after});}}
+}
 function hurt(s,p,n,at,by,cause='survival'){if(!p||p.health<=0)return 0;const protected216=['arrow','poison'].includes(cause)&&p.location==='cornucopia'&&s.food>=0.1&&!!fighting(s,p)?.runs[p.id]?.saved;const amount=Math.min(Math.max(0,p.health-(protected216?0.01:0)),Math.max(0,n));p.health=rounded(p.health-amount);if(!p.health){if(cause==='arrow'&&p.location==='cornucopia'&&s.food>=0.1&&!p.collect&&!fighting(s,p)){p.arrowDeathPending={by:by||null,at};}else eliminate(s,p,at,by,cause);}return amount;}
 
 export function settleEditionFourPrizes178(s){
@@ -129,6 +143,7 @@ export function advance(s,now=Date.now(),random=randomDefault){if(s.manualStartV
  s.bonuses??=[]; if(!Number.isFinite(s.nextBonusAt))s.nextBonusAt=now+TARGET_INTERVAL_MS;
  // Do not replay a backlog of targets when the arena has not been polled.
  if(s.nextBonusAt<now-TICK_MS)s.nextBonusAt=now;
+ repairSavedFightFood294(s);
  const end=Math.min(now,s.tickAt+TICK_MS*10080);
  while(s.tickAt+TICK_MS<=end&&s.phase==='active'){
  s.tickAt+=TICK_MS;const at=s.tickAt,minute=Math.floor((at-s.startedAt)/TICK_MS);if(isWiki(s)&&at-s.startedAt>=WOLF_CYCLE_MS){const position=(at-s.startedAt)%WOLF_CYCLE_MS;if(position===0)log(s,'Comienza el Modo Lobo: la pérdida pasiva de salud se duplica durante diez minutos.',at,{kind:'wolf-start'});else if(position===WOLF_DURATION_MS)log(s,'Termina el Modo Lobo.',at,{kind:'wolf-end'});}
@@ -142,7 +157,7 @@ export function advance(s,now=Date.now(),random=randomDefault){if(s.manualStartV
  if(alive(s).length<=1)break;if(!isHungerAlive(p)||p.recovered216At>at)continue;const f=fighting(s,p),saved=f?.runs[p.id]?.saved;
  if(p.collect&&at>=p.collect.readyAt){const type=p.collect.type;if(p.weapon===type)p.uses+=2;else{p.weapon=type;p.uses=2;}p.collect=null;log(s,`${p.username} recoge ${WEAPONS[type].name}.`,at,{kind:'weapon',actor:p.id,weapon:type,phase:'collected'});}
  const supplied=p.location==='cornucopia'&&s.food>=0.1&&(!f||saved);
- if(supplied){const gain=Math.min(f&&saved?0.01:0.1,100-p.health);p.health=rounded(p.health+gain);s.food=rounded(Math.max(0,s.food-0.1));if(p.health>0)delete p.arrowDeathPending;if(s.food<0.1)settleArrowDeaths(s,at);
+ if(supplied){const gain=Math.min(0.1,100-p.health);p.health=rounded(p.health+gain);s.food=rounded(Math.max(0,s.food-0.1));if(p.health>0)delete p.arrowDeathPending;if(s.food<0.1)settleArrowDeaths(s,at);
  if(s.food<=0&&s.foodStage===0){s.food=300;s.foodStage=1;log(s,'Se ha agotado la primera reserva de comida. Aparece la segunda reserva de 300.',at,{kind:'food-refill'});}
  else if(s.food===0&&s.foodStage===1)s.foodStage=2;
  }else if(!saved&&minute%2===0)hurt(s,p,wolfActive(s,at)?0.2:0.1,at);

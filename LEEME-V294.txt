@@ -1,0 +1,1 @@
+V294 — Hunger: quien guarda su desafío de combate y sigue en la Cornucopia con comida recupera 0,1 de salud por minuto, igual que quien solo come (antes 0,01). Corrección única para Mario23 y Lamine (combates 8-43 y 8-42 de Hunger #8): se abonan 0,09 por cada minuto transcurrido desde que guardaron.
