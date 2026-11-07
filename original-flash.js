@@ -7,7 +7,7 @@ function loadRuffle(){
  if(window.__ruffleLoading)return window.__ruffleLoading;
  if(typeof WebAssembly==='undefined')return Promise.reject(Error('Este navegador no admite WebAssembly, necesario para las pruebas. Actualiza el navegador para jugar.'));
  window.RufflePlayer=window.RufflePlayer||{};
- window.RufflePlayer.config={...(window.RufflePlayer.config||{}),autoplay:'on',unmuteOverlay:'visible',warnOnUnsupportedContent:true};
+ window.RufflePlayer.config={...(window.RufflePlayer.config||{}),autoplay:'on',unmuteOverlay:'visible',warnOnUnsupportedContent:true,contextMenu:'off'};
  const script=document.createElement('script');script.src='/vendor/ruffle/ruffle.js?v=0.7.1-tg117';script.async=true;
  let resolveLoad,rejectLoad,settled=false;
  const task=new Promise((resolve,reject)=>{resolveLoad=resolve;rejectLoad=reject;});window.__ruffleLoading=task;
@@ -47,7 +47,7 @@ export async function play(host,kind,questions,done,options={}){
  const runtime=typeof player.ruffle==='function'?player.ruffle():player;
  await withLoadDeadline(runtime.load({
    url:'/original-games/swf/'+(mobileMaze?'MazeTouch153':file)+'.swf',
-   autoplay:'on',unmuteOverlay:'visible',allowScriptAccess:!!mobileMaze,
+   autoplay:'on',unmuteOverlay:'visible',contextMenu:'off',allowScriptAccess:!!mobileMaze,
    parameters:{context:'game',contextId:String(contextId),subcontext:options.duel?'duel':options.frookies?'frookies':options.hunger?'hunger':options.standalone?'minigame':options.competitive?'casting':'regaged',subcontextId:options.hunger?String(fightIndex):options.competitive?String(options.round):'0'}
  }),()=>player.remove());
  status.textContent=options.hunger?'':options.standalone?'Jugando · el resultado se registrará al terminar si el juego logra comunicarse con el servidor.':options.competitive?'Esperando el inicio del minijuego…':'Minijuego cargado. Los puntos de práctica no se guardan.';

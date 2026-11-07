@@ -1,0 +1,1 @@
+V291 — Minijuegos: al mantener pulsado ya no aparece el menú de Reproducir/Rebobinar. Afecta a todos los juegos Flash, sobre todo a Endurance y Words en móvil.
