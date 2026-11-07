@@ -1,5 +1,5 @@
 // Mismos archivos SWF utilizados por Casting y por Minijuegos, embebidos con Ruffle.
-const FILES={wheel:'Wof',numbers:'Numbers',deal:'Deal',match:'MatchThree',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'StarFlakes292',words:'Words',line:'LineBalls'};
+const FILES={wheel:'Wof',numbers:'Numbers',deal:'Deal',match:'MatchThree',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'StarFlakes293',words:'Words',line:'LineBalls'};
 const LABELS={wheel:'Wheel of Fortune',numbers:'Numbers',deal:'Deal or No Deal',match:'Match Three',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'Snow Flakes',words:'Words',line:'Line Balls'};
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e};
 function loadRuffle(){
