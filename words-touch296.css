@@ -1,0 +1,7 @@
+.words-touch{max-width:550px;margin:10px auto 16px;font:13px/1.35 Arial,Helvetica,sans-serif;color:#444;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.words-touch p{margin:0 0 8px;text-align:center}
+.words-touch-row{display:flex;justify-content:center;gap:5px;margin-bottom:6px}
+.words-touch button{flex:1 1 0;min-width:0;max-width:52px;height:48px;padding:0;border:1px solid #6d86ad;border-radius:6px;background:#eef2f8;color:#2f4468;font:bold 20px/1 Arial,Helvetica,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:pointer}
+.words-touch button:active{background:#b9c9e3}
+.words-touch button.words-touch-vowel{border-color:#c98a4a;background:#fdf1e3;color:#8a4a12}
+.words-touch button.words-touch-vowel:active{background:#f4d2ab}

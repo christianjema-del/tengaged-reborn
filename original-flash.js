@@ -1,5 +1,5 @@
 // Mismos archivos SWF utilizados por Casting y por Minijuegos, embebidos con Ruffle.
-const FILES={wheel:'Wof',numbers:'Numbers',deal:'Deal',match:'MatchThree',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'StarFlakes293',words:'Words',line:'LineBalls'};
+const FILES={wheel:'Wof',numbers:'Numbers',deal:'Deal',match:'MatchThree',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'StarFlakes296',words:'Words',line:'LineBalls'};
 const LABELS={wheel:'Wheel of Fortune',numbers:'Numbers',deal:'Deal or No Deal',match:'Match Three',guitar:'Guitar',endurance:'Endurance',maze:'Maze',snow:'Snow Flakes',words:'Words',line:'Line Balls'};
 const make=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e};
 function loadRuffle(){
@@ -25,6 +25,7 @@ export async function play(host,kind,questions,done,options={}){
  const mobileMaze=kind==='maze'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const mobileWheel=kind==='wheel'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const mobileGuitar=kind==='guitar'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
+ const mobileWords=kind==='words'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const title=make('h3',LABELS[kind]);host.append(title);
  const note=make('p',options.duel?'Prueba de El Duelo. Pulsa dentro del tablero para controlarlo.':options.frookies?'Prueba de PoV. Pulsa dentro del tablero para controlarlo.':options.hunger?'Combate de Hunger · Minijuego original de Casting. Pulsa dentro del tablero para controlarlo.':'Prueba de Casting. Pulsa dentro del tablero para controlarla.');host.append(note);
  const container=make('div');container.className='original-flash-frame';host.append(container);
@@ -46,7 +47,7 @@ export async function play(host,kind,questions,done,options={}){
  const contextId=Number.isSafeInteger(Number(options.contextId)) && Number(options.contextId)>=0 ? Number(options.contextId) : 0;
  const runtime=typeof player.ruffle==='function'?player.ruffle():player;
  await withLoadDeadline(runtime.load({
-   url:'/original-games/swf/'+(mobileMaze?'MazeTouch153':file)+'.swf',
+   url:'/original-games/swf/'+(mobileMaze?'MazeTouch153':mobileWords?'WordsTouch296':file)+'.swf',
    autoplay:'on',unmuteOverlay:'visible',contextMenu:'off',allowScriptAccess:!!mobileMaze,
    parameters:{context:'game',contextId:String(contextId),subcontext:options.duel?'duel':options.frookies?'frookies':options.hunger?'hunger':options.standalone?'minigame':options.competitive?'casting':'regaged',subcontextId:options.hunger?String(fightIndex):options.competitive?String(options.round):'0'}
  }),()=>player.remove());
@@ -61,6 +62,9 @@ export async function play(host,kind,questions,done,options={}){
  }
  if(mobileGuitar){
   try{if(!document.querySelector('link[data-guitar-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/guitar-touch238.css?v=245';style.dataset.guitarTouch='true';document.head.append(style);}const {installGuitarTouch}=await import('/guitar-touch238.js?v=245');disposeTouch=installGuitarTouch(container,player);}catch(error){console.warn('Guitar touch buttons:',error);}
+ }
+ if(mobileWords){
+  try{if(!document.querySelector('link[data-words-touch]')){const style=document.createElement('link');style.rel='stylesheet';style.href='/words-touch296.css?v=296';style.dataset.wordsTouch='true';document.head.append(style);}const {installWordsTouch}=await import('/words-touch296.js?v=296');disposeTouch=installWordsTouch(container,player);}catch(error){console.warn('Words touch keys:',error);}
  }
  return ()=>{disposeTouch?.();player.remove();};
  }catch(err){status.textContent='No se pudo abrir el juego original: '+(err?.message||err);button.disabled=true;throw err;}

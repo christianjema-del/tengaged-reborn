@@ -4,4 +4,4 @@ const a=tags(readFileSync(new URL('../original-games/swf/StarFlakes.swf',import.
 assert.equal(a.length,b.length);let changed=0;for(let i=0;i<a.length;i++){assert.equal(a[i][0],b[i][0]);if(!a[i][1].equals(b[i][1])){assert.equal(a[i][0],82,'solo cambia la física del código AS3');changed++;}}assert.equal(changed,1);
 const code=b.find(([id])=>id===82)[1],old=a.find(([id])=>id===82)[1],f=v=>{const x=Buffer.alloc(8);x.writeDoubleLE(v);return x;};
 assert.ok(old.includes(f(.12))&&old.includes(f(.9)));assert.ok(code.includes(f(.08))&&code.includes(f(.93)));assert.ok(!code.includes(f(.12))&&!code.includes(f(.9)));assert.equal(code.length,old.length+18);
-assert.match(readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),/snow:'StarFlakes293'/);console.log('PASS Snow Flakes solo cambia la física: inercia moderada, más alcance y tope de velocidad.');
+assert.match(readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),/snow:'StarFlakes29[36]'/);console.log('PASS Snow Flakes solo cambia la física: inercia moderada, más alcance y tope de velocidad.');
