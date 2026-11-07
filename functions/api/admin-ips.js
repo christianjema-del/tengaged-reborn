@@ -1,6 +1,6 @@
 import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {getSessionUser,jsonError} from '../_shared/auth.js';
-import {ensureStaffSchema,isOwner} from '../_shared/staff.js';
+import {ensureStaffSchema,isOwner,isStaff} from '../_shared/staff.js';
 import {clientIp,ensureUserIps,purgeOldIps} from '../_shared/user-ips.js';
 const VALID_IP=/^[0-9a-fA-F:.]{3,45}$/;
 async function overview(db){
@@ -11,8 +11,9 @@ async function overview(db){
  return {groups:[...groups.values()],blocked};
 }
 async function handle({request,env}){try{
- const db=env.DB;await ensureStaffSchema(db);await ensureUserIps(db);const actor=await getSessionUser(request,db);if(!isOwner(actor))return jsonError('Solo admin1 puede consultar las IP.',403);
- if(request.method==='GET')return Response.json({ok:true,...await overview(db)},{headers:{'Cache-Control':'no-store'}});
+ const db=env.DB;await ensureStaffSchema(db);await ensureUserIps(db);const actor=await getSessionUser(request,db);if(!isStaff(actor))return jsonError('No tienes permisos para consultar las IP.',403);
+ if(request.method==='GET')return Response.json({ok:true,canBlock:isOwner(actor),...await overview(db)},{headers:{'Cache-Control':'no-store'}});
+ if(!isOwner(actor))return jsonError('Solo admin1 puede bloquear o desbloquear IP.',403);
  if(request.method!=='POST')return jsonError('Método no permitido.',405);if(request.headers.get('Origin')!==new URL(request.url).origin)return jsonError('Origen no permitido.',403);
  const body=await request.json().catch(()=>({})),ip=String(body.ip||'').trim().toLowerCase(),reason=String(body.reason||'').trim().slice(0,180);if(!VALID_IP.test(ip))return jsonError('IP no válida.',400);
  if(body.action==='block'){
@@ -21,6 +22,6 @@ async function handle({request,env}){try{
  }else if(body.action==='unblock'){
   await db.batch([db.prepare('DELETE FROM blocked_ips WHERE ip=?').bind(ip),db.prepare('INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) VALUES(?,?,?,?,?)').bind(actor.id,actor.id,'unblock_ip',null,ip+(reason?' · '+reason:''))]);
  }else return jsonError('Acción no válida.',400);
- return Response.json({ok:true,message:body.action==='block'?'IP bloqueada.':'IP desbloqueada.',...await overview(db)},{headers:{'Cache-Control':'no-store'}});
+ return Response.json({ok:true,canBlock:true,message:body.action==='block'?'IP bloqueada.':'IP desbloqueada.',...await overview(db)},{headers:{'Cache-Control':'no-store'}});
  }catch(e){console.error('Admin IP',e);return jsonError('No se pudieron gestionar las IP.',500);}}
 export async function onRequest(context){return withStorageGuard(context,handle);}

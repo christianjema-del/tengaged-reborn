@@ -13,8 +13,8 @@ assert.equal(clientIp(req({'CF-Connecting-IP':'1.1.1.1','X-Tengaged-Client-IP':'
 await call(me,2,'me');await call(me,4,'me');await call(me,2,'me',{ip:'203.0.113.1'});await call(me,3,'me',{ip:'203.0.113.2'});
 assert.equal(sql.prepare('SELECT hits FROM user_ips WHERE user_id=2 AND ip=?').get('198.51.100.7').hits,1,'una visita seguida no vuelve a escribir');
 await call(ips,1,'admin-ips');sql.exec("UPDATE users SET is_moderator=1 WHERE id=3");
-assert.equal((await call(ips,3,'admin-ips')).status,403,'un moderador no ve IP');assert.equal((await call(ips,2,'admin-ips')).status,403);
-assert.equal((await call(moderation,3,'admin-moderation?username=Alice')).account,null,'un moderador no ve email ni IP');
+{const m=await call(ips,3,'admin-ips');assert.equal(m.status,200,'V298: un moderador ve las IP');assert.equal(m.canBlock,false);}assert.equal((await call(ips,3,'admin-ips',{body:{action:'block',ip:'203.0.113.9',reason:'x'}})).status,403,'un moderador no bloquea IP');assert.equal((await call(ips,2,'admin-ips')).status,403);
+{const acc=(await call(moderation,3,'admin-moderation?username=Alice')).account;assert.ok(acc&&Array.isArray(acc.ips),'V298: un moderador ve las IP de la ficha');assert.equal('email' in acc,false,'un moderador no ve el email');}
 let d=await call(ips,1,'admin-ips');assert.deepEqual(d.groups.map(g=>[g.ip,g.users.map(u=>u.username).sort()]),[['198.51.100.7',['Alice','Bob']]]);
 d=await call(moderation,1,'admin-moderation?username=Alice');assert.equal(d.account.email,'alice@x.test');assert.equal(d.account.ips.length,2);assert.deepEqual(d.account.related,[{username:'Bob',is_banned:false,ips:['198.51.100.7']}]);assert.equal(d.account.password_hash,undefined);
 assert.deepEqual((await call(list,1,'admin-users?q=198.51.100.7')).users.map(u=>u.username).sort(),['Alice','Bob']);assert.deepEqual((await call(list,1,'admin-users?q=bob@x')).users.map(u=>u.username),['Bob']);assert.deepEqual((await call(list,3,'admin-users?q=bob@x')).users,[],'el moderador no busca por email');assert.deepEqual((await call(list,3,'admin-users?q=Bob')).users.map(u=>u.username),['Bob']);

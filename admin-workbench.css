@@ -113,3 +113,8 @@
 .staff-ip-flag{margin-left:auto;color:var(--staff-pink);font:bold 11px var(--staff-font)}
 .staff-ip-users{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
 .staff-ip-user{padding:2px 7px;background:#fff;border:1px solid var(--staff-blue);border-radius:3px;color:var(--staff-blue-text);font:bold 11px var(--staff-font);cursor:pointer}
+/* V298: acciones dentro de las listas de IP y avisos */
+.staff-audit-list li>a,.staff-audit-list li>.staff-ip-inline{display:inline-block;margin:6px 10px 0 0;font-size:12px}
+.staff-audit-list li>button{margin:6px 10px 0 0;padding:3px 8px;font-size:12px}
+#staffNotices textarea{width:100%;box-sizing:border-box}
+#staffNotices .staff-action-form{max-width:640px}

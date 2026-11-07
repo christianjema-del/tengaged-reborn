@@ -4,6 +4,8 @@ import {ensureProfileSchema,getSessionUser,jsonError} from '../_shared/auth.js';
 import {ensureCommunitySchema} from '../_shared/community.js';
 import {ensureStaffSchema,isOwner,isStaff,removableSanctions} from '../_shared/staff.js';
 import {accountDetails} from '../_shared/user-ips.js';
+import {checkNewName,existingTables,nameTaken,renameStatements,ensureUsernameChanges} from '../_shared/username-change296.js';
+const RENAME_LOCKED=new Set(['admin1','mod','tengaged']);
 async function handle141_onRequest({request,env}){try{
  const db=env.DB;await ensureStaffSchema(db);await expireModeration(db);const actor=await getSessionUser(request,db);if(!isStaff(actor))return jsonError('No tienes permisos de moderación.',403);
  const owner=isOwner(actor),url=new URL(request.url);if(!['GET','POST'].includes(request.method))return jsonError('Método no permitido.',405);if(request.method==='POST'&&request.headers.get('Origin')!==url.origin)return jsonError('Origen no permitido.',403);
@@ -14,15 +16,24 @@ async function handle141_onRequest({request,env}){try{
  if(request.method==='GET'){
   const audit=(await db.prepare('SELECT l.id,l.actor_user_id,a.username AS actor,l.action,l.amount,l.reason,l.created_at FROM admin_audit_log l LEFT JOIN users a ON a.id=l.actor_user_id WHERE l.target_user_id=? ORDER BY l.id DESC LIMIT 50').bind(target.id).all()).results;
   if(!owner){target.t_money=null;}
-  return Response.json({ok:true,user:target,account:owner?await accountDetails(db,target):null,audit:owner?audit:audit.filter(e=>!['give_t_money','take_t_money','give_karma','take_karma'].includes(e.action)),capabilities:{owner,moderate:!protectedTarget&&target.id!==actor.id,economy:owner&&!target.is_system,roles:owner&&!target.is_system&&!target.is_admin,removeBan:!protectedTarget&&remove.ban,removeNose:!protectedTarget&&remove.nose,maxHours:owner?8760:168}},{headers:{'Cache-Control':'no-store'}});
+  return Response.json({ok:true,user:target,account:await accountDetails(db,target,{email:owner}),audit:owner?audit:audit.filter(e=>!['give_t_money','take_t_money','give_karma','take_karma'].includes(e.action)),capabilities:{owner,blockIp:owner,rename:owner&&!target.is_system&&!RENAME_LOCKED.has(String(target.username).toLowerCase()),logout:!protectedTarget&&target.id!==actor.id,moderate:!protectedTarget&&target.id!==actor.id,economy:owner&&!target.is_system,roles:owner&&!target.is_system&&!target.is_admin,removeBan:!protectedTarget&&remove.ban,removeNose:!protectedTarget&&remove.nose,maxHours:owner?8760:168}},{headers:{'Cache-Control':'no-store'}});
  }
  if(target.is_system)return jsonError('La cuenta de avisos está protegida.',403);
  const action=String(input.action||''),reason=String(input.reason||'').trim();if(!reason||reason.length>180)return jsonError('Escribe un motivo de entre 1 y 180 caracteres.',400);
  const economy=['give_karma','take_karma','give_t_money','take_t_money'].includes(action),role=['make_moderator','remove_moderator'].includes(action);
- if((economy||role||['set_card','logout','ban'].includes(action))&&!owner)return jsonError('Esta acción está reservada a admin1.',403);
+ if((economy||role||['set_card','ban','rename'].includes(action))&&!owner)return jsonError('Esta acción está reservada a admin1.',403);
  if(!owner&&protectedTarget)return jsonError('Los moderadores no pueden actuar sobre cuentas del equipo.',403);
  if(target.id===actor.id&&['suspend','red_nose','red_nose_suspend','logout','ban','make_moderator','remove_moderator'].includes(action))return jsonError('No puedes aplicar esta acción a tu propia cuenta.',400);
  if(role&&target.is_admin)return jsonError('El rol de administrador está protegido.',403);
+ if(action==='rename'){
+  if(target.is_test_bot||RENAME_LOCKED.has(String(target.username).toLowerCase()))return jsonError('Esta cuenta no puede cambiar de nombre.',403);
+  const newName=checkNewName(input.newName);if(newName===target.username)return jsonError('Ese ya es su nombre de usuario.',400);
+  await ensureUsernameChanges(db);const tables=await existingTables(db);if(await nameTaken(db,tables,target.id,target.username,newName))return jsonError('Ese nombre ya está en uso. Elige otro.',409);
+  const list=renameStatements(db,tables,{userId:target.id,oldName:target.username,newName,price:0});
+  list.push(db.prepare('INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) SELECT ?,?,?,?,? WHERE EXISTS(SELECT 1 FROM users WHERE id=? AND username=?)').bind(actor.id,target.id,'rename_user',null,target.username+' → '+newName+' · '+reason,target.id,newName));
+  const r=await db.batch(list);if(!Number(r[0]?.meta?.changes))return jsonError('No se pudo cambiar el nombre. Actualiza la ficha y vuelve a intentarlo.',409);
+  return Response.json({ok:true,message:'Nombre cambiado: '+target.username+' → '+newName+'.',username:newName},{headers:{'Cache-Control':'no-store'}});
+ }
  const requestKey=input.requestId==null?crypto.randomUUID():String(input.requestId);if(!/^[A-Za-z0-9_-]{8,80}$/.test(requestKey))return jsonError('Identificador de operación no válido.',400);
  const fingerprint=JSON.stringify([actor.id,target.id,action,reason,input.amount??null,input.hours??null,input.color??null]);
  const receipt=await db.prepare('SELECT actor_id,fingerprint FROM admin_operations WHERE request_key=?').bind(requestKey).first();if(receipt){if(receipt.actor_id!==actor.id||receipt.fingerprint!==fingerprint)return jsonError('Este identificador ya pertenece a otra operación.',409);return Response.json({ok:true,replayed:true,message:'La acción ya estaba guardada; no se ha repetido.'});}
@@ -48,6 +59,6 @@ async function handle141_onRequest({request,env}){try{
  statements.push(db.prepare(`INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) SELECT ?,?,?,?,? WHERE ${guard}`).bind(actor.id,target.id,action,amount,action==='set_card'?reason+' · '+String(input.color):reason,...args));
  await db.batch(statements);const saved=await db.prepare('SELECT actor_id,fingerprint FROM admin_operations WHERE request_key=?').bind(requestKey).first();if(saved?.actor_id!==actor.id||saved?.fingerprint!==fingerprint)return jsonError('Identificador utilizado para otra operación.',409);
  return Response.json({ok:true,message:'Acción guardada y registrada.'},{headers:{'Cache-Control':'no-store'}});
- }catch(e){if(/ADMIN_BALANCE_LIMIT/.test(String(e.message)))return jsonError('No puedes retirar más de lo disponible ni superar el límite de saldo.',409);console.error('Admin moderation',e);return jsonError('No se pudo completar la moderación.',500);}}
+ }catch(e){if(/reservado|entre 3 y 24/.test(String(e.message)))return jsonError(e.message,400);if(/ADMIN_BALANCE_LIMIT/.test(String(e.message)))return jsonError('No puedes retirar más de lo disponible ni superar el límite de saldo.',409);console.error('Admin moderation',e);return jsonError('No se pudo completar la moderación.',500);}}
 
 export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

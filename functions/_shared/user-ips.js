@@ -1,4 +1,4 @@
-// IP de conexión por cuenta. Solo admin1 puede consultarla; se conserva 180 días para detectar multicuentas.
+// IP de conexión por cuenta. Admin1 y los moderadores pueden consultarla (V298); se conserva 180 días para detectar multicuentas.
 const VALID_IP=/^[0-9a-fA-F:.]{3,45}$/,RETENTION="-180 days";
 const ready=new WeakMap();
 export async function ensureUserIps(db){if(!ready.has(db))ready.set(db,db.batch([
@@ -20,10 +20,13 @@ export async function ipBlocked(db,request,env){
  catch(error){console.warn('Bloqueo de IP',error);return false;}
 }
 export const purgeOldIps=db=>db.prepare(`DELETE FROM user_ips WHERE last_seen<datetime('now','${RETENTION}')`).run();
-export async function accountDetails(db,target){
+export async function accountDetails(db,target,{email=true}={}){
  await ensureUserIps(db);
  const account=await db.prepare('SELECT email,created_at,last_seen_at,(SELECT COUNT(*) FROM sessions s WHERE s.user_id=users.id) AS sessions FROM users WHERE id=?').bind(target.id).first();
  const ips=(await db.prepare(`SELECT i.ip,i.first_seen,i.last_seen,i.hits,EXISTS(SELECT 1 FROM blocked_ips b WHERE b.ip=i.ip) AS blocked FROM user_ips i WHERE i.user_id=? ORDER BY i.last_seen DESC LIMIT 30`).bind(target.id).all()).results;
  const related=(await db.prepare(`SELECT u.username,u.is_banned,GROUP_CONCAT(DISTINCT other.ip) AS ips FROM user_ips own JOIN user_ips other ON other.ip=own.ip AND other.user_id<>own.user_id JOIN users u ON u.id=other.user_id WHERE own.user_id=? AND COALESCE(u.is_system,0)=0 GROUP BY u.id ORDER BY u.username COLLATE NOCASE LIMIT 50`).bind(target.id).all()).results;
- return {...account,ips:ips.map(row=>({...row,blocked:!!row.blocked})),related:related.map(row=>({username:row.username,is_banned:!!row.is_banned,ips:String(row.ips||'').split(',')}))};
+ const hasNames=!!await db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='username_changes296'").first();
+ const names=hasNames?(await db.prepare('SELECT old_username,new_username,price,created_at FROM username_changes296 WHERE user_id=? ORDER BY id DESC LIMIT 20').bind(target.id).all()).results:[];
+ if(!email)delete account.email;
+ return {...account,names,ips:ips.map(row=>({...row,blocked:!!row.blocked})),related:related.map(row=>({username:row.username,is_banned:!!row.is_banned,ips:String(row.ips||'').split(',')}))};
 }
