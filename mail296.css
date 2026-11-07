@@ -1,0 +1,4 @@
+.mail-toolbar296{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0}
+.mail-toolbar296 button{margin:0!important}
+.mail-toolbar296 .mail-read-all296{white-space:nowrap}
+.mail-toolbar296 .mail-read-all296:disabled{opacity:.6;cursor:wait}

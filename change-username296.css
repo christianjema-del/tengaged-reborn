@@ -1,0 +1,6 @@
+#changeUsername .rename-card{max-width:520px;margin:12px 0;padding:16px 18px;border:1px solid #eee18c;border-radius:4px;background:#fffbe0}
+#changeUsername .rename-facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0 0 12px}
+#changeUsername .rename-facts dt{color:#6b6b6b}#changeUsername .rename-facts dd{margin:0;font-weight:bold;overflow-wrap:anywhere}
+#changeUsername .rename-warning{padding:8px 10px;border-radius:3px;background:#fde8ec;color:#a3324a}
+#changeUsername .rename-help{color:#555;font-size:14px}
+#changeUsername .rename-back{display:inline-block;margin-top:12px}

@@ -19,6 +19,10 @@ async function handle141_onRequest({request,env}){try{
  }
  if(request.method!=='POST')return fail('Método no permitido.',405);const denied=mutation(request,me);if(denied)return denied;
  const b=await request.json();
+ if(b.action==='read_all'){
+  const r=await db.prepare('UPDATE private_messages SET read_at=CURRENT_TIMESTAMP WHERE recipient=? AND read_at IS NULL').bind(me.id).run();const marked=Number(r.meta?.changes)||0;
+  return ok({unread:0,marked,message:marked?(marked===1?'1 correo marcado como leído.':marked+' correos marcados como leídos.'):'No tenías correos sin leer.'});
+ }
  if(b.action==='read'){
   const id=number(b.id),message=await db.prepare('SELECT id FROM private_messages WHERE id=? AND recipient=?').bind(id,me.id).first();if(!message)return fail('Correo no encontrado.',404);await db.prepare('UPDATE private_messages SET read_at=CURRENT_TIMESTAMP WHERE id=? AND recipient=? AND read_at IS NULL').bind(id,me.id).run();const count=await db.prepare('SELECT COUNT(*) AS n FROM private_messages WHERE recipient=? AND read_at IS NULL').bind(me.id).first();return ok({unread:Number(count.n)||0});
  }

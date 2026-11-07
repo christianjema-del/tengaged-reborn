@@ -2,7 +2,9 @@ import {$,el,api,post,link,title,action,form,tabs,pages,comment} from '/communit
 const params=new URLSearchParams(location.search),peer=params.get('with')||'',folder=params.get('folder')||'inbox',page=Number(params.get('page'))||1;
 async function load(){try{
  const data=await api('/api/mail?'+params),root=$('content');root.replaceChildren(tabs([['Recibidos ('+data.unread+')','/mail.html',folder!=='sent'&&!peer],['Enviados','/mail.html?folder=sent',folder==='sent'],['Nuevo mensaje','#compose',false]]));
- const refresh=el('button','Actualizar bandeja','plain-btn');refresh.type='button';refresh.onclick=load;root.append(refresh);
+ const toolbar=el('div',undefined,'mail-toolbar296'),refresh=el('button','Actualizar bandeja','plain-btn');refresh.type='button';refresh.onclick=load;toolbar.append(refresh);
+ if(data.unread>0){const readAll=el('button','✓ Marcar todos como leídos','market-btn mail-read-all296');readAll.type='button';readAll.onclick=async()=>{readAll.disabled=true;try{const r=await post('/api/mail',{action:'read_all'});$('notice').textContent=r.message;window.TengagedSetUnread?.(0);document.dispatchEvent(new Event('tengaged:mail-changed'));await load();}catch(error){$('notice').textContent=error.message;readAll.disabled=false;}};toolbar.append(readAll);}
+ root.append(toolbar);
  if(data.peer&&!data.peer_system){root.append(title('Conversación con '+data.peer));root.append(action(data.blocks.some(x=>x.username===data.peer)?'Desbloquear usuario':'Bloquear usuario',async()=>{const r=await post('/api/mail',{action:data.blocks.some(x=>x.username===data.peer)?'unblock':'block',recipient:data.peer});$('notice').textContent=r.message;await load();}));}
  if(!data.messages.length)root.append(el('p','No hay mensajes en esta carpeta.'));
  window.TengagedSetUnread?.(data.unread);
