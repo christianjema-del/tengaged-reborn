@@ -131,3 +131,17 @@
 .survivorMoves li:nth-child(odd){background:#f5f8fb}
 .survivorMoves time{flex:0 0 42px;color:#999}
 .survivorResourceHistory{cursor:pointer}
+/* V309: una sección por recurso, con − / + azules y Guardar amarillo. */
+.survivorCampSingle{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.survivorCampItem{position:relative;width:75px;flex:0 0 75px;text-align:center}
+.survivorCampItem .survivorStock{top:1px}
+.survivorCampSide{flex:1;min-width:220px}
+.survivorCampLine{margin:4px 0 10px;font-size:13px;color:#4d4d4d}
+.survivorCampAfter{margin:8px 0 0;font-size:12px;color:#7d7d7d;min-height:15px}
+.survivorStepper{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.survivorStepper .survivorStep{width:34px;height:32px;padding:0!important;margin:0!important;display:inline-flex;align-items:center;justify-content:center;font:bold 20px/1 Arial!important;color:#416379!important;background:linear-gradient(#f0f6fa,#d5e5ef)!important;border:1px solid #8caebe!important;border-radius:3px!important;cursor:pointer}
+.survivorStepper .survivorStep:hover:not(:disabled){background:linear-gradient(#e4eff6,#c4d9e6)!important}
+.survivorStepper .survivorStep:disabled{opacity:.45;cursor:default}
+.survivorStepValue{min-width:38px;text-align:center;font:bold 20px/32px Arial;color:#333}
+.survivorStepper .survivorSave{margin:0 0 0 6px!important;display:inline-flex;align-items:center;min-height:32px;padding:7px 16px!important;border:1px solid #edbd28!important;border-radius:3px!important;background:linear-gradient(#ffdf5e,#ffc51a)!important;box-shadow:0 3px 10px #f4c63e30!important;color:#6a571e!important;font:bold 12px Arial!important;cursor:pointer}
+.survivorStepper .survivorSave:disabled{opacity:.5;cursor:default}

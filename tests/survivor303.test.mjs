@@ -42,16 +42,16 @@ test('el cubo: solo con lluvia, una persona a la vez, −6 de pollo y +10 de agu
  assert.throws(()=>E.actSurvivor(s,mate,{action:'bucket'},at),/Ya hay alguien/);
  E.advanceSurvivor(s,at+66*60000);assert.equal(s.camps[t].water,60);
 });
-test('comer y beber con el fuego encendido; con el fuego apagado hay que aceptar el riesgo del 50 %',()=>{
+test('V309: comer y beber libremente, con o sin fuego; avivar cuesta 6 de agua',()=>{
  const s=started(),p=me(s,0),t=p.tribe,at=s.startedAt+1000;p.food=60;p.water=60;setWeather(s,t,'fire',at);
  E.actSurvivor(s,p,{action:'eat',food:20,water:10},at);assert.deepEqual([p.food,p.water,s.camps[t].food,s.camps[t].water],[80,70,30,40]);
  assert.throws(()=>E.actSurvivor(s,p,{action:'eat',food:31},at),/reserva/);
  assert.throws(()=>E.actSurvivor(s,p,{action:'eat',food:21},at),/100/);
- E.actSurvivor(s,p,{action:'fan'},at);assert.equal(p.water,65);assert.equal(s.camps[t].schedule.fire[0][1],at+3600000+E.FAN_MS);
- setWeather(s,t,'sun',at);assert.throws(()=>E.actSurvivor(s,p,{action:'eat',food:1},at),/fuego está apagado/);
- let doomed=false;for(let i=0;i<60&&!doomed;i++){s.camps[t].food=50;p.food=50;p.water=50;p.doomed=false;const r=E.actSurvivor(s,p,{action:'eat',food:1,risk:true},at);doomed=r.poisoned;}
- assert.ok(doomed,'en algún intento sale mal');assert.deepEqual([p.food,p.water,p.doomed],[0,0,true]);
- E.advanceSurvivor(s,s.deadline);assert.equal(p.status,'eliminated');assert.equal(p.deathCause,'starvation');
+ E.actSurvivor(s,p,{action:'fan'},at);assert.equal(E.FAN_WATER,6);assert.equal(p.water,64);assert.equal(s.camps[t].schedule.fire[0][1],at+3600000+E.FAN_MS);
+ setWeather(s,t,'sun',at);assert.equal(E.fireLit(s.camps[t],at),false);
+ for(let i=0;i<30;i++){s.camps[t].food=50;p.food=50;p.water=50;const r=E.actSurvivor(s,p,{action:'eat',food:1},at);assert.equal(r.poisoned,false);assert.equal(p.food,51);assert.ok(!p.doomed);}
+ assert.throws(()=>E.actSurvivor(s,p,{action:'fan'},at),/encendido/);
+ assert.equal(E.HUNT_WATER,6);assert.equal(E.BUCKET_FOOD,6);
 });
 test('cambio de día: −5 de agua y −6 de pollo; solo muere quien está a 0/0',()=>{
  const s=started(),a=me(s,0),b=me(s,1),c=me(s,2);a.food=1;a.water=0;b.food=0;b.water=0;c.food=100;c.water=100;
@@ -181,9 +181,20 @@ test('V308: inicio con fuego y sol, tics, página de comer y beber, chat por tri
  assert.equal(v.today.own.rows.find(r=>r.username==='H0').at,null);
  const {moveText}=await import('../survivor-camp308.js').catch(()=>({}));
  const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
- const camp=read('survivor-camp308.js');for(const t of ['ha cazado comida','ha sacado el cubo de agua','está cazando.','Comer 1 de pollo','Beber 1 de agua','{food:1}','{water:1}'])assert.ok(camp.includes(t),t);
+ const camp=read('survivor-camp308.js');for(const t of ['ha cazado comida','ha sacado el cubo de agua','está cazando.','Guardar','Avivar el fuego','Sacar el cubo','Cazar ('])assert.ok(camp.includes(t),t);
  const page=read('survivor-page303.js');assert.ok(!page.includes("label+' '")&&!page.includes('survivorTake'),'sin campos de pollo y agua');assert.match(page,/survivor-camp\.html/);assert.match(page,/survivorSafe/);assert.match(page,/survivorQuestion/);assert.match(page,/\$\('svPhaseLabel'\)\.hidden=true/);
  assert.match(read('survivor303.css'),/-198px -374px/);
  const chat=read('functions/api/game-chat.js');assert.match(chat,/chatTribe=type==='survivor'&&state\.phase!=='waiting'\?\(member\?\.tribe\|\|askedTribe\|\|'A'\):null/);assert.match(chat,/room=type\+':'\+id\+\(chatTribe\?':'\+chatTribe:''\)/);
  assert.match(read('functions/api/community-feed.js'),/c\.room NOT LIKE 'survivor:%:%'/);assert.match(read('game-chat.js'),/survivor&&new URLSearchParams\(location\.search\)\.get\('tribe'\)/);
+});
+test('V309: campamento con secciones de agua, pollo y fuego; chat de tribu sin bienvenidas de la otra tribu',async()=>{
+ const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
+ const m=await import('../survivor-camp308.js').catch(()=>null);
+ if(m){assert.equal(m.maxTake(50,94),6);assert.equal(m.maxTake(3,10),3);assert.equal(m.clampQty(0,5),1);assert.equal(m.clampQty(9,5),5);assert.equal(m.clampQty(1,0),0);
+  assert.deepEqual(m.SECTION_KINDS.water,['drink','bucket-start','bucket']);assert.deepEqual(m.SECTION_KINDS.fire,['fan']);}
+ const html=read('survivor-camp.html');for(const id of ['scMinus','scPlus','scSave','scQty'])assert.match(html,new RegExp('id="'+id+'"'));
+ assert.match(read('survivor303.css'),/\.survivorSave\{[^}]*#ffc51a/);assert.match(read('survivor303.css'),/\.survivorStep\{[^}]*#416379/);
+ assert.match(read('survivor.html'),/id="svFireLog"/);assert.match(read('survivor-page303.js'),/campPage\('fire'\)/);
+ assert.ok(!read('survivor-camp308.js').includes('risk'));assert.ok(!read('survivor-page303.js').includes('poisoned'));
+ assert.match(read('functions/api/game-chat.js'),/p\.tribe===chatTribe/);
 });

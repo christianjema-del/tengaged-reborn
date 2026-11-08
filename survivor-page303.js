@@ -66,14 +66,13 @@ function renderCamp(){
  $('svMyWater').textContent=own?me.water:'';$('svMyFood').textContent=own?me.food:'';
  const box=$('svCampActions');box.replaceChildren();
  if(!own){if(me&&s.phase==='day'&&me.tribe!==s.viewTribe)box.append(el('p','Estás viendo el campamento de la '+tribeName(s.viewTribe)+'.','survivorNotice'));return;}
- if(me.doomed)box.append(el('p','Comiste con el fuego apagado y te quedaste a 0 de pollo y agua: no superarás el próximo cambio de día.','survivorWarning'));
- else if(me.food<=0&&me.water<=0)box.append(el('p','Estás a 0 de pollo y 0 de agua. Si sigues así cuando cambie el día, quedarás eliminado.','survivorWarning'));
+ if(me.food<=0&&me.water<=0)box.append(el('p','Estás a 0 de pollo y 0 de agua. Si sigues así cuando cambie el día, quedarás eliminado.','survivorWarning'));
  if(c.weather==='sun'){const b=button('Cazar (−6 de agua)',()=>act({action:'hunt'}),'survivorButton survivorGather');b.disabled=me.hunting||me.water<6;box.append(b);if(me.hunting)box.append(el('p','Estás cazando. La caza se recoge entre 30 y 45 minutos después de salir.','survivorNotice'));}
  if(c.weather==='rain'){const b=button('Sacar el cubo (−6 de pollo)',()=>act({action:'bucket'}),'survivorButton survivorGather');b.disabled=!!c.bucket||me.food<6;box.append(b);}
  if(c.bucket)box.append(el('p',c.bucket.username+' está recogiendo agua con el cubo'+(c.bucket.readyAt?' (vuelve hacia las '+new Date(c.bucket.readyAt).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+')':'')+'.','survivorNotice'));
  if(c.hunting.length)box.append(el('p','Cazando: '+c.hunting.map(h=>h.username).join(', ')+'.','survivorNotice'));
- if(c.fire){const b=button('Avivar el fuego (−5 de agua, +30 min)',()=>act({action:'fan'}),'survivorButton survivorGather');b.disabled=me.water<5;box.append(b);if(c.fireUntil)box.append(el('p','El fuego estará encendido hasta las '+new Date(c.fireUntil).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+'.','survivorNotice'));}
- if(!c.fire)box.append(el('p','Espera a que se encienda el fuego para comer y beber sin riesgo. Pulsa el agua o el pollo para comer y beber.','survivorNotice'));
+ if(c.fire){const b=button('Avivar el fuego (−6 de agua, +30 min)',()=>act({action:'fan'}),'survivorButton survivorGather');b.disabled=me.water<6;box.append(b);if(c.fireUntil)box.append(el('p','El fuego estará encendido hasta las '+new Date(c.fireUntil).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+'.','survivorNotice'));}
+ box.append(el('p','Pulsa el agua para beber, el pollo para comer o la fogata para avivar el fuego.','survivorNotice'));
 }
 function button(text,fn,cls='survivorButton'){const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;}
 
@@ -129,13 +128,13 @@ async function load(){
 }
 async function act(body){
  if(busy)return;busy=true;
- try{const d=await api('/api/survivor?'+new URLSearchParams({id,...(viewTribe?{tribe:viewTribe}:{})}),body);state=d.match;notice(d.result?.poisoned?'¡Mala suerte! Comiste con el fuego apagado y te has quedado a 0 de pollo y agua.':'');render();}
+ try{const d=await api('/api/survivor?'+new URLSearchParams({id,...(viewTribe?{tribe:viewTribe}:{})}),body);state=d.match;notice('');render();}
  catch(e){notice(e.message);}finally{busy=false;}
 }
 $('svSwitch').onclick=()=>{if(!state)return;const own=state.me?.tribe;viewTribe=state.viewTribe===(own||'A')?(own==='B'?'A':'B'):(own||'A');const url=new URL(location.href);url.searchParams.set('id',String(state.id));url.searchParams.set('tribe',viewTribe);history.replaceState(null,'',url);dispatchEvent(new Event('online'));load();};
 $('svFillBots').onclick=()=>act({action:'fill_bots'});
 $('svStart').onclick=()=>act({action:'start'});
 const campPage=kind=>{if(state)location.href='/survivor-camp.html?'+new URLSearchParams({id:state.id,kind});};
-$('svWaterLog').onclick=()=>campPage('water');$('svFoodLog').onclick=()=>campPage('food');
+$('svWaterLog').onclick=()=>campPage('water');$('svFoodLog').onclick=()=>campPage('food');$('svFireLog').onclick=()=>campPage('fire');
 load();setInterval(clock,1000);setInterval(()=>{if(!document.hidden)load();},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});

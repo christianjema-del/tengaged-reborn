@@ -1,0 +1,15 @@
+V309 - Survivor: agua, pollo y fuego con su propia sección; chat de tribu arreglado
+
+- Chat público de cada tribu: los mensajes de inscripción ya solo salen en el chat de la tribu
+  de quien los escribió (antes salían en las dos).
+- Survivor #1: como empezó antes de V308, se le ha puesto a las dos tribus el fuego encendido
+  y sol desde ahora (arreglado directamente en la base de datos).
+- Al pulsar el agua sale solo el cubo de agua; al pulsar el pollo, solo el pollo. Con los
+  botones azules − y + se elige de 1 en 1 cuánto beber o comer y se guarda con el botón
+  amarillo Guardar. En la sección del agua se saca el cubo (cuando llueve) y en la del pollo
+  se caza (cuando hace sol).
+- Al pulsar la fogata se abre la sección del fuego: mientras no se haya apagado se puede
+  avivar con 6 de agua (+30 minutos).
+- Costes: sacar el cubo −6 de pollo, cazar −6 de agua, avivar el fuego −6 de agua.
+- Se puede comer y beber libremente con el fuego apagado (sin el riesgo del 50 %).
+- Cada sección muestra solo sus movimientos.

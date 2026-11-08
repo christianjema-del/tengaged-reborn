@@ -9,7 +9,7 @@ import {enrollmentOptions} from './enrollment.js';
 
 export const CAPACITY=20,TRIBE_SIZE=10,MERGE_AT=10,DAY_MS=12*3600000;
 export const MAX_SUPPLY=100,START_RESERVE=50,GATHER_AMOUNT=10;
-export const HUNT_WATER=6,BUCKET_FOOD=6,FAN_WATER=5,FAN_MS=30*60000;
+export const HUNT_WATER=6,BUCKET_FOOD=6,FAN_WATER=6,FAN_MS=30*60000;
 export const DECAY_WATER=5,DECAY_FOOD=6;
 export const HUNT_MIN_MS=30*60000,HUNT_MAX_MS=45*60000,BUCKET_MIN_MS=55*60000,BUCKET_MAX_MS=65*60000;
 export const ATTEMPT_GRACE_MS=20000;
@@ -227,10 +227,9 @@ export function actSurvivor(s,user,input,now=Date.now(),trusted=false){
   const food=amount(input.food||0),water=amount(input.water||0);if(!food&&!water)throw Error('Elige cuánto pollo o agua quieres tomar.');
   if(food>camp.food||water>camp.water)throw Error('La reserva de la tribu no tiene tanto.');
   if(p.food+food>MAX_SUPPLY||p.water+water>MAX_SUPPLY)throw Error('No puedes pasar de '+MAX_SUPPLY+'.');
-  const lit=fireLit(camp,now);if(!lit&&!input.risk)throw Error('El fuego está apagado. Si comes ahora tienes un 50 % de posibilidades de quedarte a 0 y morir en el próximo cambio de día.');
   camp.food-=food;camp.water-=water;p.food=clamp(p.food+food);p.water=clamp(p.water+water);
   if(food)useLog(camp,s.day,now,p.username,'eat',-food);if(water)useLog(camp,s.day,now,p.username,'drink',-water);
-  if(!lit&&random(2)===0){p.food=0;p.water=0;p.doomed=true;return {poisoned:true};}
+  // V309: se puede comer y beber libremente aunque el fuego esté apagado.
   return {poisoned:false};
  }
  if(action==='fan'){
