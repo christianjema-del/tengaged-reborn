@@ -1,0 +1,19 @@
+V302 - Menos consultas periódicas
+
+El acceso de Vercel tiene un límite gratuito de 1.000.000 de peticiones cada 30 días y se estaban
+gastando entre 76.000 y 140.000 al día (el 97 %, consultas de las páginas y la API). Se alargan
+los intervalos de refresco; los juegos funcionan igual, solo reflejan los cambios unos segundos después.
+
+- Casting (partida, prueba, votación, vista clásica): cada 10 s (antes 3-5 s).
+- Hunger: cada 8 s en combate (antes 5 s) y cada 30 s en la arena (antes 20 s).
+- Duelo: prueba cada 10 s (antes 5 s), partida cada 20 s (antes 15 s).
+- Frookies: partida y prueba cada 15 s (antes 10-12 s).
+- Chat de partida: cada 20 s (antes 12 s).
+- Listados de juegos, novedades y tiendas: cada 30 s (antes 15 s).
+- Amigos y perfil: cada 60 s (antes 30 s).
+- En todas las páginas (sesión, correo, partidas activas, actividad): cada 2 min (antes 1 min).
+  Al volver a la pestaña se actualiza al momento, como antes.
+
+Todos los scripts modificados (y los que los cargan) pasan a ?v=302: el acceso guarda un año los
+archivos versionados en el navegador.
+Pruebas: tests/polling302.test.mjs

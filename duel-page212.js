@@ -1,6 +1,6 @@
 import {request as fetch} from '/http.js?v=170';
 import {setAvatar} from '/avatar-display.js?v=159';
-import {refreshPlayerActivity} from '/player-activity.js?v=159';
+import {refreshPlayerActivity} from '/player-activity.js?v=302';
 import {launchCastingMinigame} from '/casting-minigame-launcher.js?v=212';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
 let id=Number(new URLSearchParams(location.search).get('id'))||0,s=null,busy=false,loading=false,offset=0,playing=false,dispose=null,list=[],listStage=null,roster='',privateTab=false;
@@ -34,7 +34,7 @@ $('duel-whisper-form').onsubmit=async e=>{e.preventDefault();const body=$('duel-
 for(const [button,isPrivate]of [['duel-public',false],['duel-private',true]])$(button).onclick=()=>{privateTab=isPrivate;$('public-chat').hidden=isPrivate;$('duel-whispers').hidden=!isPrivate;$('duel-public').setAttribute('aria-pressed',String(!isPrivate));$('duel-private').setAttribute('aria-pressed',String(isPrivate));};
 async function blogs(){try{const r=await fetch('/api/blog?q=%23duelo&page_size=5'),d=await r.json();if(!r.ok)throw Error();$('duel-blogs').replaceChildren(...d.posts.map(p=>{const a=el('a',p.title);a.href='/blogs?id='+p.id;const row=el('p');row.append(a);return row;}));if(!d.posts.length)$('duel-blogs').append(el('p','No hay blogs todavía. Incluye #duelo en tu blog.'));}catch{$('duel-blogs').textContent='No se pudieron cargar los blogs.';}}
 const chat=$('public-chat');let imageSignature='';new MutationObserver(()=>{const sources=[...new Set([...chat.querySelectorAll('.embedded-media img')].map(i=>i.src))].slice(0,3),sig=JSON.stringify(sources);if(sig===imageSignature)return;imageSignature=sig;$('duel-images').replaceChildren(...sources.map(src=>{const a=el('a'),img=el('img');a.href=src;a.target='_blank';a.rel='noopener noreferrer';img.src=src;img.alt='Imagen compartida';img.loading='lazy';a.append(img);return a;}));if(!sources.length)$('duel-images').textContent='No hay imágenes enviadas todavía.';}).observe(chat,{subtree:true,childList:true});
-$('duel-images').textContent='No hay imágenes enviadas todavía.';load();blogs();setInterval(()=>{if(!document.hidden)load();},15000);setInterval(clock,1000);
+$('duel-images').textContent='No hay imágenes enviadas todavía.';load();blogs();setInterval(()=>{if(!document.hidden)load();},20000);setInterval(clock,1000);
 
 let dragged219=null;
 function movePreference219(from,to){const a=list.indexOf(from),b=list.indexOf(to);if(a<0||b<0||a===b)return;list.splice(b,0,list.splice(a,1)[0]);renderList();}

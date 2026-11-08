@@ -55,4 +55,4 @@ async function load(){const username=new URLSearchParams(location.search).get('u
  }
 
  }catch(e){root.textContent=e.message;}}
-load();setInterval(()=>{if(!document.hidden&&!editingOrder&&!root.contains(document.activeElement))load();},30000);
+load();setInterval(()=>{if(!document.hidden&&!editingOrder&&!root.contains(document.activeElement))load();},60000);

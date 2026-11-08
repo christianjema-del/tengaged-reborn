@@ -1,5 +1,5 @@
 import {setAvatar} from '/avatar-display.js?v=159';
-import {refreshPlayerActivity} from '/player-activity.js?v=159';
+import {refreshPlayerActivity} from '/player-activity.js?v=302';
 import {$,el,api,post,buttonTask,profileLink,loginLink} from '/market-ui.js?v=170';
 const id=Number(new URLSearchParams(location.search).get('id'))||1;let state=null,stateRevision=0,loading=false,busy=false,clockOffset=0,reactionTimer=null,reactionReady=0,playingReaction=false,challengeStartedAt=0,demoPlaying=false,disposeFlash=null;
 async function action(input){if(busy)return;busy=true;stateRevision++;try{const data=await post('/api/castings?id='+id,input);applyState(data.match);$('gameNotice').textContent='Acción guardada.';}catch(e){$('gameNotice').textContent=e.message;}finally{busy=false;updateResourceControls();}}
@@ -63,7 +63,7 @@ $('gameAdmin').replaceChildren();if(s.user?.is_admin){if(s.phase==='waiting'&&s.
 function formatDate(value){if(value==null||value==='')return 'fecha no disponible';let x=value;if(typeof x==='string'){x=x.trim();if(/^\d{10,13}$/.test(x))x=Number(x);else if(/^\d{4}-\d{2}-\d{2} /.test(x))x=x.replace(' ','T')+'Z';}if(typeof x==='number'&&x<1e11)x*=1000;const d=new Date(x);return Number.isFinite(d.getTime())?d.toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'}):'fecha no disponible';}
 function updateResourceControls(){const p=state?.me,at=Date.now()+clockOffset;if(!p)return;for(const [position,value] of [[1,p.keys],[2,p.apples],[3,p.health]]){const metric=document.querySelector('.casting-metrics>div:nth-child('+position+')>b');if(metric)metric.textContent=String(value);}const eat=$('casting-eat'),rest=$('casting-rest');if(eat)eat.disabled=busy||p.health>=100||p.apples<1;if(rest){const wait=Math.max(0,Math.ceil(((p.lastRest||0)+60000-at)/1000));rest.disabled=busy||p.health>=100||wait>0;rest.textContent=wait>0?'Descansar ('+wait+' s)':'Descansar (+20)';}}
 function timer(){if(!state)return;updateResourceControls();const end=state.phase==='waiting'?state.startAt:state.deadline;if(!end){$('deadline').textContent=state.phase==='waiting'?'Esperando al menos dos participantes.':'';return;}const seconds=Math.max(0,Math.ceil((end-Date.now()-clockOffset)/1000));$('deadline').textContent=(state.phase==='waiting'?'Comienza en ':'Tiempo restante: ')+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');}
-window.TengagedSession.then(load).catch(load);setInterval(()=>{if(!document.hidden)load();},3000);setInterval(timer,1000);addEventListener('beforeunload',()=>{clearTimeout(reactionTimer);disposeFlash?.();});
+window.TengagedSession.then(load).catch(load);setInterval(()=>{if(!document.hidden)load();},10000);setInterval(timer,1000);addEventListener('beforeunload',()=>{clearTimeout(reactionTimer);disposeFlash?.();});
 
 function enrollmentLink(id){const a=document.createElement('a');a.href='/enroll-game.html?type=casting&id='+id;a.textContent='Unirme';a.className='market-btn';return a;}
 

@@ -1,6 +1,6 @@
 import {request as fetch} from '/http.js?v=170';
 import {setAvatar} from '/avatar-display.js?v=159';
-import {refreshPlayerActivity} from '/player-activity.js?v=159';
+import {refreshPlayerActivity} from '/player-activity.js?v=302';
 import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=159';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
 let lastArenaPoll=0;
@@ -73,7 +73,7 @@ $('whisper-form').onsubmit=async e=>{e.preventDefault();const text=$('whisper-te
 
 
 async function blogs(){const root=$('blogs');try{const r=await arenaFetch('/api/blog?q=%23hunger');if(!r.ok)throw Error('blogs');const d=await r.json(),posts=(d.posts||[]).filter(p=>/(^|[^\w])#hunger\b/i.test(p.title+' '+p.body)).slice(0,5);root.replaceChildren();for(const p of posts){const row=el('article','','hunger-blog-row'),a=el('a',p.title),by=el('a',p.author||'');a.href='/blogs?id='+encodeURIComponent(p.id);by.href='/profile.html?username='+encodeURIComponent(p.author||'');by.className='hunger-blog-author';row.append(a,by);root.append(row);}if(!posts.length)root.append(el('p','Todavía no hay blogs con #hunger.'));}catch{root.replaceChildren(el('p','No se pudieron cargar los blogs.'));const retry=button('Reintentar',blogs);root.append(retry);}}
-load();blogs();setInterval(()=>{if(!document.hidden&&!busy&&!pending&&!$('answer').matches(':focus')&&(!$('fight-page').hidden||Date.now()-lastArenaPoll>=20000)){lastArenaPoll=Date.now();load();}},5000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!busy&&!pending)load();});addEventListener('online',()=>{if(!busy&&!pending)load();});setInterval(timers,1000);
+load();blogs();setInterval(()=>{if(!document.hidden&&!busy&&!pending&&!$('answer').matches(':focus')&&(!$('fight-page').hidden||Date.now()-lastArenaPoll>=30000)){lastArenaPoll=Date.now();load();}},8000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!busy&&!pending)load();});addEventListener('online',()=>{if(!busy&&!pending)load();});setInterval(timers,1000);
 
 async function showFightMinigame(){
  const initial=state?.fight;

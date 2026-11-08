@@ -14,4 +14,4 @@ async function refresh(){if(loading)return;loading=true;try{
  }catch(e){$('challengeStatus').textContent=playing?'Conexión interrumpida. Mantén la prueba abierta; comprobaremos el guardado de nuevo.':e.message;$('challengeRetry').hidden=false;}finally{loading=false;}}
 $('challengeRetry').onclick=()=>{failed=false;refresh();};
 addEventListener('pagehide',()=>stop());addEventListener('online',()=>refresh());document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
-refresh();setInterval(()=>{if(!document.hidden)refresh();},5000);
+refresh();setInterval(()=>{if(!document.hidden)refresh();},10000);

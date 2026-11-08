@@ -12,4 +12,4 @@ async function load(){try{
  if(!data.mentions.length)mentions.append(el('p','Todavía no hay menciones en blogs.'));
  const edit=document.getElementById('profileEditLink');if(edit)edit.hidden=!data.self;
  }catch(e){const badge=document.getElementById('profileGiftLink');if(badge){badge.setAttribute('aria-label','Ver regalos recibidos: contador no disponible');badge.title='Ver regalos recibidos: contador temporalmente no disponible';}}}
-load();setInterval(()=>{if(!document.hidden)load();},30000);
+load();setInterval(()=>{if(!document.hidden)load();},60000);

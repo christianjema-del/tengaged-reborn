@@ -41,7 +41,7 @@ addEventListener('pagehide',()=>{if(!playing)stop();});
 $('challengeStart').onclick=async()=>{launchFailed=false;await refresh();if(canPlay())await beginChallenge();};
 $('challengeRetry').onclick=refresh;
 if($('challengeScoresRefresh'))$('challengeScoresRefresh').onclick=refresh;
-refresh();setInterval(()=>{if(!document.hidden)refresh();},12000);
+refresh();setInterval(()=>{if(!document.hidden)refresh();},15000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
 
 addEventListener('online',()=>refresh());

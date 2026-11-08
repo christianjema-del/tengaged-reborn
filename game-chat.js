@@ -91,7 +91,7 @@ function rawEventCard(m){
  row.setAttribute('aria-label',m.body);row.append(header,body);return row;
 }
 
-input.oninput=counter;form.onsubmit=e=>{e.preventDefault();const message=input.value.trim();if(message&&allowed)update(message);};update();setInterval(()=>{if(!document.hidden)update();},12000);
+input.oninput=counter;form.onsubmit=e=>{e.preventDefault();const message=input.value.trim();if(message&&allowed)update(message);};update();setInterval(()=>{if(!document.hidden)update();},20000);
 
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});
 

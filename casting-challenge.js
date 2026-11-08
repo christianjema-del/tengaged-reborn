@@ -37,7 +37,7 @@ async function refresh(){
 $('challengeStart').onclick=async()=>{launchFailed=false;await refresh();if(canPlay())await beginChallenge();};
 $('challengeRetry').onclick=refresh;
 if($('challengeScoresRefresh'))$('challengeScoresRefresh').onclick=refresh;
-refresh();setInterval(()=>{if(!document.hidden)refresh();},5000);
+refresh();setInterval(()=>{if(!document.hidden)refresh();},10000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
 
 addEventListener('online',()=>refresh());

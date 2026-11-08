@@ -11,7 +11,7 @@ async function daily(){if(!user||dailyBusy||document.hidden||Date.now()<nextRewa
 function start(next){const changed=user?.username!==next?.username;user=next||null;if(changed){unreadRevision++;nextRewardCheck=0;let cached=0;if(user)try{cached=Number(localStorage.getItem('tengaged_unread:'+user.username.toLowerCase()))||0;}catch{}paintUnread(cached,false);}if(!user){paintUnread(0,false);return;}window.TengagedRefreshUnread({force:true});daily();}
 window.TengagedSession?.then(start).catch(()=>{});
 addEventListener('tengaged:session',event=>start(event.detail));
-setInterval(()=>{if(!document.hidden&&user)window.TengagedRefreshUnread();},60000);
+setInterval(()=>{if(!document.hidden&&user)window.TengagedRefreshUnread();},120000);
 function returnToPage(){if(!document.hidden){window.TengagedRefreshUnread({force:true});daily();}}
 document.addEventListener('visibilitychange',returnToPage);addEventListener('focus',returnToPage);addEventListener('online',returnToPage);addEventListener('pageshow',event=>{if(event.persisted)returnToPage();});
 for(const event of ['pointerdown','keydown'])addEventListener(event,()=>{if(Date.now()>=nextRewardCheck)daily();},{passive:true});
