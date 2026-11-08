@@ -8,3 +8,8 @@ SITE = "https://tengaged-reborns.pages.dev"
 
 [triggers]
 crons = ["* * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tengaged-reborn-db"
+database_id = "a345236c-b96f-40ed-a9f2-2fa63d943097"

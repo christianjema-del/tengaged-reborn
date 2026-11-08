@@ -9,6 +9,8 @@ export async function tick(env,fetcher=fetch){
  }
  return results;
 }
+// Deja constancia de la última ejecución para poder comprobar que el reloj funciona.
+export async function record(env,text){if(!env.DB)return;await env.DB.prepare('CREATE TABLE IF NOT EXISTS game_tick299(id INTEGER PRIMARY KEY CHECK(id=1),ran_at INTEGER NOT NULL,result TEXT NOT NULL)').run();await env.DB.prepare('INSERT INTO game_tick299(id,ran_at,result) VALUES(1,?,?) ON CONFLICT(id) DO UPDATE SET ran_at=excluded.ran_at,result=excluded.result').bind(Date.now(),String(text).slice(0,2000)).run();}
 export default {
- async scheduled(event,env,ctx){ctx.waitUntil(tick(env).then(r=>console.log(r.join(' | '))).catch(e=>console.error(e)));}
+ async scheduled(event,env,ctx){ctx.waitUntil(tick(env).then(r=>record(env,r.join(' | '))).catch(e=>record(env,'error: '+String(e?.message||e))));}
 };
