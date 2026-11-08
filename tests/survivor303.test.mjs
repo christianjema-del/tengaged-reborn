@@ -126,7 +126,13 @@ test('servicio: inscripción, historial, salud heredada, premios y siguiente par
 test('página: réplica de Regaged en castellano, refresco de 30 s y piezas integradas',()=>{
  const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
  const page=read('survivor-page303.js'),html=read('survivor.html'),css=read('survivor303.css');
- for(const t of ['Tribu rival','Ayuda','Prueba','Inmunidad','Consejo','Resultados de las pruebas','Historia del juego','Últimos blogs de Survivor'])assert.ok(html.includes(t)||page.includes(t),t);
+ for(const t of ['Tribu rival','Ayuda','Prueba','Inmunidad','Consejo','Últimos blogs de Survivor','Consejo Tribal'])assert.ok(html.includes(t)||page.includes(t),t);
+ // V304: sin apartados de prueba, resultados ni historia en la página; los resultados van bajo el minijuego.
+ for(const t of ['Resultados de las pruebas','Historia del juego','id="svChallenge"','id="svPhase"'])assert.ok(!html.includes(t),'sin '+t);
+ const ch=read('survivor-challenge303.js'),chHtml=read('survivor-challenge.html');
+ assert.ok(chHtml.includes('id="challengeLeaderboard"')&&chHtml.indexOf('challengeBoard')<chHtml.indexOf('challengeLeaderboard'),'resultados debajo del minijuego');
+ for(const t of ['compañeros han terminado','se sienta hoy','está realizando la prueba','challenge-own-result','Sentarme hoy'])assert.ok(ch.includes(t),t);
+ assert.match(page,/survivor-challenge\.html\?'\+new URLSearchParams\(\{id:s\.id,day:s\.day,mode:'tribe'\}\)/);assert.match(page,/mode:'immunity'/);
  assert.match(page,/setInterval\(\(\)=>\{if\(!document\.hidden\)load\(\);\},30000\)/);
  for(const rule of ['.survivorRoster{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))','.survivorResources{display:grid;grid-template-columns:repeat(4,75px)','.survivorBannerTimer{position:absolute;top:70.23%;left:62.4%'])assert.ok(css.includes(rule),rule);
  for(const img of ['bg-game-sidetitle-survivor.gif','icon_game_campfire_1.gif','icon_game_campfire_3.gif','icon_game_weather_1.gif','icon_game_weather_2.gif','icon_game_weather_3.gif','icon_game_water_level.gif','icon_game_food_level.gif','clock.gif'])assert.ok(fs.existsSync(new URL('../assets/survivor/'+img,import.meta.url)),img);

@@ -1,0 +1,11 @@
+V304 - Survivor: botones Prueba, Inmunidad y Consejo
+
+- La página de Survivor ya no tiene los apartados «Prueba de tribu», «Resultados de las pruebas»
+  ni «Historia del juego». Cada botón hace su función:
+  · Prueba: abre la prueba de tribu del día.
+  · Inmunidad: abre la prueba de inmunidad (solo para la tribu que está en el Consejo; en gris si no hay).
+  · Consejo: muestra la votación (botones para votar) y los votos del último Consejo.
+- En la página de la prueba, debajo del minijuego, aparecen los resultados de tus compañeros de tribu
+  con el mismo formato que Casting (quién terminó y con cuántos puntos, quién está jugando, quién se
+  sienta), enlaces a otros días, cuántos deben jugar hoy y el botón «Sentarme hoy».
+Pruebas: tests/survivor303.test.mjs

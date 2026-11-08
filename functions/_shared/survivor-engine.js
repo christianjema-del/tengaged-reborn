@@ -279,9 +279,10 @@ export function survivorView(s,user,now=Date.now(),viewTribe=null){
  const me=user?s.players.find(p=>key(p.id)===key(user.id)):null,active=me?.status==='active',day=s.day;
  const tribe=TRIBES.includes(viewTribe)?viewTribe:me?.tribe||'A';
  const ownTribe=me?.tribe||null,sitting=s.sitouts[day]||{A:[],B:[]};
- const immunityRows=(t)=>tribeOf(s,t).map(p=>({username:p.username,points:s.immunity[day]?.[key(p.id)]?.points??null}));
+ const running=(p,mode)=>Object.values(s.attempts).some(a=>a.day===day&&a.mode===mode&&!a.done&&key(a.user)===key(p.id)&&now<a.startedAt+a.duration*1000+ATTEMPT_GRACE_MS);
+ const immunityRows=(t)=>tribeOf(s,t).map(p=>({username:p.username,bot:!!p.bot,points:s.immunity[day]?.[key(p.id)]?.points??null,started:running(p,'immunity')}));
  const imm=s.nominated?immunityRows(s.nominated).filter(r=>r.points!==null).sort((a,b)=>b.points-a.points):[];
- const todayRows=t=>tribeOf(s,t).map(p=>{const x=s.scores[day]?.[key(p.id)];return {username:p.username,result:sitting[t]?.some(id=>key(id)===key(p.id))?'sitting':x?'score':'none',points:x?.points??null};});
+ const todayRows=t=>tribeOf(s,t).map(p=>{const x=s.scores[day]?.[key(p.id)];return {username:p.username,bot:!!p.bot,result:sitting[t]?.some(id=>key(id)===key(p.id))?'sitting':x?'score':'none',points:x?.points??null,started:running(p,'tribe')};});
  return {id:s.id,phase:s.phase,day,now,deadline:s.deadline,startedAt:s.startedAt,finishedAt:s.finishedAt,capacity:CAPACITY,
   carriedFrom:s.carriedFrom,nextId:s.nextId,viewTribe:tribe,nominated:s.nominated,required:s.required,
   canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<CAPACITY,

@@ -64,7 +64,6 @@ function renderCamp(){
  const w=$('svWeather'),code={sun:3,cloudy:2,rain:1}[c.weather],label={sun:'Soleado',cloudy:'Nublado',rain:'Lluvia'}[c.weather];w.src='/assets/survivor/icon_game_weather_'+code+'.gif';w.alt=w.title=label;
  $('svWaterStock').textContent=c.water;$('svFoodStock').textContent=c.food;
  $('svMyWater').textContent=own?me.water:'';$('svMyFood').textContent=own?me.food:'';
- const steps={svStepChallenge:s.phase==='day',svStepImmunity:!!s.nominated,svStepCouncil:!!s.nominated};for(const [k,on] of Object.entries(steps))on?$(k).setAttribute('aria-current','step'):$(k).removeAttribute('aria-current');
  const logList=$('svUseLog');logList.replaceChildren();
  const items=c.log.filter(l=>!showLog||(showLog==='water'?['drink','bucket','hunt-start','fan'].includes(l.kind):['eat','hunt','bucket-start'].includes(l.kind)));
  logList.hidden=!showLog||!own;
@@ -87,66 +86,33 @@ function renderCamp(){
 }
 function button(text,fn,cls='survivorButton'){const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;}
 
-// ---------- Prueba, inmunidad y consejo ----------
-function renderPhase(){
- const s=state,me=s.me,box=$('svPhase');box.replaceChildren();
- $('svChallenge').textContent=s.nominated?'Prueba y Consejo Tribal':'Prueba de tribu';
- if(s.phase==='waiting'){box.append(el('p','Survivor empieza cuando se completan las 20 plazas y admin1 lo inicia. Los 20 náufragos se reparten en dos tribus de diez'+(s.carriedFrom?'; los supervivientes de Survivor #'+s.carriedFrom+' forman la tribu A y los nuevos completan la tribu rival.':'.')));return;}
- if(s.phase==='finished'){const merged=s.players.filter(p=>p.status==='merged').map(p=>p.username);box.append(el('p','Unificación: '+merged.join(', ')+' comparten el primer puesto.'));return;}
- const t=s.today,mine=me?.status==='active'?me:null;
- box.append(el('p','Las dos tribus juegan la prueba de hoy. La tribu con menos puntos va al Consejo Tribal durante el día siguiente.'));
- box.append(el('p','Cada día dura 12 horas. La votación, la inmunidad individual y la siguiente prueba de tribu comparten la misma cuenta atrás.'));
- box.append(el('p','Hoy deben jugar '+s.required+' por tribu'+(s.challenge?' · Minijuego: '+(NAMES[s.challenge.kind]||s.challenge.kind):'')+'.','survivorNotice'));
- if(mine){
-  const need=t?.seatsToSit?.[mine.tribe]||0;
-  if(mine.played)box.append(el('p','Ya has jugado la prueba de hoy: '+points(mine.score)+'.','survivorNotice'));
-  else if(mine.sitting)box.append(el('p','Hoy te sientas: no juegas la prueba de tribu.','survivorNotice'));
-  else{const a=el('a','Jugar la prueba de tribu ('+mine.seconds+' s)','survivorButton');a.href='/survivor-challenge.html?'+new URLSearchParams({id:s.id,day:s.day,mode:'tribe'});box.append(a);}
-  if(need>0&&!mine.played){const sitting=t.sitouts[mine.tribe]||[];box.append(el('p','Tu tribu tiene más náufragos: '+need+(need===1?' debe sentarse':' deben sentarse')+' hoy. Sentados: '+(sitting.length?sitting.join(', '):'nadie')+'. Si juegan de más, se quita la prueba más alta.','survivorNotice'));box.append(button(mine.sitting?'Volver a jugar hoy':'Sentarme hoy',()=>act({action:'sitout'})));}
- }
- const imm=el('h3','Inmunidad individual');imm.id='svImmunity';imm.tabIndex=-1;box.append(imm);
- if(!s.nominated)box.append(el('p','La inmunidad individual no está abierta este día.'));
- else{
-  box.append(el('p','La tribu que vota hoy juega una prueba aparte, también quienes se sentaron en la prueba de tribu. El líder puede cambiar hasta el cambio de día; solo el ganador final queda a salvo. Los votos a ese ganador no cuentan. Puedes cambiar tu voto durante todo el día.'));
-  if(s.immunity){const ul=el('ul');s.immunity.forEach((r,i)=>ul.append(el('li',r.username+': '+(r.points==null?'Sin puntuación':points(r.points)+(i===0?' — líder actual':'')))));box.append(ul);}
-  else box.append(el('p','Los resultados de la inmunidad solo los ve la '+tribeName(s.nominated)+'.','survivorNotice'));
-  if(mine&&mine.atCouncil){if(mine.playedImmunity)box.append(el('p','Tu inmunidad de hoy: '+points(mine.immunityScore)+'.','survivorNotice'));else{const a=el('a','Jugar la inmunidad ('+mine.seconds+' s)','survivorButton');a.href='/survivor-challenge.html?'+new URLSearchParams({id:s.id,day:s.day,mode:'immunity'});box.append(a);}}
- }
- const council=el('h3','Consejo Tribal');council.id='svCouncil';council.tabIndex=-1;box.append(council);
- if(!s.nominated)box.append(el('p','La votación está cerrada. Vota la tribu que pierda la prueba de hoy.'));
- else{
-  box.append(el('p','La '+tribeName(s.nominated)+' perdió la prueba anterior y está en el Consejo Tribal. Sale quien tenga más votos al cambiar de día. Los votos al inmune no cuentan. Los votos son secretos: al cambiar de día se verá cuántos votos tuvo cada uno.'));
-  if(mine&&mine.atCouncil){const targets=el('div',null,'survivorVoteTargets');for(const p of s.players.filter(p=>p.status==='active'&&p.tribe===mine.tribe&&p.id!==mine.id)){const b=button(p.username,()=>act({action:'vote',target:p.id}));b.setAttribute('aria-pressed',String(String(mine.vote)===String(p.id)));targets.append(b);}box.append(el('p',mine.vote?'Tu voto está guardado. Puedes cambiarlo hasta el cambio de día.':'Todavía no has votado.','survivorNotice'),targets);}
- }
+// ---------- Botones Prueba · Inmunidad · Consejo ----------
+let councilOpen=false;
+function renderSteps(){
+ const s=state,me=s.me,mine=me?.status==='active'?me:null,box=$('svSteps');box.replaceChildren();
+ const step=(label,href,on,title)=>{const li=el('li');if(on)li.setAttribute('aria-current','step');if(href){const a=el('a',label);a.href=href;if(title)a.title=title;li.append(a);}else{li.textContent=label;if(title)li.title=title;}box.append(li);return li;};
+ const day=s.phase==='day';
+ step('Prueba',day?'/survivor-challenge.html?'+new URLSearchParams({id:s.id,day:s.day,mode:'tribe'}):null,day,day?'Prueba de tribu del día '+s.day:'La prueba se abre al empezar la partida.');
+ step('Inmunidad',day&&s.nominated&&mine?.tribe===s.nominated?'/survivor-challenge.html?'+new URLSearchParams({id:s.id,day:s.day,mode:'immunity'}):null,day&&!!s.nominated,s.nominated?'Inmunidad individual de la '+tribeName(s.nominated):'La inmunidad no está abierta este día.');
+ const li=step('Consejo',null,day&&!!s.nominated||s.history.length>0);
+ li.replaceChildren();const a=el('a','Consejo');a.href='#svCouncilPanel';a.onclick=e=>{e.preventDefault();councilOpen=!councilOpen;renderCouncil();if(councilOpen)$('svCouncilPanel').scrollIntoView({behavior:'smooth',block:'start'});};li.append(a);
 }
-function table(caption,rows){
- const t=el('table'),cap=el('caption',caption),head=el('thead'),hr=el('tr'),body=el('tbody');hr.append(el('th','Náufrago'),el('th','Resultado'));head.append(hr);
- for(const r of rows){const tr=el('tr'),th=el('th',r.username);th.scope='row';tr.append(th,el('td',r.result==='sitting'?'Sentado':r.result==='dropped'?points(r.points)+' (no cuenta)':r.result==='score'?points(r.points):'Sin puntuación'));body.append(tr);}
- t.append(cap,head,body);return t;
+function renderCouncil(){
+ const s=state,me=s.me,mine=me?.status==='active'?me:null,box=$('svCouncilPanel');box.hidden=!councilOpen;box.replaceChildren();if(!councilOpen)return;
+ box.append(el('h2','Consejo Tribal','survivorSectionTitle'));const body=el('div',null,'survivorPhase');box.append(body);
+ if(s.phase==='day'&&s.nominated){
+  body.append(el('p','La '+tribeName(s.nominated)+' perdió la prueba anterior y está en el Consejo Tribal. Sale quien tenga más votos al cambiar de día. El ganador final de la inmunidad no puede salir y los votos a él no cuentan. Puedes cambiar tu voto durante todo el día. Los votos son secretos: al cambiar de día se verá cuántos tuvo cada uno.'));
+  if(mine&&mine.atCouncil){const targets=el('div',null,'survivorVoteTargets');for(const p of s.players.filter(p=>p.status==='active'&&p.tribe===mine.tribe&&p.id!==mine.id)){const b=button(p.username,()=>act({action:'vote',target:p.id}));b.setAttribute('aria-pressed',String(String(mine.vote)===String(p.id)));targets.append(b);}body.append(el('p',mine.vote?'Tu voto está guardado. Puedes cambiarlo hasta el cambio de día.':'Todavía no has votado.','survivorNotice'),targets);}
+  else body.append(el('p',mine?'Hoy tu tribu no vota.':'Solo vota la tribu que está en el Consejo Tribal.','survivorNotice'));
+ }else body.append(el('p','La votación está cerrada. Vota la tribu que pierda la prueba de hoy.'));
+ const last=s.history.find(h=>h.council);
+ if(last){body.append(el('h3','Votos del día '+last.day+' · '+tribeName(last.council.tribe)));const ul=el('ul');for(const v of last.council.votes||[])ul.append(el('li',v.username+': '+v.votes+(v.votes===1?' voto':' votos')+(v.immune?' (inmune)':'')));body.append(ul);if(last.council.out)body.append(el('p','Expulsado: '+last.council.out+'.'));}
 }
-function renderResults(){
- const s=state,box=$('svResults'),open=new Set([...box.querySelectorAll('details[open]')].map(d=>d.dataset.key));box.replaceChildren();
- const add=(k,summary,fill)=>{const d=el('details');d.dataset.key=k;if(open.has(k)||(!open.size&&k==='today'))d.open=true;d.append(el('summary',summary));fill(d);box.append(d);};
- if(s.phase==='day'&&s.today?.own)add('today','Puntuaciones de hoy',d=>{const cols=el('div',null,'survivorResultColumns');cols.append(table(tribeName(s.today.own.tribe)+' — '+points(s.today.own.total),s.today.own.rows));const other=el('div');other.append(el('p',tribeName(s.today.other.tribe)+': se verá al cambiar de día.','survivorNotice'));cols.append(other);d.append(cols);});
- else if(s.phase==='day')add('today','Puntuaciones de hoy',d=>d.append(el('p','Cada tribu ve sus propias puntuaciones. Se comparten al cambiar de día.','survivorNotice')));
- for(const h of s.history){
-  add('day'+h.day,'Día '+h.day+' — puntuaciones y votos',d=>{
-   d.append(el('p',tribeName(h.winner)+(h.tieBreak?' ganó el desempate aleatorio. ':' ganó. ')+tribeName(h.loser)+' va al siguiente Consejo Tribal.'));
-   const cols=el('div',null,'survivorResultColumns');cols.append(table(tribeName('A')+' — '+points(h.totals.A),h.rows.A),table(tribeName('B')+' — '+points(h.totals.B),h.rows.B));d.append(cols);
-   if(h.council){
-    if(h.council.immunity){d.append(el('h3','Inmunidad individual'));const ul=el('ul');for(const r of h.council.immunity)ul.append(el('li',r.username+': '+(r.points==null?'Sin puntuación':points(r.points))));d.append(ul);}
-    d.append(el('h3','Votos'));const ul=el('ul');for(const v of h.council.votes||[])ul.append(el('li',v.username+': '+v.votes+(v.votes===1?' voto':' votos')+(v.immune?' (inmune)':'')));d.append(ul);
-    if(h.council.out)d.append(el('p','Expulsado: '+h.council.out+'.'));
-   }
-  });
- }
-}
-function renderStory(){const box=$('svStory');box.replaceChildren();for(const e of state.events)box.append(el('p',e.text));for(const w of state.welcomes||[])box.append(el('p',w.username+': '+w.body));}
 async function loadBlogs(){
  if(blogsLoaded)return;blogsLoaded=true;
  try{const d=await api('/api/blog?q=%23survivor');const posts=(d.posts||[]).slice(0,5);if(!posts.length)return;const box=$('svBlogs');box.replaceChildren();for(const b of posts){const p=el('p'),a=el('a',b.title||'Blog');a.href='/blogs?id='+b.id;p.append(a);box.append(p);}}catch{}
 }
-function render(){renderHeader();renderCamp();renderPhase();renderResults();renderStory();clock();}
+function render(){renderHeader();renderCamp();renderSteps();renderCouncil();clock();}
 async function pick(){
  const d=await api('/api/survivor');const list=d.matches||[];
  const mine=list.find(m=>m.mine&&m.phase!=='finished'),active=list.find(m=>m.phase==='day'),waiting=list.find(m=>m.phase==='waiting');
