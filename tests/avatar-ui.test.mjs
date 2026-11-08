@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '../avatar-art.js';
+import {hairOrnamentCostume} from '../avatar-costumes.js';
 class E{
  constructor(tag,text,cls){this.tag=tag;this.textContent=text||'';this.className=cls||'';this.children=[];this.style={};this.disabled=false;this.classList={add(){}};}
  setAttribute(k,v){this[k]=v;}
@@ -12,7 +13,7 @@ const nodes=new Map(),requests=[];
 const get=id=>{if(!nodes.has(id))nodes.set(id,new E('div'));return nodes.get(id);};
 const wardrobe=[{id:1,title:'Pelo comprado',layer_type:'hair',has_image:1,acquired_at:'2026-11-03 08:00:00'},{id:2,title:'Camiseta regalada',layer_type:'shirt',has_image:1,acquired_at:'2026-11-02 08:00:00'}];
 const context=vm.createContext({setAvatar:(img,name)=>{img.src='/api/avatar?username='+encodeURIComponent(name);return img;},invalidateAvatar(){},CustomEvent:class{constructor(type,options){this.type=type;this.detail=options?.detail;}},
- avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette,
+ avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette,hairOrnamentCostume,
  isPhotoAvatar:()=>false,$:get,el:(...a)=>new E(...a),console,
  api:async()=>({settings:normalizeAvatar({}),layers:[],wardrobe}),
  post:async(url,body)=>{requests.push({url,body});return {message:'Avatar guardado'};},

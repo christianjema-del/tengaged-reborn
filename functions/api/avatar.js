@@ -3,6 +3,7 @@ import {isPhotoAvatar} from '../../full-avatar115.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {ensurePeachWardrobe} from '../_shared/peach-wardrobe108.js';
 import {avatarLayerImage} from '../_shared/avatar-media.js';
+import {hairOrnamentCostume} from '../../avatar-costumes.js';
 import {ensureCristiDesigns} from '../_shared/cristi-import100.js';
 import {noseActive,addRedNose} from '../_shared/moderation.js';
 import {ADMIN1_OUTFIT_ID,ADMIN1_OUTFIT_DATA,ADMIN1_OUTFIT,ownsAdmin1Outfit} from '../_shared/admin1-outfit.js';
@@ -36,7 +37,7 @@ if(Object.hasOwn(raw,'layers')){
 }
 await db.batch(statements);
 return Response.json({ok:true,settings,message:'Avatar y diseños guardados.'},{headers:{'Cache-Control':'no-store'}});}
-if(request.method!=='GET')return jsonError('Método no permitido.',405);const username=url.searchParams.get('username')||viewer?.username;const user=username?await db.prepare('SELECT id,username,red_nose_until FROM users WHERE LOWER(username)=LOWER(?)').bind(username).first():null;if(!user)return jsonError('No existe ese usuario.',404);const {settings,layers}=await displayRecord(db,user);const overlays=Object.fromEntries(layers.map(d=>[d.layer_type,avatarLayerImage(d.image_data)]).filter(([,image])=>image));const adminOutfitEquipped=ownsAdmin1Outfit(user.username)&&layers.some(l=>l.layer_type==='skin'&&l.design_id===ADMIN1_OUTFIT_ID);if(adminOutfitEquipped){overlays.skin=ADMIN1_OUTFIT_DATA;overlays._fullBody=true;}
+if(request.method!=='GET')return jsonError('Método no permitido.',405);const username=url.searchParams.get('username')||viewer?.username;const user=username?await db.prepare('SELECT id,username,red_nose_until FROM users WHERE LOWER(username)=LOWER(?)').bind(username).first():null;if(!user)return jsonError('No existe ese usuario.',404);const {settings,layers}=await displayRecord(db,user);const overlays=Object.fromEntries(layers.map(d=>[d.layer_type,avatarLayerImage(d.image_data)]).filter(([,image])=>image));{const costume=hairOrnamentCostume(layers.find(l=>l.layer_type==='hair_ornament')?.design_id);if(costume)overlays._hairOrnamentCostume=costume;}const adminOutfitEquipped=ownsAdmin1Outfit(user.username)&&layers.some(l=>l.layer_type==='skin'&&l.design_id===ADMIN1_OUTFIT_ID);if(adminOutfitEquipped){overlays.skin=ADMIN1_OUTFIT_DATA;overlays._fullBody=true;}
 if(url.searchParams.get('format')==='json'){if(viewer?.id!==user.id)return jsonError('Solo puedes editar tu propio avatar.',403);const wardrobe=(await db.prepare(`SELECT d.id,d.title,d.description,d.layer_type,i.purchased_at AS acquired_at,
  CASE WHEN d.image_data IS NULL THEN 0 ELSE 1 END AS has_image
  FROM user_inventory i JOIN community_designs d ON i.item_code='userdesign-'||d.id

@@ -1,0 +1,14 @@
+V306 - Disfraces Stitch, bicho y Tiburón
+
+Estos tres diseños de Peach se subieron como «adorno del pelo», pero son disfraces que cubren el
+avatar entero (capucha + sudadera, o una escena delante). Por eso no tapaban del todo:
+- el pelo se dibujaba por encima de la capucha y el pelo largo de debajo del cuello por encima de todo;
+- el disfraz se encogía al 90 % como la cabeza y dejaba ver la ropa de debajo.
+
+Ahora (avatar-costumes.js, diseños 299, 300 y 301):
+- se dibujan encima de todo, también del pelo que cae bajo el cuello;
+- se parten por el cuello como la piel: la capucha sigue a la cabeza y la sudadera cubre el cuerpo;
+- Stitch y bicho (capuchas) ocultan el pelo; el Tiburón no.
+Funciona igual en el avatar de la web, en el armario y al probar en las tiendas. El resto de adornos
+del pelo no cambia. No se ha tocado ninguna imagen ni ningún armario.
+Pruebas: tests/avatar-costumes306.test.mjs

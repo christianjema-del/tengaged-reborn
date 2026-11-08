@@ -8,7 +8,7 @@ assert.ok(first<ornament,'va sobre el pelo');assert.ok(svg.slice(opening,ornamen
 assert.ok(!renderAvatar(normalizeAvatar({}),{skin:'data:image/png;base64,SKIN'}).includes('hair_ornament'),'sin adorno no añade nada');
 assert.ok(!renderAvatar(normalizeAvatar({}),{skin:'data:image/png;base64,FULL',_fullBody:true,hair_ornament:'data:image/png;base64,ORNAMENT'}).includes('ORNAMENT'),'cuerpo entero no lleva capas');
 for(const f of ['functions/api/designs.js','functions/api/avatar.js','functions/api/try-on.js','avatar-editor.js','designs.html'])assert.ok(read(f).includes('hair_ornament'),f);
-assert.equal((read('functions/api/avatar.js').match(/'hair_ornament'/g)||[]).length,2,'quitar y equipar');
+assert.equal((read('functions/api/avatar.js').match(/'hair_ornament'/g)||[]).length,3,'quitar, equipar y disfraces (V306)');
 assert.match(read('designs.html'),/<option value="hair_ornament">Adorno del pelo<\/option>/);
 console.log('PASS adornos del pelo: categoría publicable, equipable y dibujada sobre el pelo siguiendo a la cabeza.');
 

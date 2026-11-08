@@ -58,11 +58,16 @@ export function renderAvatar(raw={},overlays={}){
  content+=`<defs><clipPath id="avatarHeadClip"><rect x="-60" y="-60" width="320" height="${neck+60}"/></clipPath><clipPath id="avatarBodyClip"><rect x="-60" y="${neck}" width="320" height="${290-neck}"/></clipPath></defs>`;
  content+=`<g clip-path="url(#avatarBodyClip)">${skin}</g>`+head(`<g clip-path="url(#avatarHeadClip)">${skin}</g>`);
  content+=overlays.shirt?image('shirt'):overlays.skin?'':baseLayer(s,'shirt');
- const hair=overlays.hair?image('hair'):baseLayer(s,'hair');
+ const costume=overlays.hair_ornament&&overlays._hairOrnamentCostume?overlays._hairOrnamentCostume:null;
+ // Las capuchas tapan el pelo entero.
+ const hair=costume?.hideHair?'':overlays.hair?image('hair'):baseLayer(s,'hair');
  content+=head(['mouth','eyes','glasses'].map(slot=>overlays[slot]?image(slot):baseLayer(s,slot)).join('')+`<g clip-path="url(#avatarHeadClip)">${hair}</g>`);
  // El adorno va sobre el pelo y sigue a la cabeza.
- if(overlays.hair_ornament)content+=head(image('hair_ornament'));
+ if(overlays.hair_ornament&&!costume)content+=head(image('hair_ornament'));
  // Bajo el cuello el pelo se estrecha igual pero conserva su largo: las melenas siguen llegando al borde.
  content+=`<g transform="translate(${centerX} 0) scale(${scale} 1) translate(${-centerX} 0)"><g clip-path="url(#avatarBodyClip)">${hair}</g></g>`;
+ // Los disfraces van encima de todo, también del pelo que cae bajo el cuello.
+ // Se parten por el cuello como la piel: la capucha sigue a la cabeza y la sudadera cubre el cuerpo entero.
+ if(overlays.hair_ornament&&costume){const art=image('hair_ornament');content+=`<g clip-path="url(#avatarBodyClip)">${art}</g>`+head(`<g clip-path="url(#avatarHeadClip)">${art}</g>`);}
  return root(content);
 }

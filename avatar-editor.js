@@ -1,7 +1,8 @@
 import {isPhotoAvatar} from '/full-avatar115.js?v=159';
 import {request as fetch} from '/http.js?v=170';
 import {invalidateAvatar} from '/avatar-display.js?v=159';
-import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '/avatar-art.js?v=248';
+import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '/avatar-art.js?v=306';
+import {hairOrnamentCostume} from '/avatar-costumes.js?v=306';
 import {$,el,api,post,buttonTask,loginLink} from '/market-ui.js?v=170';
 const partRows=[['body','Cuerpo'],['hair','Pelo'],['eyes','Ojos'],['mouth','Boca'],['glasses','Gafas'],['shirt','Ropa']];
 const colorRows=[['skin','Tono de piel',skinPalette],['shirtColor','Color de ropa',featurePalette],['eyeColor','Color de ojos',featurePalette],['mouthColor','Color de boca',featurePalette],['hairColor','Color de pelo',featurePalette],['glassesColor','Color de gafas',featurePalette],['background','Color de fondo',featurePalette]];
@@ -32,7 +33,7 @@ function renderPalette(target,key,palette){
 }
 function draw(){
   if(!settings) return;
-  $('avatarPreview').innerHTML=renderAvatar(settings,overlays);
+  overlays._hairOrnamentCostume=hairOrnamentCostume(selection.hair_ornament);$('avatarPreview').innerHTML=renderAvatar(settings,overlays);
   dirty=JSON.stringify(settings)!==JSON.stringify(saved)||!sameLayers(selection,savedSelection);
   $('changes').textContent=dirty?'Vista previa · cambios sin guardar':'Avatar guardado';
   $('saveAvatar').disabled=!dirty||saving;

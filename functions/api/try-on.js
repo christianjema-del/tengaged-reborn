@@ -1,3 +1,4 @@
+import {hairOrnamentCostume} from '../../avatar-costumes.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {decodeDesignImage} from '../_shared/design-images.js';
 import {cleanDesignLayer} from '../_shared/clean-design-layers.js';
@@ -16,7 +17,7 @@ async function handle141_onRequest({request,env}) {
   const item=await db.prepare('SELECT image_data,layer_type FROM community_designs WHERE id=?').bind(id).first();
   if(!item||!item.image_data)return jsonError('Este diseño no tiene imagen para probar.',404);
   const settings=await getAvatar(db,user);
-  const layers=(await db.prepare('SELECT l.layer_type,d.image_data FROM user_avatar_layers l JOIN community_designs d ON d.id=l.design_id WHERE l.user_id=?').bind(user.id).all()).results;
+  const layers=(await db.prepare('SELECT l.layer_type,l.design_id,d.image_data FROM user_avatar_layers l JOIN community_designs d ON d.id=l.design_id WHERE l.user_id=?').bind(user.id).all()).results;
   const overlays=Object.fromEntries(layers.filter(x=>x.image_data).map(x=>[x.layer_type,cleanDesignLayer(x.image_data)]));
   // No database writes: temporarily swap the chosen layer only for this rendering.
   if(item.layer_type==='profile'){
@@ -26,6 +27,7 @@ async function handle141_onRequest({request,env}) {
   }
   if(!['skin','shirt','eyes','mouth','hair','hair_ornament','glasses','background'].includes(item.layer_type))return jsonError('Capa no compatible.',400);
   overlays[item.layer_type]=cleanDesignLayer(item.image_data);
+  {const costume=hairOrnamentCostume(item.layer_type==='hair_ornament'?id:layers.find(l=>l.layer_type==='hair_ornament')?.design_id);if(costume)overlays._hairOrnamentCostume=costume;else delete overlays._hairOrnamentCostume;}
   // A skin selection replaces the entire original base avatar. Other purchased
   // overlays remain, but default features must not be drawn over the selected body.
 
