@@ -1,0 +1,14 @@
+V308 - Survivor: campamento, prueba como tengaged.es 2014 y chat por tribu
+
+- Debajo de cada náufrago: tic verde si está a salvo, interrogante rojo si va al consejo.
+- Quitado el texto «Prueba de tribu» de encima de los avatares.
+- Sin campos de pollo y agua: al pulsar el cubo de agua o el pollo se abre el campamento
+  (survivor-camp.html) para beber o comer de 1 en 1 de la reserva de la tribu, con la lista
+  de movimientos debajo (quién está cazando, quién ha cazado, quién saca el cubo, etc.).
+- Al empezar un Survivor nuevo, las dos tribus arrancan con el fuego encendido y sol para
+  cazar; después el tiempo y el fuego vuelven a ser aleatorios.
+- Página de la prueba rehecha como la Prueba de Grupo de tengaged.es (2014): a la izquierda
+  los resultados de ayer (solo cuentan los amarillos) y el catálogo de pruebas; a la derecha
+  las instrucciones, el minijuego y los resultados de hoy.
+- Cada tribu tiene su propio chat público: solo se ven los mensajes de los náufragos de esa
+  tribu. Los chats de tribu no salen en el feed de la comunidad.

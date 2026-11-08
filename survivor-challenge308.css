@@ -1,0 +1,19 @@
+/* V308: prueba de Survivor como la de tengaged.es (2014). */
+.survivor-challenge-page .svc-note{font:11px/1.3 Arial;color:#5f788a;background:#dceaf2;border:1px solid #b7d0df;padding:10px 12px;margin:0 0 14px}
+.survivor-challenge-page .svc-only-yellow{font:11px/1.3 Arial;color:#7b7744;background:#ffffce;border:1px solid #eeee94;padding:6px 8px;margin:0 0 8px}
+.svc-yesterday table{width:100%;border-collapse:separate;border-spacing:2px;margin:0 0 14px;font:11px/16px Arial;table-layout:fixed}
+.svc-yesterday td{padding:2px 3px;text-align:center;color:#8f8f8f;background:none;border:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.svc-yesterday td.svc-name a,.svc-yesterday td.svc-name span{color:#3f7cac;text-decoration:none}
+.svc-yesterday td.svc-count{background:#ffffce;color:#555}
+.svc-yesterday tfoot td{font-weight:bold;color:#444;border-top:1px solid #ddd}
+.svc-yesterday p{font:11px/1.4 Arial;color:#91a0aa;margin:0 0 14px}
+.svc-today{margin:18px 0 12px}
+.svc-today h2{font:600 17px/1.2 Arial!important;color:#dd7b85!important;margin:0 0 7px!important;border:0!important;border-bottom:1px dotted #e0cfd0!important;padding-bottom:3px!important}
+.svc-today ul{list-style:none;margin:0;padding:0;font:11px/1.35 Arial;color:#666}
+.svc-today li{padding:4px 6px;border-bottom:1px solid #eef2f5}
+.svc-today li:nth-child(odd){background:#f3f7fa}
+.svc-today li.svc-me{background:#fffbd5}
+.svc-today li a{color:#3f7cac;text-decoration:none}
+.svc-today li small{color:#a7b3bb;margin-left:4px}
+.svc-today li .svc-out{color:#a5a5a5}
+@media (max-width:760px){.svc-yesterday table{font-size:10px}}

@@ -131,7 +131,7 @@ test('página: réplica de Regaged en castellano, refresco de 30 s y piezas inte
  for(const t of ['Resultados de las pruebas','Historia del juego','id="svChallenge"','id="svPhase"'])assert.ok(!html.includes(t),'sin '+t);
  const ch=read('survivor-challenge303.js'),chHtml=read('survivor-challenge.html');
  assert.ok(chHtml.includes('id="challengeLeaderboard"')&&chHtml.indexOf('challengeBoard')<chHtml.indexOf('challengeLeaderboard'),'resultados debajo del minijuego');
- for(const t of ['compañeros han terminado','se sienta hoy','está realizando la prueba','challenge-own-result','Sentarme hoy'])assert.ok(ch.includes(t),t);
+ for(const t of ['terminada la prueba con','se sienta hoy','está realizando la prueba','no ha empezado la prueba todavía','Sentarme hoy','Resultados de ayer','Sólo cuentan los resultados en amarillo','svc-count','Prueba de Grupo','esta duración se basa en tu fuerza total'])assert.ok(ch.includes(t)||chHtml.includes(t),t);
  assert.match(page,/survivor-challenge\.html\?'\+new URLSearchParams\(\{id:s\.id,day:s\.day,mode:'tribe'\}\)/);assert.match(page,/mode:'immunity'/);
  assert.match(page,/setInterval\(\(\)=>\{if\(!document\.hidden\)load\(\);\},30000\)/);
  for(const rule of ['.survivorRoster{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))','.survivorResources{display:grid;grid-template-columns:repeat(4,75px)','.survivorBannerTimer{position:absolute;top:70.23%;left:62.4%'])assert.ok(css.includes(rule),rule);
@@ -172,5 +172,18 @@ test('V305: mensajes privados, burbuja del perfil, color en la lista de juegos y
 });
 test('V307: en inscripción no hay texto encima de los avatares',()=>{
  const page=fs.readFileSync(new URL('../survivor-page303.js',import.meta.url),'utf8');
- assert.ok(!page.includes('Inscripción · '));assert.match(page,/\$\('svPhaseLabel'\)\.hidden=s\.phase==='waiting'/);
+ assert.ok(!page.includes('Inscripción · '));assert.match(page,/\$\('svPhaseLabel'\)\.hidden=true/,'V308: nunca hay texto encima');
+});
+test('V308: inicio con fuego y sol, tics, página de comer y beber, chat por tribu y prueba de 2014',async()=>{
+ const s=started(2);for(const t of E.TRIBES){assert.equal(E.weatherAt(s.camps[t],s.startedAt),'sun','sol al empezar');assert.equal(E.fireLit(s.camps[t],s.startedAt),true,'fuego al empezar');}
+ const p=me(s,0);E.actSurvivor(s,p,{action:'hunt'},s.startedAt+1000);E.actSurvivor(s,p,{action:'eat',water:1},s.startedAt+2000);
+ const v=E.survivorView(s,p,s.startedAt+3000);assert.deepEqual(v.camp.log.map(l=>l.kind),['hunt-start','drink']);assert.equal(v.camp.hunting[0].username,'H0');
+ assert.equal(v.today.own.rows.find(r=>r.username==='H0').at,null);
+ const {moveText}=await import('../survivor-camp308.js').catch(()=>({}));
+ const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
+ const camp=read('survivor-camp308.js');for(const t of ['ha cazado comida','ha sacado el cubo de agua','está cazando.','Comer 1 de pollo','Beber 1 de agua','{food:1}','{water:1}'])assert.ok(camp.includes(t),t);
+ const page=read('survivor-page303.js');assert.ok(!page.includes("label+' '")&&!page.includes('survivorTake'),'sin campos de pollo y agua');assert.match(page,/survivor-camp\.html/);assert.match(page,/survivorSafe/);assert.match(page,/survivorQuestion/);assert.match(page,/\$\('svPhaseLabel'\)\.hidden=true/);
+ assert.match(read('survivor303.css'),/-198px -374px/);
+ const chat=read('functions/api/game-chat.js');assert.match(chat,/chatTribe=type==='survivor'&&state\.phase!=='waiting'\?\(member\?\.tribe\|\|askedTribe\|\|'A'\):null/);assert.match(chat,/room=type\+':'\+id\+\(chatTribe\?':'\+chatTribe:''\)/);
+ assert.match(read('functions/api/community-feed.js'),/c\.room NOT LIKE 'survivor:%:%'/);assert.match(read('game-chat.js'),/survivor&&new URLSearchParams\(location\.search\)\.get\('tribe'\)/);
 });

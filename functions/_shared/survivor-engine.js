@@ -56,10 +56,12 @@ function windows(count,minMs,maxMs,start,taken=[]){
  return out.sort((a,b)=>a[0]-b[0]);
 }
 // Normalmente sale el sol, llueve y se enciende el fuego al menos una vez en cada ciclo de 12 horas.
-export function daySchedule(start){
- const sun=windows(between(1,2),60*60000,120*60000,start);
+export function daySchedule(start,opening=false){
+ // Al empezar la partida las dos tribus tienen el fuego encendido y sol para cazar; después, al azar.
+ const firstSun=opening?[[start,start+90*60000]]:[],firstFire=opening?[[start,start+120*60000]]:[];
+ const sun=[...firstSun,...windows(between(opening?0:1,opening?1:2),60*60000,120*60000,start,firstSun)].sort((a,b)=>a[0]-b[0]);
  const rain=windows(between(1,2),60*60000,120*60000,start,sun);
- const fire=windows(between(1,2),90*60000,150*60000,start);
+ const fire=[...firstFire,...windows(between(opening?0:1,opening?1:2),90*60000,150*60000,start,firstFire)].sort((a,b)=>a[0]-b[0]);
  return {start,sun,rain,fire};
 }
 const inside=(list,at)=>(list||[]).some(([a,b])=>at>=a&&at<b);
@@ -94,7 +96,7 @@ function startDay(s,at){
  s.challenge={day:s.day,kind:KINDS[random(KINDS.length)],immunityKind:KINDS[random(KINDS.length)]};
  s.required=Math.min(...TRIBES.map(t=>tribeOf(s,t).length));
  s.sitouts[s.day]={A:[],B:[]};s.scores[s.day]={};s.immunity[s.day]={};
- for(const t of TRIBES){s.camps[t].schedule=daySchedule(at);}
+ for(const t of TRIBES){s.camps[t].schedule=daySchedule(at,s.day===1);}
 }
 function eliminate(s,p,at,cause){
  const place=alive(s).length;p.status='eliminated';p.placement=place;p.eliminatedAt=at;p.deathCause=cause;
@@ -279,16 +281,16 @@ function campView(s,t,now,me){
   fireUntil:currentFire(c,now)?.[1]||null,
   hunting:c.hunts.filter(h=>!h.done).map(h=>({username:h.username,readyAt:own?h.readyAt:null})),
   bucket:c.bucket&&!c.bucket.done?{username:c.bucket.username,readyAt:own?c.bucket.readyAt:null}:null,
-  log:own?c.log.filter(l=>l.day===s.day).map(({at,user,kind,amount})=>({at,user,kind,amount})):[]};
+  log:own?c.log.slice(-60).map(({day,at,user,kind,amount})=>({day,at,user,kind,amount})):[]};
 }
 export function survivorView(s,user,now=Date.now(),viewTribe=null){
  const me=user?s.players.find(p=>key(p.id)===key(user.id)):null,active=me?.status==='active',day=s.day;
  const tribe=TRIBES.includes(viewTribe)?viewTribe:me?.tribe||'A';
  const ownTribe=me?.tribe||null,sitting=s.sitouts[day]||{A:[],B:[]};
  const running=(p,mode)=>Object.values(s.attempts).some(a=>a.day===day&&a.mode===mode&&!a.done&&key(a.user)===key(p.id)&&now<a.startedAt+a.duration*1000+ATTEMPT_GRACE_MS);
- const immunityRows=(t)=>tribeOf(s,t).map(p=>({username:p.username,bot:!!p.bot,points:s.immunity[day]?.[key(p.id)]?.points??null,started:running(p,'immunity')}));
+ const immunityRows=(t)=>tribeOf(s,t).map(p=>({username:p.username,bot:!!p.bot,points:s.immunity[day]?.[key(p.id)]?.points??null,at:s.immunity[day]?.[key(p.id)]?.at??null,started:running(p,'immunity')}));
  const imm=s.nominated?immunityRows(s.nominated).filter(r=>r.points!==null).sort((a,b)=>b.points-a.points):[];
- const todayRows=t=>tribeOf(s,t).map(p=>{const x=s.scores[day]?.[key(p.id)];return {username:p.username,bot:!!p.bot,result:sitting[t]?.some(id=>key(id)===key(p.id))?'sitting':x?'score':'none',points:x?.points??null,started:running(p,'tribe')};});
+ const todayRows=t=>tribeOf(s,t).map(p=>{const x=s.scores[day]?.[key(p.id)];return {username:p.username,bot:!!p.bot,result:sitting[t]?.some(id=>key(id)===key(p.id))?'sitting':x?'score':'none',points:x?.points??null,at:x?.at??null,started:running(p,'tribe')};});
  return {id:s.id,phase:s.phase,day,now,deadline:s.deadline,startedAt:s.startedAt,finishedAt:s.finishedAt,capacity:CAPACITY,
   carriedFrom:s.carriedFrom,nextId:s.nextId,viewTribe:tribe,nominated:s.nominated,required:s.required,
   canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<CAPACITY,

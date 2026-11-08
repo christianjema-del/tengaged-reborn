@@ -25,9 +25,8 @@ function seat(p,me){
  const status=el('div',null,'survivorStatus');
  if(p.status==='eliminated'&&p.placement){const pl=el('span',String(p.placement),'survivorPlacement');pl.append(el('sup','º'));status.append(pl);}
  else if(p.status==='merged')status.append(el('span','1º','survivorPlacement'));
- else if(state.phase==='waiting')status.append(el('span','✓','survivorReady'));
- else if(p.immunityLeader)status.append(document.createTextNode('Líder de inmunidad'));
- else if(p.atCouncil){const n=el('span',null,'survivorNominated');n.setAttribute('role','img');n.title=n.ariaLabel='En el Consejo Tribal';status.append(n);}
+ else if(p.atCouncil){const q=el('b','?','survivorQuestion');q.title='En el Consejo Tribal';q.setAttribute('aria-label','En el Consejo Tribal');status.append(q);}
+ else{const ok=el('b','','survivorSafe');ok.title='A salvo';ok.setAttribute('role','img');ok.setAttribute('aria-label','A salvo');status.append(ok);}
  box.append(a,name,presence,status);return box;
 }
 function renderHeader(){
@@ -36,8 +35,7 @@ function renderHeader(){
  for(const p of list)roster.append(seat(p,me));
  if(s.phase==='waiting')for(let i=list.length;i<10*Math.ceil(Math.max(list.length,1)/10);i++)roster.append(el('div',null,'survivorSeat survivorEmpty'));
  // En inscripción no hay texto encima de los avatares.
- $('svPhaseLabel').hidden=s.phase==='waiting';
- $('svPhaseLabel').textContent=s.phase==='waiting'?'':s.phase==='finished'?'Unificación':s.nominated?'Prueba de tribu y Consejo Tribal':'Prueba de tribu';
+ $('svPhaseLabel').hidden=true;
  $('svTitle').textContent='Un juego Survivor online #'+s.id;$('svDay').textContent=String(s.day||0);
  const sw=$('svSwitch');sw.hidden=s.phase!=='day';const own=me?.tribe;
  sw.textContent=own&&s.viewTribe!==own?'Tu tribu':'Tribu rival';sw.title=sw.textContent;
@@ -66,11 +64,6 @@ function renderCamp(){
  const w=$('svWeather'),code={sun:3,cloudy:2,rain:1}[c.weather],label={sun:'Soleado',cloudy:'Nublado',rain:'Lluvia'}[c.weather];w.src='/assets/survivor/icon_game_weather_'+code+'.gif';w.alt=w.title=label;
  $('svWaterStock').textContent=c.water;$('svFoodStock').textContent=c.food;
  $('svMyWater').textContent=own?me.water:'';$('svMyFood').textContent=own?me.food:'';
- const logList=$('svUseLog');logList.replaceChildren();
- const items=c.log.filter(l=>!showLog||(showLog==='water'?['drink','bucket','hunt-start','fan'].includes(l.kind):['eat','hunt','bucket-start'].includes(l.kind)));
- logList.hidden=!showLog||!own;
- for(const l of items.slice(-20).reverse())logList.append(el('li',new Date(l.at).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+' · '+l.user+' '+KINDS[l.kind]+' ('+(l.amount>0?'+':'')+l.amount+')'));
- if(showLog&&!items.length&&own)logList.append(el('li','Hoy todavía no se ha usado.'));
  const box=$('svCampActions');box.replaceChildren();
  if(!own){if(me&&s.phase==='day'&&me.tribe!==s.viewTribe)box.append(el('p','Estás viendo el campamento de la '+tribeName(s.viewTribe)+'.','survivorNotice'));return;}
  if(me.doomed)box.append(el('p','Comiste con el fuego apagado y te quedaste a 0 de pollo y agua: no superarás el próximo cambio de día.','survivorWarning'));
@@ -80,11 +73,7 @@ function renderCamp(){
  if(c.bucket)box.append(el('p',c.bucket.username+' está recogiendo agua con el cubo'+(c.bucket.readyAt?' (vuelve hacia las '+new Date(c.bucket.readyAt).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+')':'')+'.','survivorNotice'));
  if(c.hunting.length)box.append(el('p','Cazando: '+c.hunting.map(h=>h.username).join(', ')+'.','survivorNotice'));
  if(c.fire){const b=button('Avivar el fuego (−5 de agua, +30 min)',()=>act({action:'fan'}),'survivorButton survivorGather');b.disabled=me.water<5;box.append(b);if(c.fireUntil)box.append(el('p','El fuego estará encendido hasta las '+new Date(c.fireUntil).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+'.','survivorNotice'));}
- const form=el('form',null,'survivorTake'),food=document.createElement('input'),water=document.createElement('input');
- for(const [input,label,max] of [[food,'Pollo',Math.min(c.food,100-me.food)],[water,'Agua',Math.min(c.water,100-me.water)]]){input.type='number';input.min='0';input.max=String(Math.max(0,max));input.value='0';input.setAttribute('aria-label',label);const l=el('label',label+' ');l.append(input);form.append(l);}
- const eat=el('button',c.fire?'Comer y beber':'Comer con el fuego apagado','survivorButton');eat.type='submit';form.append(eat);
- form.onsubmit=e=>{e.preventDefault();const body={action:'eat',food:Number(food.value)||0,water:Number(water.value)||0};if(!c.fire){if(!confirm('El fuego está apagado. Tienes un 50 % de posibilidades de quedarte a 0 de pollo y agua y morir en el próximo cambio de día. ¿Comer igualmente?'))return;body.risk=true;}act(body);};
- box.append(form);if(!c.fire)box.append(el('p','Espera a que se encienda el fuego para comer y beber sin riesgo.','survivorNotice'));
+ if(!c.fire)box.append(el('p','Espera a que se encienda el fuego para comer y beber sin riesgo. Pulsa el agua o el pollo para comer y beber.','survivorNotice'));
 }
 function button(text,fn,cls='survivorButton'){const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;}
 
@@ -143,10 +132,10 @@ async function act(body){
  try{const d=await api('/api/survivor?'+new URLSearchParams({id,...(viewTribe?{tribe:viewTribe}:{})}),body);state=d.match;notice(d.result?.poisoned?'¡Mala suerte! Comiste con el fuego apagado y te has quedado a 0 de pollo y agua.':'');render();}
  catch(e){notice(e.message);}finally{busy=false;}
 }
-$('svSwitch').onclick=()=>{if(!state)return;const own=state.me?.tribe;viewTribe=state.viewTribe===(own||'A')?(own==='B'?'A':'B'):(own||'A');load();};
+$('svSwitch').onclick=()=>{if(!state)return;const own=state.me?.tribe;viewTribe=state.viewTribe===(own||'A')?(own==='B'?'A':'B'):(own||'A');const url=new URL(location.href);url.searchParams.set('id',String(state.id));url.searchParams.set('tribe',viewTribe);history.replaceState(null,'',url);dispatchEvent(new Event('online'));load();};
 $('svFillBots').onclick=()=>act({action:'fill_bots'});
 $('svStart').onclick=()=>act({action:'start'});
-$('svWaterLog').onclick=()=>{showLog=showLog==='water'?null:'water';renderCamp();};
-$('svFoodLog').onclick=()=>{showLog=showLog==='food'?null:'food';renderCamp();};
+const campPage=kind=>{if(state)location.href='/survivor-camp.html?'+new URLSearchParams({id:state.id,kind});};
+$('svWaterLog').onclick=()=>campPage('water');$('svFoodLog').onclick=()=>campPage('food');
 load();setInterval(clock,1000);setInterval(()=>{if(!document.hidden)load();},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});
