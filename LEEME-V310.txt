@@ -1,0 +1,7 @@
+V310 - Survivor: todos pueden leer el chat público de las dos tribus
+
+- Cualquier usuario (náufrago o no) ve el chat público de la tribu que tiene abierta:
+  al cambiar a la otra tribu se ven sus mensajes.
+- Cada náufrago solo puede escribir en el chat de su tribu. Si está leyendo el de la otra,
+  sale «Estás leyendo el chat de la otra tribu. Solo puedes escribir en el de la tuya.»
+- Al abrir la partida sin elegir tribu, un náufrago ve primero el chat de su tribu.

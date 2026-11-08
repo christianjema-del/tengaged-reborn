@@ -23,11 +23,13 @@ async function handle141_onRequest({request,env}){try{
  const voteCutoff=type==='casting'?Math.max(Number(state.chatVoteCutoffAt||0),...(state.keyDrops||[]).filter(d=>d.claimedBy).map(d=>Number(d.at||0))):0;const messageAt=m=>m.at??Date.parse(String(m.created_at).replace(' ','T')+(String(m.created_at).endsWith('Z')?'':'Z'));
  const member=me&&state.players.find(p=>!p.bot&&(Number(p.id)>0&&Number(p.id)===Number(me.id)||String(p.username||'').trim().toLowerCase()===me.username.trim().toLowerCase()));
  const eliminated=!!member&&(type!=='hunger'?member.status==='eliminated':!isHungerAlive(member));
- const participantCanWrite=!!member&&!eliminated&&!archived&&!(type!=='hunger'&&state.phase==='finished'),adminCanWrite=isOwner(me),canWrite=adminCanWrite||participantCanWrite;
- // V308: en Survivor cada tribu tiene su chat. Un náufrago solo ve el de su tribu; quien no juega lee el de la tribu que está viendo.
- const askedTribe=['A','B'].includes(url.searchParams.get('tribe'))?url.searchParams.get('tribe'):null,chatTribe=type==='survivor'&&state.phase!=='waiting'?(member?.tribe||askedTribe||'A'):null,room=type+':'+id+(chatTribe?':'+chatTribe:'');
+ let participantCanWrite=!!member&&!eliminated&&!archived&&!(type!=='hunger'&&state.phase==='finished'),canWrite;const adminCanWrite=isOwner(me);canWrite=adminCanWrite||participantCanWrite;
+ // V310: en Survivor cada tribu tiene su chat público. Cualquiera lee el de la tribu que está viendo; un náufrago solo escribe en el de su tribu.
+ const askedTribe=['A','B'].includes(url.searchParams.get('tribe'))?url.searchParams.get('tribe'):null,chatTribe=type==='survivor'&&state.phase!=='waiting'?(askedTribe||member?.tribe||'A'):null,room=type+':'+id+(chatTribe?':'+chatTribe:'');
+ const otherTribe=!!chatTribe&&!!member?.tribe&&member.tribe!==chatTribe;
+ if(otherTribe){participantCanWrite=false;canWrite=adminCanWrite;}
  if(request.method==='POST'){
- if(!sameOrigin(request))return jsonError('Origen no permitido.',403);if(!me)return jsonError('Inicia sesión.',401);if(!canWrite)return jsonError(eliminated?'Has sido eliminado: puedes leer el chat, pero no escribir.':'Solo los participantes pueden escribir en esta partida.',403);
+ if(!sameOrigin(request))return jsonError('Origen no permitido.',403);if(!me)return jsonError('Inicia sesión.',401);if(!canWrite)return jsonError(otherTribe&&!eliminated?'Solo puedes escribir en el chat de tu tribu.':eliminated?'Has sido eliminado: puedes leer el chat, pero no escribir.':'Solo los participantes pueden escribir en esta partida.',403);
  const input=await request.json().catch(()=>null);if(!input||typeof input!=='object'||Array.isArray(input))return jsonError('Petición inválida.',400);
  if(input.action==='vote'){
  if(type==='duel')return jsonError('El Duelo no utiliza votos positivos ni negativos.',400);
@@ -79,7 +81,7 @@ async function handle141_onRequest({request,env}){try{
  let messages=(await db.prepare(`SELECT c.id,c.body,c.created_at,u.username,c.user_id,CASE WHEN lower(u.username)='admin1' AND u.is_admin=1 THEN 1 ELSE 0 END AS admin_notice,COALESCE((SELECT SUM(v.value) FROM game_chat_votes v WHERE v.message_id=c.id),0) AS score,COALESCE((SELECT v.value FROM game_chat_votes v WHERE v.message_id=c.id AND v.user_id=${me?.id||-1}),0) AS my_vote FROM game_chat c JOIN users u ON u.id=c.user_id WHERE c.room=? AND u.is_banned=0 ORDER BY c.id DESC LIMIT ? OFFSET ?`).bind(room,type==='hunger'||castingNotices.length||froEvents.length||welcomes.length||castingDrops.length||nominationNotice.length||completionNotice.length?page*20:20,type==='hunger'||castingNotices.length||froEvents.length||welcomes.length||castingDrops.length||nominationNotice.length||completionNotice.length?0:(page-1)*20).all()).results;
  if(type==='hunger'||castingNotices.length||froEvents.length||welcomes.length||castingDrops.length||nominationNotice.length||completionNotice.length)messages=[...messages,...castingNotices,...arenaEvents,...froEvents,...welcomes,...castingDrops,...nominationNotice,...completionNotice].sort((a,b)=>Date.parse(b.created_at.replace(' ','T')+(b.created_at.endsWith('Z')?'':'Z'))-Date.parse(a.created_at.replace(' ','T')+(a.created_at.endsWith('Z')?'':'Z'))||String(b.id).localeCompare(String(a.id))).slice((page-1)*20,page*20);
  messages=messages.map(m=>({...m,canVote:participantCanWrite&&!m.admin_notice&&!m.my_vote&&!(voteCutoff&&messageAt(m)<=voteCutoff)}));
- return Response.json({ok:true,roomId:chatTribe?id+':'+chatTribe:id,tribe:chatTribe,total,page,messages,finished:state.phase==='finished',canVote:participantCanWrite&&type!=='duel',viewerId:me?.id||null,canWrite,eliminated,loggedIn:!!me},{headers:{'Cache-Control':'no-store'}});
+ return Response.json({ok:true,roomId:chatTribe?id+':'+chatTribe:id,tribe:chatTribe,total,page,messages,finished:state.phase==='finished',canVote:participantCanWrite&&type!=='duel',viewerId:me?.id||null,canWrite,eliminated,otherTribe,loggedIn:!!me},{headers:{'Cache-Control':'no-store'}});
  }catch(e){console.error(e);return jsonError('No se pudo actualizar el chat.',500);}}
 
 export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

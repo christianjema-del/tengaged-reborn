@@ -184,7 +184,7 @@ test('V308: inicio con fuego y sol, tics, página de comer y beber, chat por tri
  const camp=read('survivor-camp308.js');for(const t of ['ha cazado comida','ha sacado el cubo de agua','está cazando.','Guardar','Avivar el fuego','Sacar el cubo','Cazar ('])assert.ok(camp.includes(t),t);
  const page=read('survivor-page303.js');assert.ok(!page.includes("label+' '")&&!page.includes('survivorTake'),'sin campos de pollo y agua');assert.match(page,/survivor-camp\.html/);assert.match(page,/survivorSafe/);assert.match(page,/survivorQuestion/);assert.match(page,/\$\('svPhaseLabel'\)\.hidden=true/);
  assert.match(read('survivor303.css'),/-198px -374px/);
- const chat=read('functions/api/game-chat.js');assert.match(chat,/chatTribe=type==='survivor'&&state\.phase!=='waiting'\?\(member\?\.tribe\|\|askedTribe\|\|'A'\):null/);assert.match(chat,/room=type\+':'\+id\+\(chatTribe\?':'\+chatTribe:''\)/);
+ const chat=read('functions/api/game-chat.js');assert.match(chat,/chatTribe=type==='survivor'&&state\.phase!=='waiting'\?\(askedTribe\|\|member\?\.tribe\|\|'A'\):null/);assert.match(chat,/if\(otherTribe\)\{participantCanWrite=false;canWrite=adminCanWrite;\}/);assert.match(chat,/Solo puedes escribir en el chat de tu tribu/);assert.match(chat,/room=type\+':'\+id\+\(chatTribe\?':'\+chatTribe:''\)/);
  assert.match(read('functions/api/community-feed.js'),/c\.room NOT LIKE 'survivor:%:%'/);assert.match(read('game-chat.js'),/survivor&&new URLSearchParams\(location\.search\)\.get\('tribe'\)/);
 });
 test('V309: campamento con secciones de agua, pollo y fuego; chat de tribu sin bienvenidas de la otra tribu',async()=>{
