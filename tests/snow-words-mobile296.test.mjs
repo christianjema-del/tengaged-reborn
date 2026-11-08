@@ -14,7 +14,7 @@ const w=inflateSync(swf('Words').subarray(8)),t=inflateSync(swf('WordsTouch296')
 const diff=[];for(let i=0;i<w.length;i++)if(w[i]!==t[i])diff.push([i,w[i],t[i]]);assert.equal(diff.length,2);for(const [i,x,y] of diff){assert.equal(x,4);assert.equal(y,0);assert.equal(w[i-1],0x24);}
 assert.match(flash,/mobileWords\?'WordsTouch296':file/);assert.match(flash,/const mobileWords=kind==='words'&&window\.matchMedia\?\.\('\(any-pointer: coarse\) and \(max-width: 1024px\)'\)\.matches/);
 assert.match(flash,/import\('\/words-touch296\.js\?v=296'\)/);
-assert.match(readFileSync(new URL('../casting-minigame-launcher.js',import.meta.url),'utf8'),/original-flash\.js\?v=296/);
+assert.ok(Number(readFileSync(new URL('../casting-minigame-launcher.js',import.meta.url),'utf8').match(/original-flash\.js\?v=(\d+)/)[1])>=296,'el lanzador carga original-flash v296 o posterior');
 const {letterPosition,ROWS}=await import('../words-touch296.js');
 assert.deepEqual(ROWS,['ABCDEFGHI','JKLMNOPQR','STUVWXYZ']);
 assert.deepEqual(letterPosition('A'),{x:129,y:263});assert.deepEqual(letterPosition('I'),{x:417,y:263});assert.deepEqual(letterPosition('R'),{x:417,y:314});assert.deepEqual(letterPosition('Z'),{x:381,y:365});

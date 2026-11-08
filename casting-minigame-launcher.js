@@ -1,6 +1,6 @@
 // ÚNICO lanzador de minijuegos tanto para Casting como para Minijuegos.
 // Nunca sustituir por una implementación alternativa (minigames.js).
-import {play} from '/original-flash.js?v=296';
+import {play} from '/original-flash.js?v=303';
 import {CASTING_MINIGAMES} from '/minigame-catalog.js?v=159';
 export {CASTING_MINIGAMES};
 export function launchCastingMinigame(container,kind,options={}){

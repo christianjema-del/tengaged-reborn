@@ -43,6 +43,8 @@
   "/rookies",
   "/rookies-bets",
   "/room",
+  "/survivor",
+  "/survivor-challenge",
   "/shops",
   "/posts/*",
   "/blog/*",

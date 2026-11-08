@@ -1,7 +1,7 @@
 import {request as fetch} from '/http.js?v=170';
 import {setAvatar} from '/avatar-display.js?v=159';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
-import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=159';
+import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
 let lastArenaPoll=0;
 let sponsorsPanelOpen233=false,winnersLoading233=false,sponsorQuote233=null,sponsorEdition233=null;

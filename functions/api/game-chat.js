@@ -1,5 +1,6 @@
 import {ensureDuel} from '../_shared/duel-service212.js';
 import {ensureRookies} from '../_shared/rookies-service.js';
+import {ensureSurvivor} from '../_shared/survivor-service.js';
 import {publicEvents166} from '../_shared/public-game-events166.js';
 import {isOwner} from '../_shared/staff.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
@@ -11,9 +12,9 @@ import {ensureProfileSchema,getSessionUser,jsonError} from '../_shared/auth.js';
 import {ensureSocial,sameOrigin} from '../_shared/social.js';
 async function handle141_onRequest({request,env}){try{
  const db=env.DB;await ensureProfileSchema(db);await ensureSocial(db);const me=await getSessionUser(request,db),url=new URL(request.url),type=url.searchParams.get('type');let id=Number(url.searchParams.get('id'));const currentArena=type==='hunger'&&url.searchParams.get('id')==='current';
- if(!['casting','hunger','frookies','duel','rookies'].includes(type)||(!currentArena&&(!Number.isSafeInteger(id)||id<1)))return jsonError('Partida inválida.',400);
- if(type==='frookies')await ensureFrookies(db);if(type==='duel')await ensureDuel(db);if(type==='rookies')await ensureRookies(db);
- const table=type==='rookies'?'rookies_matches':type==='duel'?'duel_matches':type==='frookies'?'frookies_matches':type==='casting'?'casting_matches':'hunger_arena';
+ if(!['casting','hunger','frookies','duel','rookies','survivor'].includes(type)||(!currentArena&&(!Number.isSafeInteger(id)||id<1)))return jsonError('Partida inválida.',400);
+ if(type==='frookies')await ensureFrookies(db);if(type==='duel')await ensureDuel(db);if(type==='rookies')await ensureRookies(db);if(type==='survivor')await ensureSurvivor(db);
+ const table=type==='survivor'?'survivor_matches':type==='rookies'?'rookies_matches':type==='duel'?'duel_matches':type==='frookies'?'frookies_matches':type==='casting'?'casting_matches':'hunger_arena';
  const row=await db.prepare(`SELECT state FROM ${table} WHERE id=?`).bind(type!=='hunger'?id:1).first();if(!row)return jsonError('No existe esa partida.',404);
  let state=JSON.parse(row.state),archived=false;if(currentArena)id=Number(state.edition);if(type==='hunger'&&state.edition!==id){
  const has=await db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='hunger_history'").first();const old=has?await db.prepare('SELECT state FROM hunger_history WHERE edition=?').bind(id).first():null;

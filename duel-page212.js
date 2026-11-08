@@ -1,7 +1,7 @@
 import {request as fetch} from '/http.js?v=170';
 import {setAvatar} from '/avatar-display.js?v=159';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
-import {launchCastingMinigame} from '/casting-minigame-launcher.js?v=212';
+import {launchCastingMinigame} from '/casting-minigame-launcher.js?v=303';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
 let id=Number(new URLSearchParams(location.search).get('id'))||0,s=null,busy=false,loading=false,offset=0,playing=false,dispose=null,list=[],listStage=null,roster='',privateTab=false;
 function person(p){const card=el('div','','duel-person'+(p.status==='eliminated'?' eliminated':'')+(s?.immune===p.id?' immune':'')),a=el('a',p.username),photo=el('img'),seen=el('small','…');photo.alt=p.username;if(p.bot)photo.src='/assets/hunger/tributes/0.svg';else setAvatar(photo,p.username);a.href='/profile.html?username='+encodeURIComponent(p.username);const portrait=el('a');portrait.href=a.href;portrait.append(photo);if(!p.bot)seen.dataset.playerLastSeen=p.username;else{seen.textContent='Bot';a.removeAttribute('href');portrait.removeAttribute('href');}const badge=el('b',p.placement?p.placement+'º':p.nominated?'?':p.doingChallenge?'':'',p.placement?'duel-place':p.nominated?'duel-nominated220':p.doingChallenge?'casting-safe225':'');card.append(portrait,a,seen,badge);if(p.challengePending){const clock=el('img','','duel-wait220');clock.src='/assets/ui/wait-clock.gif';clock.alt='Desafío pendiente';portrait.append(clock);}return card;}

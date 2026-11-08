@@ -1,5 +1,5 @@
 import {request as fetch} from '/http.js?v=170';
-import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=217';
+import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),id=Number(params.get('id')),stage=Number(params.get('stage'));
 let loading=false,playing=false,dispose=null,failed=false;
 $('challengeReturn').href='/duel.html?id='+id;

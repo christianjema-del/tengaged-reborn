@@ -30,7 +30,7 @@ if(s.phase==='finished'){
   controls.replaceChildren();
   const back=el('button','Elegir otro minijuego','market-btn');back.type='button';
   back.onclick=()=>{disposeFlash?.();disposeFlash=null;playingReaction=false;demoPlaying=false;render();};controls.append(back);
-  try{const m=await import('/casting-minigame-launcher.js?v=159');
+  try{const m=await import('/casting-minigame-launcher.js?v=303');
    disposeFlash=await m.launchCastingMinigame(slot,picker.value,{demo:true});
   }catch(err){playingReaction=false;demoPlaying=false;slot.replaceChildren(el('p','No se pudo iniciar: '+(err?.message||err)));}
  };
@@ -47,7 +47,7 @@ if(p&&p.status==='active'&&!['waiting','finished'].includes(s.phase)){
    if(playingReaction)return;playingReaction=true;challengeStartedAt=performance.now();
    start.disabled=true;
    const round=s.round,kind=s.challenge;
-   import('/casting-minigame-launcher.js?v=159').then(async m=>{
+   import('/casting-minigame-launcher.js?v=303').then(async m=>{
     disposeFlash=await m.launchCastingMinigame(box,kind,{competitive:true,contextId:s.id,round});
     const retry=el('button','Reabrir el minijuego','plain-btn');retry.type='button';
     retry.onclick=()=>{disposeFlash?.();disposeFlash=null;playingReaction=false;render();};

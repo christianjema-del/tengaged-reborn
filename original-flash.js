@@ -27,7 +27,7 @@ export async function play(host,kind,questions,done,options={}){
  const mobileGuitar=kind==='guitar'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const mobileWords=kind==='words'&&window.matchMedia?.('(any-pointer: coarse) and (max-width: 1024px)').matches;
  const title=make('h3',LABELS[kind]);host.append(title);
- const note=make('p',options.duel?'Prueba de El Duelo. Pulsa dentro del tablero para controlarlo.':options.frookies?'Prueba de PoV. Pulsa dentro del tablero para controlarlo.':options.hunger?'Combate de Hunger · Minijuego original de Casting. Pulsa dentro del tablero para controlarlo.':'Prueba de Casting. Pulsa dentro del tablero para controlarla.');host.append(note);
+ const note=make('p',options.survivor?'Prueba de Survivor. Pulsa dentro del tablero para controlarlo.':options.duel?'Prueba de El Duelo. Pulsa dentro del tablero para controlarlo.':options.frookies?'Prueba de PoV. Pulsa dentro del tablero para controlarlo.':options.hunger?'Combate de Hunger · Minijuego original de Casting. Pulsa dentro del tablero para controlarlo.':'Prueba de Casting. Pulsa dentro del tablero para controlarla.');host.append(note);
  const container=make('div');container.className='original-flash-frame';host.append(container);
  const diag=make('p','');diag.setAttribute('role','status');
  const status=make('p','Cargando el juego original…');status.dataset.flashStatus='true';status.setAttribute('role','status');host.append(status);
@@ -49,7 +49,7 @@ export async function play(host,kind,questions,done,options={}){
  await withLoadDeadline(runtime.load({
    url:'/original-games/swf/'+(mobileMaze?'MazeTouch153':mobileWords?'WordsTouch296':file)+'.swf',
    autoplay:'on',unmuteOverlay:'visible',contextMenu:'off',allowScriptAccess:!!mobileMaze,
-   parameters:{context:'game',contextId:String(contextId),subcontext:options.duel?'duel':options.frookies?'frookies':options.hunger?'hunger':options.standalone?'minigame':options.competitive?'casting':'regaged',subcontextId:options.hunger?String(fightIndex):options.competitive?String(options.round):'0'}
+   parameters:{context:'game',contextId:String(contextId),subcontext:options.survivor?'survivor':options.duel?'duel':options.frookies?'frookies':options.hunger?'hunger':options.standalone?'minigame':options.competitive?'casting':'regaged',subcontextId:options.hunger?String(fightIndex):options.competitive?String(options.round):'0'}
  }),()=>player.remove());
  status.textContent=options.hunger?'':options.standalone?'Jugando · el resultado se registrará al terminar si el juego logra comunicarse con el servidor.':options.competitive?'Esperando el inicio del minijuego…':'Minijuego cargado. Los puntos de práctica no se guardan.';
  diag.textContent=options.competitive?'Prueba oficial de la ronda '+options.round+'. Todos los participantes juegan al mismo minijuego.':'';

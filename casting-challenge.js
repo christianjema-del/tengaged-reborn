@@ -1,6 +1,6 @@
 import {renderChallengeLeaderboard} from '/casting-leaderboard.js?v=159';
 import {api} from '/market-ui.js?v=170';
-import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=159';
+import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),id=Number(params.get('id')),round=Number(params.get('round'));
 const previews={wheel:'wheel-of-fortune',numbers:'numbers',deal:'deal-or-no-deal',match:'match-three',guitar:'guitar',endurance:'endurance',maze:'maze',snow:'snow-flakes',words:'words',line:'line-balls'};
 const descriptions={wheel:'Haz girar la rueda y trata de resolver los puzles.',numbers:'Cuenta los cubos, cuenta los puntos y encuentra la ecuación.',deal:'Abre los maletines y consigue el importe máximo.',match:'Intercambia dos piezas para formar una línea de tres o más.',endurance:'Sigue el objetivo tanto tiempo como puedas.',words:'Encuentra el mayor número de palabras posible.',guitar:'Un juego del tipo Guitar Hero.',maze:'Encuentra el camino a través del laberinto.',snow:'Recoge los copos y completa la prueba.',line:'Conecta bolas del mismo color formando cadenas.'};

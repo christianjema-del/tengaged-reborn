@@ -1,0 +1,38 @@
+V303 - Survivor
+
+Réplica del Survivor de Regaged (regaged.com/game/...) en castellano, con las normas de Tengaged Reborn.
+
+Partida
+- 20 náufragos, dos tribus de 10. Días de 12 horas. Gratis. admin1 completa con bots e inicia.
+- Pollo y agua personales (empiezan en 100/100) y reservas de tribu (empiezan en 50/50, máximo 100).
+  Si te expulsaron de un Survivor, el siguiente lo empiezas con la salud que tenías al salir.
+- Sol: se caza (−6 de agua) y a los 30-45 min se suman 10 de pollo a la reserva. Pueden cazar varios.
+- Lluvia: se saca el cubo (−6 de pollo), una persona a la vez, y en ~1 hora se suman 10 de agua.
+- Fuego encendido: se come y se bebe de la reserva sin riesgo; avivarlo cuesta 5 de agua y lo alarga 30 min.
+  Comer con el fuego apagado: 50 % de quedarse a 0/0 y morir en el próximo cambio de día.
+- Sol, lluvia y fuego aparecen al menos una vez en cada ciclo de 12 h, a horas al azar, en cada campamento.
+- Cambio de día: −5 de agua y −6 de pollo. Solo muere quien está a 0 de pollo y 0 de agua.
+- Tiempo de las pruebas = 100 s + hasta 50 s por el pollo + hasta 50 s por el agua
+  (cada 6 puntos menos restan 3 s): 100/100 = 200 s, 95/94 = 194 s, 0/94 = 147 s, 0/0 = 100 s.
+
+Pruebas y consejo
+- Prueba de tribu diaria con un minijuego Flash; juegan tantos como tenga la tribu más pequeña.
+  En la tribu grande, quien sobra se sienta; si juegan de más, se quita la prueba más alta.
+- Al cambiar de día, la tribu con menos puntos va al Consejo Tribal (empate: al azar).
+- Esa tribu juega además la inmunidad individual (también los sentados) y vota durante el día.
+  El ganador final de la inmunidad no puede salir; los votos a él no cuentan. El voto se puede cambiar.
+- Resultados de la prueba e inmunidad solo para tu tribu; la prueba se comparte al cambiar de día.
+  Votos secretos; al cambiar de día se ve cuántos tuvo cada uno.
+- Expulsados: puestos 20.º, 19.º... Al quedar 10 se unifican: comparten el primer puesto
+  (40 karma y 10 T$) y los humanos pasan juntos como tribu A a la siguiente partida, contra 10 nuevos.
+  Si al unificar tienes 30 o menos de algo sube a 40; con 96 o más sube a 100.
+
+Peticiones: la página se actualiza cada 30 s y la cuenta atrás corre en el navegador. El reloj
+automático (tick) avanza la partida sin visitas.
+
+Archivos: survivor.html, survivor-page303.js, survivor303.css, survivor-challenge.html,
+survivor-challenge303.js, assets/survivor/, functions/_shared/survivor-engine.js,
+functions/_shared/survivor-service.js, functions/api/survivor.js, functions/microgames.js
+(subcontexto survivor), original-flash.js, game-chat (tipo survivor), tick, Mis juegos, inscripción,
+lista de juegos y Salón de la Fama (unificaciones).
+Pruebas: tests/survivor303.test.mjs

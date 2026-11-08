@@ -1,0 +1,116 @@
+/* V303: Survivor. Réplica 1:1 de la página de Survivor de Regaged, limitada a .survivorGamePage. */
+.survivorGamePage{max-width:980px;margin:0 auto;padding:12px 16px 20px;background:#fff;color:#4d4d4d;font:12px/1.4 Arial,Helvetica,sans-serif;box-sizing:border-box}
+.survivorGamePage *,.survivorGamePage *::before,.survivorGamePage *::after{box-sizing:border-box}
+.survivorGamePage a{color:#257eb2;text-decoration:none;padding:0;border:0;background:none;font-size:inherit}
+.survivorGamePage a:hover{text-decoration:underline}
+.survivorGamePage .header,.survivorGamePage .head{min-height:0!important;padding:0!important;background:none!important;border:0!important;margin:0!important}
+.survivorHeader{display:flex;justify-content:space-between;align-items:start;gap:8px;margin:0 0 8px}
+.survivorHeader p{font-size:11px;color:#555;margin:0 0 4px}
+.survivorHeader>div:first-child{flex:1 1 0%;min-width:0}
+.survivorBanner{position:relative;width:359px;max-width:100%;height:auto;flex:0 0 359px;color:sienna}
+.survivorBannerImage{display:block;width:100%;height:auto;pointer-events:none}
+.survivorBanner .survivorBannerTitle{position:absolute;top:6.1%;left:27.85%;width:29.25%;padding:0;margin:0;background:none;border:0;font:normal 9px/11px "Trebuchet MS",Trebuchet,Verdana,sans-serif;font-variant:small-caps;color:sienna;text-align:center;letter-spacing:0;text-transform:none}
+.survivorBannerDay{position:absolute;top:43.51%;left:71.87%;width:13.09%;height:18.32%;display:grid;place-items:center;padding:0;margin:0;color:#4b341b;font:700 22px/1 Trebuchet,Arial,Helvetica,sans-serif;text-align:center}
+.survivorHelp{display:contents}
+.survivorBannerHelp{display:block;position:absolute;left:29.53%;top:64.12%;width:22%;margin:0;padding:3px 0;font:10px/14px Arial,sans-serif;text-align:center;background:transparent;color:#407eb4;cursor:pointer;text-decoration:underline;list-style:none}
+.survivorBannerHelp::-webkit-details-marker{display:none}
+.survivorHelpText{position:absolute;z-index:20;top:100%;right:0;width:320px;max-width:100%;padding:12px;background:#fff;border:1px solid #c6dbf0;box-shadow:0 3px 10px rgba(0,0,0,.133);color:#4d4d4d;font:12px/1.5 Verdana,sans-serif}
+.survivorHelpText p{margin:6px 0}
+.survivorBannerSwitch{position:absolute;top:43.51%;left:29.53%;width:22%;height:13.74%;display:grid;place-items:center;padding:0;margin:0;border:0;background:transparent;color:#250e0c;font:normal 9px/1 "Trebuchet MS",Trebuchet,Verdana,sans-serif;font-variant:small-caps;text-align:center;white-space:nowrap;cursor:pointer}
+.survivorBannerSwitch:hover{color:#fff}
+.survivorBannerTimer{position:absolute;top:70.23%;left:62.4%;width:34.82%;text-align:center}
+.survivorBannerTimer,.survivorBannerTimer .castingCountdown{color:#006600;font:17px Verdana,sans-serif;white-space:nowrap}
+.survivorBannerTimer .castingCountdown{display:inline;font-variant-numeric:tabular-nums}
+.survivorBannerTimer .castingCountdown span{color:#878787;font-size:9px;margin:0 1px}
+.survivorRoster{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:0;width:100%;max-width:590px}
+.survivorSeat{position:relative;min-width:0;text-align:center;padding-bottom:2px;font-family:"Trebuchet MS",Trebuchet,Verdana,sans-serif}
+.survivorAvatar{display:block;position:relative;line-height:0}
+.survivorAvatar .avatarFrame{display:block;width:65px;max-width:100%;aspect-ratio:200/230;margin:0 auto;position:relative;overflow:hidden;border:1px solid rgba(0,0,0,.22);background:#d7e7f4}
+.survivorAvatar .avatarFrame img{display:block;width:100%;height:100%;object-fit:cover}
+.survivorBallotClock{position:absolute;top:1px;left:0;z-index:2}
+.survivorName{display:block;line-height:14px;color:#4682b4;font-weight:700}
+.survivorName,.survivorPresence{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+.survivorPresence{height:12px;line-height:12px;color:#b0c0ca}
+.survivorStatus{min-height:17px;display:flex;align-items:center;justify-content:center;font-size:10px}
+.survivorPlacement{font-size:14px;color:#555}
+.survivorPlacement sup{font-size:9px}
+.survivorNominated{display:inline-block;width:16px;height:17px;background:url(/assets/regaged/avatars/ui/master.gif) no-repeat -230px -374px;vertical-align:middle}
+.survivorReady{color:#4caf50;font-size:15px;font-weight:700;line-height:17px}
+.survivorOut .survivorAvatar{opacity:.5;filter:grayscale(1)}
+.survivorOut .survivorAvatar:hover{opacity:1;filter:none}
+.survivorEmpty{height:105px}
+.survivorSectionTitle{font:700 18px Arial,"Trebuchet MS",sans-serif!important;color:#ff536d!important;border:0!important;border-bottom:1px solid #ffc3c3!important;padding:2px 0 0 5px!important;margin:0 0 8px!important;letter-spacing:0;background:none!important;text-transform:none!important}
+.survivorCamp,.survivorPanel{min-width:0;font-size:12px;color:#4d4d4d}
+.survivorCamp{margin-bottom:16px}
+.survivorSrOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.survivorCampHeader{display:flex;gap:8px;justify-content:space-between;align-items:start;flex-wrap:wrap}
+.survivorResources{display:grid;grid-template-columns:repeat(4,75px);margin:0 0 8px}
+.survivorResource{position:relative;width:75px;min-height:75px;text-align:center;font-size:10px}
+.survivorResource img{display:block;width:75px;height:75px}
+.survivorStock{position:absolute;top:1px;left:0;width:75px;color:#7d7d7d;font-size:18px;line-height:22px;font-weight:400;pointer-events:none}
+.survivorPersonal{display:block;min-height:0;color:#8db0f0;font-size:14px;font-weight:700}
+.survivorPersonal:empty{display:none}
+.survivorPhaseSteps{width:85px;flex:0 0 85px;margin:0;padding:0;list-style:none;font-family:"Trebuchet MS",Trebuchet,Verdana,sans-serif}
+.survivorPhaseSteps li{margin:0 0 3px 2px;padding:5px;border:1px solid #e6edf2;background:#ecf3f8;color:#bed3e7;font-size:12px;line-height:12px;white-space:nowrap}
+.survivorPhaseSteps li[aria-current=step]{color:#407eb4;border-color:#c6dbf0}
+.survivorPhaseSteps li:has(a){padding:0}
+.survivorPhaseSteps a{display:block;padding:5px;color:#407eb4;text-decoration:none}
+.survivorPhaseSteps a:hover{background:#e3edf5;text-decoration:underline}
+.survivorPanel [id]:target{background:#fff4bf;outline:2px solid #ecd77c;scroll-margin-top:16px}
+.survivorButton{background:#ecf3f8;color:#407eb4;border:1px solid #e6edf2;border-radius:0;padding:5px 9px;font:12px "Trebuchet MS",Trebuchet,Verdana,sans-serif;cursor:pointer;text-decoration:none;display:inline-block}
+.survivorButton:hover:not(:disabled){background:#e3edf5;text-decoration:underline}
+.survivorButton:disabled{color:#bed3e7;cursor:default}
+.survivorTake{display:flex;gap:6px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.survivorTake input{width:44px;border:1px solid #ccc;padding:3px;border-radius:0}
+.survivorGather{display:block;width:100%;margin:4px 0}
+.survivorNotice,.survivorWarning{margin:7px 0;font-size:11px;line-height:1.4}
+.survivorWarning{color:#a72121;background:#fff8db;padding:6px}
+.survivorNotice{color:#476478}
+.survivorPhase{margin-bottom:10px;line-height:1.5}
+.survivorPhase h3{font:700 14px Arial,sans-serif;color:#333;margin:10px 0 4px;border:0;padding:0;background:none;text-transform:none}
+.survivorPhase p{margin:0 0 8px}
+.survivorPhase ul{margin:4px 0 8px 18px;padding:0}
+.survivorVoteTargets{display:grid;gap:4px;margin:8px 0}
+.survivorVoteTargets button{text-align:left}
+.survivorVoteTargets button[aria-pressed=true]{background:#fff1a1;border-color:#ffe54f;color:#216da9}
+.survivorStory{margin:16px 0;font-size:11px;line-height:1.4}
+.survivorStory p{border-bottom:1px solid #eee;padding:6px 0;margin:0}
+.survivorPageGrid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start}
+.survivorPageGrid>*{min-width:0}
+.survivorResourceHistory{border:0;padding:0;background:transparent;cursor:pointer;display:block}
+.survivorHistoryList{margin:0 0 8px;padding:6px 8px;background:#f5f8fb;border:1px solid #e6edf2;font-size:11px;list-style:none}
+.survivorResultColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow-wrap:anywhere}
+.survivorResultColumns table{width:100%;border-collapse:collapse;font-size:11px}
+.survivorResultColumns caption{font-weight:700;text-align:left;padding:6px 0}
+.survivorResultColumns td,.survivorResultColumns th{text-align:left;padding:3px;border-bottom:1px solid #c4c7b4;background:none;color:inherit}
+.survivorResults details{margin:8px 0}
+.survivorResults summary{cursor:pointer;font-weight:700}
+.survivorResults h3{font:700 12px Arial,sans-serif;margin:8px 0 2px;color:#333;border:0;padding:0;background:none;text-transform:none}
+.survivorBlogs h2 small{background:#ffe5e5;color:#ff8496;font-size:11px;font-weight:normal;padding:2px 3px;margin-left:4px}
+.survivorBlogs p,.survivorBlogs li{font-size:11px}
+.survivorAdmin{margin:6px 0;display:flex;gap:6px;flex-wrap:wrap}
+.survivorJoin{margin:6px 0}
+@media (max-width:900px){
+ .survivorHeader{flex-wrap:wrap}
+ .survivorHeader>div:first-child{flex:1 1 100%}
+ .survivorBanner{margin-left:auto}
+ .survivorPageGrid{grid-template-columns:minmax(0,1fr)}
+ .survivorPageGrid>aside{order:-1}
+}
+@media (max-width:500px){
+ .survivorGamePage{padding:10px 8px 16px}
+ .survivorRoster{grid-template-columns:repeat(5,minmax(0,65px));justify-content:space-between;row-gap:5px}
+ .survivorBanner{flex:0 1 359px;margin:6px auto}
+ .survivorBannerDay{font-size:20px}
+ .survivorPhaseSteps{display:flex;width:auto;flex:1 1 100%;gap:2px;margin-bottom:7px}
+ .survivorPhaseSteps li{flex:1 1 0%;text-align:center}
+ .survivorResultColumns{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:370px){
+ .survivorBannerDay{font-size:18px}
+ .survivorBannerTimer,.survivorBannerTimer .castingCountdown{font-size:14px}
+ .survivorResources{grid-template-columns:repeat(4,minmax(0,75px));width:100%}
+ .survivorResource{width:100%}
+ .survivorResource img{max-width:100%;height:auto}
+ .survivorStock{width:100%}
+}

@@ -9,6 +9,6 @@ for(const [f,ms] of Object.entries(expect)){
 }
 assert.match(read('hunger-page.js'),/lastArenaPoll>=30000/);
 for(const f of fs.readdirSync(new URL('..',import.meta.url)).filter(f=>/\.(html|js)$/.test(f))){
- for(const m of read(f).matchAll(/(?<![\w.-])(shell|hunger-page|casting-game|frookies-page|engagement)\.js\?v=(\d+)/g))assert.equal(m[2],'302',f+' carga '+m[1]+'.js con versión antigua');
+ for(const m of read(f).matchAll(/(?<![\w.-])(shell|hunger-page|casting-game|frookies-page|engagement)\.js\?v=(\d+)/g))assert.ok(Number(m[2])>=302,f+' carga '+m[1]+'.js con versión antigua');
 }
 console.log('polling ok');

@@ -1,4 +1,5 @@
 import {duelMatch} from './_shared/duel-service212.js';
+import {survivorMatch} from './_shared/survivor-service.js';
 import {match as frookiesMatch} from './_shared/frookies-service.js';
 import {recordMinigameResult} from './_shared/minigame-scores.js';
 import {BASE_CHALLENGE_SECONDS} from './_shared/challenge-time.js';
@@ -27,6 +28,17 @@ export async function onRequestGet({request,env}){
    const result=await duelMatch(env.DB,id,user,{action:saving?'flash_finish':'flash_start',stage,kind,token:header.code,points:payload.data?.points},true,game),run=result.attempt;
    const left=Math.max(0,Math.min(Math.ceil((result.match.deadline-Date.now())/1000),Math.ceil((run.startedAt+run.duration*1000-Date.now())/1000)));
    return reply({error:0,recorded:saving,header:{code:run.token},data:saving?{points:run.score,timeleft:0}:{...result.data,timeleft:left,...(Object.hasOwn(result.data,'gameTotalTimeLeft')?{gameTotalTimeLeft:left}:{})}},game);
+  }
+  if(header.subcontext==='survivor'){
+   // V303: prueba de tribu o de inmunidad. subcontextId = «día:tribe» o «día:immunity».
+   if(request.headers.get('Sec-Fetch-Site')==='cross-site'||(request.headers.has('Origin')&&request.headers.get('Origin')!==url.origin))throw Error('Origen no permitido.');
+   await ensureProfileSchema(env.DB);const user=await getSessionUser(request,env.DB);if(!user)throw Error('Inicia sesión para jugar.');
+   const id=Number(header.contextId),[dayText,modeText]=String(header.subcontextId||'').split(':'),day=Number(dayText),mode=modeText==='immunity'?'immunity':'tribe',saving=payload.function==='requestSaveGameData';
+   if(header.context!=='game'||!Number.isSafeInteger(id)||id<1||!Number.isSafeInteger(day)||day<1)throw Error('Partida no válida.');
+   const result=await survivorMatch(env.DB,id,user,saving?{action:'flash_finish',day,mode,kind,token:header.code,points:payload.data?.points}:{action:'flash_start',day,mode,kind},true),run=result.attempt;
+   if(saving){await recordMinigameResult(env.DB,user.id,kind,run.score,'survivor:'+id+':'+day+':'+mode+':'+user.id+':'+kind);return reply({error:0,recorded:true,header:{code:run.token},data:{points:run.score,timeleft:0}},game);}
+   const left=Math.max(0,Math.ceil((run.startedAt+run.duration*1000-Date.now())/1000));
+   return reply({error:0,header:{code:run.token},data:gameData(game,left)},game);
   }
   if(header.subcontext==='hunger'){
    if(request.headers.get('Sec-Fetch-Site')==='cross-site'||(request.headers.has('Origin')&&request.headers.get('Origin')!==url.origin))throw Error('Origen no permitido.');
