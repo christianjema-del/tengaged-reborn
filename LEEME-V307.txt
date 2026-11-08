@@ -1,0 +1,5 @@
+V307 - Survivor sin texto en inscripción
+
+- En la página de Survivor ya no aparece «Inscripción · N / 20 náufragos» encima de los avatares
+  mientras la partida está en inscripción.
+- Survivor #1: inscritos a mano MDMA y DaisyJane (10/20), con 100/100 y su fila en el historial.

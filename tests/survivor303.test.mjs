@@ -170,3 +170,7 @@ test('V305: mensajes privados, burbuja del perfil, color en la lista de juegos y
  const html=read('survivor.html');for(const id of ['froPublic','froPrivate','froPublicCount','public-chat','froWhispers','froWhisperForm'])assert.ok(html.includes('id="'+id+'"'),id);
  assert.match(read('game-chat.js'),/frookies\|\|rookies\|\|survivor/);assert.match(read('game-feed.js'),/'survivor'\?'\/survivor\.html\?id='|type==='survivor'\?'\/survivor\.html\?id='/);
 });
+test('V307: en inscripción no hay texto encima de los avatares',()=>{
+ const page=fs.readFileSync(new URL('../survivor-page303.js',import.meta.url),'utf8');
+ assert.ok(!page.includes('Inscripción · '));assert.match(page,/\$\('svPhaseLabel'\)\.hidden=s\.phase==='waiting'/);
+});

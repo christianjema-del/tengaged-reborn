@@ -35,7 +35,9 @@ function renderHeader(){
  const list=s.phase==='waiting'?s.players:s.players.filter(p=>p.tribe===s.viewTribe);
  for(const p of list)roster.append(seat(p,me));
  if(s.phase==='waiting')for(let i=list.length;i<10*Math.ceil(Math.max(list.length,1)/10);i++)roster.append(el('div',null,'survivorSeat survivorEmpty'));
- $('svPhaseLabel').textContent=s.phase==='waiting'?'Inscripción · '+s.players.length+' / '+s.capacity+' náufragos':s.phase==='finished'?'Unificación':s.nominated?'Prueba de tribu y Consejo Tribal':'Prueba de tribu';
+ // En inscripción no hay texto encima de los avatares.
+ $('svPhaseLabel').hidden=s.phase==='waiting';
+ $('svPhaseLabel').textContent=s.phase==='waiting'?'':s.phase==='finished'?'Unificación':s.nominated?'Prueba de tribu y Consejo Tribal':'Prueba de tribu';
  $('svTitle').textContent='Un juego Survivor online #'+s.id;$('svDay').textContent=String(s.day||0);
  const sw=$('svSwitch');sw.hidden=s.phase!=='day';const own=me?.tribe;
  sw.textContent=own&&s.viewTribe!==own?'Tu tribu':'Tribu rival';sw.title=sw.textContent;
