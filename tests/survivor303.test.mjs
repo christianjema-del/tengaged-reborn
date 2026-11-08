@@ -198,3 +198,17 @@ test('V309: campamento con secciones de agua, pollo y fuego; chat de tribu sin b
  assert.ok(!read('survivor-camp308.js').includes('risk'));assert.ok(!read('survivor-page303.js').includes('poisoned'));
  assert.match(read('functions/api/game-chat.js'),/p\.tribe===chatTribe/);
 });
+test('V311: sin botones de campamento ni panel del Consejo en la página; tiempo y Consejo en sus páginas',async()=>{
+ const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
+ const page=read('survivor-page303.js'),html=read('survivor.html');
+ assert.ok(!page.includes("'Cazar (")&&!page.includes("'Avivar el fuego")&&!page.includes("'Sacar el cubo"),'sin botones encima del Consejo');
+ assert.ok(!html.includes('svCouncilPanel')&&!page.includes('renderCouncil'),'sin apartado Consejo Tribal');
+ assert.match(page,/survivor-council\.html\?/);assert.match(html,/id="svWeatherLog"/);assert.match(page,/campPage\('weather'\)/);
+ const camp=read('survivor-camp308.js');assert.match(camp,/weather:\['hunt-start','hunt','bucket-start','bucket'\]/);assert.match(camp,/water:\['drink'\]/);assert.match(camp,/function renderWeather/);
+ const council=read('survivor-council311.js');assert.match(council,/'Nominar'/);assert.match(council,/action:'vote',target:p\.id/);assert.match(council,/setAvatar\(img,p\.username\)/);
+ assert.match(read('_routes.json'),/"\/survivor-council"/);
+ const src=council.slice(council.indexOf('export function nomineesFor'),council.indexOf('\n',council.indexOf('export function nomineesFor')));
+ const nomineesFor=new Function(src.replace('export function nomineesFor','return function')+'')();
+ const ps=[{id:1,tribe:'A',status:'active'},{id:2,tribe:'A',status:'active'},{id:3,tribe:'B',status:'active'},{id:4,tribe:'A',status:'eliminated'}];
+ assert.deepEqual(nomineesFor(ps,{id:1,tribe:'A'}).map(p=>p.id),[2]);
+});

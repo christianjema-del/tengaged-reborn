@@ -67,17 +67,9 @@ function renderCamp(){
  const box=$('svCampActions');box.replaceChildren();
  if(!own){if(me&&s.phase==='day'&&me.tribe!==s.viewTribe)box.append(el('p','Estás viendo el campamento de la '+tribeName(s.viewTribe)+'.','survivorNotice'));return;}
  if(me.food<=0&&me.water<=0)box.append(el('p','Estás a 0 de pollo y 0 de agua. Si sigues así cuando cambie el día, quedarás eliminado.','survivorWarning'));
- if(c.weather==='sun'){const b=button('Cazar (−6 de agua)',()=>act({action:'hunt'}),'survivorButton survivorGather');b.disabled=me.hunting||me.water<6;box.append(b);if(me.hunting)box.append(el('p','Estás cazando. La caza se recoge entre 30 y 45 minutos después de salir.','survivorNotice'));}
- if(c.weather==='rain'){const b=button('Sacar el cubo (−6 de pollo)',()=>act({action:'bucket'}),'survivorButton survivorGather');b.disabled=!!c.bucket||me.food<6;box.append(b);}
- if(c.bucket)box.append(el('p',c.bucket.username+' está recogiendo agua con el cubo'+(c.bucket.readyAt?' (vuelve hacia las '+new Date(c.bucket.readyAt).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+')':'')+'.','survivorNotice'));
- if(c.hunting.length)box.append(el('p','Cazando: '+c.hunting.map(h=>h.username).join(', ')+'.','survivorNotice'));
- if(c.fire){const b=button('Avivar el fuego (−6 de agua, +30 min)',()=>act({action:'fan'}),'survivorButton survivorGather');b.disabled=me.water<6;box.append(b);if(c.fireUntil)box.append(el('p','El fuego estará encendido hasta las '+new Date(c.fireUntil).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+'.','survivorNotice'));}
- box.append(el('p','Pulsa el agua para beber, el pollo para comer o la fogata para avivar el fuego.','survivorNotice'));
 }
-function button(text,fn,cls='survivorButton'){const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;}
 
 // ---------- Botones Prueba · Inmunidad · Consejo ----------
-let councilOpen=false;
 function renderSteps(){
  const s=state,me=s.me,mine=me?.status==='active'?me:null,box=$('svSteps');box.replaceChildren();
  const step=(label,href,on,title)=>{const li=el('li');if(on)li.setAttribute('aria-current','step');if(href){const a=el('a',label);a.href=href;if(title)a.title=title;li.append(a);}else{li.textContent=label;if(title)li.title=title;}box.append(li);return li;};
@@ -85,22 +77,8 @@ function renderSteps(){
  step('Prueba',day?'/survivor-challenge.html?'+new URLSearchParams({id:s.id,day:s.day,mode:'tribe'}):null,day,day?'Prueba de tribu del día '+s.day:'La prueba se abre al empezar la partida.');
  step('Inmunidad',day&&s.nominated&&mine?.tribe===s.nominated?'/survivor-challenge.html?'+new URLSearchParams({id:s.id,day:s.day,mode:'immunity'}):null,day&&!!s.nominated,s.nominated?'Inmunidad individual de la '+tribeName(s.nominated):'La inmunidad no está abierta este día.');
  const li=step('Consejo',null,day&&!!s.nominated||s.history.length>0);
- li.replaceChildren();const a=el('a','Consejo');a.href='#svCouncilPanel';a.onclick=e=>{e.preventDefault();councilOpen=!councilOpen;renderCouncil();if(councilOpen)$('svCouncilPanel').scrollIntoView({behavior:'smooth',block:'start'});};li.append(a);
-}
-function renderCouncil(){
- const s=state,me=s.me,mine=me?.status==='active'?me:null,box=$('svCouncilPanel');box.hidden=!councilOpen;box.replaceChildren();if(!councilOpen)return;
- box.append(el('h2','Consejo Tribal','survivorSectionTitle'));const body=el('div',null,'survivorPhase');box.append(body);
- if(s.phase==='day'&&s.nominated){
-  body.append(el('p','La '+tribeName(s.nominated)+' perdió la prueba anterior y está en el Consejo Tribal. Sale quien tenga más votos al cambiar de día. El ganador final de la inmunidad no puede salir y los votos a él no cuentan. Puedes cambiar tu voto durante todo el día. Los votos son secretos: al cambiar de día se verá cuántos tuvo cada uno.'));
-  if(mine&&mine.atCouncil){const targets=el('div',null,'survivorVoteTargets');for(const p of s.players.filter(p=>p.status==='active'&&p.tribe===mine.tribe&&p.id!==mine.id)){const b=button(p.username,()=>act({action:'vote',target:p.id}));b.setAttribute('aria-pressed',String(String(mine.vote)===String(p.id)));targets.append(b);}body.append(el('p',mine.vote?'Tu voto está guardado. Puedes cambiarlo hasta el cambio de día.':'Todavía no has votado.','survivorNotice'),targets);}
-  else body.append(el('p',mine?'Hoy tu tribu no vota.':'Solo vota la tribu que está en el Consejo Tribal.','survivorNotice'));
- }else body.append(el('p','La votación está cerrada. Vota la tribu que pierda la prueba de hoy.'));
- const last=s.history.find(h=>h.council);
- if(last){body.append(el('h3','Votos del día '+last.day+' · '+tribeName(last.council.tribe)));const ul=el('ul');for(const v of last.council.votes||[])ul.append(el('li',v.username+': '+v.votes+(v.votes===1?' voto':' votos')+(v.immune?' (inmune)':'')));body.append(ul);if(last.council.out)body.append(el('p','Expulsado: '+last.council.out+'.'));}
-}
-async function loadBlogs(){
- if(blogsLoaded)return;blogsLoaded=true;
- try{const d=await api('/api/blog?q=%23survivor');const posts=(d.posts||[]).slice(0,5);if(!posts.length)return;const box=$('svBlogs');box.replaceChildren();for(const b of posts){const p=el('p'),a=el('a',b.title||'Blog');a.href='/blogs?id='+b.id;p.append(a);box.append(p);}}catch{}
+ // V311: el Consejo se abre en su propia página con los avatares y el botón Nominar.
+ li.replaceChildren();const a=el('a','Consejo');a.href='/survivor-council.html?'+new URLSearchParams({id:s.id});li.append(a);
 }
 function renderWhispers(){
  const s=state,select=$('froWhisperTo'),old=select.value;select.replaceChildren(new Option('Selecciona…',''));
@@ -112,7 +90,11 @@ function renderWhispers(){
 function tab(isPrivate){$('public-chat').hidden=isPrivate;$('froWhispers').hidden=!isPrivate;$('froPublic').setAttribute('aria-selected',String(!isPrivate));$('froPrivate').setAttribute('aria-selected',String(isPrivate));}
 $('froPublic').onclick=()=>tab(false);$('froPrivate').onclick=()=>tab(true);
 $('froWhisperForm').onsubmit=async e=>{e.preventDefault();const to=$('froWhisperTo').value,body=$('froWhisperText').value.trim();if(!to||!body)return;await act({action:'whisper',to:Number(to),body});if(!$('svNotice').textContent)$('froWhisperText').value='';};
-function render(){renderHeader();renderCamp();renderSteps();renderCouncil();renderWhispers();clock();}
+async function loadBlogs(){
+ if(blogsLoaded)return;blogsLoaded=true;
+ try{const d=await api('/api/blog?q=%23survivor');const posts=(d.posts||[]).slice(0,5);if(!posts.length)return;const box=$('svBlogs');box.replaceChildren();for(const b of posts){const p=el('p'),a=el('a',b.title||'Blog');a.href='/blogs?id='+b.id;p.append(a);box.append(p);}}catch{}
+}
+function render(){renderHeader();renderCamp();renderSteps();renderWhispers();clock();}
 async function pick(){
  const d=await api('/api/survivor');const list=d.matches||[];
  const mine=list.find(m=>m.mine&&m.phase!=='finished'),active=list.find(m=>m.phase==='day'),waiting=list.find(m=>m.phase==='waiting');
@@ -135,6 +117,6 @@ $('svSwitch').onclick=()=>{if(!state)return;const own=state.me?.tribe;viewTribe=
 $('svFillBots').onclick=()=>act({action:'fill_bots'});
 $('svStart').onclick=()=>act({action:'start'});
 const campPage=kind=>{if(state)location.href='/survivor-camp.html?'+new URLSearchParams({id:state.id,kind});};
-$('svWaterLog').onclick=()=>campPage('water');$('svFoodLog').onclick=()=>campPage('food');$('svFireLog').onclick=()=>campPage('fire');
+$('svWaterLog').onclick=()=>campPage('water');$('svFoodLog').onclick=()=>campPage('food');$('svFireLog').onclick=()=>campPage('fire');$('svWeatherLog').onclick=()=>campPage('weather');
 load();setInterval(clock,1000);setInterval(()=>{if(!document.hidden)load();},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});

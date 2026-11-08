@@ -145,3 +145,13 @@
 .survivorStepValue{min-width:38px;text-align:center;font:bold 20px/32px Arial;color:#333}
 .survivorStepper .survivorSave{margin:0 0 0 6px!important;display:inline-flex;align-items:center;min-height:32px;padding:7px 16px!important;border:1px solid #edbd28!important;border-radius:3px!important;background:linear-gradient(#ffdf5e,#ffc51a)!important;box-shadow:0 3px 10px #f4c63e30!important;color:#6a571e!important;font:bold 12px Arial!important;cursor:pointer}
 .survivorStepper .survivorSave:disabled{opacity:.5;cursor:default}
+/* V311: página del Consejo Tribal. */
+.survivorCouncilPage{max-width:760px}
+.survivorCouncilGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:14px 10px;margin:14px 0 22px}
+.survivorCouncilCard{text-align:center;font-family:"Trebuchet MS",Trebuchet,Verdana,sans-serif;padding:6px 4px;border:1px solid transparent}
+.survivorCouncilCard .avatarFrame{width:80px}
+.survivorCouncilCard .survivorName{margin:4px 0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.survivorCouncilCard.survivorChosen{background:#fffbd5;border-color:#ffe54f}
+.survivorCouncilCard .survivorNominate{margin:0!important;display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:5px 12px!important;border:1px solid #edbd28!important;border-radius:3px!important;background:linear-gradient(#ffdf5e,#ffc51a)!important;color:#6a571e!important;font:bold 12px Arial!important;cursor:pointer}
+.survivorCouncilCard .survivorNominate[aria-pressed="true"]{background:linear-gradient(#f0f6fa,#d5e5ef)!important;border-color:#8caebe!important;color:#416379!important}
+.survivorCouncilCard .survivorNominate:disabled{opacity:.6;cursor:default}

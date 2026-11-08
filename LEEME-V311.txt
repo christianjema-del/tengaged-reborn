@@ -1,0 +1,12 @@
+V311 - Survivor: Consejo Tribal en su propia página; caza y cubo desde el tiempo
+
+- Quitados de la página del juego los botones de Cazar, Sacar el cubo y Avivar el fuego
+  (y sus textos) que salían encima del Consejo Tribal.
+- Al pulsar el sol o la nube con lluvia se abre la sección «Caza y cubo»: con sol se puede
+  cazar (−6 de agua) y con lluvia sacar el cubo (−6 de pollo), con sus movimientos.
+- La fogata sigue abriendo la sección del fuego para avivarlo; el agua y el pollo, solo
+  beber y comer.
+- Quitado el apartado «Consejo Tribal» de la página del juego.
+- El botón Consejo (debajo de Inmunidad) abre una página nueva (survivor-council.html) con el
+  avatar y el nombre de cada compañero de tribu y el botón Nominar. El voto se puede cambiar
+  hasta el cambio de día. Debajo salen los votos del último Consejo.
