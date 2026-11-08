@@ -3,7 +3,7 @@ import {ensureEnrollmentNotifications} from '../_shared/enrollment.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {getSessionUser,jsonError} from '../_shared/auth.js';
 import {ensureSurvivor,survivorListing,survivorMatch,waitingSurvivor} from '../_shared/survivor-service.js';
-const ACTIONS=['join','start','fill_bots','hunt','bucket','eat','fan','sitout','vote'];
+const ACTIONS=['join','start','fill_bots','hunt','bucket','eat','fan','sitout','vote','whisper'];
 async function handle({request,env}){try{
  const user=await getSessionUser(request,env.DB),url=new URL(request.url),id=Number(url.searchParams.get('id')),tribe=url.searchParams.get('tribe'),noStore={headers:{'Cache-Control':'no-store'}};
  if(request.method==='GET')return Response.json({ok:true,...(id?await survivorMatch(env.DB,id,user,null,false,tribe):{matches:await survivorListing(env.DB,user)})},noStore);

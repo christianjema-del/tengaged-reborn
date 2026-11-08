@@ -112,7 +112,17 @@ async function loadBlogs(){
  if(blogsLoaded)return;blogsLoaded=true;
  try{const d=await api('/api/blog?q=%23survivor');const posts=(d.posts||[]).slice(0,5);if(!posts.length)return;const box=$('svBlogs');box.replaceChildren();for(const b of posts){const p=el('p'),a=el('a',b.title||'Blog');a.href='/blogs?id='+b.id;p.append(a);box.append(p);}}catch{}
 }
-function render(){renderHeader();renderCamp();renderSteps();renderCouncil();clock();}
+function renderWhispers(){
+ const s=state,select=$('froWhisperTo'),old=select.value;select.replaceChildren(new Option('Selecciona…',''));
+ for(const p of s.players.filter(p=>p.status==='active'&&!p.bot&&String(p.id)!==String(s.me?.id)))select.append(new Option(p.username,p.id));select.value=old;
+ $('froWhisperForm').hidden=!s.me||s.me.status!=='active'||s.phase!=='day';
+ $('froWhisperList').replaceChildren(...(s.whispers||[]).slice().reverse().map(w=>{const p=el('p','','fro-whisper');p.append(el('strong',w.from+' → '+w.to+': '),document.createTextNode(w.body));return p;}));
+ if(!(s.whispers||[]).length)$('froWhisperList').append(el('p','Todavía no tienes mensajes privados en esta partida.'));
+}
+function tab(isPrivate){$('public-chat').hidden=isPrivate;$('froWhispers').hidden=!isPrivate;$('froPublic').setAttribute('aria-selected',String(!isPrivate));$('froPrivate').setAttribute('aria-selected',String(isPrivate));}
+$('froPublic').onclick=()=>tab(false);$('froPrivate').onclick=()=>tab(true);
+$('froWhisperForm').onsubmit=async e=>{e.preventDefault();const to=$('froWhisperTo').value,body=$('froWhisperText').value.trim();if(!to||!body)return;await act({action:'whisper',to:Number(to),body});if(!$('svNotice').textContent)$('froWhisperText').value='';};
+function render(){renderHeader();renderCamp();renderSteps();renderCouncil();renderWhispers();clock();}
 async function pick(){
  const d=await api('/api/survivor');const list=d.matches||[];
  const mine=list.find(m=>m.mine&&m.phase!=='finished'),active=list.find(m=>m.phase==='day'),waiting=list.find(m=>m.phase==='waiting');

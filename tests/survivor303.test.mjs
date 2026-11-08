@@ -156,3 +156,17 @@ test('minijuego Flash: abre la prueba de tribu con el tiempo del jugador y guard
  const m=(await Svc.survivorMatch(db,id,{id:200,username:'Flash'})).match;assert.equal(m.me.score,4321);assert.equal(m.today.own.total,4321);
  const again=await call({type,function:'requestGameData',header});assert.equal(again.body.error,1,'no se puede repetir la prueba');
 });
+test('V305: mensajes privados, burbuja del perfil, color en la lista de juegos y pestañas del chat',()=>{
+ const s=started(3),a=me(s,0),b=me(s,1),c=me(s,2),at=s.startedAt+1000;
+ E.actSurvivor(s,a,{action:'whisper',to:b.id,body:'hola'},at);
+ assert.throws(()=>E.actSurvivor(s,a,{action:'whisper',to:b.id,body:'otra'},at+1000),/tres segundos/);
+ assert.throws(()=>E.actSurvivor(s,a,{action:'whisper',to:s.players.find(p=>p.bot).id,body:'x'},at+5000),/no válido/);
+ assert.deepEqual(E.survivorView(s,b,at).whispers.map(w=>[w.from,w.to,w.body]),[['H0','H1','hola']]);
+ assert.deepEqual(E.survivorView(s,c,at).whispers,[],'los demás no ven los privados');
+ const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
+ assert.match(read('profile.html'),/kind==='SURVIVOR'\?'\/survivor\.html\?id='\+encodeURIComponent\(game\.game_id\)/);
+ assert.match(read('profile-classic166.js'),/SURVIVOR:'\/survivor\.html\?id='/);
+ assert.match(read('games-list258.css'),/td\.type-cell\.survivor\{background:#dcf6dd!important\}/);
+ const html=read('survivor.html');for(const id of ['froPublic','froPrivate','froPublicCount','public-chat','froWhispers','froWhisperForm'])assert.ok(html.includes('id="'+id+'"'),id);
+ assert.match(read('game-chat.js'),/frookies\|\|rookies\|\|survivor/);assert.match(read('game-feed.js'),/'survivor'\?'\/survivor\.html\?id='|type==='survivor'\?'\/survivor\.html\?id='/);
+});

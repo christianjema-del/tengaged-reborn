@@ -1,0 +1,10 @@
+V305 - Survivor en la sección de juegos, burbuja del perfil y chat
+
+- Lista de juegos: las partidas de Survivor salen con su color de tengaged.es/games (2015):
+  celda verde claro #dcf6dd con el enlace azul, como el resto de juegos.
+- Perfil: la burbuja de Survivor abre la partida (/survivor.html?id=N) en vez de la página de juegos.
+  Una unificación se muestra como 1º. También enlazan a la partida la actividad del perfil,
+  los últimos mensajes de la página de juegos y los comentarios de la comunidad.
+- Chat de Survivor igual que el de Frookies y Rookies: pestañas «Comentarios públicos» y
+  «Mensajes privados» con contador, y mensajes privados entre náufragos activos.
+Pruebas: tests/survivor303.test.mjs

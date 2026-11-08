@@ -200,6 +200,12 @@ export function actSurvivor(s,user,input,now=Date.now(),trusted=false){
   if(!startAdmin172(user)||s.phase!=='waiting'||s.players.length<CAPACITY)throw Error('Solo admin1 puede iniciar con las 20 plazas completas.');
   authorizeStart172(s,user,'survivor',now);advanceSurvivor(s,now);return;
  }
+ if(action==='whisper'){
+  const p=requirePlayer(s,user),to=byId(s,input.to),body=String(input.body||'').trim();
+  if(!to||to.bot||key(to.id)===key(p.id)||to.status!=='active'||!body||body.length>500)throw Error('Mensaje privado no válido.');
+  if((s.whispers||=[]).some(w=>key(w.from)===key(p.id)&&now-w.at<3000))throw Error('Espera tres segundos.');
+  s.whispers.push({id:crypto.randomUUID(),from:p.id,to:to.id,body,at:now});s.whispers=s.whispers.slice(-500);return;
+ }
  const p=requirePlayer(s,user),camp=s.camps[p.tribe];settleCamp(s,p.tribe,now);
  if(action==='hunt'){
   if(weatherAt(camp,now)!=='sun')throw Error('Solo se puede cazar cuando hace sol.');
@@ -308,5 +314,6 @@ export function survivorView(s,user,now=Date.now(),viewTribe=null){
   // Los resultados de la prueba de tribu se comparten al cambiar de día; la inmunidad solo la ve su tribu.
   history:s.history.map(h=>({...h,council:h.council?{...h.council,immunity:ownTribe===h.council.tribe?h.council.immunity:null}:null})).reverse(),
   events:s.events.slice(-60).reverse().map(({id,text,at,kind})=>({id,text,at,kind})),
+  whispers:me?(s.whispers||[]).filter(w=>key(w.from)===key(me.id)||key(w.to)===key(me.id)).map(w=>({id:w.id,from:byId(s,w.from)?.username,to:byId(s,w.to)?.username,body:w.body,at:w.at})):[],
   welcomes:s.welcomes};
 }
