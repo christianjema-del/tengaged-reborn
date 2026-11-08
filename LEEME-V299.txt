@@ -1,0 +1,16 @@
+V299 - Los juegos avanzan solos
+
+Antes, Casting, Frookies, El Duelo, Rookies, Hunger y las subastas solo pasaban de fase
+cuando alguien abría su página. Sin visitas, la partida se quedaba parada aunque el plazo
+hubiera vencido.
+
+Ahora:
+- /api/tick devuelve la lista de partidas que no han terminado.
+- El Worker programado "tengaged-reborn-tick" (carpeta tick-worker/) se ejecuta cada minuto.
+  Visita cada partida de esa lista con la misma consulta anónima que hace la página,
+  así que el juego aplica sus propias reglas y plazos sin que nadie tenga que entrar.
+
+Despliegue del Worker (una vez, y cada vez que cambie tick-worker/):
+  cd tick-worker && npx wrangler deploy
+
+Pruebas: tests/game-tick299.test.mjs

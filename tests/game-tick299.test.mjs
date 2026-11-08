@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import fs from 'node:fs';
+import {onRequestGet as tickApi,tickTargets} from '../functions/api/tick.js';
+import {tick} from '../tick-worker/index.js';
+const sql=new DatabaseSync(':memory:');
+class S{constructor(q,a=[]){this.q=q;this.a=a;}bind(...a){return new S(this.q,a);}async first(){return sql.prepare(this.q).get(...this.a)||null;}async all(){return {results:sql.prepare(this.q).all(...this.a)};}async run(){const r=sql.prepare(this.q).run(...this.a);return {meta:{changes:Number(r.changes)}};}}
+const db={prepare:q=>new S(q)};
+assert.deepEqual(await tickTargets(db),[],'sin tablas no hay nada que visitar');
+for(const t of ['casting_matches','frookies_matches','duel_matches','rookies_matches'])sql.exec(`CREATE TABLE ${t}(id INTEGER PRIMARY KEY,state TEXT)`);
+sql.exec("CREATE TABLE hunger_arena(id INTEGER PRIMARY KEY,revision INTEGER,state TEXT);CREATE TABLE design_auctions(id INTEGER PRIMARY KEY,status TEXT)");
+const st=p=>JSON.stringify({phase:p});
+sql.prepare('INSERT INTO frookies_matches VALUES(16,?),(17,?),(15,?)').run(st('veto'),st('waiting'),st('finished'));
+sql.prepare('INSERT INTO casting_matches VALUES(11,?),(10,?)').run(st('elimination'),st('finished'));
+sql.prepare('INSERT INTO rookies_matches VALUES(1,?)').run(st('day'));
+sql.prepare('INSERT INTO duel_matches VALUES(2,?)').run(st('duel'));
+sql.prepare('INSERT INTO hunger_arena VALUES(1,0,?)').run(st('active'));
+sql.prepare("INSERT INTO design_auctions VALUES(1,'closed')").run();
+const expected=['/api/castings?id=11','/api/frookies?id=16','/api/frookies?id=17','/api/duel?id=2','/api/rookies?id=1','/api/hunger'];
+assert.deepEqual(await tickTargets(db),expected,'solo partidas no terminadas');
+sql.prepare("INSERT INTO design_auctions VALUES(2,'open')").run();
+const r=await tickApi({request:new Request('https://t.local/api/tick'),env:{DB:db}});
+assert.equal(r.status,200);assert.equal(r.headers.get('Cache-Control'),'no-store');
+assert.deepEqual((await r.json()).targets,[...expected,'/api/auctions']);
+// El Worker visita cada partida de la lista, sin cookies y solo rutas /api/ del propio sitio.
+const seen=[];
+const fetcher=async(url,init)=>{seen.push(url);assert.equal(init.headers.Cookie,undefined);
+ if(url.endsWith('/api/tick'))return Response.json({targets:['/api/frookies?id=16','https://evil.test/x','/api/hunger',5]});
+ return new Response('{}',{status:url.includes('hunger')?503:200});};
+const out=await tick({SITE:'https://site.test'},fetcher);
+assert.deepEqual(seen,['https://site.test/api/tick','https://site.test/api/frookies?id=16','https://site.test/api/hunger']);
+assert.deepEqual(out,['/api/frookies?id=16 200','/api/hunger 503']);
+await assert.rejects(tick({SITE:'https://site.test'},async()=>new Response('',{status:500})),/tick list 500/);
+const toml=fs.readFileSync(new URL('../tick-worker/wrangler.toml',import.meta.url),'utf8');
+assert.match(toml,/crons = \["\* \* \* \* \*"\]/);assert.match(toml,/SITE = "https:\/\/tengaged-reborns\.pages\.dev"/);
+console.log('game tick ok');
