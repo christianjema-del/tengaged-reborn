@@ -1,0 +1,9 @@
+V313 - Survivor: las tribus se forman por orden de inscripción
+
+- Antes, al empezar un Survivor las tribus se sorteaban, y por eso Peach, Ricardito y cazweet
+  acabaron separados del resto. Ahora se forman por orden de inscripción: los 10 primeros
+  inscritos van juntos y los siguientes forman la otra tribu (los bots siempre al final).
+- Survivor #1 (arreglado directamente en la base de datos): Peach, Ricardito y cazweet pasan a
+  la tribu de Vort (B) y Bot_01, Bot_02 y Bot_03 a la tribu A, para seguir 10 contra 10.
+  La caza de Peach y Ricardito (+20 de pollo) pasa con ellos a la reserva de su nueva tribu,
+  y sus mensajes al chat de la tribu B.

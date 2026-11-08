@@ -222,3 +222,15 @@ test('V312: los segundos de la prueba solo cambian al cambiar de día; se ve des
  const a=Object.values(s.attempts).find(x=>String(x.user)===String(p.id));assert.ok(a,'intento creado');assert.equal(a.duration,200);
  E.advanceSurvivor(s,s.deadline);if(p.status==='active')assert.equal(E.survivorView(s,p,s.deadline+1).me.seconds,E.challengeSeconds(p.food,p.water));
 });
+test('V313: las tribus salen por orden de inscripción, sin sorteo; los 10 primeros juntos',()=>{
+ for(let round=0;round<15;round++){
+  const at=Date.UTC(2026,10,10,8),s=E.freshSurvivor(9,at);
+  for(let i=0;i<12;i++)E.actSurvivor(s,H(i),{action:'join'},at+i*1000);
+  E.actSurvivor(s,admin,{action:'fill_bots'},at+20000);E.actSurvivor(s,admin,{action:'start'},at+20000);
+  const tribe=n=>me(s,n).tribe;
+  for(let i=1;i<10;i++)assert.equal(tribe(i),tribe(0),'H'+i+' con H0');
+  assert.notEqual(tribe(10),tribe(0));assert.equal(tribe(11),tribe(10));
+  assert.equal(E.tribeOf(s,'A').length,10);assert.equal(E.tribeOf(s,'B').length,10);
+ }
+ assert.ok(!fs.readFileSync(new URL('../functions/_shared/survivor-engine.js',import.meta.url),'utf8').includes('shuffle('));
+});

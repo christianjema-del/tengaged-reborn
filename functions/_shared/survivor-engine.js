@@ -86,9 +86,11 @@ function settleCamp(s,t,now){
 }
 
 // ---------- Días ----------
-function shuffle(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=random(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 function assignTribes(s){
- const carried=s.players.filter(p=>p.carried),fresh=shuffle(s.players.filter(p=>!p.carried));
+ // V313: las tribus se forman por orden de inscripción (los 10 primeros juntos), sin sortear.
+ // Así nadie cambia de tribu respecto a cómo salía en la inscripción. Los bots van siempre al final.
+ const order=s.players.map((p,i)=>({p,i})).sort((a,b)=>(!!a.p.bot-!!b.p.bot)||((a.p.joinedAt??0)-(b.p.joinedAt??0))||(a.i-b.i)).map(x=>x.p);
+ const carried=order.filter(p=>p.carried),fresh=order.filter(p=>!p.carried);
  if(!carried.length){fresh.forEach((p,i)=>{p.tribe=i<TRIBE_SIZE?'A':'B';});return;}
  // La tribu unificada espera a que se llene la otra: los nuevos completan primero la tribu B.
  for(const p of carried)p.tribe='A';
