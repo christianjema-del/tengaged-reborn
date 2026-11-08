@@ -12,3 +12,6 @@ test('V317: resumen de partidas en curso para el panel',()=>{
  const h=summarize({type:'hunger',name:'Hunger Games',href:()=>'/hunger.html'},10,{phase:'waiting',players:[{username:'Peach',health:70}]});assert.equal(h.phaseName,'Inscripción');assert.equal(h.alive,1);
  const html=read('admin.html');assert.match(html,/data-staff-tab="games"/);assert.match(html,/id="noticeTarget"/);
 });
+test('V318: el envío de avisos no usa LIKE (D1 no admite patrones de más de 50 caracteres)',()=>{
+ const s=read('functions/api/admin-notices.js');assert.ok(!/LIKE ?\?/i.test(s));assert.match(s,/substr\(system_event,1,\?\)=\?/);
+});

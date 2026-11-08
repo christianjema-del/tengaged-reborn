@@ -1,3 +1,4 @@
+// V318: sin LIKE: Cloudflare D1 no admite patrones LIKE de más de 50 caracteres y el del aviso medía 51.
 // V298: admin1 envía avisos de Tengaged al correo de un jugador o de toda la comunidad.
 import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {getSessionUser,jsonError} from '../_shared/auth.js';
@@ -18,7 +19,7 @@ async function handle({request,env}){try{
  const full=text+'\n\nEste es un aviso de la administración de Tengaged y no admite respuesta.';
  const [sent]=await db.batch([
   db.prepare(`INSERT OR IGNORE INTO private_messages(sender,recipient,subject,body,system_event) SELECT ?,u.id,?,?,?||u.id FROM users u WHERE ${where}`).bind(system.id,subject,full,key),
-  db.prepare("INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) SELECT ?,?,'send_notice',(SELECT COUNT(*) FROM private_messages WHERE system_event LIKE ?||'%'),?").bind(actor.id,target?.id??actor.id,key,(target?'Para '+target.username:'Para todos')+' · '+subject)
+  db.prepare("INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) SELECT ?,?,'send_notice',(SELECT COUNT(*) FROM private_messages WHERE substr(system_event,1,?)=?),?").bind(actor.id,target?.id??actor.id,key.length,key,(target?'Para '+target.username:'Para todos')+' · '+subject)
  ]);
  const n=Number(sent.meta?.changes)||0;
  return json({message:n===1?'Aviso enviado a '+(target?.username||'1 usuario')+'.':'Aviso enviado a '+n+' usuarios.',sent:n,notices:await history(db)});

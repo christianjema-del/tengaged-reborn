@@ -1,0 +1,6 @@
+V318 - Los avisos de admin1 ya se envían
+
+- El servidor fallaba al guardar el aviso ("No se pudo enviar el aviso.") porque contaba los
+  destinatarios con un LIKE de 51 caracteres y Cloudflare D1 solo admite patrones de hasta 50
+  ("LIKE or GLOB pattern too complex"). En local no fallaba porque SQLite no tiene ese límite.
+- Ahora se cuenta con substr(), sin LIKE. Comprobado en la base de datos real.
