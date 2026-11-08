@@ -118,3 +118,20 @@
 .staff-audit-list li>button{margin:6px 10px 0 0;padding:3px 8px;font-size:12px}
 #staffNotices textarea{width:100%;box-sizing:border-box}
 #staffNotices .staff-action-form{max-width:640px}
+/* V317: partidas en curso y contadores de avisos. */
+.staff-games-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.staff-games-tools .staff-notice{margin:0}
+.staff-games{width:100%;border-collapse:collapse;font:12px/1.4 Arial,sans-serif}
+.staff-games th{text-align:left;padding:5px 7px;background:var(--staff-blue-soft);border-bottom:1px solid var(--staff-blue-line);color:var(--staff-blue-text);font:bold 11px var(--staff-font)}
+.staff-games td{padding:5px 7px;border-bottom:1px solid #eef2f5;color:var(--staff-text)}
+.staff-games tbody tr:nth-child(even){background:var(--staff-blue-row)}
+.staff-games tr.staff-game-waiting td{background:#fffbd5}
+.staff-games strong{color:var(--staff-blue-text)}
+.staff-games a{color:var(--staff-blue-text);font-weight:bold;text-decoration:none;white-space:nowrap}
+.staff-count{float:right;color:var(--staff-muted);font-weight:normal;font-size:10px}
+@media (max-width:640px){.staff-games th:nth-child(3),.staff-games td:nth-child(3),.staff-games th:nth-child(5),.staff-games td:nth-child(5){display:none}}
+#staffApp button.staff-primary{justify-self:start;width:auto;min-height:30px;padding:5px 14px;background:linear-gradient(#fff9b7,#fff092);border:1px solid var(--staff-yellow-line);border-radius:3px;color:#6b6230;font:bold 12px var(--staff-font);cursor:pointer}
+#staffApp button.staff-primary:hover{background:linear-gradient(#fffbc9,#ffe873)}
+#staffApp button.staff-primary:disabled{opacity:.6;cursor:default}
+#staffNotices .staff-action-form textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;margin:3px 0 0;padding:6px 7px;background:#fff;border:1px solid var(--staff-blue-line);border-radius:3px;color:var(--staff-text);font:16px/1.4 Arial;resize:vertical}
+#gamesRefresh{min-height:28px;padding:4px 12px;background:linear-gradient(#fff,#e8f0f6);border:1px solid var(--staff-blue-line);border-radius:3px;color:var(--staff-blue-text);font:bold 11px var(--staff-font);cursor:pointer}

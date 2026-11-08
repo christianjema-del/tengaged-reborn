@@ -1,0 +1,13 @@
+V317 - Panel de administración: avisos arreglados y puesta a punto
+
+- Avisos a todos: no se enviaban porque el panel pedía confirmación con la ventanita del
+  navegador (confirm). En algunos navegadores y vistas integradas esa ventana no aparece y
+  cuenta como "Cancelar", así que el aviso nunca salía. Ahora la confirmación sale dentro de
+  la página, con nuestro diseño.
+- Lo mismo para restablecer contraseña, bloquear IP y los cambios de cuenta con motivo
+  (también usaban ventanitas del navegador): nuevo staff-dialog317.js.
+- Avisos: dice a cuántos jugadores llegará, cuenta caracteres de asunto y mensaje y el botón
+  "Enviar aviso" vuelve a ser amarillo.
+- Nueva pestaña "Partidas": todas las partidas sin terminar (Casting, Survivor, Frookies,
+  Rookies, El Duelo y Hunger) con fase, día, jugadores, bots, cuántos siguen en juego y enlace.
+  Las que están en inscripción salen en amarillo. API nueva: /api/admin-games (solo lectura).

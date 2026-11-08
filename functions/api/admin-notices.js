@@ -7,7 +7,7 @@ const json=data=>Response.json({ok:true,...data},{headers:{'Cache-Control':'no-s
 async function history(db){return (await db.prepare("SELECT l.id,l.amount,l.reason,l.created_at,t.username AS target FROM admin_audit_log l LEFT JOIN users t ON t.id=l.target_user_id WHERE l.action='send_notice' ORDER BY l.id DESC LIMIT 20").all()).results;}
 async function handle({request,env}){try{
  const db=env.DB;await ensureStaffSchema(db);await ensureSystemAccount(db);const actor=await getSessionUser(request,db);if(!isOwner(actor))return jsonError('Solo admin1 puede enviar avisos.',403);
- if(request.method==='GET')return json({notices:await history(db)});
+ if(request.method==='GET'){const r=await db.prepare("SELECT COUNT(*) AS n FROM users u WHERE COALESCE(u.is_system,0)=0 AND COALESCE(u.is_test_bot,0)=0 AND COALESCE(u.is_banned,0)=0").first();return json({notices:await history(db),recipients:Number(r?.n)||0});}
  if(request.method!=='POST')return jsonError('Método no permitido.',405);if(request.headers.get('Origin')!==new URL(request.url).origin)return jsonError('Origen no permitido.',403);
  const body=await request.json().catch(()=>({}));const subject=String(body.subject||'').trim(),text=String(body.body||'').trim(),to=String(body.to||'all').trim();
  if(subject.length<3||subject.length>100)return jsonError('El asunto debe tener entre 3 y 100 caracteres.',400);if(text.length<3||text.length>4000)return jsonError('El mensaje debe tener entre 3 y 4000 caracteres.',400);

@@ -42,7 +42,7 @@ assert.equal((await call(notices,1,'admin-notices',{body:{to:'all',subject:'x',b
 
 // Interfaz
 const html=readFileSync(new URL('../admin.html',import.meta.url),'utf8');
-assert.match(html,/data-staff-tab="multi">IP y multicuentas<\/button>/);assert.match(html,/data-staff-tab="audit">Registro<\/button>/);assert.match(html,/data-staff-tab="notices" data-owner-only hidden>Avisos/);assert.match(html,/admin-page\.js\?v=298/);
-const page=readFileSync(new URL('../admin-page.js',import.meta.url),'utf8');assert.match(page,/admin-workbench\.js\?v=298/);assert.match(page,/if\(!canBlock\)return/);
-assert.match(readFileSync(new URL('../profile.html',import.meta.url),'utf8'),/admin-workbench\.js\?v=298/);
+assert.match(html,/data-staff-tab="multi">IP y multicuentas<\/button>/);assert.match(html,/data-staff-tab="audit">Registro<\/button>/);assert.match(html,/data-staff-tab="notices" data-owner-only hidden>Avisos/);assert.match(html,/admin-page\.js\?v=317/);
+const page=readFileSync(new URL('../admin-page.js',import.meta.url),'utf8');assert.match(page,/admin-workbench\.js\?v=317/);assert.match(page,/if\(!canBlock\)return/);
+assert.match(readFileSync(new URL('../profile.html',import.meta.url),'utf8'),/admin-workbench\.js\?v=317/);
 console.log('PASS herramientas de moderación y administración V298');
