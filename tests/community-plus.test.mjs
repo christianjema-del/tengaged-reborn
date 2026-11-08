@@ -106,7 +106,7 @@ assert.equal((await call(friends,'api/friends?username=Alice',1,{action:'reorder
 sql.exec("INSERT INTO community_designs(id,user_id,author,title,description,theme_code,layer_type,image_data) VALUES(500,1,'Alice','Smile','','sky','mouth','data:image/png;base64,YQ==');INSERT INTO user_inventory(user_id,item_code) VALUES(1,'userdesign-500');CREATE TABLE player_shop_gifts(id INTEGER PRIMARY KEY,design_id INTEGER,buyer_id INTEGER,recipient_id INTEGER,created_at TEXT,message TEXT);INSERT INTO player_shop_gifts VALUES(1,500,2,1,CURRENT_TIMESTAMP,'A gift for you');INSERT INTO blog_posts(user_id,author,title,body) VALUES(2,'Bob','Mention','Hello @Alice and @AliceExtra')");
 const detail=await call(extras,'api/profile-extras?username=Alice',0);
 assert.equal(detail.status,200);
-assert.equal(detail.gift_count,1);assert.equal(detail.owned_count,1);
+assert.equal(detail.gift_count,1);assert.equal(detail.owned,undefined,'los diseños adquiridos no se publican');assert.equal(detail.owned_count,undefined);assert.deepEqual(detail.shops,[]);
 assert.equal(detail.gifts[0].message,'A gift for you');
 assert.equal(detail.gifts[0].sender,'Bob');
 assert.equal(detail.mentions.length,1);assert.equal(detail.colors.length,0);

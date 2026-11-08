@@ -1,0 +1,12 @@
+V300 - Página de regalos clásica
+
+La página de regalos de cada perfil (gifts.html?username=...) es ahora una réplica de la
+página /gifts/usuario del Tengaged original (abril de 2012), en castellano:
+- Izquierda: avatar, nombre, «Núm. de regalos» y «Últimos regalos recibidos» con
+  «Ir al perfil». Cada regalo muestra su diseño, «De X comprado en la tienda Y» y la dedicatoria
+  («Te quiero...» si no se escribió ninguna).
+- Derecha: «Envíame un regalo» con «Juego de compras» y hasta 8 tiendas abiertas al azar.
+- Los diseños adquiridos ya no se muestran ni salen en /api/profile-extras.
+
+Archivos: gifts.html, gifts-page.js, gifts299.css, functions/api/profile-extras.js.
+Pruebas: tests/gifts-page299.test.mjs, tests/community-plus.test.mjs.
