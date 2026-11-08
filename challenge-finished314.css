@@ -1,0 +1,9 @@
+/* V314: resultado de la prueba como en tengaged.es (2014). */
+.tg-finished,.challenge-main #challengeResult.tg-finished,.duel-challenge #challengeResult.tg-finished,#challenge-result.tg-finished{display:block;box-sizing:border-box;background:#dce8f1;border:1px solid #b9cfdf;padding:22px 18px 26px;margin:0 0 28px;min-height:0;color:#4b4b4b;font:13px/1.3 Arial,Helvetica,sans-serif;text-align:left}
+.tg-finished[hidden],#challenge-result.tg-finished[hidden]{display:none}
+.tg-finished .tg-finished-title,#challenge-result.tg-finished>p{margin:0 0 4px 18px;font:13px/1.3 Arial,Helvetica,sans-serif;color:#4b4b4b}
+.tg-finished .tg-finished-title strong,#challenge-result.tg-finished>p strong{font-weight:bold;color:#333}
+.tg-finished .tg-finished-score,#challenge-result.tg-finished>div{text-align:center;white-space:nowrap;margin:0;line-height:1}
+.tg-finished .tg-finished-points,#challenge-result.tg-finished #challenge-points{font:normal 62px/1 Arial,Helvetica,sans-serif;color:#2d4256;letter-spacing:1px}
+.tg-finished .tg-finished-label,#challenge-result.tg-finished>div>span{font:normal 20px/1 Arial,Helvetica,sans-serif;color:#3a3a3a;margin-left:20px}
+@media (max-width:480px){.tg-finished .tg-finished-points,#challenge-result.tg-finished #challenge-points{font-size:48px}.tg-finished .tg-finished-title{margin-left:0}}

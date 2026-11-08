@@ -2,6 +2,7 @@
 // los resultados de ayer de las dos tribus y el catálogo; a la derecha el minijuego y los resultados de hoy de tu tribu.
 import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';
 import {elapsedMinutes} from '/elapsed-time.js?v=159';
+import {showFinished,clearFinished} from '/challenge-finished314.js?v=314';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
 const id=Number(params.get('id')),day=Number(params.get('day')||params.get('round')),mode=params.get('mode')==='immunity'?'immunity':'tribe';
 const previews={wheel:'wheel-of-fortune',numbers:'numbers',deal:'deal-or-no-deal',match:'match-three',guitar:'guitar',endurance:'endurance',maze:'maze',snow:'snow-flakes',words:'words',line:'line-balls'};
@@ -88,9 +89,9 @@ async function refresh(){
  try{
   if(!valid)throw Error('Abre la prueba desde tu partida de Survivor.');
   state=(await api('/api/survivor?id='+id)).match;$('challengeRetry').hidden=true;render();
-  if(today()&&done()){const here=playing;stop();$('challengeBoard').hidden=true;$('challengeRules').hidden=true;$('challengeStatus').textContent='Prueba completada.';$('challengeResult').textContent='Resultado guardado: '+pts(score())+' puntos. Ya puedes volver al juego.';if(here)$('challengeLeaderboard').scrollIntoView({behavior:'smooth',block:'start'});return;}
-  if(!canPlay()){if(!playing){$('challengeBoard').hidden=true;$('challengeRules').hidden=!today();$('challengeStatus').textContent=!today()?'Resultados del día '+day+'.':!state.me?'No participas en esta partida de Survivor.':state.me.status!=='active'?'Ya no estás en la partida.':mode==='immunity'?'Hoy tu tribu no juega la inmunidad.':state.me.sitting?'Hoy te sientas: no juegas la Prueba de Grupo.':'La prueba no está disponible ahora.';}return;}
-  $('challengeRules').hidden=false;if(!playing&&!launching)begin();
+  if(today()&&done()){const here=playing;stop();$('challengeBoard').hidden=true;$('challengeRules').hidden=true;$('svcSitout').hidden=true;$('challengeStart').hidden=true;$('challengeStatus').textContent='';showFinished($('challengeResult'),score());if(here)$('challengeLeaderboard').scrollIntoView({behavior:'smooth',block:'start'});return;}
+  if(!canPlay()){if(!playing){clearFinished($('challengeResult'));$('challengeBoard').hidden=true;$('challengeRules').hidden=!today();$('challengeStatus').textContent=!today()?'Resultados del día '+day+'.':!state.me?'No participas en esta partida de Survivor.':state.me.status!=='active'?'Ya no estás en la partida.':mode==='immunity'?'Hoy tu tribu no juega la inmunidad.':state.me.sitting?'Hoy te sientas: no juegas la Prueba de Grupo.':'La prueba no está disponible ahora.';}return;}
+  clearFinished($('challengeResult'));$('challengeRules').hidden=false;if(!playing&&!launching)begin();
  }catch(e){$('challengeStatus').textContent=playing?'La conexión se ha interrumpido. Mantén el minijuego abierto; reintentaremos consultar el guardado.':e.message;$('challengeRetry').hidden=false;}
  finally{loading=false;}
 }

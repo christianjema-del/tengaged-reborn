@@ -1,0 +1,8 @@
+V314 - Resultado de la prueba como en tengaged.es (2014)
+
+- Al terminar la prueba sale un recuadro azul con "Felicidades. Has terminado tu prueba"
+  y los puntos en grande, igual que la captura de 2014. Ya no salen las letras verdes
+  de "Resultado guardado".
+- Mismo recuadro en Survivor (Prueba de Grupo e Inmunidad), Casting, Frookies, El Duelo y Hunger.
+- En Hunger el detalle del combate (rival, bonus, salud) queda debajo del recuadro.
+- Archivos nuevos: challenge-finished314.js y challenge-finished314.css.
