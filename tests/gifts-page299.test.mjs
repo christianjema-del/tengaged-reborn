@@ -27,7 +27,26 @@ assert.deepEqual((await call('api/profile-extras?view=gifts&username=Alice')).sh
 const page=fs.readFileSync(new URL('../gifts-page.js',import.meta.url),'utf8'),html=fs.readFileSync(new URL('../gifts.html',import.meta.url),'utf8');
 assert.doesNotMatch(page+html,/adquirid|owned/i,'la página no enseña diseños adquiridos');
 for(const text of ['Núm. de regalos: ','Últimos regalos recibidos','Ir al perfil','Envíame un regalo','Juego de compras',' comprado en la tienda ','Te quiero...'])assert.ok(page.includes(text),text);
-assert.match(html,/gifts299\.css\?v=299/);assert.match(html,/gifts-page\.js\?v=299/);
+assert.match(html,/gifts299\.css\?v=301/);
 const css=fs.readFileSync(new URL('../gifts299.css',import.meta.url),'utf8');
 for(const rule of ['.gifts299 .inuser-left{width:550px','.gifts299 .inuser-right{width:330px','.gifts299 ol.gifts li div.message.big{width:470px}','.gifts299 a.inlineshop img{display:block;width:80px;height:80px;padding:10px'])assert.ok(css.includes(rule),rule);
 console.log('gifts page ok');
+// V301: paginación de 20 y ranking de quienes más regalan.
+{
+ const {pageList}=await import('../gifts-pages301.js');
+ assert.deepEqual(pageList(1,1),[]);assert.deepEqual(pageList(1,2),[1,2]);
+ assert.deepEqual(pageList(1,7),[1,2,3,'…',7]);assert.deepEqual(pageList(5,7),[1,'…',3,4,5,6,7]);assert.deepEqual(pageList(10,20),[1,'…',8,9,10,11,12,'…',20]);
+ sql.exec('UPDATE users SET is_banned=0');
+ sql.exec("INSERT INTO community_designs(id,user_id,author,title,description,theme_code,layer_type,image_data) SELECT 600+value,2,'Bob','D'||value,'','sky','hat',NULL FROM json_each('[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]')");
+ sql.exec("INSERT INTO player_shop_gifts(shop_id,design_id,buyer_id,recipient_id,price) SELECT 7,600+value,CASE WHEN value<15 THEN 3 ELSE 2 END,1,20 FROM json_each('[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]')");
+ let p1=await call('api/profile-extras?view=gifts&username=Alice'),p2=await call('api/profile-extras?view=gifts&username=Alice&page=2');
+ assert.equal(p1.gift_count,27);assert.equal(p1.page_size,20);assert.equal(p1.gifts.length,20);assert.equal(p2.page,2);assert.equal(p2.gifts.length,7);
+ assert.equal(new Set([...p1.gifts,...p2.gifts].map(g=>g.id)).size,27,'las páginas no repiten regalos');
+ assert.deepEqual(p1.givers,[{username:'Carol',gifts:16},{username:'Bob',gifts:11}],'ranking por número de regalos');
+ assert.deepEqual((await call('api/profile-extras?username=Alice')).givers,[],'el perfil no calcula el ranking');
+ sql.exec('UPDATE users SET is_banned=1 WHERE id=3');
+ assert.deepEqual((await call('api/profile-extras?view=gifts&username=Alice')).givers,[{username:'Bob',gifts:11}],'sin usuarios baneados');
+ const page2=fs.readFileSync(new URL('../gifts-page.js',import.meta.url),'utf8');
+ for(const text of ['Los que más me regalan',"'paginator h2'","'gpage showing'",'gifts-pages301.js?v=301'])assert.ok(page2.includes(text),text);
+ assert.match(fs.readFileSync(new URL('../gifts.html',import.meta.url),'utf8'),/gifts-page\.js\?v=301/);
+}

@@ -1,0 +1,11 @@
+V301 - Puesta a punto de la página de regalos
+
+- Todos los regalos se pueden ver en páginas de 20. Los botones de página (1 2 3 … N) van al
+  final de la línea roja de «Últimos regalos recibidos / Ir al perfil», con el estilo del
+  paginador clásico (div.paginator). Enlace: gifts.html?username=X&page=N.
+- Debajo de «Envíame un regalo» aparece «Los que más me regalan»: los 3 usuarios que más
+  regalos han hecho a ese perfil, con el estilo de la «Clasificación mensual» del Salón de la Fama
+  (avatar, puesto, nombre y número de regalos). No cuenta usuarios baneados.
+
+Archivos: gifts-page.js, gifts-pages301.js, gifts299.css, gifts.html, functions/api/profile-extras.js.
+Pruebas: tests/gifts-page299.test.mjs.

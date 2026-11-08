@@ -31,6 +31,21 @@
 .gifts299 a.inlineshop .inlineshop-name{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:80px;height:80px;margin:10px;padding:4px;background:#e9eff5;color:#558cbb;font-size:11px;text-align:center;overflow:hidden;word-break:break-word}
 .gifts299 .gifts299-clear{clear:both}
 .gifts299 .gifts299-empty{font-size:12px;color:#737373;padding:4px 5px}
+/* V301: paginador clásico al final de la línea roja del título. */
+.gifts299 h2.gifts299-paged{overflow:hidden}
+.gifts299 h2 div.paginator{float:right;margin-top:5px;background:transparent;font:bold 12px Arial,"Trebuchet MS",trebuchet,Verdana,sans-serif;color:#5f5f5f;line-height:normal}
+.gifts299 div.paginator a.gpage{padding:2px 4px;margin-left:2px;color:#7ca9d0;background:#e9eff5;text-decoration:none}
+.gifts299 div.paginator a.gpage:hover{background:#d9e4ee;color:#33638d}
+.gifts299 div.paginator a.showing{color:#252525}
+.gifts299 div.paginator .gap{margin-left:4px;color:#9e9e9e}
+/* V301: ranking como la «Clasificación mensual» del Salón de la Fama. */
+.gifts299 .gifts299-top{margin-top:18px}
+.gifts299 .gifts299-giver{display:grid;grid-template-columns:90px minmax(0,1fr);gap:6px;align-items:center;margin:12px 0 20px;font:11px/16.5px "Trebuchet MS",Arial,sans-serif;color:#666}
+.gifts299 .gifts299-giver>a{position:relative;display:block;text-align:center;color:#4682b4;text-decoration:none}
+.gifts299 .gifts299-giver img{display:block;width:65px;height:75px;object-fit:contain;margin:0 auto;background:transparent}
+.gifts299 .gifts299-giver a>span{display:block;font:bold 12px/16px "Trebuchet MS",Arial;overflow-wrap:anywhere}
+.gifts299 .gifts299-giver .gifts299-rank{position:absolute;left:4px;top:-2px;font:bold 14px/16px "Trebuchet MS",Arial;font-style:normal;color:#fff;text-shadow:0 0 2px #000,0 0 2px #000}
+.gifts299 .gifts299-giver strong{display:block;font:bold 32px/38px "Trebuchet MS",Arial;color:#b6b6b6;text-align:center}
 @media (max-width:980px){
  .gifts299 .gifts299-wrap{width:auto;max-width:none;padding:12px 16px 16px}
  .gifts299 .inuser-left,.gifts299 .inuser-right{float:none;width:auto}
@@ -39,4 +54,5 @@
  .gifts299 .user-header .user-info{max-width:calc(100% - 135px)}
  .gifts299 .user-header h1{font-size:20px;overflow-wrap:anywhere}
  .gifts299 ol.gifts li div.message.big{width:auto;float:none;margin-left:56px}
+ .gifts299 h2 div.paginator{float:none;display:block;margin:6px 0 2px;line-height:22px}
 }
