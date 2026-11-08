@@ -1,5 +1,7 @@
 import {duelMatch} from './_shared/duel-service212.js';
 import {survivorMatch} from './_shared/survivor-service.js';
+// «12» → día 1, prueba de inmunidad; «11» → día 1, prueba de tribu; «1:tribe» (formato antiguo) también vale.
+export function survivorStage(value){const text=String(value??'');if(text.includes(':')){const [d,m]=text.split(':');return {day:Number(d),mode:m==='immunity'?'immunity':'tribe'};}const n=Number(text);if(!Number.isSafeInteger(n)||n<11)return {day:NaN,mode:'tribe'};return {day:Math.floor(n/10),mode:n%10===2?'immunity':'tribe'};}
 import {match as frookiesMatch} from './_shared/frookies-service.js';
 import {recordMinigameResult} from './_shared/minigame-scores.js';
 import {BASE_CHALLENGE_SECONDS} from './_shared/challenge-time.js';
@@ -30,10 +32,11 @@ export async function onRequestGet({request,env}){
    return reply({error:0,recorded:saving,header:{code:run.token},data:saving?{points:run.score,timeleft:0}:{...result.data,timeleft:left,...(Object.hasOwn(result.data,'gameTotalTimeLeft')?{gameTotalTimeLeft:left}:{})}},game);
   }
   if(header.subcontext==='survivor'){
-   // V303: prueba de tribu o de inmunidad. subcontextId = «día:tribe» o «día:immunity».
+   // V312: los SWF leen subcontextId como número; «día:modo» llegaba como NaN y la prueba no cargaba.
+   // Ahora subcontextId = día×10 + 1 (prueba de tribu) o + 2 (inmunidad). Se acepta también el formato antiguo.
    if(request.headers.get('Sec-Fetch-Site')==='cross-site'||(request.headers.has('Origin')&&request.headers.get('Origin')!==url.origin))throw Error('Origen no permitido.');
    await ensureProfileSchema(env.DB);const user=await getSessionUser(request,env.DB);if(!user)throw Error('Inicia sesión para jugar.');
-   const id=Number(header.contextId),[dayText,modeText]=String(header.subcontextId||'').split(':'),day=Number(dayText),mode=modeText==='immunity'?'immunity':'tribe',saving=payload.function==='requestSaveGameData';
+   const id=Number(header.contextId),{day,mode}=survivorStage(header.subcontextId),saving=payload.function==='requestSaveGameData';
    if(header.context!=='game'||!Number.isSafeInteger(id)||id<1||!Number.isSafeInteger(day)||day<1)throw Error('Partida no válida.');
    const result=await survivorMatch(env.DB,id,user,saving?{action:'flash_finish',day,mode,kind,token:header.code,points:payload.data?.points}:{action:'flash_start',day,mode,kind},true),run=result.attempt;
    if(saving){await recordMinigameResult(env.DB,user.id,kind,run.score,'survivor:'+id+':'+day+':'+mode+':'+user.id+':'+kind);return reply({error:0,recorded:true,header:{code:run.token},data:{points:run.score,timeleft:0}},game);}

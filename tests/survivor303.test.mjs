@@ -181,7 +181,7 @@ test('V308: inicio con fuego y sol, tics, página de comer y beber, chat por tri
  assert.equal(v.today.own.rows.find(r=>r.username==='H0').at,null);
  const {moveText}=await import('../survivor-camp308.js').catch(()=>({}));
  const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
- const camp=read('survivor-camp308.js');for(const t of ['ha cazado comida','ha sacado el cubo de agua','está cazando.','Guardar','Avivar el fuego','Sacar el cubo','Cazar ('])assert.ok(camp.includes(t),t);
+ const camp=read('survivor-camp308.js');for(const t of ['ha cazado comida','ha sacado el cubo de agua','está cazando','Guardar','Avivar el fuego','Sacar el cubo','Cazar ('])assert.ok(camp.includes(t),t);
  const page=read('survivor-page303.js');assert.ok(!page.includes("label+' '")&&!page.includes('survivorTake'),'sin campos de pollo y agua');assert.match(page,/survivor-camp\.html/);assert.match(page,/survivorSafe/);assert.match(page,/survivorQuestion/);assert.match(page,/\$\('svPhaseLabel'\)\.hidden=true/);
  assert.match(read('survivor303.css'),/-198px -374px/);
  const chat=read('functions/api/game-chat.js');assert.match(chat,/chatTribe=type==='survivor'&&state\.phase!=='waiting'\?\(askedTribe\|\|member\?\.tribe\|\|'A'\):null/);assert.match(chat,/if\(otherTribe\)\{participantCanWrite=false;canWrite=adminCanWrite;\}/);assert.match(chat,/Solo puedes escribir en el chat de tu tribu/);assert.match(chat,/room=type\+':'\+id\+\(chatTribe\?':'\+chatTribe:''\)/);
@@ -211,4 +211,14 @@ test('V311: sin botones de campamento ni panel del Consejo en la página; tiempo
  const nomineesFor=new Function(src.replace('export function nomineesFor','return function')+'')();
  const ps=[{id:1,tribe:'A',status:'active'},{id:2,tribe:'A',status:'active'},{id:3,tribe:'B',status:'active'},{id:4,tribe:'A',status:'eliminated'}];
  assert.deepEqual(nomineesFor(ps,{id:1,tribe:'A'}).map(p=>p.id),[2]);
+});
+test('V312: los segundos de la prueba solo cambian al cambiar de día; se ve desde cuándo se caza',()=>{
+ const s=started(),p=me(s,0),t=p.tribe,at=s.startedAt+1000;
+ assert.equal(E.survivorView(s,p,at).me.seconds,200);
+ setWeather(s,t,'sun',at);E.actSurvivor(s,p,{action:'hunt'},at);assert.equal(p.water,94);
+ assert.equal(E.survivorView(s,p,at+1000).me.seconds,200,'cazar no baja los segundos hasta el cambio de día');
+ const v=E.survivorView(s,p,at+20*60000);assert.equal(v.camp.hunting[0].at,at);
+ E.actSurvivor(s,p,{action:'flash_start',day:s.day,mode:'tribe',kind:s.challenge.kind},at+2000,true);
+ const a=Object.values(s.attempts).find(x=>String(x.user)===String(p.id));assert.ok(a,'intento creado');assert.equal(a.duration,200);
+ E.advanceSurvivor(s,s.deadline);if(p.status==='active')assert.equal(E.survivorView(s,p,s.deadline+1).me.seconds,E.challengeSeconds(p.food,p.water));
 });

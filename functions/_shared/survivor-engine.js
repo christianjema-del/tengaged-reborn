@@ -29,6 +29,9 @@ const log=(s,text,at,kind='story',extra={})=>{s.events.push({id:s.events.length+
 // 100/100 = 200 s · 95/94 = 194 s · 0/94 = 147 s · 0/88 = 144 s · 0/0 = 100 s.
 export function supplySeconds(value){const v=clamp(value);if(v<=0)return 0;return Math.max(0,50-3*Math.ceil((MAX_SUPPLY-v)/6));}
 export function challengeSeconds(food,water){return 100+supplySeconds(food)+supplySeconds(water);}
+// V312: los segundos de la prueba se fijan al cambiar de día con el pollo y el agua de ese momento.
+// Cazar, sacar el cubo, avivar el fuego, comer o beber durante el día no los cambia hasta el siguiente cambio de día.
+export function daySeconds(p){return Number.isFinite(p?.daySeconds)?p.daySeconds:challengeSeconds(p.food,p.water);}
 
 // Salud al unificar: 30 o menos sube a 40; 96 o más sube a 100.
 export function mergeSupply(value){const v=clamp(value);return v<=30?40:v>=96?100:v;}
@@ -97,6 +100,7 @@ function startDay(s,at){
  s.required=Math.min(...TRIBES.map(t=>tribeOf(s,t).length));
  s.sitouts[s.day]={A:[],B:[]};s.scores[s.day]={};s.immunity[s.day]={};
  for(const t of TRIBES){s.camps[t].schedule=daySchedule(at,s.day===1);}
+ for(const p of alive(s))p.daySeconds=challengeSeconds(p.food,p.water);
 }
 function eliminate(s,p,at,cause){
  const place=alive(s).length;p.status='eliminated';p.placement=place;p.eliminatedAt=at;p.deathCause=cause;
@@ -257,7 +261,7 @@ export function actSurvivor(s,user,input,now=Date.now(),trusted=false){
   const id=s.day+':'+mode+':'+key(p.id),old=s.attempts[id];
   if(old&&!old.done&&now<old.startedAt+old.duration*1000+ATTEMPT_GRACE_MS)return {attempt:old};
   if(old?.done)throw Error('Ya has jugado esta prueba.');
-  s.attempts[id]={user:p.id,day:s.day,mode,kind,token:crypto.randomUUID(),startedAt:now,duration:challengeSeconds(p.food,p.water),done:false};
+  s.attempts[id]={user:p.id,day:s.day,mode,kind,token:crypto.randomUUID(),startedAt:now,duration:daySeconds(p),done:false};
   return {attempt:s.attempts[id]};
  }
  if(trusted&&action==='flash_finish'){
@@ -278,8 +282,8 @@ function campView(s,t,now,me){
  const own=me&&me.tribe===t;
  return {tribe:t,fire:fireLit(c,now),weather:weatherAt(c,now),food:c.food,water:c.water,
   fireUntil:currentFire(c,now)?.[1]||null,
-  hunting:c.hunts.filter(h=>!h.done).map(h=>({username:h.username,readyAt:own?h.readyAt:null})),
-  bucket:c.bucket&&!c.bucket.done?{username:c.bucket.username,readyAt:own?c.bucket.readyAt:null}:null,
+  hunting:c.hunts.filter(h=>!h.done).map(h=>({username:h.username,at:own?h.at:null,readyAt:own?h.readyAt:null})),
+  bucket:c.bucket&&!c.bucket.done?{username:c.bucket.username,at:own?c.bucket.at:null,readyAt:own?c.bucket.readyAt:null}:null,
   log:own?c.log.slice(-60).map(({day,at,user,kind,amount})=>({day,at,user,kind,amount})):[]};
 }
 export function survivorView(s,user,now=Date.now(),viewTribe=null){
@@ -306,7 +310,7 @@ export function survivorView(s,user,now=Date.now(),viewTribe=null){
    seatsToSit:Object.fromEntries(TRIBES.map(t=>[t,Math.max(0,tribeOf(s,t).length-(s.required||0))]))}:null,
   immunity:s.nominated&&ownTribe===s.nominated?immunityRows(s.nominated).sort((a,b)=>(b.points??-1)-(a.points??-1)):null,
   me:me?{id:me.id,tribe:me.tribe,status:me.status,placement:me.placement,food:me.food,water:me.water,doomed:!!me.doomed&&active,
-   seconds:challengeSeconds(me.food,me.water),
+   seconds:daySeconds(me),
    played:!!s.scores[day]?.[key(me.id)],score:s.scores[day]?.[key(me.id)]?.points??null,
    playedImmunity:!!s.immunity[day]?.[key(me.id)],immunityScore:s.immunity[day]?.[key(me.id)]?.points??null,
    sitting:!!sitting[me.tribe]?.some(id=>key(id)===key(me.id)),

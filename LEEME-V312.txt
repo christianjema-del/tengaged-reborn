@@ -1,0 +1,11 @@
+V312 - Survivor: la prueba vuelve a cargar, segundos fijos por día y tiempo de caza
+
+- Los minijuegos de la prueba no cargaban: el juego enviaba la prueba como «1:tribe» y los
+  minijuegos solo entienden números, así que el servidor recibía NaN y respondía «Partida no
+  válida». Ahora se envía un número (día×10 + 1 para la prueba de tribu, + 2 para la de
+  inmunidad). El servidor sigue aceptando el formato antiguo.
+- Los segundos de la prueba se fijan al cambiar de día con el pollo y el agua de ese momento.
+  Cazar, sacar el cubo, avivar el fuego, comer o beber ya no los bajan hasta el próximo cambio
+  de día. En el Survivor #1 se fijan en 200 segundos para el día 1.
+- En «Caza y cubo» se ve cuánto hace que cada uno salió: «Vort está cazando (hace 20 minutos).»
+  y lo mismo con el cubo y con «Estás cazando».

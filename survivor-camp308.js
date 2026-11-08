@@ -24,6 +24,8 @@ export function moveText(l){
 export const SECTION_KINDS={water:['drink'],food:['eat'],fire:['fan'],weather:['hunt-start','hunt','bucket-start','bucket']};
 // Cuánto se puede tomar como máximo: lo que quede en la reserva y lo que te falte para 100.
 export function maxTake(stock,mine){return Math.max(0,Math.min(stock,100-mine));}
+// V312: cuánto tiempo hace que alguien salió a cazar o sacó el cubo.
+export function sinceText(at,now){if(!Number.isFinite(at))return '';const m=Math.max(0,Math.floor((now-at)/60000));return m<1?' (ahora mismo)':' (hace '+m+(m===1?' minuto)':' minutos)');}
 export function clampQty(n,max){return max<1?0:Math.max(1,Math.min(max,Math.round(n)||1));}
 async function send(body,okText){
  if(busy)return;busy=true;render();
@@ -51,7 +53,7 @@ function renderWeather(c,me,mine){
  const box=$('scChoices');box.replaceChildren();
  if(!mine)return;
  if(c.weather==='sun')box.append(action('Cazar (−'+HUNT_WATER+' de agua)',{action:'hunt'},me.hunting||me.water<HUNT_WATER,'Has salido a cazar. La caza vuelve entre 30 y 45 minutos después.'));
- if(me.hunting)box.append(el('p','Estás cazando. La caza vuelve entre 30 y 45 minutos después de salir.','survivorNotice'));
+ if(me.hunting){const myName=state.players.find(p=>String(p.id)===String(me.id))?.username,h=c.hunting.find(h=>h.username===myName);box.append(el('p','Estás cazando'+sinceText(h?.at,Date.now())+'. La caza vuelve entre 30 y 45 minutos después de salir.','survivorNotice'));}
  if(c.bucket)box.append(el('p',c.bucket.username+' está recogiendo agua con el cubo'+(c.bucket.readyAt?' (vuelve hacia las '+time(c.bucket.readyAt)+')':'')+'.','survivorNotice'));
  else if(c.weather==='rain')box.append(action('Sacar el cubo (−'+BUCKET_FOOD+' de pollo)',{action:'bucket'},me.food<BUCKET_FOOD,'Has sacado el cubo de agua. Vuelve en una hora para ver cuánta agua has recogido.'));
 }
@@ -76,7 +78,7 @@ function render(){
  const list=$('scMoves');list.replaceChildren();
  if(mine){
   const kinds=SECTION_KINDS[kind];
-  const live=kind==='weather'?[...c.hunting.map(h=>({at:Infinity,text:h.username+' está cazando.'})),...(c.bucket?[{at:Infinity,text:c.bucket.username+' está recogiendo agua con el cubo.'}]:[])]:[];
+  const now=Date.now(),live=kind==='weather'?[...c.hunting.map(h=>({at:Infinity,text:h.username+' está cazando'+sinceText(h.at,now)+'.'})),...(c.bucket?[{at:Infinity,text:c.bucket.username+' está recogiendo agua con el cubo'+sinceText(c.bucket.at,now)+'.'}]:[])]:[];
   const rows=[...live,...c.log.filter(l=>kinds.includes(l.kind)&&(l.kind!=='hunt-start'||!c.hunting.some(h=>h.username===l.user))).map(l=>({at:l.at,text:moveText(l)}))].sort((a,b)=>b.at-a.at);
   for(const r of rows.slice(0,40)){const li=el('li');if(Number.isFinite(r.at))li.append(el('time',time(r.at)));li.append(el('span',r.text));list.append(li);}
   if(!rows.length)list.append(el('li','Todavía no hay movimientos.'));

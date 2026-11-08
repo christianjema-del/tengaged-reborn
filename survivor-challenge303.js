@@ -78,7 +78,7 @@ function stop(){epoch++;dispose?.();dispose=null;playing=false;}
 async function begin(){
  if(playing||launching||!canPlay())return;launching=true;playing=true;const mine=++epoch;
  $('challengeStatus').textContent='Cargando el minijuego… Puede tardar unos segundos la primera vez.';$('challengeBoard').hidden=false;$('challengeStart').hidden=true;
- try{const cleanup=await launchCastingMinigame($('challengeBoard'),kindNow(),{competitive:true,survivor:true,contextId:id,round:day+':'+mode});if(mine!==epoch)cleanup?.();else{dispose=cleanup;$('challengeStatus').textContent='Pulsa START dentro del minijuego. Tu resultado se guardará automáticamente.';}}
+ try{const cleanup=await launchCastingMinigame($('challengeBoard'),kindNow(),{competitive:true,survivor:true,contextId:id,round:day*10+(mode==='immunity'?2:1)});if(mine!==epoch)cleanup?.();else{dispose=cleanup;$('challengeStatus').textContent='Pulsa START dentro del minijuego. Tu resultado se guardará automáticamente.';}}
  catch(e){if(mine===epoch){stop();$('challengeStatus').textContent=e.message;$('challengeStart').hidden=false;}}
  finally{launching=false;}
 }
