@@ -1,0 +1,8 @@
+V315 - Las páginas abiertas se actualizan solas
+
+- El recuadro de 2014 ("Felicidades. Has terminado tu prueba") ya estaba publicado en V314,
+  pero una pestaña abierta desde antes seguía con el código viejo y enseñaba
+  "Resultado guardado" en verde.
+- Ahora todas las páginas (shell.js) miran cada minuto la versión de la web. Si hay una nueva,
+  esperan 4 minutos a que termine de publicarse y se recargan solas.
+- Nunca se recargan en mitad de un minijuego ni si hay un texto escrito sin enviar.

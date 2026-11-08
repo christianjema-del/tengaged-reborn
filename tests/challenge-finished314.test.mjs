@@ -8,3 +8,7 @@ test('V314: el resultado de la prueba es el recuadro azul de 2014 en todos los j
  for(const f of ['survivor-challenge.html','casting-challenge.html','frookies-challenge.html','duel-challenge.html','hunger.html'])assert.match(read(f),/challenge-finished314\.css\?v=314/,f);
  assert.match(read('hunger-page.js'),/finishedTitle\(\$\('challenge-result-title'\)\)/);
 });
+test('V315: las páginas abiertas se recargan solas con versión nueva, pero nunca en mitad de un minijuego',()=>{
+ const s=read('shell.js');assert.match(s,/TgVersionWatch314/);assert.match(s,/fetch\('\/api\/health'/);assert.match(s,/original-flash-frame/);assert.match(s,/240000/);
+ for(const f of fs.readdirSync(new URL('..',import.meta.url)).filter(f=>f.endsWith('.html'))){const h=read(f);if(h.includes('/shell.js'))assert.match(h,/\/shell\.js\?v=314/,f);}
+});

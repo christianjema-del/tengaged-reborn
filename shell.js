@@ -57,3 +57,10 @@ addEventListener('DOMContentLoaded',()=>{const content=document.querySelector('m
 addEventListener('online',()=>{window.TengagedRefreshSession().catch(()=>{});updateIndicators();});
 addEventListener('pageshow',e=>{if(e.persisted)window.TengagedRefreshSession().catch(()=>{});});
 })();
+
+// V314: si se publica una versión nueva mientras la página está abierta, se recarga sola
+// para no seguir con código viejo. Nunca recarga en mitad de un minijuego ni con texto sin enviar.
+(()=>{if(window.TgVersionWatch314)return;window.TgVersionWatch314=true;let base=null,seenAt=0,checking=false;
+const busy=()=>!!document.querySelector('object,embed,ruffle-player,ruffle-object,.original-flash-frame')||[...document.querySelectorAll('textarea,input[type=text],input:not([type])')].some(x=>x.value&&x.value.trim()&&!x.readOnly&&x.offsetParent!==null&&x.type!=='search');
+async function check(){if(checking||document.hidden)return;checking=true;try{const r=await fetch('/api/health',{cache:'no-store'}),d=await r.json(),v=Number(d.version);if(!v)return;if(base==null){base=v;return;}if(v<=base){seenAt=0;return;}if(!seenAt)seenAt=Date.now();if(Date.now()-seenAt>=240000&&!busy())location.reload();}catch{}finally{checking=false;}}
+setTimeout(check,3000);setInterval(check,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});})();
