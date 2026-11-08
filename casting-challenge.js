@@ -1,4 +1,4 @@
-import {renderChallengeLeaderboard} from '/casting-leaderboard.js?v=159';
+import {renderChallengeLeaderboard} from '/casting-leaderboard.js?v=316';
 import {api} from '/market-ui.js?v=170';
 import {showFinished,clearFinished} from '/challenge-finished314.js?v=314';
 import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';

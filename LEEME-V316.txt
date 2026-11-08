@@ -1,0 +1,9 @@
+V316 - Resultados de Casting y Frookies como en Survivor
+
+- La lista "Los resultados de hoy" de Casting y Frookies es ahora como la de Survivor (2014):
+  "Vort terminada la prueba con 805 puntos  0 min", con el tiempo desde que terminó.
+  Primero los que han terminado (el más reciente arriba) y luego los que faltan.
+- Fuera el contador "N de M concursantes han terminado" y los enlaces "Ver resultados" /
+  "Actualizar resultados" (la lista se actualiza sola).
+- Fuera el recuadro azul vacío que salía debajo de las instrucciones.
+- El servidor manda la hora en que se guardó cada resultado (savedAt) en Casting y Frookies.

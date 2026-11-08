@@ -1,4 +1,4 @@
-import {renderChallengeLeaderboard} from '/casting-leaderboard.js?v=159';
+import {renderChallengeLeaderboard} from '/casting-leaderboard.js?v=316';
 // Keep challenge loading independent from the avatar/market module tree.
 async function api(url){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);try{const response=await fetch(url,{credentials:'include',cache:'no-store',signal:controller.signal});const data=await response.json();if(!response.ok||!data.ok)throw Error(data.message||data.error||'No se pudo consultar la partida.');return data;}catch(e){if(controller.signal.aborted)throw Error('La conexión ha tardado demasiado. Pulsa Reintentar conexión.');throw e;}finally{clearTimeout(timer);}}
 window.FrookiesChallengeReady145=true;

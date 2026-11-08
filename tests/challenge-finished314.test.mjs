@@ -5,7 +5,7 @@ test('V314: el resultado de la prueba es el recuadro azul de 2014 en todos los j
  assert.match(js,/'Felicidades\.'/);assert.match(js,/' Has terminado tu prueba'/);assert.match(js,/'puntos'/);
  assert.match(css,/#dce8f1/);assert.ok(!/#468058/.test(css));
  for(const f of ['survivor-challenge303.js','casting-challenge.js','frookies-challenge.js','duel-challenge217.js']){const s=read(f);assert.match(s,/showFinished\(\$\('challengeResult'\)/,f);assert.ok(!s.includes('Resultado guardado:'),f);}
- for(const f of ['survivor-challenge.html','casting-challenge.html','frookies-challenge.html','duel-challenge.html','hunger.html'])assert.match(read(f),/challenge-finished314\.css\?v=314/,f);
+ for(const f of ['survivor-challenge.html','casting-challenge.html','frookies-challenge.html','duel-challenge.html','hunger.html'])assert.match(read(f),/challenge-finished314\.css\?v=316/,f);
  assert.match(read('hunger-page.js'),/finishedTitle\(\$\('challenge-result-title'\)\)/);
 });
 test('V315: las páginas abiertas se recargan solas con versión nueva, pero nunca en mitad de un minijuego',()=>{

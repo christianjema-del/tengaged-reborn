@@ -7,3 +7,14 @@
 .tg-finished .tg-finished-points,#challenge-result.tg-finished #challenge-points{font:normal 62px/1 Arial,Helvetica,sans-serif;color:#2d4256;letter-spacing:1px}
 .tg-finished .tg-finished-label,#challenge-result.tg-finished>div>span{font:normal 20px/1 Arial,Helvetica,sans-serif;color:#3a3a3a;margin-left:20px}
 @media (max-width:480px){.tg-finished .tg-finished-points,#challenge-result.tg-finished #challenge-points{font-size:48px}.tg-finished .tg-finished-title{margin-left:0}}
+/* V316: lista de resultados de hoy como en Survivor. */
+.challenge-leaderboard.tg-today>p{display:none}
+.challenge-leaderboard.tg-today ul{list-style:none;margin:0;padding:0;font:11px/1.35 Arial;color:#666}
+.challenge-leaderboard.tg-today li{display:block;padding:4px 6px;border-bottom:1px solid #eef2f5;background:none;font:11px/1.35 Arial;color:#666}
+.challenge-leaderboard.tg-today li:nth-child(odd){background:#f3f7fa}
+.challenge-leaderboard.tg-today li.challenge-own-result{background:#fffbd5}
+.challenge-leaderboard.tg-today li a,.challenge-leaderboard.tg-today li .challenge-player-name{color:#3f7cac;text-decoration:none}
+.challenge-leaderboard.tg-today li small{color:#a7b3bb;margin-left:4px}
+.challenge-leaderboard.tg-today li .tg-today-out{color:#a5a5a5}
+.challenge-scores-tools{display:none!important}
+#challengeTimeBreakdown:empty{display:none!important}
