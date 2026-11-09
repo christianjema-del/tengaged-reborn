@@ -1,0 +1,6 @@
+V322 - El Vasallaje en menos de 24 horas, días controlados por admin1
+- Día 1 (Lluvia de flechas) empieza solo a las 22:00 hora española del 9-11-2026.
+- admin1 pasa al día 2 y al día 3 con el botón del cartel (acción event_next_day, con confirmación en la página).
+- Día 2: El Festín 15 minutos después de empezar el día. Día 3: niebla tóxica la primera hora.
+- Final: Duelo de campeones automático con 3 vivos.
+- Cartel rediseñado con el estilo de la web: días con HOY/HECHO, podio de premios y tabla del 4º al 19º.
