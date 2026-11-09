@@ -259,3 +259,11 @@ body .hunger-main .game-chat .chat-messages>article:not(.casting-key-event):not(
 
 /* V154: unavailable is a logical state, never a transparency effect. */
 body .hunger-main button:disabled,body .hunger-main button:disabled img,body .game-chat button:disabled,body .game-chat button:disabled img{opacity:1!important}
+/* V320: cartel del evento El Vasallaje */
+.hunger-event320{margin:8px 0;padding:10px 12px;background:#fff8d6;border:1px solid #e6cf6b;border-radius:4px;font-size:13px;line-height:1.45;color:#3a3320}
+.hunger-event320 p{margin:0 0 6px}.hunger-event320 .event320-head strong{font-size:15px;color:#b0306a}
+.hunger-event320 details{margin-top:4px}.hunger-event320 summary{cursor:pointer;color:#2d5d8a;font-weight:bold}
+.hunger-event320 ul,.hunger-event320 ol{margin:6px 0 0;padding-left:20px}.hunger-event320 ol{columns:2;column-gap:24px}
+@media (max-width:600px){.hunger-event320 ol{columns:1}}
+.hunger-event320 .game-event177{display:inline-block;color:#ffe78a;background:#51352c;border:1px solid #ddbc5d;border-radius:3px;padding:1px 4px;font:italic 800 10px/1.4 Georgia,serif;letter-spacing:1px;vertical-align:middle;white-space:nowrap;text-shadow:0 1px #24180c}
+.hunger-event320 ol{list-style:none;padding-left:4px}

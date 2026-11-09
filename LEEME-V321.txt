@@ -1,0 +1,9 @@
+V321 - Evento «El Vasallaje» en Hunger Games #11
+- Empieza a las 22:00 hora española (21:00 UTC) del 9-11-2026 dentro de la partida ya en marcha.
+- Día 1: Lluvia de flechas (diana cada 10 min durante 24 h).
+- Día 2: El Festín a las 23:00 (+15 salud en la Cornucopia, Espada/Maza/Hacha 30 min; aviso 1 h antes).
+- Día 3: Niebla tóxica de 22:00 a 01:00 (doble pérdida de salud en el bosque).
+- Final: Duelo de campeones con 3 vivos (hasta 60 de salud en juego, doble experiencia).
+- Premios de Hunger #11 para 19 puestos: 1º 600K·1200 T$, 2º 300K·600 T$, 3º 200K·450 T$ ... 19º 10K·30 T$.
+- Cartel EVENTO en la arena (hunger-event320.js) con giros y premios.
+- Código: functions/_shared/hunger-vasallaje320.js. Test: tests/hunger-vasallaje320.test.mjs.
