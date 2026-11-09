@@ -1,0 +1,10 @@
+V319 - Casting: los nominados no mueren y los votos se pueden corregir
+
+- Un nominado ya no puede morir (por inactividad o veneno) mientras dura la votación:
+  ni pierde salud por inactividad ni el veneno lo elimina (se queda con 1 de salud como mínimo).
+  Solo sale por la expulsión al acabar el día. Los bots siguen saliendo al cerrar el día 2.
+- Si aun así un nominado sale de la partida, cada papeleta conserva el orden y se reajusta
+  de 1 a n (antes quedaba un "3" cuando solo había 2 nominados).
+- Si muere otro jugador y quedan 7 o menos, ya no se quita a un nominado a mitad de día ni se
+  borran las papeletas: siguen los mismos nominados hasta el cambio de día.
+- Cada jugador puede cambiar sus votos hasta que acabe el día (botón "Cambiar votos").
