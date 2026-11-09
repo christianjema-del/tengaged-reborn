@@ -1,0 +1,4 @@
+V323 - Rookies: HoH y PoV definitivos al guardar
+- Al guardar las nominaciones, el HoH deja de ver los botones Nominar/Elegido y el panel «Eres HoH». No puede cambiarlas.
+- Al vetar, el PoV deja de ver los botones Vetar y su panel. El veto se usa una vez y no se puede retirar.
+- rookies-page250.js ?v=323. Engine: hohDone/povDone en la vista. Test: tests/rookies-lock323.test.mjs.

@@ -75,7 +75,7 @@ export function actRookies(s,user,input,now=Date.now()){
  }
  if(s.phase!=='day'||!p||p.status!=='active')throw Error('Ahora no puedes hacer esta acción.');
  if(action==='nominate'){
-  if(p.id!==s.hoh)throw Error('Solo el HoH puede nominar.');const picks=[...new Set((input.targets||[]).map(Number))];
+  if(p.id!==s.hoh)throw Error('Solo el HoH puede nominar.');if(s.hohPicks.length>=2)throw Error('Ya has guardado tus nominaciones.');const picks=[...new Set((input.targets||[]).map(Number))];
   if(picks.length!==2||picks.some(id=>id===p.id||byId(s,id)?.status!=='active'))throw Error('Elige a dos concursantes activos, sin incluirte.');s.hohPicks=picks;return;
  }
  if(action==='vote'){
@@ -85,8 +85,8 @@ export function actRookies(s,user,input,now=Date.now()){
   s.ballots[p.id]=Object.fromEntries(s.nominees.map((id,i)=>[id,values[i]]));return;
  }
  if(action==='save'){
-  if(p.id!==s.pov)throw Error('Solo quien tiene el PoV puede salvar.');const target=input.target==null?null:Number(input.target);
-  if(target!==null&&!s.nominees.includes(target))throw Error('Solo puedes salvar a un nominado.');s.saved=target;return;
+  if(p.id!==s.pov)throw Error('Solo quien tiene el PoV puede salvar.');if(s.saved!=null)throw Error('Ya has usado el PoV hoy.');const target=input.target==null?null:Number(input.target);
+  if(target===null||!s.nominees.includes(target))throw Error('Solo puedes salvar a un nominado.');s.saved=target;return;
  }
  throw Error('Acción no permitida.');
 }
@@ -96,7 +96,7 @@ export function rookiesView(s,user,now=Date.now()){
   hoh:hoh?.username||null,
   players:s.players.map(p=>({id:p.id,username:p.username,bot:!!p.bot,status:p.status,placement:p.placement,hoh:p.id===s.hoh,nominated:s.nominees.includes(p.id)})),
   nominees:s.nominees.map(id=>({id,username:byId(s,id)?.username})),points:s.nominees.map((_,i)=>i),
-  me:me?{id:me.id,status:me.status,isHoh:active&&me.id===s.hoh,isPov:active&&s.phase==='day'&&me.id===s.pov,nominated,canVote:active&&s.phase==='day'&&s.nominees.length>0&&!nominated&&!s.ballots[me.id],ballot:s.ballots[me.id]||null,picks:me.id===s.hoh?s.hohPicks:[],saved:me.id===s.pov?s.saved:null}:null,
+  me:me?{id:me.id,status:me.status,isHoh:active&&me.id===s.hoh,isPov:active&&s.phase==='day'&&me.id===s.pov,nominated,canVote:active&&s.phase==='day'&&s.nominees.length>0&&!nominated&&!s.ballots[me.id],ballot:s.ballots[me.id]||null,picks:me.id===s.hoh?s.hohPicks:[],saved:me.id===s.pov?s.saved:null,hohDone:active&&me.id===s.hoh&&s.phase==='day'&&s.hohPicks.length>=2,povDone:active&&me.id===s.pov&&s.phase==='day'&&s.saved!=null}:null,
   events:s.events.map(({id,text,at,kind})=>({id,text,at,kind})),
   whispers:me?(s.whispers||[]).filter(w=>w.from===me.id||w.to===me.id).map(w=>({id:w.id,from:byId(s,w.from)?.username,to:byId(s,w.to)?.username,body:w.body,at:w.at})):[],
   history:s.history.map(({day,rows})=>({day,rows}))};
