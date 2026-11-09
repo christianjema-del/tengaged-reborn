@@ -1,0 +1,5 @@
+V324 - Clasificación final de Casting
+- Al terminar, los que siguen vivos van primero (ordenados por recursos) y después los eliminados en el orden en que cayeron. Humanos antes que bots.
+- Antes se ordenaba a todo el reparto por recursos y un eliminado podía adelantar a un superviviente (Casting #11: Vort salía 5º).
+- Casting #11 corregido en la base de datos: PauCubarsi 5º (+1 karma, +1 T$), Vort 6º (conserva lo cobrado).
+- Código: finalOrder324 en functions/_shared/casting-daily.js. Test: tests/casting-final324.test.mjs.

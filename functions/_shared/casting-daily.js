@@ -17,7 +17,17 @@ function challenge(s){let bag=s.challengeBag||[];if(!bag.length){bag=[...GAMES];
 // Average percentile rank gives tied values exactly the same contribution.
 export function rankScores(players,value){const n=players.length,out={};for(const p of players){const v=value(p),lower=players.filter(q=>value(q)<v).length,equal=players.filter(q=>value(q)===v).length;out[key(p)]=n<=1?1:(lower+(equal-1)/2)/(n-1);}return out;}
 export function standings(s,final=false,at=Date.now()){return resourceOrder188(s,live(s),final,at);}
-function finish(s,at){s.positionRecovery227??={at,previousWinner:s.winner,previous:s.players.map(p=>({username:p.username,placement:p.placement})),policy:'all-resources-final'};const rows=resourceOrder188(s,s.players,true,at);rows.forEach((r,i)=>{r.placement=i+1;s.players.find(p=>key(p)===r.username.toLowerCase()).placement=i+1;});s.resourceRankingVersion227=227;s.finalStandings=rows.map(({tie,rank,...r})=>r);s.winner=rows[0]?.username||null;s.phase='finished';s.finishedAt=at;s.deadline=null;s.nominees=[];log(s,'Final del Casting. Ganador/a: '+(s.winner||'sin supervivientes')+'.',at);}
+// V324: quienes siguen vivos al final van por delante de los eliminados. Los vivos se ordenan
+// por recursos; los eliminados conservan el orden en que salieron (el último en caer, primero).
+// Humanos siempre antes que bots.
+export function finalOrder324(s,at){
+ const alivePlayers=s.players.filter(p=>p.status!=='eliminated'),out=s.players.filter(p=>p.status==='eliminated');
+ const ranked=resourceOrder188(s,s.players,true,at),byName=new Map(ranked.map(r=>[r.username.toLowerCase(),r]));
+ const resources=list=>ranked.filter(r=>list.some(p=>key(p)===r.username.toLowerCase()));
+ const gone=list=>list.slice().sort((a,b)=>(Number(a.placement)||Infinity)-(Number(b.placement)||Infinity)||(b.eliminatedAt186||0)-(a.eliminatedAt186||0)).map(p=>byName.get(key(p)));
+ return [...resources(alivePlayers.filter(p=>!p.bot)),...gone(out.filter(p=>!p.bot)),...resources(alivePlayers.filter(p=>p.bot)),...gone(out.filter(p=>p.bot))];
+}
+function finish(s,at){s.positionRecovery227??={at,previousWinner:s.winner,previous:s.players.map(p=>({username:p.username,placement:p.placement})),policy:'all-resources-final'};const rows=finalOrder324(s,at);rows.forEach((r,i)=>{r.placement=i+1;s.players.find(p=>key(p)===r.username.toLowerCase()).placement=i+1;});s.resourceRankingVersion227=227;s.finalOrderVersion324=324;s.finalStandings=rows.map(({tie,rank,...r})=>r);s.winner=rows[0]?.username||null;s.phase='finished';s.finishedAt=at;s.deadline=null;s.nominees=[];log(s,'Final del Casting. Ganador/a: '+(s.winner||'sin supervivientes')+'.',at);}
 function eliminate(s,p,at,cause){
  // V319: un nominado no puede morir (inactividad o veneno) mientras dura la votación.
  if(s.phase==='elimination'&&s.nominees.includes(p.username)&&['inactividad','veneno'].includes(cause)){p.health=Math.max(1,Number(p.health)||0);return;}
