@@ -1,0 +1,4 @@
+V320 - Hunger #11 marcado como EVENTO
+- En la sección de juegos, Hunger #11 aparece con el cartel EVENTO junto al nombre (igual que Hunger 4# y el Duelo #2).
+- La lista de partidas evento está en EVENT_GAMES dentro de games-directory.js (?v=320).
+- Test nuevo: tests/games-event320.test.mjs.
