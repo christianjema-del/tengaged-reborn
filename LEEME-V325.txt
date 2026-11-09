@@ -1,0 +1,4 @@
+V325 - Cartel del Vasallaje con cuenta atrás
+- Cuenta atrás en directo (horas, minutos, segundos) hasta el inicio del evento, el Festín o el fin de la niebla.
+- Recuadro rediseñado con el estilo de la web: cabecera azul, título rosa, tarjetas de días (HOY/HECHO), podio de premios y panel rosa de admin1.
+- hunger-event320.js / hunger-page.js / hunger.css ?v=325.
