@@ -1,0 +1,6 @@
+V340 - GIF animados como avatar completo para 7 usuarios
+- full-avatar115.js: 10 huellas nuevas en la lista de avatares de foto (DaisyJane, Ricardito x3, AntonioJ, Cristi x2, PauCubarsi, Fentanilo, MDMA). GIF recortados a 140x161 como el de Bowsy.
+- avatar-art.js: un GIF de foto se ve solo, sin el avatar debajo, aunque el navegador tenga la lista anterior en caché.
+- avatar-editor.js ?v=340 y avatar.html.
+- Base de datos (tras publicar): cada GIF se añade gratis al armario de su dueño, retirado de la venta, y se equipa el primero de cada usuario. Las demás capas se conservan para volver al avatar normal.
+- Test: tests/photo-gifts340.test.mjs.

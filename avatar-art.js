@@ -48,7 +48,8 @@ export const AVATAR_HEAD=Object.freeze({scale:0.9,centerX:100,neck:156});
 export function renderAvatar(raw={},overlays={}){
  const s=normalizeAvatar(raw);
  const root=content=>`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 230" width="200" height="230" role="img" aria-label="Avatar personalizado">${content}</svg>`;
- if(isPhotoAvatar(overlays.skin))return root(`<image href="${overlays.skin}" xlink:href="${overlays.skin}" width="200" height="230" preserveAspectRatio="xMidYMid slice"/>`).replace('<svg ','<svg data-avatar-mode="photo" ');
+ // V340: un GIF solo llega aquí si es un avatar de foto aprobado (el servidor rechaza los demás), aunque el navegador aún tenga la lista antigua.
+ if(isPhotoAvatar(overlays.skin)||/^data:image\/gif;base64,/.test(overlays.skin||''))return root(`<image href="${overlays.skin}" xlink:href="${overlays.skin}" width="200" height="230" preserveAspectRatio="xMidYMid slice"/>`).replace('<svg ','<svg data-avatar-mode="photo" ');
  const image=slot=>{if(!overlays[slot])return '';const fit=placementForDesign(overlays[slot]);return `<image data-owned-layer="${slot}" href="${overlays[slot]}" xlink:href="${overlays[slot]}" x="${fit.x}" y="${fit.y}" width="${fit.width}" height="${fit.height}" preserveAspectRatio="none"/>`;};
  let content=`<rect width="200" height="230" fill="${s.background}"/>${image('background')}`;
  if(overlays.skin&&overlays._fullBody)return root(content+image('skin'));
