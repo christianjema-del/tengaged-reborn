@@ -1,0 +1,4 @@
+V327 - Hunger #11: Vort recibe 400 flechas al acabar la niebla
+- Al disiparse la niebla tóxica del Vasallaje, Vort recibe 400 flechas (una sola vez) y aviso EVENTO.
+- Desde entonces Vort puede dispararse a sí mismo (botón «Dispararme»); no cuenta como baja. Solo Vort y solo Hunger #11.
+- Código: hunger-vasallaje320.js (canShootSelf), hunger.js (shoot), hunger-page.js ?v=327. Test: tests/hunger-vort327.test.mjs.

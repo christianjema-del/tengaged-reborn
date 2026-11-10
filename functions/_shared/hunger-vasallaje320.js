@@ -13,6 +13,10 @@ export const DAYS=[
  {day:0,title:'Duelo de campeones',text:'Cuando solo queden 3 tributos, los combates ponen en juego hasta 60 de salud y dan el doble de experiencia.'}
 ];
 export const isVasallaje=s=>Number(s?.edition)===VASALLAJE.edition;
+export const SELF_SHOOTER='vort';
+const isSelfShooter=p=>!p?.bot&&String(p?.username||'').toLowerCase()===SELF_SHOOTER;
+// V327: solo Vort, solo en Hunger #11 y solo después de recibir sus 400 flechas.
+export function canShootSelf(s,p){return isVasallaje(s)&&s.phase==='active'&&isSelfShooter(p)&&Number(s.vasallaje320?.vortArrows327)>0;}
 const on=(s,at)=>isVasallaje(s)&&s.phase==='active'&&at>=VASALLAJE.startAt;
 const v=s=>(s.vasallaje320??={announced:{},feast:false,final:false});
 const dayOf=s=>Number(s.vasallaje320?.day)||0;
@@ -40,6 +44,8 @@ export function tick(s,at,{alive,log,weapons}){
   log(`EVENTO · ¡Empieza el Festín! ${fed.length?fed.length+' tributos en la Cornucopia recuperan 15 de salud.':'Nadie estaba en la Cornucopia.'} Hay una Espada, una Maza y un Hacha durante 30 minutos.`,at,{kind:'event320'});
  }
  if(st.day===3&&!st.fogEnded&&at>=st.dayAt+FOG_LENGTH){st.fogEnded=at;log('EVENTO · Se disipa la niebla tóxica.',at,{kind:'event320'});}
+ // V327: al acabar la niebla, Vort recibe 400 flechas y puede dispararse a sí mismo (solo Hunger #11).
+ if(st.fogEnded&&!st.vortArrows327){const vort=alive().find(p=>isSelfShooter(p));if(vort){st.vortArrows327=at;vort.arrows=(Number(vort.arrows)||0)+400;log('EVENTO · Se disipa la niebla y Vort recibe 400 flechas. Puede disparárselas incluso a sí mismo.',at,{kind:'event320'});}else st.vortArrows327=-1;}
  if(!st.final&&alive().length<=FINAL_ALIVE&&alive().length>1){st.final=at;log('EVENTO · ¡Duelo de campeones! Quedan '+alive().length+' tributos: los combates ponen en juego hasta 60 de salud y dan el doble de experiencia.',at,{kind:'event320'});}
 }
 // Lo que la página necesita para mostrar el cartel del evento.

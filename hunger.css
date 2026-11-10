@@ -305,3 +305,5 @@ body .hunger-main button:disabled,body .hunger-main button:disabled img,body .ga
 .event320-admin button{font:bold 13px Arial;cursor:pointer;min-height:30px}.event320-admin small{color:#888;font-size:10px}
 @media (max-width:760px){.event320-days{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:480px){.event320-days{grid-template-columns:1fr}.event320-header{justify-content:center;text-align:center}.event320-name{justify-content:center}.event320-cell{min-width:40px}.event320-cell b{font-size:20px}}
+/* V327: botón para dispararse a uno mismo (Vort, Hunger #11) */
+.arrow-target.arrow-self327{background:#fff8fa;border-color:#c97890}.arrow-target.arrow-self327 strong{color:#ff5265}
