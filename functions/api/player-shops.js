@@ -73,7 +73,8 @@ async function schema(db){
  UPDATE player_shop_stock SET quantity=quantity-1 WHERE shop_id=NEW.shop_id AND design_id=NEW.design_id;
  END`).run();
  // A bid is only a promise: it is charged when the shop wins a place, never while bidding.
- const oldBidTriggers=(await db.prepare("SELECT name FROM sqlite_master WHERE type='trigger' AND (name IN ('tengaged_shop_bid_insert_charge','tengaged_shop_bid_update_charge') OR (name='tengaged_shop_bid_update_guard' AND sql LIKE '%NEW.amount-OLD.amount%'))").all()).results||[];
+ // V339: la puja se puede subir o bajar libremente; se retira la regla antigua que solo dejaba subirla.
+ const oldBidTriggers=(await db.prepare("SELECT name FROM sqlite_master WHERE type='trigger' AND (name IN ('tengaged_shop_bid_insert_charge','tengaged_shop_bid_update_charge') OR (name='tengaged_shop_bid_update_guard' AND (sql LIKE '%NEW.amount-OLD.amount%' OR sql LIKE '%NEW.amount<=OLD.amount%')))").all()).results||[];
  if(oldBidTriggers.length)await db.batch(oldBidTriggers.map(t=>db.prepare('DROP TRIGGER IF EXISTS '+t.name)));
  await db.prepare(`CREATE TRIGGER IF NOT EXISTS tengaged_shop_bid_insert_guard
  BEFORE INSERT ON player_shop_bids BEGIN
@@ -86,7 +87,7 @@ async function schema(db){
  END`).run();
  await db.prepare(`CREATE TRIGGER IF NOT EXISTS tengaged_shop_bid_update_guard
  BEFORE UPDATE OF amount ON player_shop_bids BEGIN
- SELECT CASE WHEN NEW.amount<=OLD.amount OR NEW.shop_id<>OLD.shop_id
+ SELECT CASE WHEN NEW.amount<1 OR NEW.shop_id<>OLD.shop_id
  OR NEW.cycle_id<>OLD.cycle_id OR NOT EXISTS(
  SELECT 1 FROM player_shops sh JOIN users u ON u.id=sh.owner_id
  JOIN player_shop_cycles c ON c.id=NEW.cycle_id
@@ -271,19 +272,21 @@ async function handle141_onRequest({request,env}){
    const id=Number(body.design_id);await db.prepare('DELETE FROM player_shop_stock WHERE shop_id=? AND design_id=?').bind(shop.id,id).run();return Response.json({ok:true,message:'Diseño retirado del escaparate.'});
   }
   if(act==='bid'){
-   const amount=Number(body.amount);if(!Number.isInteger(amount)||amount<1||amount>100000)return jsonError('Puja de 1 a 100.000 T$.',400);
+   // V339: puedes subir o bajar tu puja cuando quieras mientras dure la ronda; con 0 la retiras.
+   const amount=Number(body.amount);if(!Number.isInteger(amount)||amount<0||amount>100000)return jsonError('Puja de 0 a 100.000 T$ (0 la retira).',400);
    const last=await db.prepare('SELECT amount FROM player_shop_bids WHERE cycle_id=? AND shop_id=?').bind(c.id,shop.id).first(),previous=Number(last?.amount||0);
-   if(amount<=previous)return jsonError('La puja total debe superar la anterior.',400);
+   if(amount===previous)return jsonError(amount?'Tu puja ya es de '+amount+' T$.':'No tienes ninguna puja en esta ronda.',400);
+   if(amount===0){await db.prepare('DELETE FROM player_shop_bids WHERE cycle_id=? AND shop_id=? AND (SELECT settled FROM player_shop_cycles WHERE id=?)=0').bind(c.id,shop.id,c.id).run();return Response.json({ok:true,message:'Puja retirada. Esta ronda tu tienda no opta al escaparate.'});}
    try {
      if(last){
-       await db.prepare('UPDATE player_shop_bids SET amount=?,updated_at=CURRENT_TIMESTAMP WHERE cycle_id=? AND shop_id=? AND amount<?').bind(amount,c.id,shop.id,amount).run();
+       await db.prepare('UPDATE player_shop_bids SET amount=?,updated_at=CURRENT_TIMESTAMP WHERE cycle_id=? AND shop_id=?').bind(amount,c.id,shop.id).run();
      } else {
        await db.prepare('INSERT INTO player_shop_bids(cycle_id,shop_id,amount) VALUES(?,?,?)').bind(c.id,shop.id,amount).run();
      }
    } catch (error) {
      return jsonError('No se pudo registrar la puja. Comprueba tu saldo y la ronda activa.',409);
    }
-   return Response.json({ok:true,message:'Puja registrada. Solo se te cobrará si tu tienda sube al escaparate.'});
+   return Response.json({ok:true,message:(last?(amount>previous?'Puja subida':'Puja bajada')+' de '+previous+' a '+amount+' T$.':'Puja registrada.')+' Solo se te cobrará si tu tienda sube al escaparate.'});
   }
   return jsonError('Acción desconocida.',400);
  }catch(e){console.error('Player shops',e);return jsonError('No se pudo completar la operación de tienda.',500);}

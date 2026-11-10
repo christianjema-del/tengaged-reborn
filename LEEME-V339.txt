@@ -1,0 +1,6 @@
+V339 - Pujas de tienda: subir, bajar o retirar
+- La puja por el escaparate se puede subir o bajar libremente mientras dure la ronda; con 0 se retira. Nunca por encima del saldo; pujar no cobra.
+- La regla antigua de la base de datos (tengaged_shop_bid_update_guard con NEW.amount<=OLD.amount) se sustituye automáticamente.
+- shops-page.js ?v=339: botón «Cambiar mi puja» y campo con mínimo 0.
+- Base de datos: AntonioJ +150 T$ (devueltos 200 cobrados en la ronda 13, cobrados 50), registrado en admin_audit_log.
+- Test: tests/shop-bids339.test.mjs.
