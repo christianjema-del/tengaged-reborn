@@ -16,6 +16,8 @@ export const isVasallaje=s=>Number(s?.edition)===VASALLAJE.edition;
 export const SELF_SHOOTER='vort';
 const isSelfShooter=p=>!p?.bot&&String(p?.username||'').toLowerCase()===SELF_SHOOTER;
 // V327: solo Vort, solo en Hunger #11 y solo después de recibir sus 400 flechas.
+// V328: si Vort muere por sus propias flechas, puede seguir disparando a los demás hasta el final.
+export function canGhostShoot(s,p){return isVasallaje(s)&&s.phase==='active'&&isSelfShooter(p)&&!!p.selfShot327&&!!p.eliminatedAt&&p.deathCause==='arrow'&&!p.eliminatedBy&&Number(p.arrows)>0;}
 export function canShootSelf(s,p){return isVasallaje(s)&&s.phase==='active'&&isSelfShooter(p)&&Number(s.vasallaje320?.vortArrows327)>0;}
 const on=(s,at)=>isVasallaje(s)&&s.phase==='active'&&at>=VASALLAJE.startAt;
 const v=s=>(s.vasallaje320??={announced:{},feast:false,final:false});

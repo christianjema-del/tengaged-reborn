@@ -1,0 +1,5 @@
+V328 - Hunger #11: Vort sigue disparando si muere por sus propias flechas
+- Si Vort cae por una flecha suya (sin autor), puede seguir disparando a los vivos hasta que quede un superviviente. Sus bajas cuentan.
+- No aplica si lo mata otro jugador, el hambre o un combate. Solo Hunger #11.
+- En la base de datos: los 9 supervivientes de Hunger #11 quedaron con 100 de salud (healthBoost328) y aviso EVENTO.
+- Código: canGhostShoot en hunger-vasallaje320.js, hunger.js, hunger-page.js ?v=328. Test: tests/hunger-ghost328.test.mjs.

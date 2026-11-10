@@ -60,6 +60,6 @@ test('V320: Duelo de campeones con 3 vivos solo desde las 22:00',()=>{
 });
 test('V322: la página muestra el cartel EVENTO con el botón de admin1',()=>{
  const html=fs.readFileSync(new URL('../hunger.html',import.meta.url),'utf8'),page=fs.readFileSync(new URL('../hunger-page.js',import.meta.url),'utf8');
- assert.match(html,/id="event320"/);assert.match(html,/hunger-start124\.js\?v=327/);assert.match(page,/renderEvent320/);assert.match(page,/event_next_day/);assert.ok(!/confirm\(/.test(page.replace(/askConfirm\(/g,'')));
- assert.match(fs.readFileSync(new URL('../hunger-start124.js',import.meta.url),'utf8'),/hunger-page\.js\?v=327/);
+ assert.match(html,/id="event320"/);assert.match(html,/hunger-start124\.js\?v=328/);assert.match(page,/renderEvent320/);assert.match(page,/event_next_day/);assert.ok(!/confirm\(/.test(page.replace(/askConfirm\(/g,'')));
+ assert.match(fs.readFileSync(new URL('../hunger-start124.js',import.meta.url),'utf8'),/hunger-page\.js\?v=328/);
 });
