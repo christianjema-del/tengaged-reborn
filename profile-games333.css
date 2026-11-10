@@ -18,9 +18,10 @@
 #profileGames333 .num{font-size:25px;letter-spacing:-2px}
 #profileGames333 .num .ordinal{letter-spacing:-5px}
 /* El Duelo: «the duel» oscuro mientras se juega y claro con el puesto al terminar. */
-#profileGames333 .gdbutton{background-position:-384px -203px;color:#fff;font-size:11px;font-weight:bold;line-height:100px;letter-spacing:0;text-shadow:0 1px 2px #2b1408}
-#profileGames333 .gdbutton.num{background-position:-324px -203px;color:#5e311b;font-size:15px;line-height:102px;letter-spacing:-1px;text-shadow:0 0 3px #fff,0 0 2px #fff}
-#profileGames333 .gdbutton.num .ordinal{letter-spacing:0}
+#profileGames333 .gdbutton{background-position:-384px -203px;color:#fff;font-size:16px;font-weight:normal;line-height:56px;letter-spacing:0;text-shadow:0 1px 2px #2b1408,0 0 3px #2b1408}
+/* El puesto va dentro de la burbuja, centrado y del mismo tamaño que en el resto de juegos. */
+#profileGames333 .gdbutton.num{background-position:-324px -203px;color:#5e311b;font-size:25px;font-weight:normal;line-height:56px;letter-spacing:-2px;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 2px #fff}
+#profileGames333 .gdbutton.num .ordinal{letter-spacing:-5px}
 /* Hunger: sinsajo negro mientras se juega y dorado con el puesto al terminar. */
 #profileGames333 .ghbutton.num{background-position:-502px -203px;color:#fff;text-shadow:0 1px 2px #5a4310}
 #profileGames333 .grbutton.num{color:#b20000}

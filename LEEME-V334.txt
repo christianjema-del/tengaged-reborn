@@ -1,0 +1,3 @@
+V334 - Burbujas del Duelo con el texto centrado
+- En «Mis Juegos» del perfil, «Entrar» y el puesto del Duelo van dentro de la burbuja, centrados y del mismo tamaño que en el resto de juegos.
+- profile-games333.css ?v=336. Test: tests/profile-emblems79.test.mjs.

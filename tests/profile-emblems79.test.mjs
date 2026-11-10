@@ -19,5 +19,6 @@ assert.equal(g3.children[0].textContent,'1°');assert.equal(g3.children[0].class
 assert.deepEqual(pageList333(1,117),[1,2,3,'…',117]);assert.deepEqual(pageList333(50,117),[1,2,3,'…',49,50,51,'…',117]);assert.deepEqual(pageList333(1,1),[1]);
 assert.equal(shortDate333('2026-11-10T09:00:00Z'),'10 Nov, 26');assert.equal(statusLine333({status:'active',day:0}),'Inscripción');assert.equal(placement333({placement:'Ganador'}),1);
 assert.equal(gameHref333({game_type:'HUNGER',game_id:'9',status:'finished'}),'/hunger.html?edition=9');
-const html=readFileSync(new URL('../profile.html',import.meta.url),'utf8');assert.match(html,/id="profileGames333"/);assert.match(html,/profile-games333\.js\?v=334/);assert.match(html,/profile-games333\.css\?v=334/);
+const html=readFileSync(new URL('../profile.html',import.meta.url),'utf8');assert.match(html,/id="profileGames333"/);assert.match(html,/profile-games333\.js\?v=334/);assert.match(html,/profile-games333\.css\?v=336/);
+{const css=readFileSync(new URL('../profile-games333.css',import.meta.url),'utf8');assert.match(css,/\.gdbutton\.num\{[^}]*font-size:25px[^}]*line-height:56px/,'puesto del Duelo centrado como el resto');assert.match(css,/\.gdbutton\{[^}]*font-size:16px[^}]*line-height:56px/,'Entrar del Duelo centrado como el resto');}
 console.log('PASS Mis Juegos 1:1: burbujas por juego, puesto con °, cajita Día/Terminado, F de rápidas, paginador 1 2 3 … N.');
