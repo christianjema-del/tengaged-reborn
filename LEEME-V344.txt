@@ -1,0 +1,5 @@
+V344 - GIF animados para Peach y Bowsy
+- full-avatar115.js: huellas del GIF de Peach y del segundo GIF de Bowsy (140x161, como los anteriores).
+- avatar-editor.js ?v=344 y avatar.html.
+- Base de datos (tras publicar): cada GIF se añade gratis al armario de su dueña/dueño, retirado de la venta, listo para equiparse.
+- Test: tests/photo-gifts344.test.mjs.

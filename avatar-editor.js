@@ -1,7 +1,7 @@
-import {isPhotoAvatar} from '/full-avatar115.js?v=340';
+import {isPhotoAvatar} from '/full-avatar115.js?v=344';
 import {request as fetch} from '/http.js?v=170';
 import {invalidateAvatar} from '/avatar-display.js?v=337';
-import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '/avatar-art.js?v=340';
+import {avatarOptions,normalizeAvatar,renderAvatar,skinPalette,featurePalette} from '/avatar-art.js?v=344';
 import {hairOrnamentCostume} from '/avatar-costumes.js?v=306';
 import {$,el,api,post,buttonTask,loginLink} from '/market-ui.js?v=170';
 const partRows=[['body','Cuerpo'],['hair','Pelo'],['eyes','Ojos'],['mouth','Boca'],['glasses','Gafas'],['shirt','Ropa']];
