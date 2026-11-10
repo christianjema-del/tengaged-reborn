@@ -1,0 +1,37 @@
+/* V333: «Mis Juegos» del perfil, réplica 1:1 del Tengaged original (medidas y colores del perfil de 2015). */
+#profileGames333{margin:0 0 18px;padding:0;background:none;border:0;box-shadow:none}
+#profileGames333 .inuser-games-aj{display:block;max-width:550px;color:#5d5d5d;font:14px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:left}
+#profileGames333 .inuser-games-aj h2{display:block;height:21px;margin:0 0 8px;padding:0 1px 0 5px;border:0;background:none;color:#ff536d;font:bold 18px/21px Arial,'Trebuchet MS',trebuchet,Verdana,sans-serif;text-align:left;text-transform:none;letter-spacing:0}
+#profileGames333 .inuser-games-aj h2:after,#profileGames333 .inuser-games-aj h2:before{display:none}
+#profileGames333 .inuser-games-aj h2 .info{display:inline-block;margin:0 0 1px;padding:0 3px;background:#fff0f0;color:#ff647b;font:normal 11px/17px 'Trebuchet MS',trebuchet,Verdana,Arial,sans-serif;vertical-align:middle}
+#profileGames333 .pGames{float:right;margin:0 0 0 -1px;color:#5f5f5f;font:bold 11px/21px Arial,'Trebuchet MS',trebuchet,Verdana,sans-serif;text-align:right}
+#profileGames333 .pGames .gpage{width:auto;height:auto;min-height:0;max-width:none;display:inline-block;margin:0 0 0 2px;padding:0 4px;background:#e9eff5;color:#252525;font:bold 11px/21px Arial,'Trebuchet MS',trebuchet,Verdana,sans-serif;text-decoration:none}
+#profileGames333 .pGames .gpage.showing{background:#d3dfea}
+#profileGames333 .pGames .gpage:hover{background:#d3dfea}
+#profileGames333 .inuser-games{display:flow-root;margin:0 0 10px 10px;color:#5d5d5d;font:14px Verdana,Geneva,Arial,Helvetica,sans-serif}
+#profileGames333 .inuser-games .game{float:left;box-sizing:content-box;width:66px;height:98px;margin:0 3px 0 6px;padding:0;text-align:center}
+#profileGames333 .grbutton,#profileGames333 .gsvbutton,#profileGames333 .gbutton,#profileGames333 .gdbutton,#profileGames333 .ghbutton{display:block;width:58px;height:58px;margin:3px;padding:0 0 0 2px;box-sizing:content-box;background:url('/assets/regaged/avatars/ui/master.gif') no-repeat;border:0;border-radius:0;box-shadow:none;font:normal 16px/56px 'Trebuchet MS',trebuchet,Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center;text-decoration:none;text-shadow:none}
+#profileGames333 .grbutton{background-position:-262px -378px;color:#b20000}
+#profileGames333 .gsvbutton{background-position:-166px -263px;color:#ffea6f}
+#profileGames333 .gbutton{background-position:-300px 0;color:#476b8d}
+#profileGames333 .gdbutton{background-position:-324px -203px;color:#5e311b}
+#profileGames333 .ghbutton{background-position:-442px -203px;color:#f1d749}
+#profileGames333 .gbutton.num{font-size:25px;letter-spacing:-2px}
+#profileGames333 .gbutton .ordinal{letter-spacing:-5px}
+#profileGames333 .inuser-games .status{display:block;width:65px;height:33px;overflow:hidden;background:#e7f0f9;color:#4682b4;font:9px/11px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center}
+#profileGames333 .fastsign{float:left;height:11px;padding:1px;background:#2a5f84;color:#fff;font:9px/11px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center}
+#profileGames333 .inuser-games-empty{margin:0;color:#5d5d5d;font:12px Verdana,Geneva,Arial,sans-serif}
+@media (max-width:600px){#profileGames333 .inuser-games{margin-left:0}#profileGames333 .inuser-games .game{margin:0 2px 0 3px}}
+/* V333: ordenar amigos arrastrando (PC, solo en tu perfil) */
+.friend-grid-sortable333 [data-friend]{cursor:grab;transition:opacity .15s}
+.friend-grid-sortable333 [data-friend]:active{cursor:grabbing}
+.friend-grid-sortable333 .dragging333{opacity:.35}
+.friend-grid-sortable333 .drop-before333{box-shadow:inset 3px 0 0 #ff536d;background:#fff8fa}
+.friend-grid-sortable333 .drop-after333{box-shadow:inset -3px 0 0 #ff536d;background:#fff8fa}
+.friends-pages button.drop-page333{background:#fff29a!important;border-color:#e5d47c!important;color:#827749!important}
+.friends-drag-hint333{margin:6px 0 0;color:#8a99a6;font:10px/1.4 Verdana,Geneva,Arial,sans-serif}
+/* V333: cabecera como el original: «Jugado: N veces» y «Última Actividad:» */
+.profile-played148 .profile-times333{margin-left:4px;color:#5d5d5d}
+.profile-seen333 span{margin-right:4px}
+body.page-profile #profilePage .hero .profile-seen333{flex-direction:row!important;gap:5px!important;align-items:center!important}
+body.page-profile #profilePage .hero .profile-seen333 span{margin-right:0}

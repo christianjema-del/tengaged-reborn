@@ -164,7 +164,7 @@ test('V305: mensajes privados, burbuja del perfil, color en la lista de juegos y
  assert.deepEqual(E.survivorView(s,b,at).whispers.map(w=>[w.from,w.to,w.body]),[['H0','H1','hola']]);
  assert.deepEqual(E.survivorView(s,c,at).whispers,[],'los demás no ven los privados');
  const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
- assert.match(read('profile.html'),/kind==='SURVIVOR'\?'\/survivor\.html\?id='\+encodeURIComponent\(game\.game_id\)/);
+ assert.match(read('profile-games333.js'),/kind==='SURVIVOR'\?'\/survivor\.html\?id='\+id/);
  assert.match(read('profile-classic166.js'),/SURVIVOR:'\/survivor\.html\?id='/);
  assert.match(read('games-list258.css'),/td\.type-cell\.survivor\{background:#dcf6dd!important\}/);
  const html=read('survivor.html');for(const id of ['froPublic','froPrivate','froPublicCount','public-chat','froWhispers','froWhisperForm'])assert.ok(html.includes('id="'+id+'"'),id);

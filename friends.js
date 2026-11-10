@@ -1,6 +1,7 @@
 import {enableFriendDrag231} from '/friend-drag231.js?v=231';
 import {request as fetch} from '/http.js?v=170';
 import {setAvatar} from '/avatar-display.js?v=159';
+import {canDragFriends333,enableGridSort333,moveFriend333,moveToPage333} from '/friend-sort333.js?v=333';
 const root=document.getElementById('profileCommunity');let editingOrder=false,currentPage=1;
 async function load(){const username=new URLSearchParams(location.search).get('username')||'';try{
  const response=await fetch('/api/friends?username='+encodeURIComponent(username),{cache:'no-store'}),data=await response.json();if(!response.ok)throw Error(data.message);document.getElementById("friendsTitle").textContent="Amigos";root.replaceChildren();
@@ -23,13 +24,21 @@ async function load(){const username=new URLSearchParams(location.search).get('u
  activityButton.onclick=()=>{activity.hidden=!activity.hidden;activityButton.setAttribute('aria-expanded',String(!activity.hidden));};
  function drawFriends(){
   const count=Math.max(1,Math.ceil(data.friends.length/15));currentPage=Math.min(Math.max(1,currentPage),count);pages.replaceChildren();list.replaceChildren();
-  for(let i=1;i<=count;i++){const b=document.createElement('button');b.type='button';b.textContent=String(i);b.setAttribute('aria-label','Página '+i+' de amigos');if(i===currentPage)b.setAttribute('aria-current','page');b.onclick=()=>{currentPage=i;drawFriends();};pages.append(b);}
-  for(const friend of data.friends.slice((currentPage-1)*15,currentPage*15)){const a=document.createElement('a');a.href='/profile.html?username='+encodeURIComponent(friend.username);a.className='friend-person'+(friend.mutual?' mutual':'');a.title=friend.username+(friend.mutual?' · Os habéis añadido mutuamente':'');const img=document.createElement('img');setAvatar(img,friend.username);img.alt='Avatar de '+friend.username;img.loading='lazy';const name=document.createElement('span');name.className='friend-name';name.textContent=friend.username;a.append(img,name);list.append(a);}
+  for(let i=1;i<=count;i++){const b=document.createElement('button');b.type='button';b.textContent=String(i);b.setAttribute('aria-label','Página '+i+' de amigos');b.dataset.page=String(i);if(i===currentPage)b.setAttribute('aria-current','page');b.onclick=()=>{currentPage=i;drawFriends();};pages.append(b);}
+  for(const friend of data.friends.slice((currentPage-1)*15,currentPage*15)){const a=document.createElement('a');a.href='/profile.html?username='+encodeURIComponent(friend.username);a.className='friend-person'+(friend.mutual?' mutual':'');a.dataset.friend=friend.username;a.title=friend.username+(friend.mutual?' · Os habéis añadido mutuamente':'');const img=document.createElement('img');setAvatar(img,friend.username);img.alt='Avatar de '+friend.username;img.loading='lazy';const name=document.createElement('span');name.className='friend-name';name.textContent=friend.username;a.append(img,name);list.append(a);}
+  if(data.self&&data.friends.length>1&&canDragFriends333())enableGridSort333(list,pages,{onMove:(name,target,after)=>saveOrder333(moveFriend333(data.friends.map(f=>f.username),name,target,after)),onPage:(name,page)=>{currentPage=page;saveOrder333(moveToPage333(data.friends.map(f=>f.username),name,page,15));}});
   if(!data.friends.length){const empty=document.createElement('p');empty.className='friends-empty';empty.textContent=data.self?'Todavía no tienes amigos. Visita un perfil para añadirlo a tu lista.':'Este usuario todavía no tiene amigos.';list.append(empty);}
  }
+ // V333: guarda el orden nuevo al soltar un amigo arrastrado (PC).
+ async function saveOrder333(order){
+  const before=data.friends.slice(),byName=new Map(before.map(f=>[f.username,f]));data.friends=order.map(n=>byName.get(n)).filter(Boolean);drawFriends();status.textContent='Guardando el orden…';editingOrder=true;
+  try{const r=await fetch('/api/friends?username='+encodeURIComponent(username),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'reorder',usernames:order})}),d=await r.json();if(!r.ok)throw Error(d.message||'No se pudo guardar el orden.');status.textContent='Orden de amigos guardado.';}
+  catch(e){data.friends=before;drawFriends();status.textContent=e.message;}finally{editingOrder=false;}
+ }
  drawFriends();if(card)card.insertBefore(tools,root);else root.append(tools);root.append(list,activity);
+ if(data.self&&data.friends.length>1&&canDragFriends333()){const hint=document.createElement('p');hint.className='friends-drag-hint333';hint.textContent='Arrastra a tus amigos para cambiar el orden. Suéltalos sobre un número para llevarlos a esa página.';root.append(hint);}
  
- if(data.self&&data.friends.length>1){
+ if(data.self&&data.friends.length>1&&!canDragFriends333()){
   const reorder=document.createElement('button');reorder.type='button';reorder.textContent='Ordenar amigos';
   reorder.onclick=()=>{
    editingOrder=true;reorder.disabled=true;let order=data.friends.map(f=>f.username);

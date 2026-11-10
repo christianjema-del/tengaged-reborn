@@ -13,5 +13,5 @@ class E{constructor(){this.children=[];this.hidden=true;this.textContent='';}rep
 const root=new E(),document={hidden:false,getElementById:()=>root,createElement:()=>new E(),addEventListener(){}};
 vm.runInNewContext(read('my-active-games.js'),{window:{},document,JSON,AbortController,setTimeout,clearTimeout,setInterval(){},fetch:async()=>({status:200,ok:true,json:async()=>({ok:true,games})})});await new Promise(r=>setTimeout(r,20));
 assert.equal(root.children[0].textContent,'#Rookies 1');assert.equal(root.children[0].href,'/rookies.html?id=1');
-for(const [file,text] of [['profile.html',"kind==='ROOKIES'?'/rookies.html?id='"],['profile-classic166.js',"ROOKIES:'/rookies.html?id='"],['game-feed.js',"type==='rookies'?'/rookies.html?id='"],['community-page.js',"type==='rookies'?'/rookies.html?id='"]])assert.ok(read(file).includes(text),file+' enlaza a la partida');
+for(const [file,text] of [['profile-games333.js',"kind==='ROOKIES'?'/rookies.html?id='"],['profile-classic166.js',"ROOKIES:'/rookies.html?id='"],['game-feed.js',"type==='rookies'?'/rookies.html?id='"],['community-page.js',"type==='rookies'?'/rookies.html?id='"]])assert.ok(read(file).includes(text),file+' enlaza a la partida');
 console.log('PASS Rookies enlazado desde el menú de juegos, el perfil, la actividad y los feeds.');

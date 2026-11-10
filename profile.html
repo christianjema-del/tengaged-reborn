@@ -71,7 +71,7 @@
     .avatar-dialog-foot .avatar-editor-actions{margin:0}
     @media(max-width:760px){.avatar-dialog{max-height:90vh}.avatar-options{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-option .avatar-art{width:62px;height:62px}}
   </style>
-<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=264"><link rel="stylesheet" href="/profile-mafia278.css?v=278"><link rel="stylesheet" href="/profile-rename296.css?v=296"></head>
+<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=264"><link rel="stylesheet" href="/profile-mafia278.css?v=278"><link rel="stylesheet" href="/profile-rename296.css?v=296"><link rel="stylesheet" href="/profile-games333.css?v=333"></head>
 <body><script src="/shell.js?v=314"></script>
   <div class="wrap">
     <div class="tg-legacy-shell" hidden><header class="head"><a class="logo" href="/">tengaged<b>.es</b> reborn</a><span id="sessionLabel">Perfil de usuario</span></header></div>
@@ -90,10 +90,10 @@
         <div id="stats" class="stats" aria-label="Estadísticas del usuario">
           <div class="stat"><span>Karma:</span><strong id="karma">0</strong><a id="karmaRank" href="/hall-of-fame.html" class="profile-karma-rank" aria-label="Puesto en la clasificación de karma" hidden></a></div>
           <div id="moneyStat" class="stat hidden"><strong id="money">0</strong><span>Dinero:</span></div>
-          <div class="stat profile-played148"><span>Jugado:</span><strong id="games">0</strong></div>
+          <div class="stat profile-played148"><span>Jugado:</span><strong id="games">0</strong><span class="profile-times333">veces</span></div>
           <div id="winsStatBox" class="stat"><strong id="wins">0</strong><span>Victorias:</span></div>
           
-          <div class="stat"><strong id="lastSeenStat">—</strong></div>
+          <div class="stat profile-seen333"><span>Última Actividad:</span><strong id="lastSeenStat">—</strong></div>
           <div id="joinedStatBox" class="stat hidden"><strong id="joinedStat">—</strong><span>Registro:</span></div>
           <div id="bannedNotice" class="profile-banned hidden">BANEADO/BORRADO</div>
         </div>
@@ -109,7 +109,7 @@
             <button type="button" id="editBio" class="bio-edit hidden">Editar</button><div id="bioText" class="bio">Este jugador aún no ha escrito una descripción.</div>
             <form id="bioForm" class="bio-form hidden"><label for="bioInput">Tu descripción (máximo 1.000 caracteres)</label><textarea id="bioInput" maxlength="1000"></textarea><button class="button">Guardar descripción</button><div id="bioNotice" class="notice" aria-live="polite"></div></form>
           </section>
-          <section class="card profile-games157"><h2 class="section-title">Mis juegos <small id="historySummary"></small></h2><nav class="history-pagination" aria-label="Páginas de mis juegos"><button type="button" id="historyPrev" aria-label="Página anterior">‹</button><span id="historyPageLabel" class="hidden"></span><span id="historyPageButtons"></span><button type="button" id="historyNext" aria-label="Página siguiente">›</button></nav><div id="gameHistory" class="game-history"><div class="empty">Cargando partidas…</div></div></section>
+          <section id="profileGames333" aria-label="Mis Juegos"><div class="inuser-games-aj"><h2>Mis Juegos</h2><div class="inuser-games"><p class="inuser-games-empty">Cargando partidas…</p></div></div></section>
           <section class="card"><h2 class="section-title">Mi blog <a id="profileBlogAll166" href="/blogs" class="small-section-link">Mira mi blog →</a><a id="profileRss166" class="profile-rss166" href="/api/blog-rss" aria-label="RSS de este usuario">RSS</a></h2><div id="profilePosts">Cargando publicaciones…</div></section><section class="card"><h2 class="section-title">Últimas menciones en blogs</h2><div id="profileMentions">Cargando menciones…</div></section><section id="activity" class="card"><h2 class="side-card-title">Últimas Acciones</h2><ol id="activityText" class="smallList"></ol></section><details id="adminPanel" class="card admin hidden">
             <summary>Administración de usuario</summary>
             <p>Herramientas del equipo. Cada acción queda registrada.</p>
@@ -140,6 +140,7 @@ import {setAvatar,invalidateAvatar} from '/avatar-display.js?v=159';
 import {api as profileApi} from "/market-ui.js?v=170";
 import {elapsedMinutes} from "/elapsed-time.js?v=159";
 import {applyGameEmblem} from "/game-emblems.js?v=215";
+import {renderGames333} from "/profile-games333.js?v=333";
 import {applyColorCard} from "/color-cards.js?v=159";
     const params = new URLSearchParams(location.search);
     let requestedUsername = (params.get("username") || "").trim();
@@ -217,32 +218,8 @@ import {applyColorCard} from "/color-cards.js?v=159";
       return Number.isFinite(date.getTime())?date.toLocaleDateString("es-ES"):"Fecha no disponible";
     }
 
-    let historyPage=0;
-    function renderHistory(){
-      const historyRoot=byId('gameHistory'),games=profile.games||[],pages=Math.max(1,Math.ceil(games.length/7));historyPage=Math.max(0,Math.min(historyPage,pages-1));historyRoot.replaceChildren();
-      for(const game of games.slice(historyPage*7,historyPage*7+7)){
-       const kind=String(game.game_type).toUpperCase(),active=game.status==='active',row=document.createElement('a');row.className='game-history-row'+(active?' active':'')+' game-kind-'+kind.toLowerCase()+(kind==='HUNGER'?' hunger':'');
-       row.href=kind==='HUNGER'?'/hunger.html'+(active?'':'?edition='+encodeURIComponent(game.game_id)):kind==='CASTING'?'/casting-game.html?id='+encodeURIComponent(game.game_id):kind==='FROOKIES'?'/frookies.html?id='+encodeURIComponent(game.game_id):kind==='DUEL'?'/duel.html?id='+encodeURIComponent(game.game_id):kind==='ROOKIES'?'/rookies.html?id='+encodeURIComponent(game.game_id):kind==='SURVIVOR'?'/survivor.html?id='+encodeURIComponent(game.game_id):'/games.html';
-       const token=document.createElement('div');token.className='game-token';const placement=String(game.placement||'');
-       const match=placement.match(/(?:Puesto\s*)?(\d+)/i);const position=/ganador|unificaci/i.test(placement)?'1':match?match[1]:null;
-       if(position){token.append(document.createTextNode(position));const suffix=document.createElement('sup');suffix.textContent='º';token.append(suffix);}else token.textContent=active?'Entrar':'Fin';
-       if(/ganador|unificaci/i.test(placement)||/^1(?:º|st)?$/.test(placement))token.classList.add('winner');
-       const title=document.createElement('strong');title.textContent=(kind==='CASTING'?'Casting':kind==='HUNGER'?'Hunger':kind==='DUEL'?'El Duelo':kind==='ROOKIES'?'Rookies':kind==='SURVIVOR'?'Survivor':kind)+' #'+game.game_id;
-       const status=document.createElement('span');status.textContent=active?'En curso':placement||'Finalizada';
-       const date=document.createElement('small');date.textContent=safeDate(kind==='CASTING'?(game.created_at||game.joined_at):game.joined_at);
-       applyGameEmblem(token,kind);
-       const sprite={DUEL:[324,203],CASTING:[300,0],FASTING:[300,0],SURVIVOR:[166,263],ROOKIES:[262,378],FROOKIES:[262,378],HUNGER:[442,203]}[kind];
-       if(sprite){const ns='http://www.w3.org/2000/svg',art=document.createElementNS(ns,'svg'),image=document.createElementNS(ns,'image');art.setAttribute('viewBox',sprite[0]+' '+sprite[1]+' 58 58');art.setAttribute('class','history-emblem157');art.setAttribute('aria-hidden','true');art.setAttribute('focusable','false');image.setAttribute('href','/assets/regaged/avatars/ui/master.gif');image.setAttribute('width','560');image.setAttribute('height','448');art.append(image);token.append(art);}
-       const info=document.createElement('div');info.className='game-history-caption';status.textContent=active?'Entrar':'Finalizada';if(kind==='DUEL')status.textContent=active?'Entrar':'Terminado';title.textContent='#'+game.game_id;
-       if(kind==='FROOKIES'||kind==='FASTING'){const flag=document.createElement('span');flag.className='history-fast157';flag.textContent='F';flag.title='Modalidad rápida';status.textContent='';status.append(flag,document.createTextNode(active?'Entrar':'Finalizada'));}
-       const parts=date.textContent.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(parts){const months=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];date.textContent=parts[1]+' '+months[Number(parts[2])-1]+' '+parts[3].slice(-2);}
-       info.append(status,title,date);row.append(token,info);row.setAttribute('aria-label',kind+' '+title.textContent+' · '+status.textContent+' · '+date.textContent);historyRoot.append(row);
-      }
-      if(!games.length)historyRoot.textContent='Todavía no hay partidas registradas.';
-      byId('historyPageLabel').textContent=(historyPage+1)+' / '+pages;
-      const pageButtons=byId('historyPageButtons');pageButtons.replaceChildren();for(let i=0;i<pages;i++){const b=document.createElement('button');b.type='button';b.textContent=i+1;b.setAttribute('aria-label','Página '+(i+1)+' de juegos');if(i===historyPage)b.setAttribute('aria-current','page');b.onclick=()=>{historyPage=i;renderHistory();};pageButtons.append(b);} byId('historySummary').textContent=games.length+' partidas registradas';byId('historyPrev').disabled=historyPage===0;byId('historyNext').disabled=historyPage>=pages-1;
-    }
-    byId('historyPrev').onclick=()=>{historyPage--;renderHistory();};byId('historyNext').onclick=()=>{historyPage++;renderHistory();};
+    const historyState={page:1};
+    function renderHistory(){renderGames333(byId('profileGames333'),profile.games||[],historyState);}
     byId('editBio').onclick=()=>{byId('bioForm').classList.toggle('hidden');if(!byId('bioForm').classList.contains('hidden'))byId('bioInput').focus();};
     async function loadDesigns(){
      const root=byId('profileDesigns');
@@ -413,5 +390,5 @@ loadProfileAvatar(profile.username);
     }
     byId('profileRetry').onclick=openProfile;addEventListener('online',openProfile);openProfile();
   </script>
-<script type="module" src="/admin-workbench.js?v=317"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=302"></script><script type="module" src="/profile-extras.js?v=302"></script><script type="module" src="/profile-classic166.js?v=305"></script><script type="module" src="/profile-bets253.js?v=256"></script></body>
+<script type="module" src="/admin-workbench.js?v=317"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=333"></script><script type="module" src="/profile-extras.js?v=302"></script><script type="module" src="/profile-classic166.js?v=305"></script><script type="module" src="/profile-bets253.js?v=256"></script></body>
 </html>

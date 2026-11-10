@@ -1,0 +1,6 @@
+V332 - Perfil: «Mis Juegos» como el Tengaged original y amigos ordenables arrastrando
+- «Mis Juegos» réplica 1:1 del perfil de 2015: título con «N games played», paginador «1 2 3 … N», 7 burbujas de 58 px del sprite master.gif (Entrar con color de cada juego; puesto con ° en las terminadas), cajita «Día N / Terminado», número y fecha («10 Nov, 26»), «F» en las rápidas.
+- La API del perfil manda el día actual de cada partida en curso (Rookies, Frookies, Survivor, Duelo, Casting, Hunger).
+- En PC, en tu propio perfil, ordenas a tus amigos arrastrando los avatares (o sobre un número de página); se guarda al soltar. En móvil, el botón «Ordenar amigos» con flechas.
+- Cabecera: «Jugado: N veces» y «Última Actividad:».
+- Archivos: profile-games333.js/.css, friend-sort333.js, friends.js ?v=333, profile.html, functions/api/profile.js. Tests: profile-emblems79 (reescrito), friend-sort333.

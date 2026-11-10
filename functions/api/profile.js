@@ -147,10 +147,24 @@ async function handle141_onRequest({ request, env }) {
       let currentHealthFound=false;
       for(const row of matches){const s=JSON.parse(row.state),member=s.players.find(p=>p.username.toLowerCase()===profile.username.toLowerCase());if(!member)continue;
         if(!currentHealthFound&&member.status==='active'&&s.phase!=='finished'){profile.casting_health=Number(member.health);currentHealthFound=true;}
-        const entry={game_type:'CASTING',game_id:String(s.id),status:s.phase==='finished'?'finished':member.status==='eliminated'?'eliminated':'active',placement:member.placement===1?'Ganador':member.placement?'Puesto '+member.placement:null,joined_at:Number.isFinite(new Date(s.createdAt).getTime())?new Date(s.createdAt).toISOString():null,created_at:Number.isFinite(new Date(s.createdAt).getTime())?new Date(s.createdAt).toISOString():null,finished_at:s.finishedAt&&Number.isFinite(new Date(s.finishedAt).getTime())?new Date(s.finishedAt).toISOString():null};
+        const entry={game_type:'CASTING',game_id:String(s.id),status:s.phase==='finished'?'finished':member.status==='eliminated'?'eliminated':'active',placement:member.placement===1?'Ganador':member.placement?'Puesto '+member.placement:null,joined_at:Number.isFinite(new Date(s.createdAt).getTime())?new Date(s.createdAt).toISOString():null,created_at:Number.isFinite(new Date(s.createdAt).getTime())?new Date(s.createdAt).toISOString():null,finished_at:s.finishedAt&&Number.isFinite(new Date(s.finishedAt).getTime())?new Date(s.finishedAt).toISOString():null,day:s.phase==='waiting'?0:Number(s.round)||null};
         const i=gameHistory.results.findIndex(x=>x.game_type==='CASTING'&&x.game_id===entry.game_id);if(i>=0)gameHistory.results[i]=entry;else gameHistory.results.unshift(entry);
       }
     }
+    // V333: día de juego de las partidas en curso, para las burbujas de «Mis Juegos» (como en Tengaged).
+    try{
+      const tables={ROOKIES:['rookies_matches','day'],FROOKIES:['frookies_matches','round'],SURVIVOR:['survivor_matches','day'],DUEL:['duel_matches','round']};
+      for(const [type,[table,field]] of Object.entries(tables)){
+        const ids=[...new Set(gameHistory.results.filter(g=>g.game_type===type&&g.status==='active'&&g.day==null).map(g=>Number(g.game_id)).filter(Number.isSafeInteger))].slice(0,20);
+        if(!ids.length)continue;
+        const rows=(await env.DB.prepare(`SELECT id,json_extract(state,'$.${field}') AS day,json_extract(state,'$.phase') AS phase FROM ${table} WHERE id IN (${ids.map(()=>'?').join(',')})`).bind(...ids).all()).results;
+        for(const r of rows)for(const g of gameHistory.results)if(g.game_type===type&&Number(g.game_id)===Number(r.id))g.day=r.phase==='waiting'?0:Number(r.day)||null;
+      }
+      if(gameHistory.results.some(g=>g.game_type==='HUNGER'&&g.status==='active')){
+        const h=await env.DB.prepare("SELECT json_extract(state,'$.edition') AS edition,json_extract(state,'$.phase') AS phase,json_extract(state,'$.startedAt') AS started FROM hunger_arena WHERE id=1").first();
+        for(const g of gameHistory.results)if(g.game_type==='HUNGER'&&g.status==='active'&&Number(g.game_id)===Number(h?.edition))g.day=h.phase==='waiting'?0:h.started?Math.floor((Date.now()-Number(h.started))/86400000)+1:null;
+      }
+    }catch(e){console.warn('Profile game days unavailable',e);}
     const historyDate=item=>{let raw=item.created_at||item.joined_at||item.finished_at;if(typeof raw==='string'&&/^\d{4}-\d{2}-\d{2} /.test(raw))raw=raw.replace(' ','T')+'Z';const value=new Date(raw).getTime();return Number.isFinite(value)?value:0;};
     gameHistory.results.sort((a,b)=>Number(b.status==='active')-Number(a.status==='active')||historyDate(b)-historyDate(a));
     return Response.json({
