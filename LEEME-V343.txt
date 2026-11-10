@@ -1,0 +1,5 @@
+V343 - Words: más palabras y más largas
+- functions/_shared/words-list237.js: de 120 a 407 palabras en castellano (184 de 9 a 14 letras), sin tilde ni Ñ porque el teclado de Words.swf solo tiene A-Z y el panel tiene 14 casillas. Nuevas categorías: Lugar, Deporte y Escuela.
+- Cada partida reparte 64 palabras sin repetir: al menos 40 de 9 letras o más, mezcladas con 24 más cortas.
+- Las partidas ya empezadas conservan sus palabras. No cambia puntuaciones, tiempo ni premios.
+- Test: tests/words-list237.test.mjs.
