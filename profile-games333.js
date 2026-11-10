@@ -45,7 +45,8 @@ export function renderGames333(root,games,state={page:1}){
  for(const g of list.slice((state.page-1)*PER_PAGE,state.page*PER_PAGE)){
   const kind=String(g.game_type||'').toUpperCase(),place=placement333(g),item=el('div','game');
   const bubble=el('a');bubble.href=gameHref333(g);
-  if(place&&g.status!=='active'){bubble.className='gbutton num';bubble.append(document.createTextNode(String(place)),el('span','ordinal','°'));}
+  // V333b: cada juego conserva su burbuja también al terminar (el Duelo con «the duel», Hunger con el sinsajo…).
+  if(place&&g.status!=='active'){bubble.className=(ACTIVE[kind]||'gbutton')+' num';bubble.append(document.createTextNode(String(place)),el('span','ordinal','°'));}
   else{bubble.className=ACTIVE[kind]||'gbutton';bubble.textContent=g.status==='active'?'Entrar':'Fin';}
   bubble.title=(NAMES[kind]||kind)+' #'+g.game_id+(place&&g.status!=='active'?' · '+(place===1?'Ganador':'Puesto '+place):'');
   const status=el('div','status');

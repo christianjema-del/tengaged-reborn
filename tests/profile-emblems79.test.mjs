@@ -14,9 +14,10 @@ assert.equal(g0.className,'game');assert.equal(g0.children[0].className,'grbutto
 assert.equal(g0.children[1].className,'status');assert.equal(g0.children[1].children[0].className,'fastsign');assert.equal(g0.children[1].textContent,'FDía 11#131 May, 15');
 assert.equal(g1.children[0].className,'gsvbutton');assert.equal(g1.children[1].textContent,'Día 10#231 May, 15');
 assert.equal(g2.children[0].className,'gbutton num');assert.equal(g2.children[0].textContent,'4°','eliminado con su puesto');assert.equal(g2.children[1].textContent,'Día 9#331 May, 15');
-assert.equal(g3.children[0].textContent,'1°');assert.equal(g3.children[1].textContent,'Terminado#431 May, 15');
+assert.equal(g3.children[0].textContent,'1°');assert.equal(g3.children[0].className,'grbutton num','Rookies terminado conserva su burbuja');
+{const r=new E('section');renderGames333(r,[{game_type:'DUEL',game_id:'6',status:'finished',placement:'Puesto 1',joined_at:'2026-11-09'},{game_type:'DUEL',game_id:'7',status:'active',day:2,joined_at:'2026-11-10'},{game_type:'HUNGER',game_id:'10',status:'finished',placement:'Puesto 2',joined_at:'2026-11-08'}],{page:1});const [d1,d2,h]=r.children[0].children[1].children;assert.equal(d1.children[0].className,'gdbutton num','Duelo terminado con su burbuja');assert.equal(d1.children[0].textContent,'1°');assert.equal(d2.children[0].className,'gdbutton');assert.equal(d2.children[0].textContent,'Entrar');assert.equal(h.children[0].className,'ghbutton num');}assert.equal(g3.children[1].textContent,'Terminado#431 May, 15');
 assert.deepEqual(pageList333(1,117),[1,2,3,'…',117]);assert.deepEqual(pageList333(50,117),[1,2,3,'…',49,50,51,'…',117]);assert.deepEqual(pageList333(1,1),[1]);
 assert.equal(shortDate333('2026-11-10T09:00:00Z'),'10 Nov, 26');assert.equal(statusLine333({status:'active',day:0}),'Inscripción');assert.equal(placement333({placement:'Ganador'}),1);
 assert.equal(gameHref333({game_type:'HUNGER',game_id:'9',status:'finished'}),'/hunger.html?edition=9');
-const html=readFileSync(new URL('../profile.html',import.meta.url),'utf8');assert.match(html,/id="profileGames333"/);assert.match(html,/profile-games333\.js\?v=333/);assert.match(html,/profile-games333\.css\?v=333/);
+const html=readFileSync(new URL('../profile.html',import.meta.url),'utf8');assert.match(html,/id="profileGames333"/);assert.match(html,/profile-games333\.js\?v=334/);assert.match(html,/profile-games333\.css\?v=334/);
 console.log('PASS Mis Juegos 1:1: burbujas por juego, puesto con °, cajita Día/Terminado, F de rápidas, paginador 1 2 3 … N.');

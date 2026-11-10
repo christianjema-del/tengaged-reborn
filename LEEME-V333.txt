@@ -1,0 +1,3 @@
+V333 - Burbujas del Duelo en «Mis Juegos»
+- Cada juego conserva su burbuja también al terminar: El Duelo («the duel», con «Entrar» o el puesto debajo del logo), Hunger (sinsajo negro / dorado), Rookies y Frookies (rosa), Survivor (verde), Casting (azul).
+- profile-games333.js/.css ?v=334. Test: tests/profile-emblems79.test.mjs.
