@@ -1,0 +1,5 @@
+V337 - El cambio de nombre también actualiza Survivor
+- username-change296: survivor_matches (estado) y survivor_results (username) se actualizan al cambiar de nombre.
+- Base de datos: Survivor #1 pasa de «Vort» a «Bowsy» (id 11), que no salía en la tribu.
+- Vasallaje (Hunger #11, ya terminado): lo de dispararse va ligado al id 11 y no al nombre.
+- Test: tests/rename-survivor337.test.mjs.

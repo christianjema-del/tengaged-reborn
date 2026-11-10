@@ -14,7 +14,8 @@ export const DAYS=[
 ];
 export const isVasallaje=s=>Number(s?.edition)===VASALLAJE.edition;
 export const SELF_SHOOTER='vort';
-const isSelfShooter=p=>!p?.bot&&String(p?.username||'').toLowerCase()===SELF_SHOOTER;
+// V337: va ligado a la cuenta de Vort (id 11), que después se llamó Bowsy.
+const isSelfShooter=p=>!p?.bot&&(Number(p?.id)===11||String(p?.username||'').toLowerCase()===SELF_SHOOTER);
 // V327: solo Vort, solo en Hunger #11 y solo después de recibir sus 400 flechas.
 // V328: si Vort muere por sus propias flechas, puede seguir disparando a los demás hasta el final.
 export function canGhostShoot(s,p){return isVasallaje(s)&&s.phase==='active'&&isSelfShooter(p)&&!!p.selfShot327&&!!p.eliminatedAt&&p.deathCause==='arrow'&&!p.eliminatedBy&&Number(p.arrows)>0;}
