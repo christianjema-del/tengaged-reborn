@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {freshRookies,advanceRookies,actRookies,setActivity,DAY_MS,FINALE_MS,alive} from '../functions/_shared/rookies-engine.js';
+import {freshRookies,advanceRookies,actRookies,setActivity,DAY_MS,alive} from '../functions/_shared/rookies-engine.js';
 import {totalPosis} from '../functions/_shared/chat-posis.js';
 const admin={id:999,username:'admin1',is_admin:1};
 function game(t0,ties={}){
@@ -62,15 +62,16 @@ const t0=Date.UTC(2026,10,5,8);
  assert.deepEqual(s.players.filter(p=>p.id===1||p.id===2).map(p=>p.status),['active','active'],'los dos más activos siguen');
  assert.equal(s.players.find(p=>p.id===3).status,'eliminated','el menos activo de los usuarios sale');
 }
-// La final se decide igual.
+// V330: el último día reparte los puestos; entre los que se salvan gana el más activo de la partida.
 {
  const s=game(t0);let at=t0;
- for(let i=0;i<15&&s.phase==='day';i++){at+=DAY_MS;advanceRookies(s,at);}
- assert.equal(s.phase,'finale');const [a,b,c,d]=alive(s);a.bot=b.bot=c.bot=d.bot=false;
- setActivity(s,[...line([[a.id,0],[b.id,3],[a.id,0],[b.id,0],[c.id,0]],at+1000),...line([[c.id,0],[d.id,0],[c.id,0],[d.id,0],[c.id,0]],at+FINALE_MS+1000)]);
- advanceRookies(s,at+FINALE_MS+60000);
- assert.equal(s.phase,'finished');assert.equal(s.winner,b.username,'empate a comentarios en la final: ganan los tics');
- assert.equal(s.players.find(p=>p.id===c.id).placement,3,'lo escrito tras la final no cuenta');
+ for(let i=0;i<15&&s.phase==='day'&&!(alive(s).length<=6&&s.hoh===null);i++){at+=DAY_MS;advanceRookies(s,at);}
+ assert.equal(s.phase,'day');assert.equal(s.hoh,null);
+ const nominees=[...s.nominees],[a,b]=alive(s).filter(p=>!nominees.includes(p.id)),x=s.players.find(p=>p.id===nominees[0]);a.bot=b.bot=x.bot=false;
+ setActivity(s,[...line([[a.id,0],[b.id,3],[a.id,0],[b.id,0],[x.id,0]],at+1000),...line([[a.id,0],[x.id,0],[a.id,0],[x.id,0],[a.id,0]],at+DAY_MS+1000)]);
+ advanceRookies(s,at+DAY_MS+60000);
+ assert.equal(s.phase,'finished');assert.equal(s.winner,b.username,'empate a comentarios: ganan los tics');
+ assert.equal(a.placement,2,'lo escrito tras el final no cuenta');
 }
 // El registro del chat nunca se guarda en la partida.
 {

@@ -1,0 +1,7 @@
+V330 - Rookies termina al cerrar el último día de votación
+- Ya no hay final de cuatro. El último día (sin HoH) reparte todos los puestos al cerrarse.
+- Nominados no salvados: últimos puestos según los votos (más puntos de expulsión = peor puesto).
+- Los demás (incluido el salvado por el PoV): ordenados por actividad de toda la partida (comentarios y, si empatan, tics). Gana el más activo.
+- Textos del día, reglas de rookies.html y descripción de inscripción actualizados.
+- Código: finalDay330 en functions/_shared/rookies-engine.js; rookies-page250.js ?v=330; enrollment-formats.js ?v=330.
+- Tests actualizados: rookies-engine249, rookies-activity273, rookies-service249, rookies-final-hoh329.

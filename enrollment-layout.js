@@ -1,5 +1,5 @@
 import {request as fetch} from '/http.js?v=170';
-import {ENROLLMENT_FORMATS} from '/enrollment-formats.js?v=303';
+import {ENROLLMENT_FORMATS} from '/enrollment-formats.js?v=330';
 const root=document.getElementById('formatSelection');
 for(const [type,format] of Object.entries(ENROLLMENT_FORMATS)){const a=document.createElement('a'),img=document.createElement('img'),state=document.createElement('span');a.dataset.gameType=type;a.className='enrollment-format format-'+type+(format.implemented?'':' unavailable');a.href='/enroll-game.html?type='+type;img.src='/assets/formats/'+format.image;img.alt=format.name;state.textContent=format.implemented?'Consultar e inscribirme':'Próximamente';a.setAttribute('aria-label',format.name+' · '+state.textContent);a.append(img,state);root.append(a);}
 document.getElementById('refreshEnrollment').onclick=()=>location.reload();

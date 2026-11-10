@@ -19,5 +19,5 @@ test('V323: la página oculta Nominar/Vetar y los paneles cuando ya se ha guarda
  const page=fs.readFileSync(new URL('../rookies-page250.js',import.meta.url),'utf8');
  assert.match(page,/s\.me\?\.isHoh&&!s\.me\.hohDone/);assert.match(page,/s\.me\?\.isPov&&!s\.me\.povDone/);
  assert.match(page,/hoh=me\?\.isHoh&&!me\.hohDone/);assert.match(page,/pov=me\?\.isPov&&!me\.povDone/);
- assert.match(fs.readFileSync(new URL('../rookies.html',import.meta.url),'utf8'),/rookies-page250\.js\?v=329/);
+ assert.match(fs.readFileSync(new URL('../rookies.html',import.meta.url),'utf8'),/rookies-page250\.js\?v=330/);
 });

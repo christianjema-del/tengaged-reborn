@@ -38,7 +38,7 @@ function startDay(s,at){
  s.phase='day';s.deadline=at+DAY_MS;
  // V329: el día cuyas expulsiones dejan a cuatro (el anterior a la final) no tiene HoH:
  // sus nominaciones serían para la final, que ya no tiene nominaciones.
- if(lastVoteDay329(players.length)){s.previousHoh=s.hoh;s.hoh=null;log(s,'Día '+s.day+': no hay HoH. Mañana empieza la final de cuatro.',at,'hoh',{hoh:null,day:s.day});}else chooseHoh(s,at);
+ if(lastVoteDay329(players.length)){s.previousHoh=s.hoh;s.hoh=null;log(s,'Día '+s.day+': último día. No hay HoH: al terminar el día se reparten todos los puestos y acaba la partida.',at,'hoh',{hoh:null,day:s.day});}else chooseHoh(s,at);
  s.hohPicks=[];
  if(s.day===1){s.nominees=[];return;}
  const wanted=players.length===5?3:4,chosen=nominated.filter(id=>id!==s.hoh).slice(0,2),others=mostActive(s,players.filter(p=>p.id!==s.hoh&&!chosen.includes(p.id)),s.day-1).reverse();
@@ -54,10 +54,20 @@ function closeDay(s,at){
  const total=Object.fromEntries(s.nominees.map(id=>[id,0]));// Los votos antiguos iban de 1 a 4: se pasan a la escala actual, que empieza en 0.
  for(const ballot of Object.values(s.ballots)){const low=Math.min(...Object.values(ballot));for(const [id,points] of Object.entries(ballot))if(id in total)total[id]+=points-low;}
  const saved=s.saved,calm=mostActive(s,s.nominees.map(id=>byId(s,id)),s.day).reverse(),ranked=s.nominees.filter(id=>id!==saved).map(id=>byId(s,id)).sort((a,b)=>total[b.id]-total[a.id]||calm.indexOf(a)-calm.indexOf(b)),out=ranked.slice(0,s.nominees.length===4?2:1);
+ // V330: el último día de votación termina la partida. Los nominados no salvados ocupan los
+ // últimos puestos según los votos (más votos, peor puesto); el resto, incluido el salvado por el
+ // PoV, se ordena por actividad de toda la partida y gana el más activo.
+ if(lastVoteDay329(alive(s).length))return finalDay330(s,at,ranked,total,saved);
  let place=alive(s).length;for(const p of out){p.status='eliminated';p.placement=place--;p.eliminatedAt=at;}
  const rows=s.nominees.map(id=>({username:byId(s,id).username,points:total[id],out:out.some(p=>p.id===id)})).sort((a,b)=>b.points-a.points);
  s.history.push({day:s.day,hoh:s.hoh,pov:s.pov,saved,rows});log(s,'Resultados del día '+s.day,at,'rookies-results',{rows,day:s.day});
  if(s.hohPicks.length<2)autoPicks(s);startDay(s,at);
+}
+function finalDay330(s,at,ranked,total,saved){
+ let place=alive(s).length;for(const p of ranked){p.status='finished';p.placement=place--;}
+ const rows=s.nominees.map(id=>({username:byId(s,id).username,points:total[id],out:ranked.some(p=>p.id===id),placement:byId(s,id).placement||null})).sort((a,b)=>b.points-a.points);
+ s.history.push({day:s.day,hoh:s.hoh,pov:s.pov,saved,rows,final:true});log(s,'Resultados del día '+s.day,at,'rookies-results',{rows,day:s.day});
+ s.nominees=[];s.hohPicks=[];finish(s,at);
 }
 function autoPicks(s){const pool=alive(s).filter(p=>p.id!==s.hoh&&!s.hohPicks.includes(p.id)),least=mostActive(s,pool,s.day).reverse();while(s.hohPicks.length<2&&least.length)s.hohPicks.push(least.shift().id);}
 function finish(s,at){
