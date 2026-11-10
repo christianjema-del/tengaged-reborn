@@ -1,0 +1,7 @@
+V331 - Casting: final por posis con llave y nominados por desafío
+- Final: gana quien más posis (tics verdes) tiene, siempre que tenga al menos una llave. Sin llaves, detrás. Empates: más llaves, desafío, manzanas. El chat reciente ya no cuenta. Vivos antes que eliminados (V324).
+- Nominados de cada día: los peores del desafío del día; quien tiene al menos una llave se salva frente a quien no tiene. Bots siempre por detrás. El chat no protege. Misma regla para sustituciones y desempates de expulsión.
+- 150 s en el desafío para quien más posis tiene (desde el día 2): ya funcionaba, sin cambios.
+- Base de datos: Casting #11 recolocado (1 Ricardito, 2 AntonioJ, 3 Peach, 4 PauCubarsi, 5 cazweet) y Casting #12 (gana Jaime); diferencias de premio pagadas, nada retirado.
+- Textos de reglas en casting-game.html y enrollment-formats.js ?v=332.
+- Código: finalCompare331 y nominationCompare332 en functions/_shared/casting-daily.js. Tests: casting-final331, casting-nominees332, casting-daily78 actualizado.

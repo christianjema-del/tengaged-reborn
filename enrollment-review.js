@@ -1,5 +1,5 @@
 import {request as fetch} from '/http.js?v=170';
-import {ENROLLMENT_FORMATS} from '/enrollment-formats.js?v=330';
+import {ENROLLMENT_FORMATS} from '/enrollment-formats.js?v=332';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),type=params.get('type'),format=Object.hasOwn(ENROLLMENT_FORMATS,type)?ENROLLMENT_FORMATS[type]:null;let user=null,game=null,busy=false,nonce=null,available=false;
 const gameURL=()=>['casting','frookies','duel','rookies','survivor'].includes(type)?'/'+(type==='casting'?'casting-game':type==='duel'?'duel':type==='rookies'?'rookies':type==='survivor'?'survivor':'frookies')+'.html?id='+game.id:'/hunger.html';
 function ready(){const text=$('enrollmentWelcome').value.trim();$('enrollmentCounter').textContent=$('enrollmentWelcome').value.length+'/500';$('confirmEnrollment').disabled=busy||!available||!text;}

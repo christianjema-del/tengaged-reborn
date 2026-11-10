@@ -16,14 +16,22 @@ export function fresh(id=0,now=Date.now()){return {id,rulesVersion:78,healthRule
 function challenge(s){let bag=s.challengeBag||[];if(!bag.length){bag=[...GAMES];for(let i=bag.length-1;i>0;i--){const j=random(i+1);[bag[i],bag[j]]=[bag[j],bag[i]];}if(bag.at(-1)===s.selectedChallenge)[bag[0],bag[bag.length-1]]=[bag.at(-1),bag[0]];}s.selectedChallenge=bag.pop();s.challengeBag=bag;s.scoringMode='flash-v1';s.flashAttempts={};s.flashScores={};s.reactions={};}
 // Average percentile rank gives tied values exactly the same contribution.
 export function rankScores(players,value){const n=players.length,out={};for(const p of players){const v=value(p),lower=players.filter(q=>value(q)<v).length,equal=players.filter(q=>value(q)===v).length;out[key(p)]=n<=1?1:(lower+(equal-1)/2)/(n-1);}return out;}
-export function standings(s,final=false,at=Date.now()){return resourceOrder188(s,live(s),final,at);}
+// V332 (regla de admin1): los nominados del día son los peores del desafío, pero quien tiene al menos
+// una llave se salva frente a quien no tiene ninguna. Los bots, siempre por detrás. El chat no cuenta.
+export function nominationCompare332(a,b){return Number(!!a.bot)-Number(!!b.bot)||Number(b.keys>0)-Number(a.keys>0)||b.challengeScore-a.challengeScore||b.checks-a.checks||b.keys-a.keys||a.tie-b.tie||a.username.localeCompare(b.username);}
+export function standings(s,final=false,at=Date.now()){const rows=resourceOrder188(s,live(s),final,at);return final?rows:rows.sort(nominationCompare332);}
 // V324: quienes siguen vivos al final van por delante de los eliminados. Los vivos se ordenan
-// por recursos; los eliminados conservan el orden en que salieron (el último en caer, primero).
+// por recursos (V331: con llaves primero, después más posis); los eliminados conservan el orden en que salieron (el último en caer, primero).
 // Humanos siempre antes que bots.
+// V331 (regla de admin1): gana quien más posis (tics) tiene, pero sin llaves no se puede ganar:
+// primero quienes tienen al menos una llave, después más posis, más llaves, mejor desafío y más manzanas.
+export function finalCompare331(a,b){return Number(!!a.bot)-Number(!!b.bot)||Number(b.keys>0)-Number(a.keys>0)||b.checks-a.checks||b.keys-a.keys||b.challengeScore-a.challengeScore||b.apples-a.apples||a.tie-b.tie||a.username.localeCompare(b.username);}
 export function finalOrder324(s,at){
  const alivePlayers=s.players.filter(p=>p.status!=='eliminated'),out=s.players.filter(p=>p.status==='eliminated');
  const ranked=resourceOrder188(s,s.players,true,at),byName=new Map(ranked.map(r=>[r.username.toLowerCase(),r]));
- const resources=list=>ranked.filter(r=>list.some(p=>key(p)===r.username.toLowerCase()));
+ // V331: ver finalCompare331.
+ // La actividad reciente en el chat ya no cuenta para la clasificación final.
+ const resources=list=>ranked.filter(r=>list.some(p=>key(p)===r.username.toLowerCase())).sort(finalCompare331);
  const gone=list=>list.slice().sort((a,b)=>(Number(a.placement)||Infinity)-(Number(b.placement)||Infinity)||(b.eliminatedAt186||0)-(a.eliminatedAt186||0)).map(p=>byName.get(key(p)));
  return [...resources(alivePlayers.filter(p=>!p.bot)),...gone(out.filter(p=>!p.bot)),...resources(alivePlayers.filter(p=>p.bot)),...gone(out.filter(p=>p.bot))];
 }
