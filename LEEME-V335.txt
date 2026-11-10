@@ -1,0 +1,5 @@
+V335 - Burbujas de «Mis Juegos»: normal y al pasar el ratón
+- El Duelo: siempre «the duel» claro con «Entrar» o el puesto en marrón y centrado.
+- Hunger: siempre el sinsajo negro con texto amarillo (también terminado).
+- Al pasar el ratón o pulsar, cada burbuja usa su segunda versión del sprite (Hunger dorado, Duelo oscuro, etc.).
+- profile-games333.css ?v=337. Test: tests/profile-emblems79.test.mjs.
