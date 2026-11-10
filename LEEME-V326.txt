@@ -1,0 +1,4 @@
+V326 - Burbujas de Rookies en los perfiles
+- El perfil traía solo 30 partidas ordenadas por fecha; una partida en curso con inscripción antigua (Rookies) quedaba fuera en perfiles con muchas partidas (Vort).
+- Ahora las partidas en curso van primero y se cargan hasta 300.
+- functions/api/profile.js. Test: tests/profile-games326.test.mjs.

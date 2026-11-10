@@ -140,7 +140,7 @@ async function handle141_onRequest({ request, env }) {
     const gameHistory = await env.DB.prepare(`
       SELECT game_type, game_id, status, placement, joined_at, finished_at
       FROM user_game_history WHERE LOWER(username)=LOWER(?)
-      ORDER BY COALESCE(finished_at,joined_at) DESC, id DESC LIMIT 30
+      ORDER BY (status='active') DESC, COALESCE(finished_at,joined_at) DESC, id DESC LIMIT 300
     `).bind(profile.username).all();
     if(hasNewCasting){
       const matches=(await env.DB.prepare('SELECT state FROM casting_matches ORDER BY id DESC LIMIT 60').all()).results;
