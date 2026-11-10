@@ -84,6 +84,16 @@ export function actRookies(s,user,input,now=Date.now()){
  if(action==='join'){const enrollment=enrollmentOptions(input);if(s.phase!=='waiting')throw Error('La inscripción está cerrada.');if(p)return;if(s.players.length>=CAPACITY)throw Error('No quedan plazas.');s.players.push({id:user.id,username:user.username,bot:false,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff),...(enrollment?{notifyOnStart:enrollment.notifyOnStart}:{})});if(enrollment)s.welcomes.push({username:user.username,body:enrollment.welcome,at:now});return;}
  if(action==='fill_bots'){if(!canFillBots(user)||s.phase!=='waiting')throw Error('Solo admin1 puede completar con bots.');let n=1;while(s.players.length<CAPACITY){const id=-(s.id*100+n);s.players.push({id,username:'Bot '+s.id+' · '+n++,bot:true,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff)});}return;}
  if(action==='start'){if(!startAdmin172(user)||s.phase!=='waiting'||s.players.length<CAPACITY)throw Error('Solo admin1 puede iniciar con las 13 plazas completas.');authorizeStart172(s,user,'rookies',now);advanceRookies(s,now);return;}
+ if(action==='admin_kick'){
+  if(!startAdmin172(user))throw Error('Solo admin1 puede expulsar de la partida.');if(!['day','finale'].includes(s.phase))throw Error('La partida no está en juego.');
+  const t=s.players.find(q=>String(q.username).toLowerCase()===String(input.target||'').toLowerCase());if(!t||t.status!=='active')throw Error('Ese jugador no sigue en la partida.');
+  t.placement=alive(s).length;t.status='eliminated';t.eliminatedAt=now;t.kicked336=true;
+  s.nominees=s.nominees.filter(id=>id!==t.id);s.hohPicks=(s.hohPicks||[]).filter(id=>id!==t.id);delete s.ballots[t.id];
+  for(const b of Object.values(s.ballots))delete b[t.id];
+  if(s.hoh===t.id)s.hoh=null;if(s.pov===t.id){s.pov=null;s.saved=null;}if(s.saved===t.id)s.saved=null;
+  log(s,t.username+' queda expulsado/a de la partida por admin1.',now,'kick',{username:t.username});
+  if(alive(s).length<=1)finish(s,now);return;
+ }
  if(action==='whisper'){
   if(!p||p.status!=='active'||!['day','finale'].includes(s.phase))throw Error('Ahora no puedes enviar mensajes privados.');
   const to=s.players.find(q=>q.id===Number(input.to)),body=String(input.body||'').trim();if(!to||to.bot||to.id===p.id||to.status!=='active'||!body||body.length>500)throw Error('Mensaje privado no válido.');

@@ -42,6 +42,18 @@ export function actDuel(s,user,input,now=Date.now(),bridge=false){
   if(s.players.length!==12)throw Error('Completa las 12 plazas antes de iniciar.');
   s.startedAt=now;s.manualStart213={by:user.id,username:user.username,at:now};s.round=1;stage(s,'immunity',now);return;
  }
+ if(input.action==='admin_kick'){
+  if(!canFillBots(user))throw Error('Solo admin1 puede expulsar de la partida.');if(['waiting','finished'].includes(s.phase))throw Error('La partida no está en juego.');
+  const t=s.players.find(q=>String(q.username).toLowerCase()===String(input.target||'').toLowerCase());if(!t||t.status!=='active')throw Error('Ese jugador no sigue en la partida.');
+  t.placement=duelAlive(s).length;t.status='eliminated';t.eliminatedAt=now;t.kicked336=true;delete s.runs[t.id];
+  if(s.nominees?.includes(t.id))s.nominees=s.nominees.filter(id=>id!==t.id);
+  log(s,t.username+' queda expulsado de la partida por admin1 (puesto '+t.placement+').',now);
+  const live=duelAlive(s);
+  if(live.length===1){live[0].placement=1;live[0].status='finished';s.phase='finished';s.finishedAt=now;s.winner=live[0].username;log(s,s.winner+' gana El Duelo #'+s.id+'.',now);}
+  else if(s.phase==='duel'&&s.nominees.length<2){s.nominees=[];s.round++;stage(s,live.length<=3?'final':'immunity',now);}
+  else if(s.phase==='immunity'&&live.length<=3){s.round++;stage(s,'final',now);}
+  return;
+ }
  if(input.action==='join'){
   if(p)return;if(s.phase!=='waiting'||s.players.length>=12)throw Error('Las inscripciones están cerradas.');
   if(user.is_banned||user.is_system||user.is_test_bot)throw Error('Esta partida se reserva a usuarios reales.');

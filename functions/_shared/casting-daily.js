@@ -41,6 +41,12 @@ function eliminate(s,p,at,cause){
  if(s.phase==='elimination'&&s.nominees.includes(p.username)&&['inactividad','veneno'].includes(cause)){p.health=Math.max(1,Number(p.health)||0);return;}
  if(activeCasting188(s,p,at)){const bots=live(s).filter(x=>x.bot);if(bots.length){const intended=p;p=bots.sort((a,b)=>(a.health||0)-(b.health||0)||key(a).localeCompare(key(b)))[0];intended.health=Math.max(1,intended.health);cause='prioridad de usuarios activos · '+cause;}else{const inactive=live(s).filter(x=>x!==p&&!x.bot&&!activeCasting188(s,x,at));if(inactive.length){const intended=p,worst=resourceOrder188(s,inactive,false,at).at(-1);p=inactive.find(x=>x.username===worst.username);intended.health=Math.max(1,intended.health);cause='prioridad de usuarios activos · '+cause;}}}
  const placement=p.bot?s.players.filter(x=>!x.bot).length+live(s).filter(x=>x.bot).length:live(s).filter(x=>!x.bot).length;p.status='eliminated';p.placement=placement;p.eliminatedAt186=at;s.eliminations.unshift({username:p.username,round:s.round,at,cause});const wasNominee=s.nominees.includes(p.username);s.nominees=s.nominees.filter(n=>n!==p.username);if(wasNominee)compactBallots319(s,p.username);log(s,p.username+' queda eliminado/a ('+cause+').',at);}
+export function adminKick336(s,p,at){
+ const placement=p.bot?s.players.filter(x=>!x.bot).length+live(s).filter(x=>x.bot).length:live(s).filter(x=>!x.bot).length;
+ p.status='eliminated';p.placement=placement;p.eliminatedAt186=at;s.eliminations.unshift({username:p.username,round:s.round,at,cause:'expulsado por admin1'});
+ const wasNominee=s.nominees.includes(p.username);s.nominees=s.nominees.filter(n=>n!==p.username);if(wasNominee)compactBallots319(s,p.username);if(s.ballots)delete s.ballots[key(p)];
+ log(s,p.username+' queda expulsado/a de la partida por admin1.',at);
+}
 // V319: si un nominado sale de la partida, cada papeleta conserva su orden y se reajusta a 1..n
 // (antes quedaba un 3 cuando solo había 2 nominados y no se podía corregir).
 export function compactBallots319(s,gone){for(const [voter,ballot] of Object.entries(s.ballots||{})){const rest=Object.entries(ballot).filter(([n])=>n!==gone&&s.nominees.includes(n)).sort((a,b)=>a[1]-b[1]);s.ballots[voter]=Object.fromEntries(rest.map(([n],i)=>[n,i+1]));if(!rest.length)delete s.ballots[voter];}}
@@ -90,6 +96,8 @@ export function advance(s,now=Date.now(),force=false){if(s.phase==='finished')re
  repairNominees223(s,now);let guard=0;while(s.phase!=='finished'&&now>=s.deadline&&guard++<100){botActivity(s,s.deadline);inactivity(s,s.deadline);if(live(s).length<=5){recordDay(s);finish(s,s.deadline);break;}closeDay(s,s.deadline);}
  if(s.phase==='finished')return s;resetActiveChallenge129(s,now);botActivity(s,now);inactivity(s,now);if(live(s).length<=5){recordDay(s);finish(s,now);return s;}repairNominees223(s,now);if(force){closeDay(s,now);return s;}publicDrops(s,now);return s;}
 export function act(s,user,input,now=Date.now(),trusted=false){advance(s,now);if(!user?.username)throw Error('Inicia sesión.');let p=s.players.find(p=>key(p)===user.username.toLowerCase());const action=input.action;
+ // V336: admin1 expulsa a un jugador de la partida en curso (sin las protecciones de una eliminación normal).
+ if(action==='admin_kick'){if(!startAdmin172(user))throw Error('Solo admin1 puede expulsar de la partida.');if(['waiting','finished'].includes(s.phase))throw Error('La partida no está en juego.');const t=s.players.find(x=>key(x)===String(input.target||'').toLowerCase());if(!t||t.status!=='active')throw Error('Ese jugador no sigue en la partida.');adminKick336(s,t,now);advance(s,now);return;}
  if(action==='fill_bots'){
  if(!canFillBots(user))throw Error('Solo admin1 puede completar partidas con bots.');
  if(s.phase!=='waiting')throw Error('Solo puedes llenar una partida en inscripción.');

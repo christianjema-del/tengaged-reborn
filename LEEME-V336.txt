@@ -1,0 +1,7 @@
+V336 - Panel de administración y de moderación ampliado
+- País y ciudad de conexión por IP (Cloudflare o Vercel con clave compartida; sin servicios externos): en la ficha, en cada IP y bandera en la lista de usuarios. Admin1 y moderadores.
+- admin1: cambiar «Jugado» del perfil (users.games_played_adjust336), expulsar de una partida en curso (Casting, Hunger, Rookies, El Duelo; acción admin_kick en cada motor) con registro en el historial.
+- Moderadores y admin1: aviso privado de moderación al buzón (cuenta Tengaged). Pestaña «Partidas» de solo lectura para moderadores.
+- Hunger: la lista de muertes muestra «fue expulsado por admin1».
+- Acceso de Vercel: reenvía x-vercel-ip-country/city como x-tengaged-client-country/city solo con la clave.
+- Archivos: functions/_shared/admin-extra336.js, admin-geo336.js, admin-moderation.js, admin-users.js, user-ips.js, profile.js, motores de juegos, admin-workbench.js/.css, admin-page.js, admin.html. Test: tests/admin-extra336.test.mjs.

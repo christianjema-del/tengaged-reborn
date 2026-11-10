@@ -4,6 +4,7 @@ import {ensureProfileSchema,getSessionUser,jsonError} from '../_shared/auth.js';
 import {ensureCommunitySchema} from '../_shared/community.js';
 import {ensureStaffSchema,isOwner,isStaff,removableSanctions} from '../_shared/staff.js';
 import {accountDetails} from '../_shared/user-ips.js';
+import {shownPlayed336,activeGames336,ensurePlayedAdjust336,systemSender336,KICK_GAMES336} from '../_shared/admin-extra336.js';
 import {checkNewName,existingTables,nameTaken,renameStatements,ensureUsernameChanges} from '../_shared/username-change296.js';
 const RENAME_LOCKED=new Set(['admin1','mod','tengaged']);
 async function handle141_onRequest({request,env}){try{
@@ -16,12 +17,13 @@ async function handle141_onRequest({request,env}){try{
  if(request.method==='GET'){
   const audit=(await db.prepare('SELECT l.id,l.actor_user_id,a.username AS actor,l.action,l.amount,l.reason,l.created_at FROM admin_audit_log l LEFT JOIN users a ON a.id=l.actor_user_id WHERE l.target_user_id=? ORDER BY l.id DESC LIMIT 50').bind(target.id).all()).results;
   if(!owner){target.t_money=null;}
-  return Response.json({ok:true,user:target,account:await accountDetails(db,target,{email:owner}),audit:owner?audit:audit.filter(e=>!['give_t_money','take_t_money','give_karma','take_karma'].includes(e.action)),capabilities:{owner,blockIp:owner,rename:owner&&!target.is_system&&!RENAME_LOCKED.has(String(target.username).toLowerCase()),logout:!protectedTarget&&target.id!==actor.id,moderate:!protectedTarget&&target.id!==actor.id,economy:owner&&!target.is_system,roles:owner&&!target.is_system&&!target.is_admin,removeBan:!protectedTarget&&remove.ban,removeNose:!protectedTarget&&remove.nose,maxHours:owner?8760:168}},{headers:{'Cache-Control':'no-store'}});
+  const played=await shownPlayed336(db,target),games=await activeGames336(db,target.username);
+  return Response.json({ok:true,user:target,played,games,account:await accountDetails(db,target,{email:owner}),audit:owner?audit:audit.filter(e=>!['give_t_money','take_t_money','give_karma','take_karma'].includes(e.action)),capabilities:{owner,blockIp:owner,rename:owner&&!target.is_system&&!RENAME_LOCKED.has(String(target.username).toLowerCase()),logout:!protectedTarget&&target.id!==actor.id,moderate:!protectedTarget&&target.id!==actor.id,economy:owner&&!target.is_system,roles:owner&&!target.is_system&&!target.is_admin,removeBan:!protectedTarget&&remove.ban,removeNose:!protectedTarget&&remove.nose,maxHours:owner?8760:168,played:owner&&!target.is_system,kick:owner&&!target.is_system,warn:!protectedTarget&&target.id!==actor.id}},{headers:{'Cache-Control':'no-store'}});
  }
  if(target.is_system)return jsonError('La cuenta de avisos está protegida.',403);
  const action=String(input.action||''),reason=String(input.reason||'').trim();if(!reason||reason.length>180)return jsonError('Escribe un motivo de entre 1 y 180 caracteres.',400);
  const economy=['give_karma','take_karma','give_t_money','take_t_money'].includes(action),role=['make_moderator','remove_moderator'].includes(action);
- if((economy||role||['set_card','ban','rename'].includes(action))&&!owner)return jsonError('Esta acción está reservada a admin1.',403);
+ if((economy||role||['set_card','ban','rename','set_played','kick_game'].includes(action))&&!owner)return jsonError('Esta acción está reservada a admin1.',403);
  if(!owner&&protectedTarget)return jsonError('Los moderadores no pueden actuar sobre cuentas del equipo.',403);
  if(target.id===actor.id&&['suspend','red_nose','red_nose_suspend','logout','ban','make_moderator','remove_moderator'].includes(action))return jsonError('No puedes aplicar esta acción a tu propia cuenta.',400);
  if(role&&target.is_admin)return jsonError('El rol de administrador está protegido.',403);
@@ -35,7 +37,7 @@ async function handle141_onRequest({request,env}){try{
   return Response.json({ok:true,message:'Nombre cambiado: '+target.username+' → '+newName+'.',username:newName},{headers:{'Cache-Control':'no-store'}});
  }
  const requestKey=input.requestId==null?crypto.randomUUID():String(input.requestId);if(!/^[A-Za-z0-9_-]{8,80}$/.test(requestKey))return jsonError('Identificador de operación no válido.',400);
- const fingerprint=JSON.stringify([actor.id,target.id,action,reason,input.amount??null,input.hours??null,input.color??null]);
+ const fingerprint=JSON.stringify([actor.id,target.id,action,reason,input.amount??null,input.hours??null,input.color??null,input.played??null,input.message??null,input.game??null]);
  const receipt=await db.prepare('SELECT actor_id,fingerprint FROM admin_operations WHERE request_key=?').bind(requestKey).first();if(receipt){if(receipt.actor_id!==actor.id||receipt.fingerprint!==fingerprint)return jsonError('Este identificador ya pertenece a otra operación.',409);return Response.json({ok:true,replayed:true,message:'La acción ya estaba guardada; no se ha repetido.'});}
  const token=crypto.randomUUID(),guard='EXISTS(SELECT 1 FROM admin_operations WHERE request_key=? AND run_token=?)',args=[requestKey,token];
  const statements=[db.prepare('INSERT OR IGNORE INTO admin_operations(request_key,actor_id,target_id,fingerprint,run_token) VALUES(?,?,?,?,?)').bind(requestKey,actor.id,target.id,fingerprint,token)];let amount=null;
@@ -51,12 +53,18 @@ async function handle141_onRequest({request,env}){try{
  else if(action==='remove_red_nose'){if(!remove.nose)return jsonError('Solo puedes retirar una sanción aplicada por ti.',403);update('UPDATE users SET red_nose_until=NULL,red_nose_reason=NULL WHERE id=?',[target.id]);}
  else if(action==='unsuspend'){if(!remove.ban)return jsonError('Solo puedes retirar una sanción aplicada por ti.',403);update('UPDATE users SET is_banned=0,ban_reason=NULL,banned_at=NULL,ban_until=NULL WHERE id=?',[target.id]);}
  else if(action==='logout')update('DELETE FROM sessions WHERE user_id=?',[target.id]);
+ // V336: «Jugado» del perfil. Se guarda la diferencia con las partidas reales.
+ else if(action==='set_played'){const value=Number(input.played);if(!Number.isSafeInteger(value)||value<0||value>100000)return jsonError('Indica un número de partidas entre 0 y 100.000.',400);await ensurePlayedAdjust336(db);const {real}=await shownPlayed336(db,target);amount=value;update('UPDATE users SET games_played_adjust336=? WHERE id=?',[value-real,target.id]);}
+ // V336: aviso privado de moderación (lo pueden enviar admin1 y los moderadores).
+ else if(action==='warn'){const text=String(input.message||'').trim();if(text.length<3||text.length>1000)return jsonError('El aviso debe tener entre 3 y 1000 caracteres.',400);const sender=await systemSender336(db);if(!sender)return jsonError('No existe la cuenta de avisos.',500);statements.push(db.prepare(`INSERT INTO private_messages(sender,recipient,subject,body,system_event) SELECT ?,?,?,?,? WHERE ${guard}`).bind(sender.id,target.id,'Aviso de moderación',text+'\n\nEste aviso lo envía el equipo de moderación de Tengaged y no admite respuesta.','moderation-warning:'+requestKey,...args));}
+ // V336: la expulsión se hace en la propia partida; aquí queda anotada en el registro.
+ else if(action==='kick_game'){const game=String(input.game||''),[type,id]=game.split(':');if(!Object.hasOwn(KICK_GAMES336,type)||!/^\d{1,9}$/.test(id||''))return jsonError('Partida no válida.',400);}
  else if(action==='clear_bio')update("UPDATE users SET bio='' WHERE id=?",[target.id]);
  else if(action==='set_card'){
   await ensureCommunitySchema(db);const card=await db.prepare("SELECT code FROM shop_items WHERE category='Tarjetas de color' AND theme_code=?").bind(String(input.color||'')).first();if(!card)return jsonError('Tarjeta no válida.',400);
   update("UPDATE user_inventory SET is_equipped=0 WHERE user_id=? AND item_code IN (SELECT code FROM shop_items WHERE category='Tarjetas de color')",[target.id]);statements.push(db.prepare(`INSERT INTO user_inventory(user_id,item_code,is_equipped) SELECT ?,?,1 WHERE ${guard} ON CONFLICT(user_id,item_code) DO UPDATE SET is_equipped=1`).bind(target.id,card.code,...args));
  }else return jsonError('Acción no válida.',400);
- statements.push(db.prepare(`INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) SELECT ?,?,?,?,? WHERE ${guard}`).bind(actor.id,target.id,action,amount,action==='set_card'?reason+' · '+String(input.color):reason,...args));
+ statements.push(db.prepare(`INSERT INTO admin_audit_log(actor_user_id,target_user_id,action,amount,reason) SELECT ?,?,?,?,? WHERE ${guard}`).bind(actor.id,target.id,action,amount,action==='set_card'?reason+' · '+String(input.color):action==='kick_game'?reason+' · '+KICK_GAMES336[String(input.game).split(':')[0]]+' #'+String(input.game).split(':')[1]:action==='warn'?reason+' · '+String(input.message||'').trim().slice(0,120):reason,...args));
  await db.batch(statements);const saved=await db.prepare('SELECT actor_id,fingerprint FROM admin_operations WHERE request_key=?').bind(requestKey).first();if(saved?.actor_id!==actor.id||saved?.fingerprint!==fingerprint)return jsonError('Identificador utilizado para otra operación.',409);
  return Response.json({ok:true,message:'Acción guardada y registrada.'},{headers:{'Cache-Control':'no-store'}});
  }catch(e){if(/reservado|entre 3 y 24/.test(String(e.message)))return jsonError(e.message,400);if(/ADMIN_BALANCE_LIMIT/.test(String(e.message)))return jsonError('No puedes retirar más de lo disponible ni superar el límite de saldo.',409);console.error('Admin moderation',e);return jsonError('No se pudo completar la moderación.',500);}}

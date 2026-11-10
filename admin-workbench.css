@@ -135,3 +135,8 @@
 #staffApp button.staff-primary:disabled{opacity:.6;cursor:default}
 #staffNotices .staff-action-form textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;margin:3px 0 0;padding:6px 7px;background:#fff;border:1px solid var(--staff-blue-line);border-radius:3px;color:var(--staff-text);font:16px/1.4 Arial;resize:vertical}
 #gamesRefresh{min-height:28px;padding:4px 12px;background:linear-gradient(#fff,#e8f0f6);border:1px solid var(--staff-blue-line);border-radius:3px;color:var(--staff-blue-text);font:bold 11px var(--staff-font);cursor:pointer}
+/* V336: país de conexión, expulsar de partida y aviso de moderación */
+#staffApp .staff-flag336{font-weight:normal;margin-left:3px}
+.staff-place336{margin:2px 0 0;color:#2d4256;font-size:12px}
+#staffApp button.staff-danger336,#adminWorkbench button.staff-danger336{background:#fff0f0;border:1px solid #e3a0a8;color:#b20000;font-weight:bold;cursor:pointer}
+#staffApp button.staff-danger336:hover,#adminWorkbench button.staff-danger336:hover{background:#ffe0e3}

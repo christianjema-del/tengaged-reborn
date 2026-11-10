@@ -12,8 +12,8 @@ async function handle({request,env}){try{
  if(!Number.isSafeInteger(id)||id<1)return jsonError('Partida no válida.',400);
  const body=await request.json();
  if(body?.action==='bet')return Response.json({ok:true,...await placeBet(env.DB,id,user,body.target)},noStore);
- if(!['join','start','fill_bots','nominate','vote','save','whisper'].includes(body?.action))return jsonError('Acción no permitida.',400);
- if(['start','fill_bots'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
+ if(!['join','start','fill_bots','nominate','vote','save','whisper','admin_kick'].includes(body?.action))return jsonError('Acción no permitida.',400);
+ if(['start','fill_bots','admin_kick'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
  if(body.action==='join'&&body.notifyOnStart)await ensureEnrollmentNotifications(env.DB,'rookies');
  const result=await rookiesMatch(env.DB,id,user,body);await waitingRookies(env.DB);return Response.json({ok:true,...result},noStore);
 }catch(e){return jsonError(e.message||'No se pudo cargar Rookies.',400);}}

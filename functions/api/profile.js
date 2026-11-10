@@ -1,5 +1,6 @@
 import {reconcilePrevious161} from '../_shared/casting-service.js';
 import {playedCount148} from '../_shared/played-count148.js';
+import {shownPlayed336} from '../_shared/admin-extra336.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
 import {expireModeration} from '../_shared/moderation.js';
 import { ensureProfileSchema, jsonError } from "../_shared/auth.js";
@@ -185,7 +186,7 @@ async function handle141_onRequest({ request, env }) {
         avatar_code: profile.avatar_code || "default",
         color_code: profile.color_code || "",
         casting_health: isOwner ? Number(profile.casting_health) || 0 : null,
-        games_played: await playedCount148(env.DB,profile.username),
+        games_played: profile.user_id?(await shownPlayed336(env.DB,{id:profile.user_id,username:profile.username})).shown:await playedCount148(env.DB,profile.username),
         wins: Number(profile.wins) || 0,
         created_at: profile.created_at || null,
         last_seen_at: profile.last_seen_at || null,
