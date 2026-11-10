@@ -1,4 +1,4 @@
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
 const id=Number(new URLSearchParams(location.search).get('id'))||0,avatars=new Map();let busy=false;
 const profile=(name,cls='')=>{const a=el('a',name,cls);a.href='/profile.html?username='+encodeURIComponent(name);return a;};

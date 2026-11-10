@@ -48,5 +48,5 @@ console.log('gifts page ok');
  assert.deepEqual((await call('api/profile-extras?view=gifts&username=Alice')).givers,[{username:'Bob',gifts:11}],'sin usuarios baneados');
  const page2=fs.readFileSync(new URL('../gifts-page.js',import.meta.url),'utf8');
  for(const text of ['Los que más me regalan',"'paginator h2'","'gpage showing'",'gifts-pages301.js?v=301'])assert.ok(page2.includes(text),text);
- assert.match(fs.readFileSync(new URL('../gifts.html',import.meta.url),'utf8'),/gifts-page\.js\?v=301/);
+ assert.match(fs.readFileSync(new URL('../gifts.html',import.meta.url),'utf8'),/gifts-page\.js\?v=337/);
 }

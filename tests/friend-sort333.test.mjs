@@ -8,5 +8,5 @@ test('V333: ordenar amigos arrastrando en PC',()=>{
  const many=Array.from({length:20},(_,i)=>'U'+i);const moved=moveToPage333(many,'U0',2,15);assert.equal(moved.indexOf('U0'),15,'al principio de la página 2');assert.equal(moved.length,20);
  const src=fs.readFileSync(new URL('../friends.js',import.meta.url),'utf8');
  assert.match(src,/data\.self&&data\.friends\.length>1&&canDragFriends333\(\)\)enableGridSort333/,'solo el dueño y en PC');
- assert.match(src,/action:'reorder',usernames:order/);assert.match(fs.readFileSync(new URL('../profile.html',import.meta.url),'utf8'),/friends\.js\?v=333/);
+ assert.match(src,/action:'reorder',usernames:order/);assert.match(fs.readFileSync(new URL('../profile.html',import.meta.url),'utf8'),/friends\.js\?v=337/);
 });

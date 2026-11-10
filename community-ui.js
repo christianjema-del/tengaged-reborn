@@ -1,4 +1,4 @@
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {elapsedMinutes} from '/elapsed-time.js?v=159';
 export {$,el,api,post,profileLink,date,buttonTask,loginLink} from '/market-ui.js?v=170';
 import {$,el,buttonTask} from '/market-ui.js?v=170';

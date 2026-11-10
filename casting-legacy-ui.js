@@ -1,4 +1,4 @@
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
 import {$,el,api,post,buttonTask,profileLink,loginLink} from '/market-ui.js?v=170';
 const id=Number(new URLSearchParams(location.search).get('id'))||1;let state=null,stateRevision=0,loading=false,busy=false,clockOffset=0,reactionTimer=null,reactionReady=0,playingReaction=false,challengeStartedAt=0,demoPlaying=false,disposeFlash=null;

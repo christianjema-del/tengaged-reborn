@@ -1,6 +1,6 @@
 // V299: réplica de la página de regalos clásica (/gifts/usuario). Solo se listan los regalos recibidos.
-import {$,el,api} from '/community-ui.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {$,el,api} from '/community-ui.js?v=337';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {pageList} from '/gifts-pages301.js?v=301';
 const params=new URLSearchParams(location.search);
 const profile=name=>'/profile.html?username='+encodeURIComponent(name);

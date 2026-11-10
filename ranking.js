@@ -1,5 +1,5 @@
 import {colorCard} from '/color-cards.js?v=159';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {$,el,api} from '/market-ui.js?v=170';
 const profile=name=>'/profile.html?username='+encodeURIComponent(name);
 function portrait(p){const a=el('a'),img=el('img');a.href=profile(p.username);a.title=p.username;setAvatar(img,p.username);img.alt=p.username;img.loading='lazy';a.append(img,el('span',p.username));return a;}

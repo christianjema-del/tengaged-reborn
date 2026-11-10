@@ -2,7 +2,7 @@ import {request as fetch} from '/http.js?v=170';
 import {finishedTitle} from '/challenge-finished314.js?v=314';
 import {renderEvent320,waitingText320} from '/hunger-event320.js?v=325';
 import {askConfirm} from '/staff-dialog317.js?v=317';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
 import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};

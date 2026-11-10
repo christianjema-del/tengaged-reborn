@@ -12,7 +12,7 @@ const wrapper=()=>({prepare:q=>new S(q),batch:async list=>{sql.exec('BEGIN');try
 await ensureCommunityPlus(wrapper());const cold=statements;assert.ok(cold>100);
 statements=0;await ensureCommunityPlus(wrapper());assert.equal(statements,1,'a new D1 wrapper must not repeat DDL, seeding or migrations');
 for(const ensure of [ensureProfileSchema,ensureCommunitySchema,ensureSocial]){statements=0;await ensure(wrapper());assert.equal(statements,1);}
-assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM schema_ready170').get().n,5);
+assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM schema_ready170').get().n,6);
 assert.ok(sql.prepare("SELECT name FROM sqlite_master WHERE name='private_messages'").get());
 assert.ok(sql.prepare("SELECT name FROM sqlite_master WHERE name='blog_posts'").get());
 let fail=true;const broken={prepare(q){if(fail)throw Error('database unavailable');return wrapper().prepare(q);}};

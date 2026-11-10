@@ -1,5 +1,5 @@
 import {askConfirm,askText} from '/staff-dialog317.js?v=317';
-import {api,post,el,date} from '/market-ui.js?v=170';import {COLOR_CARDS} from '/color-cards.js?v=159';import {setAvatar,invalidateAvatar} from '/avatar-display.js?v=159';import {actionNames} from '/admin-labels.js?v=336';import {place336} from '/admin-geo336.js?v=336';
+import {api,post,el,date} from '/market-ui.js?v=170';import {COLOR_CARDS} from '/color-cards.js?v=159';import {setAvatar,invalidateAvatar} from '/avatar-display.js?v=337';import {actionNames} from '/admin-labels.js?v=336';import {place336} from '/admin-geo336.js?v=336';
 const host=document.getElementById('adminWorkbench');let current='',working=false,revision=0,activeTab='summary',reason='',pending=null,data=null,temporary=null;
 function label(text,control){const l=el('label',text);l.append(control);return l;}
 function btn(text,fn,cls=''){const b=el('button',text,cls);b.type='button';b.onclick=fn;return b;}

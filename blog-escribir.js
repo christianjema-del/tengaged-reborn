@@ -1,7 +1,7 @@
-import {syncAvatarPreview} from '/avatar-preview290.js?v=290';
+import {syncAvatarPreview} from '/avatar-preview290.js?v=337';
 // Página propia para escribir o editar un blog, con fotos del dispositivo.
 import {$,el,api,post,buttonTask,loginLink} from '/market-ui.js?v=170';
-import {link,avatar} from '/community-ui.js?v=170';
+import {link,avatar} from '/community-ui.js?v=337';
 import {blogHref162,authorHref162} from '/blog-routing162.js?v=165';
 const MAX_PHOTOS=8,MAX_SIDE=1400,MAX_CHARS=1100000,editId=Number(new URLSearchParams(location.search).get('editar'))||0,form=$('blogWriteForm');
 let photos=[],author='';

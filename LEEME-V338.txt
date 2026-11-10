@@ -1,0 +1,6 @@
+V338 - GIF animado en el armario de Bowsy
+- Avatar completo de foto «Avatar completo · GIF animado» para la cuenta id 11 (Bowsy): recortado a 140×161 (como el resto de avatares de foto), 18 fotogramas en bucle, 219 KB. Gratis, no a la venta, no se equipa solo.
+- Se añade una vez con la marca de esquema community-337 (photo-import337.js / photo-assets337.js).
+- full-avatar115.js: huella del GIF en la lista de avatares de foto. design-images.js: GIF solo si está en esa lista.
+- avatar-display.js acepta image/gif; versiones de los módulos que lo cargan subidas a ?v=337.
+- Test: tests/photo-gifts337.test.mjs.

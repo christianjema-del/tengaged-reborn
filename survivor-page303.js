@@ -1,6 +1,6 @@
 // V303: página de Survivor. Se actualiza cada 30 s (y al volver a la pestaña) para gastar pocas peticiones;
 // la cuenta atrás corre en el navegador.
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search);
 let reloadFor=0,id=Number(params.get('id'))||0,viewTribe=params.get('tribe')||'',state=null,loading=false,busy=false,blogsLoaded=false,showLog=null;

@@ -1,4 +1,4 @@
-import {$,el,api,post,link,form} from '/community-ui.js?v=170';
+import {$,el,api,post,link,form} from '/community-ui.js?v=337';
 const money=n=>(Math.round((Number(n)||0)*10)/10).toLocaleString('es-ES',{maximumFractionDigits:1});
 async function load(){try{
  const data=await api('/api/change-username'),root=$('content');

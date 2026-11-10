@@ -1,4 +1,4 @@
-import {api,el,link,title,avatar} from '/community-ui.js?v=170';
+import {api,el,link,title,avatar} from '/community-ui.js?v=337';
 const root=document.getElementById('communityGroups');
 async function load(){try{
  const data=await api('/api/groups'),section=el('section');section.append(title('Grupos de la comunidad'),link('Ver todos →','/groups.html'));

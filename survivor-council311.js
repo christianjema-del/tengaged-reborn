@@ -1,5 +1,5 @@
 // V311: Consejo Tribal en su propia página: avatar, nombre y botón Nominar de cada compañero de tribu.
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),id=Number(params.get('id'));
 let state=null,busy=false,loading=false;
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};

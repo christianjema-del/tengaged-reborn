@@ -1,5 +1,5 @@
-import {setAvatar} from '/avatar-display.js?v=159';
-import {$,el,api,form,link,title,date} from '/community-ui.js?v=170';
+import {setAvatar} from '/avatar-display.js?v=337';
+import {$,el,api,form,link,title,date} from '/community-ui.js?v=337';
 import {richText} from '/rich-profile.js?v=159';
 async function load(){try{
  const me=await window.TengagedSession;if(!me)throw Error('Inicia sesión para editar tu perfil.');

@@ -1,4 +1,4 @@
-import {api,post,el,link,relative} from '/community-ui.js?v=170';
+import {api,post,el,link,relative} from '/community-ui.js?v=337';
 let name='',page=1,busy=false;
 const $=id=>document.getElementById(id);
 function actionAge(value){const raw=String(value||''),date=new Date(raw.replace(' ','T')+(!raw.includes('T')?'Z':''));if(!Number.isFinite(date.getTime()))return '';const minutes=Math.max(0,Math.floor((Date.now()-date.getTime())/60000)),hours=Math.floor(minutes/60),days=Math.floor(hours/24);if(days)return days+(days===1?' día':' días');if(hours)return hours+(hours===1?' hora':' horas');return Math.max(1,minutes)+(minutes===1?' minuto':' minutos');}

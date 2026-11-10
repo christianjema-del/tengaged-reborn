@@ -1,5 +1,5 @@
 import {api,post} from '/market-ui.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
 const $=id=>document.getElementById(id),id=Number(new URLSearchParams(location.search).get('id'));
 const phases={waiting:'Inscripción abierta',warmup:'Comienza la convivencia',nominations:'HoH · Nominaciones y prueba de PoV',veto:'Decisión del PoV',replacement:'Nominación de sustitución',vote:'Votación para expulsar',tiebreak:'El HoH desempata',final_places:'El PoV elige tercero y cuarto',jury:'El jurado elige al ganador',finished:'Partida finalizada'};

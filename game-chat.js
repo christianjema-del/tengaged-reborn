@@ -1,5 +1,5 @@
 import {request as fetch} from '/http.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 // «hace 2 días 5 horas», como los avisos de resultados del Rookies clásico.
 function ago278(value){const ms=Date.now()-Date.parse(value);if(!Number.isFinite(ms))return '';const hours=Math.max(0,Math.floor(ms/3600000)),days=Math.floor(hours/24),rest=hours%24,unit=(n,one,many)=>n+' '+(n===1?one:many);return 'hace '+(days?unit(days,'día','días')+(rest?' '+unit(rest,'hora','horas'):''):hours?unit(hours,'hora','horas'):'unos minutos');}
 const chatStyle=document.createElement('link');chatStyle.rel='stylesheet';chatStyle.href='/game-chat137.css?v=179';document.head?.append(chatStyle);

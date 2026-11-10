@@ -1,4 +1,4 @@
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {refreshPlayerActivity} from '/player-activity.js?v=302';
 const $=id=>document.getElementById(id),el=(tag,text='',cls='')=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
 let id=Number(new URLSearchParams(location.search).get('id'))||0,s=null,busy=false,picks=null,signature='',storySeen=0,draft=null,draftDay=null;

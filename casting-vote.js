@@ -1,5 +1,5 @@
 import {api,post,el,profileLink} from '/market-ui.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 const $=id=>document.getElementById(id),q=new URLSearchParams(location.search),id=Number(q.get('id')),round=Number(q.get('round'));
 let state=null,loading=false,saving=false,signature='',inputs=[];
 const valid=Number.isSafeInteger(id)&&id>0&&Number.isSafeInteger(round)&&round>0;

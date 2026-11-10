@@ -1,6 +1,6 @@
 import {publicationDate159 as date} from '/publication-date159.js?v=159';
 import {$,el,api,post,profileLink,buttonTask,loginLink,preview} from '/market-ui.js?v=170';
-import {link,avatar,form} from '/community-ui.js?v=170';
+import {link,avatar,form} from '/community-ui.js?v=337';
 import {colorCard} from '/color-cards.js?v=159';
 import {blogRoute162,blogHref162,authorHref162} from '/blog-routing162.js?v=165';
 const params=blogRoute162(location.href),id=Number(params.get('id'))||0,detail=!!id,authorView=!!params.get('author'),personal=detail||authorView;

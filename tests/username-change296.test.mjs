@@ -64,5 +64,5 @@ assert.equal(sql.prepare('SELECT COUNT(*) n FROM username_changes296').get().n,2
 const profile=readFileSync(new URL('../profile.html',import.meta.url),'utf8');
 assert.match(profile,/id="profileGiftLink"[\s\S]*?<\/a><a id="profileRenameLink" class="profile-square-button profile-rename-button" href="\/change-username.html"[^>]*><span class="profile-tmoney" aria-hidden="true">T\$<\/span><\/a><\/nav>/);
 const mailPage=readFileSync(new URL('../mail-page.js',import.meta.url),'utf8');assert.match(mailPage,/Marcar todos como leídos/);assert.match(mailPage,/action:'read_all'/);
-assert.match(readFileSync(new URL('../mail.html',import.meta.url),'utf8'),/mail-page\.js\?v=29[68]/);
+assert.match(readFileSync(new URL('../mail.html',import.meta.url),'utf8'),/mail-page\.js\?v=337/);
 console.log('username change 296 ok');

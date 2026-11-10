@@ -1,6 +1,6 @@
 import {safeReturn165} from '/navigation165.js?v=165';
 import {request as fetch} from '/http.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {avatarSvg,avatarDesigns} from '/avatars.js?v=159';
 const $=id=>document.getElementById(id);let viewer=null,mode='login',pending=false;
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}

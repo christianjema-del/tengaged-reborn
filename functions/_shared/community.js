@@ -2,6 +2,7 @@ import {repairPauDesigns224} from './pau-designs224.js';
 import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensurePhotoGifts153} from './photo-import153.js';
 import {ensurePhotoGifts152} from './photo-import152.js';
+import {ensurePhotoGifts337} from './photo-import337.js';
 import {ensurePhotoGifts149} from './photo-import149.js';
 import {ensurePhotoGifts148} from './photo-import148.js';
 import {ensurePhotoAdmin127} from './photo-import127.js';
@@ -19,7 +20,10 @@ export async function ensureCommunitySchema(db) {
  const task=setupOnce224(db);ready.set(db,task);try{return await task;}catch(e){ready.delete(db);throw e;}
 }
 // La reparación de diseños va tras la migración: con el marcador, cada petición hace una sola consulta.
-async function setupOnce224(db){if(await schemaReady170(db,'community-224'))return;await setup(db);await repairPauDesigns224(db);await markSchema170(db,'community-224');}
+async function setupOnce224(db){if(await schemaReady170(db,'community-337'))return;
+ if(!await schemaReady170(db,'community-224')){await setup(db);await repairPauDesigns224(db);await markSchema170(db,'community-224');}
+ // V337: el GIF de Bowsy se añade una sola vez aunque el resto del esquema ya estuviera listo.
+ await ensurePhotoGifts337(db);await markSchema170(db,'community-337');}
 async function setup(db) {
  if(await schemaReady170(db,'community-170'))return;
   await db.prepare(`CREATE TABLE IF NOT EXISTS blog_posts (
@@ -128,7 +132,7 @@ async function setup(db) {
     catalog.push(db.prepare(`INSERT OR IGNORE INTO shop_items(code,name,category,description,price,theme_code,min_karma) VALUES(?,?,?,?,?,?,?)`).bind(...item.slice(0, 6), item[6] || 0));
   }
   await db.batch(catalog);
-  await ensureDesignVotes110(db);await ensureDesignManagement(db);await ensurePeachWardrobe(db);await ensureFentaniloDesigns(db);await ensurePhotoAvatar(db);await ensurePhotoAdmin127(db);await ensurePhotoGifts148(db);await ensurePhotoGifts149(db);await ensurePhotoGifts152(db);await ensurePhotoGifts153(db);await ensureWardrobeGrants118(db);await fixAuthorGrants(db);
+  await ensureDesignVotes110(db);await ensureDesignManagement(db);await ensurePeachWardrobe(db);await ensureFentaniloDesigns(db);await ensurePhotoAvatar(db);await ensurePhotoAdmin127(db);await ensurePhotoGifts148(db);await ensurePhotoGifts149(db);await ensurePhotoGifts152(db);await ensurePhotoGifts153(db);await ensurePhotoGifts337(db);await ensureWardrobeGrants118(db);await fixAuthorGrants(db);
  await markSchema170(db,'community-170');
 }
 

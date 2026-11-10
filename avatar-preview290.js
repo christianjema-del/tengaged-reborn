@@ -1,5 +1,5 @@
 // Guarda una imagen JPEG del propio avatar para las miniaturas de los enlaces: las redes no muestran SVG.
-import {avatarImageSource} from '/avatar-display.js?v=159';
+import {avatarImageSource} from '/avatar-display.js?v=337';
 const KEY='tengaged_avatar_preview',DAY=86400000,WIDTH=400,HEIGHT=460;
 const stored=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch{return {};}};
 function picture(src){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(Error('Avatar no disponible.'));image.src=src;});}

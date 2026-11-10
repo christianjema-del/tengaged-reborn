@@ -1,4 +1,4 @@
-import {$,el,api,post,title,form,action,comment,link} from '/community-ui.js?v=170';
+import {$,el,api,post,title,form,action,comment,link} from '/community-ui.js?v=337';
 const params=new URLSearchParams(location.search);
 async function load(){try{
  const data=await api('/api/questions?'+params),root=$('content');root.replaceChildren(title('Pregúntame · '+data.target),link('Volver al perfil','/profile.html?username='+encodeURIComponent(data.target)));

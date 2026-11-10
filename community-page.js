@@ -1,4 +1,4 @@
-import {$,el,api,link,title,avatar,relative,comment,form} from '/community-ui.js?v=170';
+import {$,el,api,link,title,avatar,relative,comment,form} from '/community-ui.js?v=337';
 const params=new URLSearchParams(location.search);
 async function load(){try{
  const data=await api('/api/community-feed?'+params),root=$('content');root.replaceChildren();

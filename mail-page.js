@@ -1,4 +1,4 @@
-import {$,el,api,post,link,title,action,form,tabs,pages,comment} from '/community-ui.js?v=170';
+import {$,el,api,post,link,title,action,form,tabs,pages,comment} from '/community-ui.js?v=337';
 const params=new URLSearchParams(location.search),peer=params.get('with')||'',folder=params.get('folder')||'inbox',page=Number(params.get('page'))||1;
 async function load(){try{
  const data=await api('/api/mail?'+params),root=$('content');root.replaceChildren(tabs([['Recibidos ('+data.unread+')','/mail.html',folder!=='sent'&&!peer],['Enviados','/mail.html?folder=sent',folder==='sent'],['Nuevo mensaje','#compose',false]]));

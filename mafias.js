@@ -1,5 +1,5 @@
 import {request as fetch} from '/http.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 const $=id=>document.getElementById(id),el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;},a=(text,href)=>{const n=el('a',text);n.href=href;return n;};
 const url=new URL(location.href);let state,busy=false;const root=$('mafiaPage');
 function emblem(m,size=50){if(m.emblem231){const img=el('img');img.src=m.emblem231;img.alt='Emblema de '+m.name;img.width=img.height=size;img.className='mafia-emblem231';return img;}const n=el('span',m.name.slice(0,2).toUpperCase(),'mafia-emblem231 placeholder');n.style.width=n.style.height=size+'px';return n;}

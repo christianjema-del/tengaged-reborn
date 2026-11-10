@@ -1,4 +1,4 @@
-import {$,el,api,post,link,title,form,action,tabs,comment,avatar,relative} from '/community-ui.js?v=170';
+import {$,el,api,post,link,title,form,action,tabs,comment,avatar,relative} from '/community-ui.js?v=337';
 const params=new URLSearchParams(location.search),id=Number(params.get('id'))||0,view=params.get('view')||'home',topic=Number(params.get('topic'))||0;
 const url='/api/groups'+(id?'?id='+id:'');
 async function change(body){const r=await post(url,body);$('notice').textContent=r.message||'';await load();return r;}

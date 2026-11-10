@@ -1,6 +1,6 @@
 import {enableFriendDrag231} from '/friend-drag231.js?v=231';
 import {request as fetch} from '/http.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {canDragFriends333,enableGridSort333,moveFriend333,moveToPage333} from '/friend-sort333.js?v=333';
 const root=document.getElementById('profileCommunity');let editingOrder=false,currentPage=1;
 async function load(){const username=new URLSearchParams(location.search).get('username')||'';try{

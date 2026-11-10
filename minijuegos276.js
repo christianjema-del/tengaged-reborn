@@ -1,6 +1,6 @@
 // Minijuegos en una sola página: lista, juego y Top 10, sin marcos internos.
 import {launchCastingMinigame,CASTING_MINIGAMES} from '/casting-minigame-launcher.js?v=303';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 import {api,el,$} from '/market-ui.js?v=170';
 const DEFAULT_KIND='guitar',links=[...document.querySelectorAll('.competition')],NOTICE='Estás jugando al minijuego original. Cuando termine y envíe su resultado, aparecerá en el ranking.';
 const kindOf=url=>{const kind=new URL(url,location.href).searchParams.get('juego');return Object.hasOwn(CASTING_MINIGAMES,kind)?kind:DEFAULT_KIND;};

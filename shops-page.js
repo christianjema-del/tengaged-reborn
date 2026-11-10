@@ -2,7 +2,7 @@ import {COLOR_LEVELS} from '/color-level-catalog.js?v=159';
 import {request as fetch} from '/http.js?v=170';
 import {colorCard} from '/color-cards.js?v=159';
 import {$,el,api,post,preview,profileLink,date,buttonTask,loginLink,empty} from '/market-ui.js?v=170';
-import {setAvatar} from '/avatar-display.js?v=159';
+import {setAvatar} from '/avatar-display.js?v=337';
 const params=new URLSearchParams(location.search),tab=['home','users','auctions','cards','manage','wheel'].includes(params.get('tab'))?params.get('tab'):'home',owner=params.get('owner')||'';let viewer=null,designs=[],accountState=null,shopInventory=new Set();
 for(const link of document.querySelectorAll('[data-market-tab]'))if(link.dataset.marketTab===tab)link.setAttribute('aria-current','page');
 async function balance(){const d=await api('/api/shop');$('shopBalance').textContent=d.signed_in?`Tu saldo: ${Number(d.balance).toLocaleString('es-ES')} T$ · ${Number(d.karma).toLocaleString('es-ES')} karma`:'Explora las tiendas. Inicia sesión para comprar o pujar.';return d;}
