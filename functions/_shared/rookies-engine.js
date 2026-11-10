@@ -29,11 +29,17 @@ function chooseHoh(s,at,finale=false){
  const blocked=new Set([s.hoh,...(finale?[]:s.hohPicks)].filter(Boolean)),pool=alive(s).filter(p=>!blocked.has(p.id)),hoh=mostActive(s,pool.length?pool:alive(s),s.day-1)[0];
  s.previousHoh=s.hoh;s.hoh=hoh.id;log(s,(finale?'Último HoH: ':'HoH del día '+s.day+': ')+hoh.username+'.',at,'hoh',{hoh:hoh.username,day:s.day});
 }
+// Con 5 vivos hay 3 nominados y sale 1; con 6, 4 nominados y salen 2: en ambos casos quedan 4.
+export function lastVoteDay329(alive){const wanted=alive===5?3:4,out=wanted===4?2:1;return alive>4&&alive-out<=4;}
 function startDay(s,at){
  const nominated=s.hohPicks.filter(id=>byId(s,id)?.status==='active'),players=alive(s);
  s.day++;s.ballots={};s.saved=null;s.pov=null;
  if(players.length<=4){s.nominees=[];s.hohPicks=[];chooseHoh(s,at,true);s.phase='finale';s.deadline=at+FINALE_MS;log(s,'Final de cuatro: los resultados llegarán en cuatro horas.',at,'finale');return;}
- s.phase='day';s.deadline=at+DAY_MS;chooseHoh(s,at);s.hohPicks=[];
+ s.phase='day';s.deadline=at+DAY_MS;
+ // V329: el día cuyas expulsiones dejan a cuatro (el anterior a la final) no tiene HoH:
+ // sus nominaciones serían para la final, que ya no tiene nominaciones.
+ if(lastVoteDay329(players.length)){s.previousHoh=s.hoh;s.hoh=null;log(s,'Día '+s.day+': no hay HoH. Mañana empieza la final de cuatro.',at,'hoh',{hoh:null,day:s.day});}else chooseHoh(s,at);
+ s.hohPicks=[];
  if(s.day===1){s.nominees=[];return;}
  const wanted=players.length===5?3:4,chosen=nominated.filter(id=>id!==s.hoh).slice(0,2),others=mostActive(s,players.filter(p=>p.id!==s.hoh&&!chosen.includes(p.id)),s.day-1).reverse();
  while(chosen.length<wanted&&others.length)chosen.push(others.shift().id);s.nominees=chosen;

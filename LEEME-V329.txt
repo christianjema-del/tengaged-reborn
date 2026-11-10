@@ -1,0 +1,5 @@
+V329 - Rookies: sin HoH el último día de votación
+- El día cuyas expulsiones dejan a cuatro (5 vivos -> sale 1, o 6 vivos -> salen 2) ya no elige HoH: sus nominaciones serían para la final de cuatro, que no tiene nominaciones.
+- Aviso en el historial y en el recuadro del día: «Hoy no hay HoH: mañana empieza la final de cuatro».
+- Código: lastVoteDay329 en functions/_shared/rookies-engine.js; rookies-page250.js ?v=329. Test: tests/rookies-final-hoh329.test.mjs.
+- Rookies #1 y #2 (día 6 en curso) no se han tocado en la base de datos.
