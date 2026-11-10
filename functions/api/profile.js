@@ -176,6 +176,7 @@ async function handle141_onRequest({ request, env }) {
         karma_rank: profile.user_id ? Number((await env.DB.prepare('SELECT COUNT(*)+1 AS rank FROM users WHERE COALESCE(is_banned,0)=0 AND COALESCE(is_system,0)=0 AND COALESCE(karma,0)>?').bind(Number(profile.karma)||0).first())?.rank)||null : null,
         t_money: isOwner ? Number(profile.t_money) || 0 : null,
         is_admin: Boolean(profile.is_admin),
+        is_moderator: Boolean(profile.is_moderator),
         is_system: Boolean(profile.is_system),
         is_test_bot: Boolean(profile.is_test_bot),
         is_banned: Boolean(profile.is_banned),

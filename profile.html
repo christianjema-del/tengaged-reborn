@@ -71,7 +71,8 @@
     .avatar-dialog-foot .avatar-editor-actions{margin:0}
     @media(max-width:760px){.avatar-dialog{max-height:90vh}.avatar-options{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-option .avatar-art{width:62px;height:62px}}
   </style>
-<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=264"><link rel="stylesheet" href="/profile-mafia278.css?v=278"><link rel="stylesheet" href="/profile-rename296.css?v=296"><link rel="stylesheet" href="/profile-games333.css?v=337"></head>
+<link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"><link rel="stylesheet" href="/profile-details148.css?v=159"><link rel="stylesheet" href="/profile-reference206.css?v=207"><link rel="stylesheet" href="/duel-profile215.css?v=215"><link rel="stylesheet" href="/profile-polish231.css?v=243"><link rel="stylesheet" href="/profile-bets253.css?v=264"><link rel="stylesheet" href="/profile-mafia278.css?v=278"><link rel="stylesheet" href="/profile-rename296.css?v=296"><link rel="stylesheet" href="/profile-games333.css?v=337">
+<link rel="stylesheet" href="/role-badge342.css?v=342"></head>
 <body><script src="/shell.js?v=337"></script>
   <div class="wrap">
     <div class="tg-legacy-shell" hidden><header class="head"><a class="logo" href="/">tengaged<b>.es</b> reborn</a><span id="sessionLabel">Perfil de usuario</span></header></div>
@@ -291,7 +292,7 @@ loadProfileAvatar(profile.username);
 
       document.body.classList.toggle("avatar-star", profile.avatar_code === "star");
       byId('redNoseBadge').classList.toggle('hidden',!profile.red_nose_until||Date.parse(profile.red_nose_until)<=Date.now());byId('redNoseBadge').title=profile.red_nose_until?'Hasta '+new Date(profile.red_nose_until).toLocaleString('es-ES'):'';
-      byId("roleBadge").textContent=profile.is_admin?"Administrador":"Moderador";byId("roleBadge").classList.toggle("hidden", !profile.is_admin&&!profile.is_moderator);
+      byId("roleBadge").textContent=profile.is_admin?"Administrador":"Moderador";byId("roleBadge").dataset.role=profile.is_admin?"admin":"mod";byId("roleBadge").title=profile.is_admin?"Administrador de Tengaged":"Moderador de Tengaged";byId("roleBadge").classList.toggle("hidden", !profile.is_admin&&!profile.is_moderator);
       byId("testBotBadge").classList.toggle("hidden", !profile.is_test_bot);
       const date = safeDate(profile.created_at);
       byId("joined").textContent = "Miembro desde " + date;byId("joinedStat").textContent=date;

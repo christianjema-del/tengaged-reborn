@@ -1,0 +1,5 @@
+V342 - Insignia de Administrador y Moderador en el perfil
+- role-badge342.css (nuevo, solo en profile.html): la insignia junto al nombre es una píldora con degradado; Administrador en rosa Tengaged con corona, Moderador en azul Tengaged con escudo.
+- functions/api/profile.js: el perfil público incluye is_moderator, así que la insignia «Moderador» aparece junto al nombre de los moderadores.
+- profile.html: marca el rol (data-role) y añade un texto al pasar el ratón.
+- Test: tests/role-badge342.test.mjs.
