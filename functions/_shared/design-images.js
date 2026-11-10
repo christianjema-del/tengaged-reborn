@@ -1,7 +1,8 @@
 import {isPhotoAvatar} from '../../full-avatar115.js';
 export function decodeDesignImage(value){
  if(!value)return null;
- if(typeof value!=='string'||value.length>360000)throw Error('La imagen es demasiado grande.');
+ // V341: los avatares de foto aprobados (lista fija por huella) pueden superar el límite; el resto no.
+ if(typeof value!=='string'||(value.length>360000&&!isPhotoAvatar(value)))throw Error('La imagen es demasiado grande.');
  // V337: los GIF solo se aceptan si son avatares de foto aprobados (lista fija por huella), como el de Bowsy.
  const gif=/^data:image\/gif;base64,([A-Za-z0-9+/]+={0,2})$/.exec(value);
  if(gif){if(!isPhotoAvatar(value))throw Error('Usa una imagen PNG, JPG o WebP.');const bytes=Uint8Array.from(atob(gif[1]),c=>c.charCodeAt(0));if(String.fromCharCode(...bytes.slice(0,6))!=='GIF89a'&&String.fromCharCode(...bytes.slice(0,6))!=='GIF87a')throw Error('El archivo no corresponde a una imagen válida.');return {bytes,type:'image/gif'};}

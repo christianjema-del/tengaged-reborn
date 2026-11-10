@@ -1,0 +1,3 @@
+V341 - Los GIF grandes de foto se ven
+- design-images.js: el límite de 360.000 caracteres ya no se aplica a los avatares de foto aprobados (lista fija por huella). Así se ven los GIF de DaisyJane, Fentanilo, PauCubarsi y Ricardito, que ya están equipados desde V340. Las demás imágenes siguen con el límite.
+- Test: tests/photo-gifts340.test.mjs.
