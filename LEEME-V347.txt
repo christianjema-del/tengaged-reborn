@@ -1,0 +1,6 @@
+V347 - Páginas más fluidas: los avatares se guardan en el navegador
+- Revisión: portada, perfil, juegos, Hunger, minijuegos, blogs y Salón de la Fama cargan en 0,2-0,6 s y sin errores de JavaScript (solo los 401 normales de /api/me y /api/mail-unread sin sesión).
+- Lo que frenaba: /api/avatar iba con «Cache-Control: no-store», así que cada página volvía a descargar todos los avatares. Un perfil con amigos con GIF bajaba ~1,7 MB en cada visita.
+- functions/_shared/avatar-etag347.js (nuevo) y functions/api/avatar.js: cada avatar lleva una huella (ETag) y «private, no-cache». Si no ha cambiado, el servidor contesta 304 sin mandar la imagen; si cambia, se ve al momento.
+- avatar-display.js: pide los avatares con cache 'no-cache' (revalidar) en vez de 'no-store'. Los navegadores que ya tenían el archivo lo recogen en menos de 24 horas.
+- Test: tests/avatar-etag347.test.mjs.
