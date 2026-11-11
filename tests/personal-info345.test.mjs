@@ -15,5 +15,7 @@ assert.equal((await call('PUT',{bio:'x'},'https://evil.example')).status,403,'so
 assert.equal((await onRequest({env:{DB:db},request:new Request('https://t.local/api/personal-info')})).status,401,'hace falta sesión');
 const profile=readFileSync(new URL('../profile.html',import.meta.url),'utf8');assert.doesNotMatch(profile,/editBio|bioForm|bioInput/,'sin el editor duplicado del perfil');
 const page=readFileSync(new URL('../profile-edit.html',import.meta.url),'utf8');for(const t of ['Información personal','Cambiar imagen','Cambiar contraseña','Nombre completo','Fecha de nacimiento','Idioma preferido para los juegos','Sexo','Sobre mí. Algunas palabras que te describen.','¿Tienes blog?','http://','Guardar'])assert.ok(page.includes(t),t);
-assert.match(page,/profile-edit345\.js\?v=345/);
+assert.match(page,/profile-edit345\.js\?v=346/);assert.match(page,/account346\.css\?v=346/);
+const pw=readFileSync(new URL('../change-password.html',import.meta.url),'utf8');for(const t of ['Contraseña actual','Contraseña nueva','Repite la contraseña nueva','Guardar contraseña','change-password346.js?v=346','account346.css?v=346'])assert.ok(pw.includes(t),t);
+assert.match(readFileSync(new URL('../account346.css',import.meta.url),'utf8'),/#fff9b7,#fff092/,'botones amarillos de la web');
 console.log('PASS V345: Información personal 1:1, guarda biografía y datos, valida y sin editor duplicado');

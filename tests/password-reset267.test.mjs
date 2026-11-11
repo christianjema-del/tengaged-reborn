@@ -25,8 +25,19 @@ const token=/session=([a-f0-9]{64})/.exec(entered.cookie)[1];assert.equal((await
 assert.equal((await call(change,'api/change-password',{password:'corta',confirm:'corta'},token)).status,400);assert.equal((await call(change,'api/change-password',{password:'nuevaclave1',confirm:'otraclave11'},token)).status,400);assert.equal((await call(change,'api/change-password',{password:done.temporaryPassword,confirm:done.temporaryPassword},token)).status,400,'no vale repetir la temporal');
 assert.equal((await call(change,'api/change-password',{password:'nuevaclave1',confirm:'nuevaclave1'},token,'https://evil.local')).status,403);
 assert.equal((await call(change,'api/change-password',{password:'nuevaclave1',confirm:'nuevaclave1'},token)).status,200);
-assert.equal((await call(me,'api/me',null,token)).user.must_change_password,false);assert.equal((await call(change,'api/change-password',{password:'otraclave12',confirm:'otraclave12'},token)).status,403,'solo cuando esta pendiente');
+assert.equal((await call(me,'api/me',null,token)).user.must_change_password,false);assert.equal((await call(change,'api/change-password',{password:'otraclave12',confirm:'otraclave12'},token)).status,400,'V346: ya no está pendiente, hace falta la actual');
 assert.equal((await call(login,'api/login',{username:'Cristi',password:done.temporaryPassword},0)).status,401,'la temporal deja de valer');assert.equal((await call(login,'api/login',{username:'Cristi',password:'nuevaclave1'},0)).status,200);
+// V346: cualquier usuario cambia su contraseña con la actual; se cierran sus otras sesiones y la de este navegador sigue
+{const mine='3'.repeat(64),other='e'.repeat(64);sql.prepare('INSERT INTO sessions VALUES(?,?,?)').run(await hash(other),3,'2099-01-01');
+assert.equal((await call(change,'api/change-password',{password:'clavenueva3',confirm:'clavenueva3'},mine)).status,400,'sin la actual no');
+assert.equal((await call(change,'api/change-password',{current:'mala',password:'clavenueva3',confirm:'clavenueva3'},mine)).status,400,'con la actual mal no');
+assert.equal((await call(change,'api/change-password',{current:'anterior3',password:'anterior3',confirm:'anterior3'},mine)).status,400,'tiene que ser distinta');
+assert.equal((await call(change,'api/change-password',{current:'anterior3',password:'clavenueva3',confirm:'clavenueva3'},mine,'https://evil.local')).status,403);
+assert.equal(sql.prepare('SELECT password_hash p FROM users WHERE id=3').get().p,await hash('anterior3'),'nada cambia si se rechaza');
+assert.equal((await call(change,'api/change-password',{current:'anterior3',password:'clavenueva3',confirm:'clavenueva3'},mine)).status,200);
+assert.equal(sql.prepare('SELECT COUNT(*) n FROM sessions WHERE user_id=3 AND token_hash=?').get(await hash(mine)).n,1,'esta sesión sigue abierta');
+assert.equal(sql.prepare('SELECT COUNT(*) n FROM sessions WHERE user_id=3 AND token_hash=?').get(await hash(other)).n,0,'las demás se cierran');
+assert.equal((await call(login,'api/login',{username:'Otro',password:'anterior3'},0)).status,401);assert.equal((await call(login,'api/login',{username:'Otro',password:'clavenueva3'},0)).status,200);}
 // Caducidad
 const again=await call(reset,'api/admin-reset-password',{username:'Cristi'});sql.prepare("UPDATE users SET temporary_password_until='2000-01-01T00:00:00Z' WHERE id=2").run();const late=await call(login,'api/login',{username:'Cristi',password:again.temporaryPassword},0);assert.equal(late.status,403);assert.match(late.error,/caducado/);
 const shell=readFileSync(new URL('../shell.js',import.meta.url),'utf8');assert.ok(shell.includes("user?.must_change_password&&pageKey!=='change-password'"),'la web obliga a cambiarla');

@@ -1,0 +1,36 @@
+/* V346: «Información personal» y «Cambiar contraseña» con el diseño de Tengaged Reborn
+   (estructura de la pantalla Personal Info original, botones amarillos como ✎ ♥ T$ del perfil). */
+.page-personal345 main>h1{display:none}
+.pi345{max-width:640px;margin:6px auto 30px;padding:14px 16px 18px;background:#fff;border:1px solid #e3ebf0;border-radius:4px;color:#5d5d5d;font:12px Arial,Helvetica,sans-serif;text-align:left}
+.pi345-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px;padding:0 0 8px;border-bottom:1px dotted #f3b7c1}
+.pi345-head h1{margin:0!important;padding:0!important;border:0!important;background:none!important;color:#ff536d!important;font:bold 18px/22px Arial,'Trebuchet MS',Verdana,sans-serif!important;letter-spacing:0;text-transform:none!important}
+.pi345-head h1:before,.pi345-head h1:after{display:none!important}
+.pi345-tabs{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+.pi345 .pi345-btn{display:inline-block;min-height:0;margin:0;padding:4px 9px;border:1px solid #eee18c;border-radius:2px;background:linear-gradient(#fff9b7,#fff092);box-shadow:none;color:#8f874f;font:bold 11px/15px Arial,Helvetica,sans-serif;text-decoration:none;text-shadow:none;cursor:pointer;white-space:nowrap}
+.pi345 .pi345-btn:hover,.pi345 .pi345-btn:focus-visible{border-color:#e2d06a;background:linear-gradient(#fff6a0,#ffe873);color:#6f6838}
+.pi345 .pi345-btn.on{border-color:#e2d06a;background:#ffe873;color:#5f592f}
+.pi345 .pi345-btn:disabled{opacity:.6;cursor:default}
+.pi345-body{display:grid;grid-template-columns:140px minmax(0,1fr);gap:0 22px;padding-top:10px}
+.pi345-side{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pi345-photo{display:block;width:140px;height:161px;background:#d6e5ef;overflow:hidden}
+.pi345-photo img{display:block;width:140px;height:161px;object-fit:cover}
+.pi345-form{display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:0;background:none;border:0;box-shadow:none}
+.pi345 .pi345-label{display:block;margin:0 0 3px;padding:0;color:#5d5d5d;font:bold 12px/15px Arial,Helvetica,sans-serif;text-transform:none;letter-spacing:0}
+.pi345 .pi345-hint{display:block;margin:-6px 0 9px;color:#8a99a6;font:11px/14px Arial,Helvetica,sans-serif}
+.pi345 label.pi345-label+input,.pi345 label.pi345-label+select,.pi345 .pi345-row,.pi345 textarea{margin-bottom:11px}
+.pi345 input.pi345-soft{width:260px;max-width:100%;height:26px;margin-top:0;padding:3px 7px;box-sizing:border-box;border:1px solid #ccd8df;border-radius:2px;background:#fff;box-shadow:inset 0 1px 2px rgba(80,110,140,.08);color:#333;font:12px Arial,Helvetica,sans-serif}
+.pi345 input.pi345-soft:focus,.pi345 select:focus,.pi345 textarea:focus{outline:0;border-color:#ff9aaa;box-shadow:0 0 0 2px #ffe3e8}
+.pi345 select{width:auto;min-width:60px;height:26px;margin:0;padding:0 4px;box-sizing:border-box;border:1px solid #ccd8df;border-radius:2px;background:#fff;color:#333;font:12px Arial,Helvetica,sans-serif}
+.pi345 select.pi345-wide{min-width:160px}
+.pi345 #piGender{min-width:90px}
+.pi345-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.pi345 textarea{width:360px;max-width:100%;height:130px;min-height:0;padding:6px 7px;box-sizing:border-box;border:1px solid #ccd8df;border-radius:2px;background:#fffef2;box-shadow:inset 0 1px 2px rgba(80,110,140,.08);color:#333;font:12px/16px Arial,Helvetica,sans-serif;resize:vertical}
+.pi345-blog span{color:#5d5d5d;font:12px Arial,Helvetica,sans-serif}
+.pi345-blog input.pi345-soft{width:214px}
+.pi345 .pi345-check{display:flex;align-items:center;gap:5px;margin:0 0 5px;color:#6f7b85;font:11px/14px Arial,Helvetica,sans-serif}
+.pi345 .pi345-check input{width:13px;height:13px;margin:0;accent-color:#ff536d}
+.pi345-save{margin-top:8px}
+.pi345 #notice{color:#4f7f3a;font:bold 11px Arial,Helvetica,sans-serif}
+.pi345 #notice.error345{color:#c0485a}
+.pi345-intro{margin:0 0 12px;padding:8px 10px;border:1px solid #f0e39a;background:#fffbd0;color:#6f6838;font:12px/16px Arial,Helvetica,sans-serif}
+@media(max-width:560px){.pi345{padding:10px 10px 14px}.pi345-head{flex-direction:column;align-items:flex-start}.pi345-tabs{justify-content:flex-start}.pi345-body{grid-template-columns:1fr;gap:12px}.pi345-side{align-items:flex-start}.pi345 textarea,.pi345 input.pi345-soft,.pi345-blog input.pi345-soft{width:100%}.pi345-blog{flex-wrap:nowrap;width:100%}}

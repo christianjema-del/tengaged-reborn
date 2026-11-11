@@ -1,0 +1,5 @@
+V346 - Cuenta con el diseño de la web y cambio de contraseña para todos
+- account346.css (sustituye a profile-edit345.css): «Información personal» y «Cambiar contraseña» con el diseño de Tengaged Reborn: botones amarillos como ✎ ♥ T$ del perfil, título rosa, etiquetas en negrita, campos con borde y la biografía sobre fondo crema.
+- change-password.html: misma pantalla que «Información personal» (pestaña Cambiar contraseña), con Contraseña actual, Contraseña nueva, Repítela, Mostrar las contraseñas y Guardar. Nuevo change-password346.js; eliminados change-password267.js/.css.
+- functions/api/change-password.js: cualquier usuario puede cambiarla escribiendo la actual. Con contraseña temporal de administración no hace falta la actual. Tiene que ser distinta, mínimo 8 caracteres. Al cambiarla se cierran las demás sesiones de la cuenta; la de ese navegador sigue abierta.
+- Tests: tests/password-reset267.test.mjs y tests/personal-info345.test.mjs.
