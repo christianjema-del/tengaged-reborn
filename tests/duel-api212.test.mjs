@@ -64,8 +64,10 @@ const resumed=JSON.parse(sql.prepare('SELECT state FROM duel_matches WHERE id=1'
 const end=await bridge({type:'WOF',function:'requestSaveGameData',header:{...head,code:begin.header.code},data:{points:1234}});assert.equal(end.error,0);assert.equal(end.recorded,true);assert.equal((await duelMatch(db,1,{id:2})).match.me.score,1234);assert.equal(sql.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE name='minigame_result_ledger'").get().n,0,'la puntuacion sigue privada durante la prueba');
 console.log('PASS original SWF encoded bridge starts and records a real Duel attempt');
 d=await call(duel,'api/duel',0);const lobby=d.matches.find(m=>m.phase==='waiting').id;
-assert.equal((await call(duel,'api/duel?id='+lobby,1,{action:'join',notifyOnStart:true})).status,200);
-for(let id=2;id<=12;id++)assert.equal((await call(duel,'api/duel?id='+lobby,id,{action:'join'})).status,200);
+// V348: mientras sigan en el Duelo #1 no pueden entrar en otro; al terminar el #1, sí.
+{const r=await call(duel,'api/duel?id='+lobby,1,{action:'join',notifyOnStart:true});assert.equal(r.status,400);assert.match(r.message,/Ya estás inscrito en El Duelo #\d+/);for(const row of sql.prepare('SELECT id,state FROM duel_matches WHERE id<?').all(lobby)){const old=JSON.parse(row.state);old.phase='finished';sql.prepare('UPDATE duel_matches SET state=? WHERE id=?').run(JSON.stringify(old),row.id);}}
+{const r=await call(duel,'api/duel?id='+lobby,1,{action:'join',notifyOnStart:true});assert.equal(r.status,200,r.message);}
+for(let id=2;id<=12;id++){const r=await call(duel,'api/duel?id='+lobby,id,{action:'join'});assert.equal(r.status,200,id+' '+r.message);}
 assert.equal((await call(duel,'api/duel?id='+lobby,999,{action:'start'})).status,200);
 assert.equal(sql.prepare('SELECT COUNT(*) n FROM private_messages WHERE system_event=?').get('duel:start:'+lobby+':1').n,1);
 console.log('PASS opted-in internal start notification is delivered exactly once');

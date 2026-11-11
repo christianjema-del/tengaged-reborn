@@ -64,6 +64,8 @@ const resumed=JSON.parse(sql.prepare('SELECT state FROM duel_matches WHERE id=1'
 const end=await bridge({type:'WOF',function:'requestSaveGameData',header:{...head,code:begin.header.code},data:{points:1234}});assert.equal(end.error,0);assert.equal(end.recorded,true);assert.equal((await duelMatch(db,1,{id:2})).match.me.score,1234);
 console.log('PASS original SWF encoded bridge starts and records a real Duel attempt');
 d=await call(duel,'api/duel',0);const lobby=d.matches.find(m=>m.phase==='waiting').id;
+// V348: mientras sigan en el Duelo #1 no pueden entrar en otro; al terminar el #1, sí.
+{const r=await call(duel,'api/duel?id='+lobby,1,{action:'join',notifyOnStart:true});assert.equal(r.status,400);assert.match(r.message,/Ya estás inscrito en El Duelo #\d+/);for(const row of sql.prepare('SELECT id,state FROM duel_matches WHERE id<?').all(lobby)){const old=JSON.parse(row.state);old.phase='finished';sql.prepare('UPDATE duel_matches SET state=? WHERE id=?').run(JSON.stringify(old),row.id);}}
 assert.equal((await call(duel,'api/duel?id='+lobby,1,{action:'join',notifyOnStart:true})).status,200);
 for(let id=2;id<=12;id++)assert.equal((await call(duel,'api/duel?id='+lobby,id,{action:'join'})).status,200);
 assert.equal((await call(duel,'api/duel?id='+lobby,999,{action:'start'})).status,200);

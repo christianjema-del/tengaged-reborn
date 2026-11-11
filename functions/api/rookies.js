@@ -1,3 +1,4 @@
+import {assertOneGame348} from '../_shared/one-game348.js';
 import {canFillBots} from '../_shared/game-bots.js';
 import {ensureEnrollmentNotifications} from '../_shared/enrollment.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
@@ -14,6 +15,7 @@ async function handle({request,env}){try{
  if(body?.action==='bet')return Response.json({ok:true,...await placeBet(env.DB,id,user,body.target)},noStore);
  if(!['join','start','fill_bots','nominate','vote','save','whisper','admin_kick'].includes(body?.action))return jsonError('Acción no permitida.',400);
  if(['start','fill_bots','admin_kick'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
+ if(body.action==='join')await assertOneGame348(env.DB,'rookies',user.id,id);
  if(body.action==='join'&&body.notifyOnStart)await ensureEnrollmentNotifications(env.DB,'rookies');
  const result=await rookiesMatch(env.DB,id,user,body);await waitingRookies(env.DB);return Response.json({ok:true,...result},noStore);
 }catch(e){return jsonError(e.message||'No se pudo cargar Rookies.',400);}}

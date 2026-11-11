@@ -1,3 +1,4 @@
+import {assertOneGame348} from '../_shared/one-game348.js';
 import {canFillBots} from '../_shared/game-bots.js';
 import {ensureEnrollmentNotifications} from '../_shared/enrollment.js';
 import {withStorageGuard} from '../_shared/storage-guard141.js';
@@ -13,6 +14,7 @@ async function handle({request,env}){try{
  if(!Number.isSafeInteger(id)||id<1)return jsonError('Partida no válida.',400);
  const body=await request.json().catch(()=>null);if(!ACTIONS.includes(body?.action))return jsonError('Acción no permitida.',400);
  if(['start','fill_bots'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
+ if(body.action==='join')await assertOneGame348(env.DB,'survivor',user.id,id);
  if(body.action==='join'){const account=await env.DB.prepare('SELECT is_test_bot,is_system FROM users WHERE id=?').bind(user.id).first();if(account?.is_test_bot||account?.is_system)return jsonError('Usa una cuenta real para inscribirte.',403);if(body.notifyOnStart){await ensureSurvivor(env.DB);await ensureEnrollmentNotifications(env.DB,'survivor');}}
  const result=await survivorMatch(env.DB,id,user,body,false,tribe);await waitingSurvivor(env.DB);
  return Response.json({ok:true,...result},noStore);

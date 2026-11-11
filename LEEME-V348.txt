@@ -1,0 +1,5 @@
+V348 - Una partida por juego a la vez
+- enroll.html (Elige tu juego): si ya estás en una partida de ese juego que sigue en curso (no ha terminado y no te han eliminado), la tarjeta sale en gris con la cruz roja, pone «Ya estás inscrito · #N» y te lleva a tu partida. enroll348.css y enrollment-layout.js ?v=348.
+- Servidor: functions/_shared/one-game348.js. Rookies, Frookies, El Duelo y Survivor rechazan inscribirte en otra partida del mismo juego mientras sigas en una: «Ya estás inscrito en X #N. No puedes jugar dos partidas a la vez...». Casting y Hunger ya lo impedían.
+- Para poder entrar en otra: que termine la partida, que te eliminen o que administración te expulse (panel de admin, V336).
+- Tests: tests/one-game348.test.mjs; tests/duel-api212 y duel-chain-chat221 adaptados a la regla.

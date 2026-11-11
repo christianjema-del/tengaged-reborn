@@ -1,0 +1,5 @@
+/* V348: juego en el que ya estás inscrito: gris y con la cruz roja, como los que no están disponibles. */
+.page-enroll .enrollment-format.already-in348{position:relative}
+.page-enroll .enrollment-format.already-in348 img{filter:grayscale(1);opacity:.6}
+.page-enroll .enrollment-format.already-in348>span{color:#999!important}
+.page-enroll .enrollment-format.already-in348:after{content:'×';position:absolute;right:0;top:-9px;color:#e92323;font:bold 44px/1 Arial;text-shadow:0 1px white}
