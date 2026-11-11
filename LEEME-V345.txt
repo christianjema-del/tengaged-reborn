@@ -1,0 +1,7 @@
+V345 - «Información personal», réplica 1:1 del Tengaged original
+- profile-edit.html (botón ✎ del perfil): ahora es la pantalla Personal Info del Tengaged original, en castellano: título «Información personal», pestañas Información personal / Cambiar imagen / Cambiar contraseña, avatar con «Cambiar imagen», Nombre completo, Fecha de nacimiento, Idioma preferido para los juegos, Sexo, «Sobre mí. Algunas palabras que te describen.», ¿Tienes blog? http://, dos casillas de avisos y Guardar.
+- functions/api/personal-info.js (nuevo): solo el dueño lee y guarda sus datos (tabla user_personal_info345). La biografía sigue en users.bio, así que el perfil la muestra igual que antes. Valida fecha, idioma, sexo, blog y longitudes.
+- Las dos casillas de avisos solo guardan la preferencia: la web todavía no envía correos.
+- profile.html: eliminado el botón «Editar» y el formulario duplicado del recuadro de la biografía. Se edita solo con ✎.
+- Eliminado profile-edit-page.js (la página antigua: vista previa, colores desbloqueados y enlaces repetidos).
+- Test: tests/personal-info345.test.mjs.

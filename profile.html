@@ -107,8 +107,8 @@
             <div class="info-row"><strong>Estado</strong><span id="accountStatus">Activo</span></div>
             <div class="info-row"><strong>Miembro desde</strong><span id="memberSince">—</span></div>
             <h2 class="section-title" style="margin-top:16px">Sobre mí</h2>
-            <button type="button" id="editBio" class="bio-edit hidden">Editar</button><div id="bioText" class="bio">Este jugador aún no ha escrito una descripción.</div>
-            <form id="bioForm" class="bio-form hidden"><label for="bioInput">Tu descripción (máximo 1.000 caracteres)</label><textarea id="bioInput" maxlength="1000"></textarea><button class="button">Guardar descripción</button><div id="bioNotice" class="notice" aria-live="polite"></div></form>
+            <div id="bioText" class="bio">Este jugador aún no ha escrito una descripción.</div>
+            
           </section>
           <section id="profileGames333" aria-label="Mis Juegos"><div class="inuser-games-aj"><h2>Mis Juegos</h2><div class="inuser-games"><p class="inuser-games-empty">Cargando partidas…</p></div></div></section>
           <section class="card"><h2 class="section-title">Mi blog <a id="profileBlogAll166" href="/blogs" class="small-section-link">Mira mi blog →</a><a id="profileRss166" class="profile-rss166" href="/api/blog-rss" aria-label="RSS de este usuario">RSS</a></h2><div id="profilePosts">Cargando publicaciones…</div></section><section class="card"><h2 class="section-title">Últimas menciones en blogs</h2><div id="profileMentions">Cargando menciones…</div></section><section id="activity" class="card"><h2 class="side-card-title">Últimas Acciones</h2><ol id="activityText" class="smallList"></ol></section><details id="adminPanel" class="card admin hidden">
@@ -221,7 +221,6 @@ import {applyColorCard} from "/color-cards.js?v=159";
 
     const historyState={page:1};
     function renderHistory(){renderGames333(byId('profileGames333'),profile.games||[],historyState);}
-    byId('editBio').onclick=()=>{byId('bioForm').classList.toggle('hidden');if(!byId('bioForm').classList.contains('hidden'))byId('bioInput').focus();};
     async function loadDesigns(){
      const root=byId('profileDesigns');
      try{const data=await profileApi('/api/designs?owner='+encodeURIComponent(requestedUsername));root.replaceChildren();
@@ -277,8 +276,6 @@ loadProfileAvatar(profile.username);
       byId("bioText").textContent = profile.bio || "Este jugador aún no ha escrito una descripción.";
       import('/rich-profile.js?v=168').then(({richText})=>richText(byId('bioText'),profile.bio||'Este jugador aún no ha escrito una descripción.')).catch(()=>{});
       if (isSelf) {
-        byId("editBio").classList.remove("hidden");
-        byId("bioInput").value = profile.bio || "";
         selectedAvatarCode = currentAvatar;
         savedAvatarCode = currentAvatar;
         byId("avatarOptions").querySelectorAll(".avatar-option").forEach(button => {
@@ -363,17 +360,6 @@ loadProfileAvatar(profile.username);
       event.preventDefault();
       const username = byId("adminUsername").value.trim();
       if (username) location.href = "/profile.html?username=" + encodeURIComponent(username);
-    });
-    byId("bioForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      byId("bioNotice").textContent = "Guardando…";
-      try {
-        const response = await fetch("/api/profile", { method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ bio: byId("bioInput").value }) });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data.message || "No se pudo guardar la descripción.");
-        byId("bioNotice").textContent = data.message;
-        await refreshProfile();
-      } catch (error) { byId("bioNotice").textContent = error.message; }
     });
     document.addEventListener('admin:user-updated',event=>{if(profile&&event.detail?.username?.toLowerCase()===profile.username.toLowerCase()){invalidateAvatar(profile.username);refreshProfile().catch(()=>{});}});
     populateAvatarChoices();

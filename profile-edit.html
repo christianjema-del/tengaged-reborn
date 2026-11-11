@@ -1,1 +1,39 @@
-<!doctype html><html lang="es"><head><script src="/safari-compat162.js?v=170"></script><script src="/connection171.js?v=171"></script><script src="/api-health141.js?v=170"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Editar perfil · Tengaged Reborn</title><link rel="stylesheet" href="/site.css?v=159"><link rel="stylesheet" href="/shell.css?v=159"><link rel="stylesheet" href="/sections.css?v=159"><link rel="stylesheet" href="/classic.css?v=159"><link rel="stylesheet" href="/community-plus.css?v=159"><link rel="stylesheet" href="/mobile-stability.css?v=159"><link rel="stylesheet" href="/polish.css?v=159"></head><body><script src="/shell.js?v=337"></script><div class="wrap"><main><h1>Editar perfil</h1><p id="notice" class="market-notice" role="status"></p><div id="content">Cargando…</div></main></div><script type="module" src="/profile-edit-page.js?v=337"></script></body></html>
+<!doctype html><html lang="es"><head><script src="/safari-compat162.js?v=170"></script><script src="/connection171.js?v=171"></script><script src="/api-health141.js?v=170"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Información personal · Tengaged Reborn</title>
+<link rel="stylesheet" href="/site.css?v=159">
+<link rel="stylesheet" href="/shell.css?v=159">
+<link rel="stylesheet" href="/sections.css?v=159">
+<link rel="stylesheet" href="/classic.css?v=159">
+<link rel="stylesheet" href="/community-plus.css?v=159">
+<link rel="stylesheet" href="/mobile-stability.css?v=159">
+<link rel="stylesheet" href="/polish.css?v=159">
+<link rel="stylesheet" href="/profile-edit345.css?v=345">
+</head><body class="page-personal345"><script src="/shell.js?v=337"></script>
+<div class="wrap"><main>
+<!-- V345: réplica 1:1 de «Personal Info» del Tengaged original. -->
+<section class="pi345" aria-labelledby="piTitle">
+ <div class="pi345-head"><h1 id="piTitle">Información personal</h1>
+  <nav class="pi345-tabs" aria-label="Opciones de la cuenta"><a class="pi345-btn on" href="/profile-edit.html" aria-current="page">Información personal</a><a class="pi345-btn" href="/avatar.html">Cambiar imagen</a><a class="pi345-btn" href="/change-password.html">Cambiar contraseña</a></nav></div>
+ <div class="pi345-body">
+  <div class="pi345-side"><a class="pi345-photo" href="/profile.html" id="piProfile" title="Ver mi perfil"><img id="piAvatar" alt="Tu avatar"></a><a class="pi345-btn pi345-change" href="/avatar.html">Cambiar imagen</a></div>
+  <form class="pi345-form" id="piForm" novalidate>
+   <label class="pi345-label" for="piName">Nombre completo</label>
+   <input class="pi345-soft" id="piName" name="full_name" maxlength="60" autocomplete="name">
+   <span class="pi345-label" id="piBirthLabel">Fecha de nacimiento</span>
+   <div class="pi345-row" role="group" aria-labelledby="piBirthLabel"><select id="piDay" name="birth_day" aria-label="Día"></select><select id="piMonth" name="birth_month" aria-label="Mes"></select><select id="piYear" name="birth_year" aria-label="Año"></select></div>
+   <label class="pi345-label" for="piLang">Idioma preferido para los juegos</label>
+   <select id="piLang" name="language" class="pi345-wide"></select>
+   <label class="pi345-label" for="piGender">Sexo</label>
+   <select id="piGender" name="gender"></select>
+   <label class="pi345-label" for="piBio">Sobre mí. Algunas palabras que te describen.</label>
+   <textarea id="piBio" name="bio" maxlength="1000"></textarea>
+   <label class="pi345-label" for="piBlog">¿Tienes blog?</label>
+   <div class="pi345-row pi345-blog"><span aria-hidden="true">http://</span><input class="pi345-soft" id="piBlog" name="blog" maxlength="200" inputmode="url" autocomplete="url"></div>
+   <label class="pi345-check"><input type="checkbox" id="piNews" name="news"> Enviadme noticias sobre las últimas novedades</label>
+   <label class="pi345-check"><input type="checkbox" id="piNotify" name="notify"> Avisadme por correo de las últimas acciones si no he entrado en 48 horas.</label>
+   <div class="pi345-row pi345-save"><button class="pi345-btn" type="submit" id="piSave">Guardar</button><span id="notice" role="status" aria-live="polite"></span></div>
+  </form>
+ </div>
+</section>
+</main></div>
+<script type="module" src="/profile-edit345.js?v=345"></script>
+</body></html>

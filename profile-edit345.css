@@ -1,0 +1,32 @@
+/* V345: «Información personal», réplica 1:1 de la pantalla Personal Info del Tengaged original. */
+.page-personal345 main>h1{display:none}
+.pi345{max-width:600px;margin:6px auto 30px;padding:12px 14px 16px;background:#fff;border-radius:9px;box-shadow:0 1px 3px rgba(80,110,150,.18);color:#5c6670;font:11px Verdana,Geneva,Arial,sans-serif;text-align:left}
+.pi345-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:0 0 14px}
+.pi345-head h1{margin:0!important;padding:0!important;border:0!important;background:none!important;color:#ec6f6f!important;font:normal 17px/22px 'Trebuchet MS',trebuchet,Verdana,Arial,sans-serif!important;letter-spacing:0;text-transform:none!important}
+.pi345-head h1:before,.pi345-head h1:after{display:none!important}
+.pi345-tabs{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+.pi345 .pi345-btn{display:inline-block;min-height:0;margin:0;padding:3px 7px;border:1px solid #cfdbe7;border-radius:2px;background:#dfe8f1;box-shadow:none;color:#7f97ae;font:10px/14px Verdana,Geneva,Arial,sans-serif;text-decoration:none;text-shadow:none;cursor:pointer;white-space:nowrap}
+.pi345 .pi345-btn:hover,.pi345 .pi345-btn:focus-visible{background:#d0dcea;color:#5d7891}
+.pi345 .pi345-btn.on{background:#dfe8f1;color:#7f97ae}
+.pi345-body{display:grid;grid-template-columns:130px minmax(0,1fr);gap:0 22px}
+.pi345-side{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pi345-photo{display:block;width:130px;height:150px;background:#dde6f2;overflow:hidden}
+.pi345-photo img{display:block;width:130px;height:150px;object-fit:contain}
+.pi345 .pi345-change{padding:2px 9px}
+.pi345-form{display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:0;background:none;border:0;box-shadow:none}
+.pi345 .pi345-label{display:block;margin:0 0 2px;padding:0;color:#a2abb4;font:italic 10px/13px Verdana,Geneva,Arial,sans-serif;text-transform:none;letter-spacing:0}
+.pi345 label.pi345-label+input,.pi345 label.pi345-label+select,.pi345 .pi345-row,.pi345 textarea{margin-bottom:9px}
+.pi345 input.pi345-soft{width:230px;max-width:100%;height:22px;margin-top:0;padding:2px 6px;box-sizing:border-box;border:0;border-radius:0;background:#e6edf5;box-shadow:none;color:#4f5a64;font:11px Verdana,Geneva,Arial,sans-serif}
+.pi345 input.pi345-soft:focus{outline:1px solid #b9cbdd;background:#eef3f9}
+.pi345 select{width:auto;min-width:56px;height:21px;margin:0;padding:0 2px;box-sizing:border-box;border:1px solid #a9b3bd;border-radius:2px;background:#fff;color:#4f5a64;font:11px Verdana,Geneva,Arial,sans-serif}
+.pi345 select.pi345-wide{min-width:140px}
+.pi345 #piGender{min-width:72px}
+.pi345-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.pi345 textarea{width:310px;max-width:100%;height:118px;min-height:0;padding:4px;box-sizing:border-box;border:1px solid #a9b3bd;border-radius:0;background:#fff;box-shadow:none;color:#333;font:11px/14px 'Courier New',Courier,monospace;resize:vertical}
+.pi345-blog span{color:#5c6670;font:11px Verdana,Geneva,Arial,sans-serif}
+.pi345 .pi345-check{display:flex;align-items:center;gap:4px;margin:0 0 4px;color:#a2abb4;font:italic 9px/12px Verdana,Geneva,Arial,sans-serif}
+.pi345 .pi345-check input{width:12px;height:12px;margin:0;accent-color:#7f97ae}
+.pi345-save{margin-top:6px}
+.pi345 #notice{color:#6c8aa5;font:10px Verdana,Geneva,Arial,sans-serif}
+.pi345 #notice.error345{color:#c0485a}
+@media(max-width:560px){.pi345{padding:10px 10px 14px}.pi345-head{flex-direction:column}.pi345-tabs{justify-content:flex-start}.pi345-body{grid-template-columns:1fr;gap:12px}.pi345-side{align-items:flex-start}.pi345 textarea,.pi345 input.pi345-soft{width:100%}}
