@@ -19,7 +19,7 @@ test('V336: admin1 expulsa de Hunger, Rookies, Duelo y Casting; nadie más puede
  const T=Date.now();
  // Hunger
  const h=hungerFresh(T-3600000,9);h.manualGate187=true;h.runId='r';for(let i=1;i<=4;i++)h.players.push(player187(i+10,'P'+i));h.manualStart172={kind:'hunger',game:9,run:'r',by:'admin1',at:T-60000};hungerAdvance(h,T-30000,()=>0.5);
- assert.throws(()=>hungerAct(h,{id:11,username:'P1'},{action:'admin_kick',target:'P2'},T,()=>0.5),/admin1/);
+ assert.throws(()=>hungerAct(h,{id:12,username:'P1'},{action:'admin_kick',target:'P2'},T,()=>0.5),/admin1/);
  hungerAct(h,admin,{action:'admin_kick',target:'P2'},T,()=>0.5);const p2=h.players.find(p=>p.username==='P2');assert.equal(p2.health,0);assert.equal(p2.deathCause,'admin');assert.equal(p2.placement,4);
  // Rookies
  const r=freshRookies(5,T);for(let i=1;i<=13;i++)actRookies(r,{id:i,username:'U'+i},{action:'join'},T);actRookies(r,admin,{action:'start'},T);

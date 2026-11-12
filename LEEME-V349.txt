@@ -1,0 +1,7 @@
+V349 - Bowsy también controla las partidas
+- functions/_shared/manual-start172.js: los controles de anfitrión son de admin1 y de la cuenta de Bowsy (id 11, cuenta de admin1). Por id, así sigue valiendo aunque cambie de nombre. Nunca si la cuenta está baneada, es de sistema o es un bot.
+- Incluye: Iniciar partida y Completar con bots en Casting, Rookies, Frookies, El Duelo, Survivor y Hunger; expulsar de la partida; pausar/reanudar Frookies; abrir la siguiente edición y cambiar el día del evento en Hunger; iniciar la disputa de Mafias.
+- functions/_shared/game-bots.js usa la misma comprobación; Frookies y Mafias dejan de comparar el nombre «admin1» por su cuenta.
+- Los botones ya existían con el diseño de la web; ahora le salen también a Bowsy porque el servidor se lo permite.
+- No cambia el panel de administración (sigue siendo de admin1) ni los demás permisos de dueño.
+- Tests: tests/game-host349.test.mjs; tests/admin-extra336 usa otro id para el «jugador cualquiera».
