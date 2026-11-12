@@ -1,0 +1,9 @@
+V350 - Casting: los tics se ponen al día cuando toca
+- Fallo: los tics solo se recalculaban cuando alguien RECOGÍA una llave o manzana. En el Casting #18 Peach recogió la manzana del día 1 antes de recibir sus positivos, y el objeto del día 2 salió pero nadie lo ha recogido: sus tics seguían en 0.
+- Ahora se actualizan (con la regla de siempre: +1=10, +2=20, +3=40…, el 3.er comentario seguido no cuenta):
+  · cuando SALE una llave o manzana (casting-drops.js),
+  · cuando alguien la RECOGE, justo antes y después (un veneno puede cerrar la partida),
+  · antes de cerrar cada día y la final, para que nominados y posiciones usen los tics reales.
+  Entre medias no suben solos.
+- Base de datos: Casting #18 recalculado: Peach 60 tics, Oscar 50.
+- Test: tests/casting-ticks350.test.mjs.

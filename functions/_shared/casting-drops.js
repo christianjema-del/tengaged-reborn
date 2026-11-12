@@ -19,5 +19,6 @@ export function publicDrops(s,at){
  if(p.lastAt!==null&&(at-p.lastAt<DROP_INTERVAL_MS||total-p.messageBaseline<DROP_MESSAGES))return;
  const available=['key','apple'].filter(k=>p.counts[k]<DROP_LIMIT);if(!available.length)return;
  const kind=available[crypto.getRandomValues(new Uint32Array(1))[0]%available.length];
- s.keyDrops.push({id:crypto.randomUUID(),at,expiresAt:at+DROP_INTERVAL_MS,position:2,kind,claimedBy:null});p.counts[kind]++;p.lastAt=at;p.messageBaseline=total;s.nextDropAt=at+DROP_INTERVAL_MS;
+ s.keyDrops.push({id:crypto.randomUUID(),at,expiresAt:at+DROP_INTERVAL_MS,position:2,kind,claimedBy:null});s.ticksPending=true;// V350: al salir una llave o manzana también se actualizan los tics.
+ p.counts[kind]++;p.lastAt=at;p.messageBaseline=total;s.nextDropAt=at+DROP_INTERVAL_MS;
 }
