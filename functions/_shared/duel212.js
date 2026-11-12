@@ -1,3 +1,4 @@
+import {armAutoStart351,autoStartDue351,fireAutoStart351,autoDeadline351} from './auto-start351.js';
 import {canFillBots} from './game-bots.js';
 import {CASTING_MINIGAMES} from '../../minigame-catalog.js';
 import {BASE_CHALLENGE_SECONDS} from './challenge-time.js';
@@ -12,6 +13,8 @@ function stage(s,phase,now){s.phase=phase;if(phase!=='duel')s.nominees=[];s.stag
 function score(s,p){return s.runs[p.id]?.saved?s.runs[p.id].score:0;}
 function ranked(s,players){return [...players].sort((a,b)=>score(s,b)-score(s,a)||Number(!!a.bot)-Number(!!b.bot)||(s.runs[a.id]?.savedAt??Infinity)-(s.runs[b.id]?.savedAt??Infinity)||a.joinedAt-b.joinedAt||s.players.indexOf(a)-s.players.indexOf(b));}
 export function advanceDuel(s,now=Date.now()){
+ if(s.phase==='waiting')armAutoStart351(s,now);
+ if(s.phase==='waiting'&&autoStartDue351(s,now)){fireAutoStart351(s,now);while(s.players.length<12){const index=s.players.length+1;s.players.push({id:-(s.id*100+index),username:'Bot · D'+s.id+' · '+index,bot:true,status:'active',placement:null,joinedAt:now});}s.startedAt=now;s.manualStart213={by:0,username:'sistema',at:now};s.autoStarted351=now;s.round=1;stage(s,'immunity',now);return true;}
  if(['waiting','finished'].includes(s.phase))return false;
  const eligible=duelEligible(s),complete=eligible.length>0&&eligible.every(p=>s.runs[p.id]?.saved)&&(s.phase!=='immunity'||eligible.every(p=>p.bot||s.listSavedStages?.[p.id]===s.stage));
  if(!complete&&now<s.deadline)return false;
@@ -57,7 +60,7 @@ export function actDuel(s,user,input,now=Date.now(),bridge=false){
  if(input.action==='join'){
   if(p)return;if(s.phase!=='waiting'||s.players.length>=12)throw Error('Las inscripciones están cerradas.');
   if(user.is_banned||user.is_system||user.is_test_bot)throw Error('Esta partida se reserva a usuarios reales.');
-  s.players.push({id:user.id,username:user.username,status:'active',placement:null,joinedAt:now,notifyOnStart:input.notifyOnStart===true});
+  s.players.push({id:user.id,username:user.username,status:'active',placement:null,joinedAt:now,notifyOnStart:input.notifyOnStart===true});armAutoStart351(s,now);
   const welcome=String(input.welcome||'').trim();if(welcome.length>500)throw Error('Presentación demasiado larga.');if(welcome)s.welcomes.push({username:user.username,body:welcome,at:now});
   return;
  }
@@ -85,5 +88,5 @@ export function actDuel(s,user,input,now=Date.now(),bridge=false){
 }
 export function duelView(s,user,now=Date.now()){
  const me=user&&s.players.find(p=>p.id===user.id),eligible=me&&duelEligible(s).some(p=>p.id===me.id),run=me&&s.runs[me.id];
- return {canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===12,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<12,manualStartRequired:true,id:s.id,phase:s.phase,round:s.round,stage:s.stage,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline,now,capacity:12,fee:0,challenge:s.challenge,immune:null,chainLeader:s.chainLeader||null,nominees:s.nominees||[],winner:s.winner||null,players:s.players.map(({id,username,status,placement,bot})=>({id,username,status,placement,bot:!!bot,listSaved:s.listSavedStages?.[id]===s.stage,challengePending:status==='active'&&duelEligible(s).some(p=>p.id===id)&&!s.runs[id]?.saved,doingChallenge:status==='active'&&(['immunity','final'].includes(s.phase)||(s.phase==='duel'&&!(s.nominees||[]).includes(id))),nominated:s.phase==='duel'&&(s.nominees||[]).includes(id)})),events:s.events.slice(-30),history:s.history,me:me?{id:me.id,username:me.username,status:me.status,placement:me.placement,canPlay:!!eligible,hasAttempt:!!run,saved:!!run?.saved,listSaved:s.listSavedStages?.[me.id]===s.stage,score:run?.saved?run.score:null,list:[...new Set([...(s.lists[me.id]||[]),...duelAlive(s).map(p=>p.id)])].filter(id=>id!==me.id&&duelAlive(s).some(p=>p.id===id))}:null,whispers:me?s.whispers.filter(w=>w.from===me.id||w.to===me.id):[]};
+ return {canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===12,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<12,manualStartRequired:true,id:s.id,phase:s.phase,round:s.round,stage:s.stage,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline??autoDeadline351(s),autoStartAt:autoDeadline351(s),now,capacity:12,fee:0,challenge:s.challenge,immune:null,chainLeader:s.chainLeader||null,nominees:s.nominees||[],winner:s.winner||null,players:s.players.map(({id,username,status,placement,bot})=>({id,username,status,placement,bot:!!bot,listSaved:s.listSavedStages?.[id]===s.stage,challengePending:status==='active'&&duelEligible(s).some(p=>p.id===id)&&!s.runs[id]?.saved,doingChallenge:status==='active'&&(['immunity','final'].includes(s.phase)||(s.phase==='duel'&&!(s.nominees||[]).includes(id))),nominated:s.phase==='duel'&&(s.nominees||[]).includes(id)})),events:s.events.slice(-30),history:s.history,me:me?{id:me.id,username:me.username,status:me.status,placement:me.placement,canPlay:!!eligible,hasAttempt:!!run,saved:!!run?.saved,listSaved:s.listSavedStages?.[me.id]===s.stage,score:run?.saved?run.score:null,list:[...new Set([...(s.lists[me.id]||[]),...duelAlive(s).map(p=>p.id)])].filter(id=>id!==me.id&&duelAlive(s).some(p=>p.id===id))}:null,whispers:me?s.whispers.filter(w=>w.from===me.id||w.to===me.id):[]};
 }

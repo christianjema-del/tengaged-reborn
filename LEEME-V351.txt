@@ -1,0 +1,9 @@
+V351 - Frookies, Casting, Rookies y El Duelo empiezan solos
+- functions/_shared/auto-start351.js (nuevo): al inscribirse un usuario real arranca una cuenta atrás de 10 minutos. Al acabar, el sistema completa las plazas con bots e inicia la partida (el mismo inicio que hacen admin1 o Bowsy, registrado como «sistema»). Otro usuario que se inscriba no la reinicia. Sin usuarios reales no hay cuenta atrás.
+- Las partidas que ya tenían a alguien inscrito antes de V351 (El Duelo #7 con Oscar) empiezan su cuenta atrás la primera vez que alguien las abre.
+- Relojes: durante la inscripción muestran la cuenta atrás. Casting pone «Empieza en …»; El Duelo, que lo ocultaba en inscripción, ahora la enseña. Frookies y Rookies usan su reloj de siempre.
+- Hunger y Survivor no cambian.
+- Los botones «Completar con bots» e «Iniciar partida» siguen funcionando para admin1 y Bowsy por si quieren empezar antes.
+- El aviso «¡Tu partida ha empezado!» llega igual que con el inicio manual.
+- casting-game.js y duel-page212.js ?v=351.
+- Tests: tests/auto-start351.test.mjs; duel212, frookies132 y frookies-api132 adaptados (antes comprobaban que nunca empezaba solo).

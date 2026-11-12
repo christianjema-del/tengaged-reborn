@@ -1,3 +1,4 @@
+import {armAutoStart351,autoStartDue351,fireAutoStart351,systemStart351,autoDeadline351} from './auto-start351.js';
 // Classic Rookies: días de 24 horas. Independiente de Frookies.
 import {startAdmin172,authorizeStart172,validStart172} from './manual-start172.js';
 import {canFillBots} from './game-bots.js';
@@ -75,13 +76,13 @@ function finish(s,at){
  order.forEach((p,i)=>{p.placement=i+1;p.status='finished';});s.phase='finished';s.finishedAt=at;s.deadline=null;s.winner=order[0]?.username||null;log(s,s.winner+' gana Rookies #'+s.id+'.',at,'winner');
 }
 export function advanceRookies(s,now=Date.now()){
- if(s.phase==='waiting'){if(s.players.length===CAPACITY&&validStart172(s,'rookies')){s.startedAt=now;startDay(s,now);}return;}
+ if(s.phase==='waiting'){armAutoStart351(s,now);if(autoStartDue351(s,now)){fireAutoStart351(s,now);let n=1;while(s.players.length<CAPACITY){const id=-(s.id*100+n);if(s.players.some(p=>p.id===id)){n++;continue;}s.players.push({id,username:'Bot '+s.id+' · '+n++,bot:true,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff)});}systemStart351(s,'rookies',now);}if(s.players.length===CAPACITY&&validStart172(s,'rookies')){s.startedAt=now;startDay(s,now);}return;}
  for(let n=0;n<40&&s.phase!=='finished'&&now>=s.deadline;n++){const at=s.deadline;if(s.phase==='finale')finish(s,at);else closeDay(s,at);}
  delete s.chatLog;
 }
 export function actRookies(s,user,input,now=Date.now()){
  const action=input.action,p=s.players.find(q=>q.id===user.id);
- if(action==='join'){const enrollment=enrollmentOptions(input);if(s.phase!=='waiting')throw Error('La inscripción está cerrada.');if(p)return;if(s.players.length>=CAPACITY)throw Error('No quedan plazas.');s.players.push({id:user.id,username:user.username,bot:false,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff),...(enrollment?{notifyOnStart:enrollment.notifyOnStart}:{})});if(enrollment)s.welcomes.push({username:user.username,body:enrollment.welcome,at:now});return;}
+ if(action==='join'){const enrollment=enrollmentOptions(input);if(s.phase!=='waiting')throw Error('La inscripción está cerrada.');if(p)return;if(s.players.length>=CAPACITY)throw Error('No quedan plazas.');s.players.push({id:user.id,username:user.username,bot:false,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff),...(enrollment?{notifyOnStart:enrollment.notifyOnStart}:{})});if(enrollment)s.welcomes.push({username:user.username,body:enrollment.welcome,at:now});armAutoStart351(s,now);return;}
  if(action==='fill_bots'){if(!canFillBots(user)||s.phase!=='waiting')throw Error('Solo admin1 puede completar con bots.');let n=1;while(s.players.length<CAPACITY){const id=-(s.id*100+n);s.players.push({id,username:'Bot '+s.id+' · '+n++,bot:true,status:'active',placement:null,joinedAt:now,tie:random(0x7fffffff)});}return;}
  if(action==='start'){if(!startAdmin172(user)||s.phase!=='waiting'||s.players.length<CAPACITY)throw Error('Solo admin1 puede iniciar con las 13 plazas completas.');authorizeStart172(s,user,'rookies',now);advanceRookies(s,now);return;}
  if(action==='admin_kick'){
@@ -118,7 +119,7 @@ export function actRookies(s,user,input,now=Date.now()){
 }
 export function rookiesView(s,user,now=Date.now()){
  const me=user&&s.players.find(p=>p.id===user.id),active=me?.status==='active',hoh=byId(s,s.hoh),nominated=!!me&&s.nominees.includes(me.id);
- return {id:s.id,phase:s.phase,day:s.day,now,deadline:s.deadline,startedAt:s.startedAt,finishedAt:s.finishedAt,winner:s.winner||null,capacity:CAPACITY,canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<CAPACITY,
+ return {id:s.id,phase:s.phase,day:s.day,now,deadline:s.deadline??autoDeadline351(s),autoStartAt:autoDeadline351(s),startedAt:s.startedAt,finishedAt:s.finishedAt,winner:s.winner||null,capacity:CAPACITY,canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<CAPACITY,
   hoh:hoh?.username||null,
   players:s.players.map(p=>({id:p.id,username:p.username,bot:!!p.bot,status:p.status,placement:p.placement,hoh:p.id===s.hoh,nominated:s.nominees.includes(p.id)})),
   nominees:s.nominees.map(id=>({id,username:byId(s,id)?.username})),points:s.nominees.map((_,i)=>i),
