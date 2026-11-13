@@ -12,7 +12,7 @@ function iso(raw){const text=String(raw||'');const parsed=Date.parse(text.includ
 function relative(raw){const ms=Date.parse(iso(raw)),minutes=Math.max(0,Math.floor((Date.now()-ms)/60000));return minutes<1?'Ahora':minutes<60?'Hace '+minutes+' min':minutes<1440?'Hace '+Math.floor(minutes/60)+' h':'Hace '+Math.floor(minutes/1440)+' días';}
 function counter(){root.querySelector('.chat-counter').textContent=input.value.length+' / 500';send.disabled=!allowed||writing||!input.value.trim();}
 async function update(message,vote=null){if(!host)return;if(busy){if(message||vote)queuedActions.push([message,vote]);return;}busy=true;writing=!!(message||vote);retry.disabled=true;counter();const draft=message;try{
- const duel=location.pathname.includes('duel'),casting=location.pathname.includes('casting-game'),frookies=location.pathname.includes('frookies'),rookies=location.pathname.includes('/rookies'),survivor=location.pathname.includes('/survivor'),type=survivor?'survivor':rookies?'rookies':duel?'duel':frookies?'frookies':casting?'casting':'hunger';let id=new URLSearchParams(location.search).get('id')||1;
+ const race356=location.pathname.includes('/race'),duel=location.pathname.includes('duel')||race356,casting=location.pathname.includes('casting-game'),frookies=location.pathname.includes('frookies'),rookies=location.pathname.includes('/rookies'),survivor=location.pathname.includes('/survivor'),type=survivor?'survivor':rookies?'rookies':race356?'race':duel?'duel':frookies?'frookies':casting?'casting':'hunger';let id=new URLSearchParams(location.search).get('id')||1;
  if(!duel&&!casting&&!frookies&&!rookies&&!survivor&&new URLSearchParams(location.search).has('edition'))id=new URLSearchParams(location.search).get('edition');
  else if(!duel&&!casting&&!frookies&&!rookies&&!survivor&&window.TengagedHungerEdition){id=window.TengagedHungerEdition;}
  else if(!duel&&!casting&&!frookies&&!rookies&&!survivor){id='current';}
@@ -56,7 +56,7 @@ function finishNotice182(row,m){
  const named=room.startsWith('frookies:')||['casting-nominations'].includes(kind);
  const existing=named?[...content.children].find(n=>tag(n)==='strong'):null;
  const title=existing||author||document.createElement('strong');
- if(!existing&&!author)title.textContent=room.startsWith('frookies:')?'Frookies':room.startsWith('casting:')?'Casting':room.startsWith('duel:')?'El Duelo':room.startsWith('rookies:')?'Rookies':room.startsWith('survivor:')?'Survivor':'Hunger Games';
+ if(!existing&&!author)title.textContent=room.startsWith('frookies:')?'Frookies':room.startsWith('casting:')?'Casting':room.startsWith('duel:')?'El Duelo':room.startsWith('rookies:')?'Rookies':room.startsWith('survivor:')?'Survivor':room.startsWith('race:')?'Race':'Hunger Games';
  if(existing)content.replaceChildren(...[...content.children].filter(n=>n!==existing));
  header.replaceChildren(...(stamp?[stamp]:[]));
  const body=document.createElement('div');body.className='game-notice-body182';

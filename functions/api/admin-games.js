@@ -7,9 +7,10 @@ const GAMES=[
  {type:'survivor',name:'Survivor',table:'survivor_matches',href:id=>'/survivor.html?id='+id},
  {type:'frookies',name:'Frookies',table:'frookies_matches',href:id=>'/frookies.html?id='+id},
  {type:'rookies',name:'Rookies',table:'rookies_matches',href:id=>'/rookies.html?id='+id},
- {type:'duel',name:'El Duelo',table:'duel_matches',href:id=>'/duel.html?id='+id}
+ {type:'duel',name:'El Duelo',table:'duel_matches',href:id=>'/duel.html?id='+id},
+ {type:'race',name:'Race',table:'race_matches',href:id=>'/race.html?id='+id}
 ];
-const PHASES={waiting:'Inscripción',day:'En juego',active:'En juego',immunity:'Inmunidad',elimination:'Eliminación',nominations:'Nominaciones',veto:'Veto',replacement:'Reemplazo',vote:'Votación',tiebreak:'Desempate',final_places:'Final',jury:'Jurado',warmup:'Preparación',finished:'Terminada'};
+const PHASES={waiting:'Inscripción',day:'En juego',active:'En juego',immunity:'Inmunidad',leg:'Etapa',final:'Final',elimination:'Eliminación',nominations:'Nominaciones',veto:'Veto',replacement:'Reemplazo',vote:'Votación',tiebreak:'Desempate',final_places:'Final',jury:'Jurado',warmup:'Preparación',finished:'Terminada'};
 export function summarize(game,id,s){
  const players=Array.isArray(s.players)?s.players:[];
  const alive=game.type==='hunger'?players.filter(p=>Number(p.health)>0&&!p.placement):players.filter(p=>!p.status||p.status==='active');

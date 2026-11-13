@@ -1,4 +1,4 @@
-import {api,post,el,date} from '/market-ui.js?v=170';import {openUser,auditList} from '/admin-workbench.js?v=337';import {askConfirm,askText} from '/staff-dialog317.js?v=317';
+import {api,post,el,date} from '/market-ui.js?v=170';import {openUser,auditList} from '/admin-workbench.js?v=356';import {askConfirm,askText} from '/staff-dialog317.js?v=317';
 import {flag336,countryName336} from '/admin-geo336.js?v=336';
 const $=id=>document.getElementById(id);let owner=false,page=1,tab='users',loading=false,revision=0,auditPage=1;
 function pagination(root,current,total,go){root.replaceChildren();const prev=el('button','← Anterior'),next=el('button','Siguiente →');prev.type=next.type='button';prev.disabled=current<=1;next.disabled=current>=total;prev.onclick=()=>go(current-1);next.onclick=()=>go(current+1);root.append(prev,el('span',current+' / '+total),next);}

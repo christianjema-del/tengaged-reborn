@@ -16,6 +16,7 @@ async function kickFromGame(g){if(working)return;const reasonBox=host.querySelec
   if(g.game_type==='CASTING')await post('/api/castings?id='+id,body);
   else if(g.game_type==='ROOKIES')await post('/api/rookies?id='+id,body);
   else if(g.game_type==='DUEL')await post('/api/duel?id='+id,body);
+  else if(g.game_type==='RACE')await post('/api/race?id='+id,body);
   else if(g.game_type==='HUNGER')await post('/api/hunger',{...body,edition:Number(g.game_id),nonce:crypto.randomUUID()});
   else throw Error('Esta partida no permite expulsar.');
  }catch(e){working=false;notice.textContent='No se pudo expulsar: '+e.message;return;}

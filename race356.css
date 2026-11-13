@@ -1,0 +1,39 @@
+/* V356: Race. Partes propias (ruta, presupuesto, transporte, parejas y etapas) con el diseño de la web. */
+.race-page356 #race-trip h2,.race-page356 aside h2{color:#ff536d}
+.race-route{margin:0 0 4px;color:#4682b4;font:bold 15px/20px Arial,Helvetica,sans-serif}
+.race-route:empty,.race-wallet:empty,.race-partner:empty{display:none}
+.race-wallet{display:inline-block;margin:0 0 6px;padding:2px 7px;border:1px solid #eee18c;border-radius:2px;background:#fffbd0;color:#6f6838;font:bold 12px/18px Arial,Helvetica,sans-serif}
+.race-partner{margin:0 0 6px;color:#5d5d5d;font:12px/16px Arial,Helvetica,sans-serif}
+.race-transports{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:6px;margin:8px 0}
+.race-transports[hidden]{display:none}
+.race-page356 .race-transport{display:grid;grid-template-columns:26px 1fr;grid-template-rows:auto auto;align-items:center;gap:0 5px;min-height:44px;margin:0;padding:5px 7px;border:1px solid #eee18c;border-radius:2px;background:linear-gradient(#fff9b7,#fff092);color:#6f6838;font:12px/15px Arial,Helvetica,sans-serif;text-align:left;cursor:pointer}
+.race-page356 .race-transport:hover:not(:disabled){border-color:#e2d06a;background:linear-gradient(#fff6a0,#ffe873)}
+.race-page356 .race-transport:disabled{cursor:default;opacity:.55}
+.race-page356 .race-transport.chosen{opacity:1!important;border-color:#ff7f93!important;background:#fff0f3!important;color:#c0485a!important;box-shadow:inset 0 0 0 1px #ffc6cf}
+.race-transport-icon{grid-row:1/3;font-size:20px;line-height:1;text-align:center}
+.race-transport strong{font-weight:bold}
+.race-transport small{color:#8f874f;font-size:11px}
+.race-transport.chosen small{color:#c0485a}
+.race-page356 .race-play{display:inline-block;margin:6px 0 0;padding:6px 14px;border:1px solid #eee18c;border-radius:3px;background:linear-gradient(#fff9b7,#fff092);color:#6f6838;font:bold 13px Arial,Helvetica,sans-serif;cursor:pointer}
+.race-play[hidden]{display:none}
+.race-pairs{display:flex;flex-direction:column;gap:4px}
+.race-pair{display:grid;grid-template-columns:auto 1fr;gap:0 8px;padding:5px 7px;border:1px solid #e3ebf0;border-radius:2px;background:#f6f9fb;font:12px/16px Arial,Helvetica,sans-serif}
+.race-pair.mine{border-color:#ffc6cf;background:#fff6f8}
+.race-pair.out{opacity:.6}
+.race-pair-name{color:#ff536d}
+.race-pair-members{color:#4682b4}
+.race-pair-state{grid-column:2;color:#8a99a6}
+.race-legs{display:flex;flex-direction:column;gap:4px;font:12px/16px Arial,Helvetica,sans-serif}
+.race-leg summary{cursor:pointer;color:#4682b4;font-weight:bold}
+.race-leg ol{margin:4px 0 6px 18px;padding:0}
+.race-leg li{margin:0 0 3px;color:#5d5d5d}
+.race-leg li:last-child b{color:#c0485a}
+.race-pair-badge{background:#4682b4!important;color:#fff!important}
+.race-person a:first-child{position:relative}
+.race-transport-badge{position:absolute;left:2px;bottom:2px;font-size:15px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+/* Cabecera propia de Race (El Duelo usa su logotipo en GIF). */
+.race-page356 .duel-title{background:#fff;padding-top:4px;color:#4682b4}
+.race-page356 .duel-title h1{font:bold 34px/40px TengagedHand,'Trebuchet MS',Arial,sans-serif!important;font-variant:normal;text-align:center;color:#ff536d!important;letter-spacing:.5px}
+.race-page356 .duel-title>strong{color:#4682b4}
+.race-page356 .duel-title>span{color:#8a99a6}
+.race-page356 .duel-empty{background:#cfe3f0!important;color:#4682b4!important}

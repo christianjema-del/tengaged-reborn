@@ -13,5 +13,5 @@ await assertOneGame348(db,'frookies',9,35);// nunca ha jugado
 assert.equal(await activeGame348(db,'rookies',5,1),null,'sin tabla todavía: no bloquea');
 for(const [f,kind] of [['rookies','rookies'],['frookies','frookies'],['duel','duel'],['survivor','survivor']])assert.match(readFileSync(new URL('../functions/api/'+f+'.js',import.meta.url),'utf8'),new RegExp("action==='join'\\)await assertOneGame348\\(env\\.DB,'"+kind+"'"),f+' comprueba al inscribirse');
 const page=readFileSync(new URL('../enrollment-layout.js',import.meta.url),'utf8');assert.match(page,/already-in348/);assert.match(page,/Ya estás inscrito · #/);
-assert.match(readFileSync(new URL('../enroll.html',import.meta.url),'utf8'),/enroll348\.css\?v=348.*enrollment-layout\.js\?v=348|enrollment-layout\.js\?v=348[\s\S]*enroll348/s);
+assert.match(readFileSync(new URL('../enroll.html',import.meta.url),'utf8'),/enroll348\.css\?v=\d+[\s\S]*enrollment-layout\.js\?v=\d+/);
 console.log('PASS V348: una partida por juego a la vez; tarjeta gris con cruz si ya estás inscrito');

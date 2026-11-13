@@ -142,7 +142,7 @@ import {setAvatar,invalidateAvatar} from '/avatar-display.js?v=337';
 import {api as profileApi} from "/market-ui.js?v=170";
 import {elapsedMinutes} from "/elapsed-time.js?v=159";
 import {applyGameEmblem} from "/game-emblems.js?v=215";
-import {renderGames333} from "/profile-games333.js?v=334";
+import {renderGames333} from "/profile-games333.js?v=356";
 import {applyColorCard} from "/color-cards.js?v=159";
     const params = new URLSearchParams(location.search);
     let requestedUsername = (params.get("username") || "").trim();
@@ -378,5 +378,5 @@ loadProfileAvatar(profile.username);
     }
     byId('profileRetry').onclick=openProfile;addEventListener('online',openProfile);openProfile();
   </script>
-<script type="module" src="/admin-workbench.js?v=337"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=337"></script><script type="module" src="/profile-extras.js?v=337"></script><script type="module" src="/profile-classic166.js?v=337"></script><script type="module" src="/profile-bets253.js?v=256"></script></body>
+<script type="module" src="/admin-workbench.js?v=356"></script><script type="module" src="/profile-invitations.js?v=170"></script><script type="module" src="/friends.js?v=337"></script><script type="module" src="/profile-extras.js?v=337"></script><script type="module" src="/profile-classic166.js?v=356"></script><script type="module" src="/profile-bets253.js?v=256"></script></body>
 </html>

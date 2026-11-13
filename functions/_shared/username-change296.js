@@ -12,7 +12,7 @@ const LOCKED=new Set(['admin1','mod','tengaged']);
 export const NAME_COLUMNS=[['casting_players','username'],['user_stats','username'],['game_actions','username'],['game_actions','vote_target'],['game_state','winner_username'],['game_elimination_votes','voter_username'],['game_elimination_votes','target_username'],['game_eliminations','username'],['casting_resources','username'],['user_game_history','username'],['casting_results','username'],['rookies_bets','username'],['rookies_results','username'],['duel_results','username'],['survivor_results','username'],['blog_posts','author'],['design_comments','author'],['community_designs','author']];
 // Tablas con el estado de cada partida en JSON; true si llevan columna revision (control de concurrencia).
 // V337: Survivor también guarda los nombres dentro de la partida.
-export const STATE_TABLES=[['casting_matches',true],['frookies_matches',true],['rookies_matches',true],['duel_matches',true],['survivor_matches',true],['hunger_arena',true],['hunger_history',false]];
+export const STATE_TABLES=[['casting_matches',true],['frookies_matches',true],['rookies_matches',true],['duel_matches',true],['survivor_matches',true],['race_matches',true],['hunger_arena',true],['hunger_history',false]];
 export function checkNewName(value){
  const name=String(value||'').trim();
  if(!/^[A-Za-z0-9_]{3,24}$/.test(name))throw Error('El nombre debe tener entre 3 y 24 caracteres: letras sin tildes, números o guion bajo.');

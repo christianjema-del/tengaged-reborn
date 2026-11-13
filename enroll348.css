@@ -3,3 +3,9 @@
 .page-enroll .enrollment-format.already-in348 img{filter:grayscale(1);opacity:.6}
 .page-enroll .enrollment-format.already-in348>span{color:#999!important}
 .page-enroll .enrollment-format.already-in348:after{content:'×';position:absolute;right:0;top:-9px;color:#e92323;font:bold 44px/1 Arial;text-shadow:0 1px white}
+/* V356: con Race hay 9 juegos: la última fila lleva tres (Race, Hunger y Stars). */
+@media(min-width:681px){
+.page-enroll #formatSelection .enrollment-format:nth-child(7){grid-column:1/span 4}
+.page-enroll #formatSelection .enrollment-format:nth-child(8){grid-column:5/span 4}
+.page-enroll #formatSelection .enrollment-format:nth-child(9){grid-column:9/span 4}
+}

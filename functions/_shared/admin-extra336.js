@@ -1,7 +1,7 @@
 // V336: funciones nuevas del panel de administración (admin1) y de moderación.
 import {playedCount148} from './played-count148.js';
 import {ensureSystemAccount,SYSTEM_NAME} from './system-account.js';
-export const KICK_GAMES336={CASTING:'Casting',HUNGER:'Hunger Games',ROOKIES:'Rookies',DUEL:'El Duelo'};
+export const KICK_GAMES336={CASTING:'Casting',HUNGER:'Hunger Games',ROOKIES:'Rookies',DUEL:'El Duelo',RACE:'Race'};
 const ready=new WeakMap();
 export async function ensurePlayedAdjust336(db){
  if(!ready.has(db))ready.set(db,db.prepare('ALTER TABLE users ADD COLUMN games_played_adjust336 INTEGER NOT NULL DEFAULT 0').run().catch(e=>{if(!/duplicate column/i.test(String(e?.message||e))){ready.delete(db);throw e;}}));

@@ -59,5 +59,5 @@ test('V336: panel: partidas jugadas, aviso de moderación y registro de expulsio
  assert.equal((await call(1,'admin-moderation',{username:'Alice',action:'kick_game',game:'FROOKIES:3',reason:'x'})).status,400);
  const log=sql.prepare("SELECT action,amount,reason FROM admin_audit_log WHERE target_user_id=2 ORDER BY id").all().map(r=>r.action+':'+r.reason);
  assert.ok(log.some(x=>x==='set_played:Partidas del Tengaged original'));assert.ok(log.some(x=>x.startsWith('warn:Insultos · Respeta')));assert.ok(log.some(x=>x==='kick_game:Trampas · Casting #3'));
- const page=readFileSync(new URL('../admin-workbench.js',import.meta.url),'utf8');assert.match(page,/kickFromGame/);assert.match(page,/action:'admin_kick'/);assert.match(readFileSync(new URL('../admin.html',import.meta.url),'utf8'),/admin-page\.js\?v=337/);
+ const page=readFileSync(new URL('../admin-workbench.js',import.meta.url),'utf8');assert.match(page,/kickFromGame/);assert.match(page,/action:'admin_kick'/);assert.match(readFileSync(new URL('../admin.html',import.meta.url),'utf8'),/admin-page\.js\?v=3\d\d/);
 });

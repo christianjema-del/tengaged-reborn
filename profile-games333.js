@@ -4,12 +4,12 @@
 const PER_PAGE=7;
 const MONTHS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 // Burbuja de partida en curso según el juego (posiciones del sprite master.gif).
-const ACTIVE={ROOKIES:'grbutton',FROOKIES:'grbutton',SURVIVOR:'gsvbutton',CASTING:'gbutton',FASTING:'gbutton',DUEL:'gdbutton',HUNGER:'ghbutton'};
-const NAMES={CASTING:'Casting',FASTING:'Fasting',ROOKIES:'Rookies',FROOKIES:'Frookies',SURVIVOR:'Survivor',DUEL:'El Duelo',HUNGER:'Hunger Games'};
+const ACTIVE={ROOKIES:'grbutton',FROOKIES:'grbutton',SURVIVOR:'gsvbutton',CASTING:'gbutton',FASTING:'gbutton',DUEL:'gdbutton',HUNGER:'ghbutton',RACE:'gbutton'};
+const NAMES={CASTING:'Casting',FASTING:'Fasting',ROOKIES:'Rookies',FROOKIES:'Frookies',SURVIVOR:'Survivor',DUEL:'El Duelo',HUNGER:'Hunger Games',RACE:'Race'};
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;};
 export function gameHref333(g){
  const kind=String(g.game_type||'').toUpperCase(),id=encodeURIComponent(g.game_id),active=g.status==='active';
- return kind==='HUNGER'?'/hunger.html'+(active?'':'?edition='+id):kind==='CASTING'||kind==='FASTING'?'/casting-game.html?id='+id:kind==='FROOKIES'?'/frookies.html?id='+id:kind==='DUEL'?'/duel.html?id='+id:kind==='ROOKIES'?'/rookies.html?id='+id:kind==='SURVIVOR'?'/survivor.html?id='+id:'/games.html';
+ return kind==='HUNGER'?'/hunger.html'+(active?'':'?edition='+id):kind==='CASTING'||kind==='FASTING'?'/casting-game.html?id='+id:kind==='FROOKIES'?'/frookies.html?id='+id:kind==='DUEL'?'/duel.html?id='+id:kind==='ROOKIES'?'/rookies.html?id='+id:kind==='SURVIVOR'?'/survivor.html?id='+id:kind==='RACE'?'/race.html?id='+id:'/games.html';
 }
 export function placement333(g){const raw=String(g.placement||'');if(/ganador|unificaci/i.test(raw))return 1;const m=raw.match(/(\d+)/);return m?Number(m[1]):null;}
 export function shortDate333(value){

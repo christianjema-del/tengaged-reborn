@@ -1,0 +1,21 @@
+V356 - Juego nuevo: Race
+Reglas
+- 12 viajeros. Al empezar se forman 6 parejas al azar. Cada viajero tiene 500 € de presupuesto para todo el viaje.
+- Cada etapa (Madrid → Lisboa, Lisboa → Sevilla, Sevilla → Barcelona, Barcelona → París, París → Ámsterdam…) eliges cómo viajar antes de jugar:
+  Andando (gratis), Autobús (60 €, +10 %), Ferry (90 €, +15 %), Tren (120 €, +20 %), Coche de alquiler (180 €, +30 %).
+  Se puede cambiar hasta empezar la prueba; al cambiar se devuelve lo del anterior. No se puede gastar más de lo que queda.
+- Todos juegan el mismo minijuego de la etapa (los de la web), un intento. Puntos de pareja = suma de los dos resultados con la mejora de su transporte.
+- La pareja con menos puntos llega la última y queda eliminada (puestos 6.º, 5.º, 4.º, 3.º). Empate: más dinero sin gastar, luego más usuarios reales, luego quien guardó antes.
+- Con dos parejas, etapa final: la primera gana (1.º) y la otra queda 2.ª. Las dos personas de una pareja comparten puesto.
+- Cada etapa dura como máximo 4 horas o termina antes si todos han jugado. Una prueba sin guardar puntúa cero. Los bots puntúan cero.
+- Premios por pareja, a cada miembro: 1.ª 30 karma + 60 T$, 2.ª 15 + 35, 3.ª 10 + 20, 4.ª 5 + 10. Entrada gratuita.
+- Como Frookies, Casting, Rookies y El Duelo: cuenta atrás de 10 minutos desde que se inscribe un usuario real y empieza solo con bots. admin1 y RelsB pueden completar con bots e iniciar antes, y expulsar.
+- Una partida de Race a la vez por usuario.
+Archivos
+- functions/_shared/race356.js (reglas), race-service356.js (guardado, historial y premios), functions/api/race.js.
+- race.html, race-page356.js, race356.css (misma maqueta y estilos que El Duelo, cabecera y transporte propios), race-challenge.html y race-challenge356.js.
+- assets/formats/race.png (tarjeta de «Elige tu juego») y assets/preview/race.jpg.
+- Conectado en: inscripción (enrollment-*), lista de juegos, pestañas de partidas activas, «Mis Juegos» del perfil, chat de la partida, feed, panel de administración (Partidas y expulsar), avisos de inicio, tick, cambio de nombre, una partida a la vez, vista previa de enlaces y _routes.json.
+- Minijuegos: subcontexto «race» en functions/microgames.js y original-flash.js (casting-minigame-launcher.js importa original-flash ?v=356).
+- prize-catalog.js: tabla «race».
+- Test: tests/race356.test.mjs; tests antiguos con números de versión fijos ahora aceptan cualquier versión.

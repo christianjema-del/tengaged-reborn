@@ -1,3 +1,4 @@
+import {raceMatch} from './_shared/race-service356.js';
 import {duelMatch} from './_shared/duel-service212.js';
 import {survivorMatch} from './_shared/survivor-service.js';
 // «12» → día 1, prueba de inmunidad; «11» → día 1, prueba de tribu; «1:tribe» (formato antiguo) también vale.
@@ -28,6 +29,16 @@ export async function onRequestGet({request,env}){
    const id=Number(header.contextId),stage=Number(header.subcontextId),saving=payload.function==='requestSaveGameData';
    if(header.context!=='game'||!Number.isSafeInteger(id)||id<1||!Number.isSafeInteger(stage)||stage<1)throw Error('Partida no válida.');
    const result=await duelMatch(env.DB,id,user,{action:saving?'flash_finish':'flash_start',stage,kind,token:header.code,points:payload.data?.points},true,game),run=result.attempt;
+   const left=Math.max(0,Math.min(Math.ceil((result.match.deadline-Date.now())/1000),Math.ceil((run.startedAt+run.duration*1000-Date.now())/1000)));
+   return reply({error:0,recorded:saving,header:{code:run.token},data:saving?{points:run.score,timeleft:0}:{...result.data,timeleft:left,...(Object.hasOwn(result.data,'gameTotalTimeLeft')?{gameTotalTimeLeft:left}:{})}},game);
+  }
+  if(header.subcontext==='race'){
+   // V356: Race usa el mismo puente que El Duelo: un intento por etapa y la puntuación queda privada hasta cerrarla.
+   if(request.headers.get('Sec-Fetch-Site')==='cross-site'||(request.headers.has('Origin')&&request.headers.get('Origin')!==url.origin))throw Error('Origen no permitido.');
+   await ensureProfileSchema(env.DB);const user=await getSessionUser(request,env.DB);if(!user)throw Error('Inicia sesión para jugar.');
+   const id=Number(header.contextId),stage=Number(header.subcontextId),saving=payload.function==='requestSaveGameData';
+   if(header.context!=='game'||!Number.isSafeInteger(id)||id<1||!Number.isSafeInteger(stage)||stage<1)throw Error('Partida no válida.');
+   const result=await raceMatch(env.DB,id,user,{action:saving?'flash_finish':'flash_start',stage,kind,token:header.code,points:payload.data?.points},true,game),run=result.attempt;
    const left=Math.max(0,Math.min(Math.ceil((result.match.deadline-Date.now())/1000),Math.ceil((run.startedAt+run.duration*1000-Date.now())/1000)));
    return reply({error:0,recorded:saving,header:{code:run.token},data:saving?{points:run.score,timeleft:0}:{...result.data,timeleft:left,...(Object.hasOwn(result.data,'gameTotalTimeLeft')?{gameTotalTimeLeft:left}:{})}},game);
   }

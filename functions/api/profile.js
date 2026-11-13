@@ -154,7 +154,7 @@ async function handle141_onRequest({ request, env }) {
     }
     // V333: día de juego de las partidas en curso, para las burbujas de «Mis Juegos» (como en Tengaged).
     try{
-      const tables={ROOKIES:['rookies_matches','day'],FROOKIES:['frookies_matches','round'],SURVIVOR:['survivor_matches','day'],DUEL:['duel_matches','round']};
+      const tables={ROOKIES:['rookies_matches','day'],FROOKIES:['frookies_matches','round'],SURVIVOR:['survivor_matches','day'],DUEL:['duel_matches','round'],RACE:['race_matches','leg']};
       for(const [type,[table,field]] of Object.entries(tables)){
         const ids=[...new Set(gameHistory.results.filter(g=>g.game_type===type&&g.status==='active'&&g.day==null).map(g=>Number(g.game_id)).filter(Number.isSafeInteger))].slice(0,20);
         if(!ids.length)continue;

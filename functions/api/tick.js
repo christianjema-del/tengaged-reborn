@@ -2,9 +2,9 @@ import {withStorageGuard} from '../_shared/storage-guard141.js';
 // V299: lista las partidas en curso para que el Worker programado (tick-worker/) las visite cada minuto.
 // Cada visita es la misma petición anónima que hace la página del juego, así que el juego avanza
 // con sus propias reglas aunque ningún usuario tenga la página abierta.
-const GAMES=[['casting_matches','/api/castings?id='],['frookies_matches','/api/frookies?id='],['duel_matches','/api/duel?id='],['rookies_matches','/api/rookies?id='],['survivor_matches','/api/survivor?id=']];
+const GAMES=[['casting_matches','/api/castings?id='],['frookies_matches','/api/frookies?id='],['duel_matches','/api/duel?id='],['rookies_matches','/api/rookies?id='],['survivor_matches','/api/survivor?id='],['race_matches','/api/race?id=']];
 export async function tickTargets(db){
- const names=new Set((await db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('casting_matches','frookies_matches','duel_matches','rookies_matches','survivor_matches','hunger_arena','design_auctions')").all()).results.map(r=>r.name));
+ const names=new Set((await db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('casting_matches','frookies_matches','duel_matches','rookies_matches','survivor_matches','race_matches','hunger_arena','design_auctions')").all()).results.map(r=>r.name));
  const targets=[];
  for(const [table,path] of GAMES){if(!names.has(table))continue;
   const rows=(await db.prepare(`SELECT id FROM ${table} WHERE json_extract(state,'$.phase')<>'finished' ORDER BY id LIMIT 40`).all()).results;
