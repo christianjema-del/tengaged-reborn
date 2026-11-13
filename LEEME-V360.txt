@@ -1,0 +1,7 @@
+V360 - Race: la burbuja nueva se ve de verdad, y premios 1.º-3.º
+- La esfera nueva de Race (V359) no se veía porque profile-games333.css seguía publicándose con el mismo número de versión (?v=358) que antes del cambio, y el navegador tenía guardada la hoja de estilos vieja (con la tarjeta rectangular). Al subir el número a ?v=359 en profile.html, se fuerza a descargarla de nuevo.
+- Tabla de premios de Race (cada miembro de la pareja, por puesto):
+  1.º 60 karma y 120 T$ · 2.º 35 karma y 80 T$ · 3.º 20 karma y 60 T$. Del 4.º al 6.º no hay premio.
+  (prize-catalog.js, entrada «race»; antes era [[30,60],[15,35],[10,20],[5,10],[0,0],[0,0]])
+- Actualizado el texto de ayuda de la página de Race con la tabla de premios nueva.
+- Test: tests/race356.test.mjs comprueba la tabla de premios completa (1.º a 6.º).

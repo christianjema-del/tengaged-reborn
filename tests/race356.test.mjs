@@ -120,4 +120,12 @@ assert.equal(LEG_MS,8*60000,'cada etapa dura 8 minutos');
  assert.match(css,/\.gracebtn\{[^}]*assets\/bubbles\/race-sphere\.png/,'la burbuja de Race es su propia esfera, no la tarjeta rectangular');
  assert.match(css,/\.grbutton,#profileGames333 \.gsvbutton,#profileGames333 \.gbutton,#profileGames333 \.gdbutton,#profileGames333 \.ghbutton,#profileGames333 \.gracebtn\{/,'conserva el tamaño y la posición del resto de burbujas');
 }
-console.log('PASS V356/V357/V358: Race completo: parejas, presupuesto, transporte (con su coste visible y el estilo de la web), privacidad, etapas de 8 minutos fijos, minijuegos, eliminación por etapas, final, premios únicos, una partida a la vez y burbuja propia en el perfil');
+// V360: la tabla de premios de Race (1.º-3.º cobran, del 4.º al 6.º no hay premio).
+{
+ const {gamePrize}=await import('../prize-catalog.js');
+ assert.deepEqual(gamePrize('race',1),{karma:60,money:120},'1.º 60 karma y 120 T$');
+ assert.deepEqual(gamePrize('race',2),{karma:35,money:80},'2.º 35 karma y 80 T$');
+ assert.deepEqual(gamePrize('race',3),{karma:20,money:60},'3.º 20 karma y 60 T$');
+ for(const place of [4,5,6])assert.deepEqual(gamePrize('race',place),{karma:0,money:0},place+'.º sin premio');
+}
+console.log('PASS V356/V357/V358/V359/V360: Race completo: parejas, presupuesto, transporte (con su coste visible y el estilo de la web), privacidad, etapas de 8 minutos fijos, minijuegos, eliminación por etapas, final, premios de la tabla (1.º-3.º) y sin premio del 4.º al 6.º, pago único, una partida a la vez y burbuja propia en el perfil');
