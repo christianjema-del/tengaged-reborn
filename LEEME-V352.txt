@@ -1,0 +1,5 @@
+V352 - Dos GIF más para Cristi
+- full-avatar115.js: huellas de los dos GIF (el del enlace de Giphy y el que se adjuntó), recortados a 140x161 como los demás.
+- avatar-editor.js ?v=352 y avatar.html.
+- Base de datos (tras publicar): se añaden gratis al armario de Cristi como «Avatar completo · GIF animado 3» y «… 4», retirados de la venta y listos para equiparse. Al equiparlos solo se ve el GIF.
+- Test: tests/photo-gifts352.test.mjs.
