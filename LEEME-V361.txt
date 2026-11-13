@@ -1,0 +1,6 @@
+V361 - Race: el transporte se elige o se cambia en cualquier momento de la etapa
+- Hasta ahora, una vez que empezabas (o terminabas) la prueba de la etapa, el transporte se bloqueaba: no se podía elegir ni cambiar. Eso era lo que impedía elegir método de transporte después de jugar el minijuego.
+- Ahora el transporte se puede decidir y cambiar las veces que haga falta durante toda la etapa (antes de jugar, después de jugar, o sin haber jugado todavía), mientras la etapa siga abierta. La mejora que se aplica a tu puntuación es siempre la del transporte que tengas elegido cuando la etapa se cierre, a los 8 minutos.
+- En «Cómo funciona Race» se ha quitado la frase de que cada etapa dura como máximo 4 horas (ya dura 8 minutos fijos desde la V358) y se explica el cambio de transporte en cualquier momento.
+- No hace falta tocar las partidas en marcha: el cambio se aplica solo al publicarse, sin ninguna corrección en la base de datos.
+- Test: tests/race356.test.mjs comprueba que el transporte se puede cambiar antes y después de jugar la prueba, incluso después de guardar la puntuación.

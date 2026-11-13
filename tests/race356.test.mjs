@@ -13,12 +13,16 @@ const T=Date.UTC(2026,10,13,12,0),admin={id:1,username:'admin1',is_admin:1},ana=
  actRace(s,ana,{action:'transport',kind:'car',stage:s.stage},T+2000);assert.equal(s.players.find(p=>p.id===20).money,RACE_START_MONEY-180);
  actRace(s,ana,{action:'transport',kind:'train',stage:s.stage},T+3000);assert.equal(s.players.find(p=>p.id===20).money,RACE_START_MONEY-120,'cambiar devuelve el anterior');
  s.players.find(p=>p.id===21).money=50;assert.throws(()=>actRace(s,leo,{action:'transport',kind:'bus',stage:s.stage},T+3000),/dinero/);actRace(s,leo,{action:'transport',kind:'walk',stage:s.stage},T+3000);
- // Prueba por el puente del minijuego: un intento, y después ya no se cambia el transporte.
+ // Prueba por el puente del minijuego: un intento de la prueba, pero el transporte se puede seguir cambiando.
  assert.throws(()=>actRace(s,ana,{action:'flash_start',stage:s.stage,kind:s.challenge},T+4000),/no permitida/,'solo desde el minijuego');
  actRace(s,ana,{action:'flash_start',stage:s.stage,kind:s.challenge},T+4000,true);const tok=s.runs[20].token;
- assert.throws(()=>actRace(s,ana,{action:'transport',kind:'bus',stage:s.stage},T+5000),/decidido/);
+ // V361: aunque ya haya empezado (o terminado) la prueba, puede seguir eligiendo transporte las veces que haga falta.
+ actRace(s,ana,{action:'transport',kind:'bus',stage:s.stage},T+5000);assert.equal(s.players.find(p=>p.id===20).money,RACE_START_MONEY-60,'cambia el transporte después de empezar la prueba');
+ actRace(s,ana,{action:'transport',kind:'train',stage:s.stage},T+5500);
  actRace(s,ana,{action:'flash_finish',stage:s.stage,kind:s.challenge,token:tok,points:1000},T+10000,true);assert.equal(travellerPoints(s,s.players.find(p=>p.id===20)),1200,'tren +20 %');
- actRace(s,leo,{action:'flash_start',stage:s.stage,kind:s.challenge},T+4000,true);actRace(s,leo,{action:'flash_finish',stage:s.stage,kind:s.challenge,token:s.runs[21].token,points:500},T+10000,true);
+ actRace(s,ana,{action:'transport',kind:'car',stage:s.stage},T+10500);assert.equal(travellerPoints(s,s.players.find(p=>p.id===20)),1300,'cambia incluso después de guardar la puntuación: coche +30 %');
+ actRace(s,ana,{action:'transport',kind:'train',stage:s.stage},T+11000);assert.equal(s.players.find(p=>p.id===20).money,RACE_START_MONEY-120,'vuelve a tren para el resto de la prueba');
+ actRace(s,leo,{action:'flash_start',stage:s.stage,kind:s.challenge},T+11500,true);actRace(s,leo,{action:'flash_finish',stage:s.stage,kind:s.challenge,token:s.runs[21].token,points:500},T+13000,true);
  // V358: aunque todos ya hayan jugado, la etapa dura siempre 8 minutos enteros (el transporte se puede cambiar hasta el final).
  const leg1Deadline=s.deadline;assert.equal(leg1Deadline-T,LEG_MS+1000,'8 minutos desde que empezó la etapa');
  assert.equal(advanceRace(s,T+11000),false,'con todos listos pero sin agotar los 8 minutos, sigue abierta');assert.equal(s.leg,1);
@@ -128,4 +132,4 @@ assert.equal(LEG_MS,8*60000,'cada etapa dura 8 minutos');
  assert.deepEqual(gamePrize('race',3),{karma:20,money:60},'3.º 20 karma y 60 T$');
  for(const place of [4,5,6])assert.deepEqual(gamePrize('race',place),{karma:0,money:0},place+'.º sin premio');
 }
-console.log('PASS V356/V357/V358/V359/V360: Race completo: parejas, presupuesto, transporte (con su coste visible y el estilo de la web), privacidad, etapas de 8 minutos fijos, minijuegos, eliminación por etapas, final, premios de la tabla (1.º-3.º) y sin premio del 4.º al 6.º, pago único, una partida a la vez y burbuja propia en el perfil');
+console.log('PASS V356-V361: Race completo: parejas, presupuesto, transporte (su coste visible, el estilo de la web, y se puede cambiar en cualquier momento de la etapa aunque ya se haya jugado), privacidad, etapas de 8 minutos fijos, minijuegos, eliminación por etapas, final, premios de la tabla (1.º-3.º) y sin premio del 4.º al 6.º, pago único, una partida a la vez y burbuja propia en el perfil');

@@ -117,7 +117,8 @@ export function actRace(s,user,input,now=Date.now(),bridge=false){
  }
  if(!p||p.status!=='active'||['waiting','finished'].includes(s.phase))throw Error('No puedes actuar en esta partida.');
  if(input.action==='transport'){
-  if(s.runs[p.id])throw Error('Ya has empezado la prueba: el transporte de esta etapa está decidido.');
+  // V361: el transporte se puede decidir y cambiar en cualquier momento de la etapa, hayas hecho ya la
+  // prueba o no; la mejora se aplica con el transporte que tengas elegido cuando se cierre la etapa.
   if(input.stage!==undefined&&input.stage!==s.stage)throw Error('La etapa ha cambiado. Actualiza la página.');
   chooseTransport(s,p,String(input.kind||''));return;
  }

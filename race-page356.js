@@ -49,10 +49,11 @@ function trip(){
  if(s.phase==='waiting')note=s.players.length+' de 12 plazas. Cada viajero empieza con '+euros(s.startMoney)+'.';
  else if(!me)note='Sigue la carrera: cada etapa, la pareja que llega la última queda eliminada.';
  else if(me.status!=='active')note='Tu pareja ha quedado fuera de la carrera'+(me.placement?' en el puesto '+me.placement:'')+'. Puedes seguir leyendo el chat.';
- else if(me.saved)note='Prueba guardada: '+me.score+' puntos'+(me.points!==me.score?' ('+me.points+' con tu transporte)':'')+'. Los resultados se verán al llegar.';
- else note=(me.hasAttempt?'Has empezado la prueba: tu transporte ya está decidido. ':'Elige cómo viajar y juega ')+(CASTING_MINIGAMES[s.challenge]||'la prueba')+'. Solo hay un intento.';
+ // V361: el transporte se puede cambiar en cualquier momento de la etapa, hayas jugado ya o no.
+ else if(me.saved)note='Prueba guardada: '+me.score+' puntos'+(me.points!==me.score?' ('+me.points+' con tu transporte)':'')+'. Puedes seguir cambiando el transporte hasta que acabe la etapa.';
+ else note=(me.hasAttempt?'Has empezado la prueba. Puedes cambiar el transporte cuando quieras mientras dure la etapa. ':'Elige cómo viajar (puedes cambiarlo cuando quieras) y juega ')+(CASTING_MINIGAMES[s.challenge]||'la prueba')+'. Solo hay un intento de la prueba.';
  $('race-note').textContent=note;
- const box=$('race-transports'),choose=playing&&me?.status==='active'&&!me.hasAttempt;box.hidden=!(playing&&me?.status==='active');
+ const box=$('race-transports'),choose=playing&&me?.status==='active';box.hidden=!(playing&&me?.status==='active');
  if(!box.hidden)box.replaceChildren(...Object.entries(s.transports).map(([kind,t])=>{
   const chosen=(me.transport||'walk')===kind,afford=me.money+(me.transport?s.transports[me.transport].cost:0)>=t.cost;
   const b=el('button','','race-transport'+(chosen?' chosen':''));b.type='button';b.disabled=!choose||!afford||chosen;b.setAttribute('aria-pressed',String(chosen));
