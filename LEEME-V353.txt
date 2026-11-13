@@ -1,0 +1,5 @@
+V353 - Otro GIF para Bowsy
+- full-avatar115.js: huella del GIF de Tenor (tenor.com/bezNU.gif -> media1.tenor.com/.../ligando-mirando.gif), recortado a 140x161 como los demás.
+- avatar-editor.js ?v=353 y avatar.html.
+- Base de datos (tras publicar): gratis en el armario de Bowsy como «Avatar completo · GIF animado 3», retirado de la venta y listo para equiparse. Al equiparlo solo se ve el GIF.
+- Test: tests/photo-gifts353.test.mjs.
