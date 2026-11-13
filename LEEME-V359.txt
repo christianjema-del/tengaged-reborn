@@ -1,0 +1,5 @@
+V359 - Race: burbuja de verdad y arreglo de las etapas atascadas
+- La burbuja de Race en «Mis Juegos» del perfil se veía como la tarjeta rectangular de inscripción (con la cinta «fast game» y las esquinas cuadradas), distinta a las esferas brillantes de los demás juegos. Ahora es una esfera propia (dorado/ámbar, para no compartir color con la pálida de Casting), con el mismo tamaño y posición; el texto («Entrar», «Fin», el puesto) no se ha tocado.
+  Nuevos archivos: assets/bubbles/race-sphere.png y race-sphere-hover.png.
+- Las etapas de Race podían seguir durando más de 8 minutos: la V358 cambió la duración a 8 minutos, pero las partidas que ya estaban en marcha conservaban la cuenta atrás larga de antes (hasta 4 horas) hasta que cerraran por su cuenta. Se ha corregido en la base de datos: los Race #1 y #2, que llevaban una etapa en marcha desde antes de la V358, se han cerrado ya y han pasado a su siguiente etapa con el cronómetro correcto (8 minutos). Ningún Race se queda ya con una etapa de más de 8 minutos.
+- Test: tests/race356.test.mjs corregido para comprobar la esfera en vez de la tarjeta.

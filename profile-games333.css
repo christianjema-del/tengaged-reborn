@@ -18,8 +18,9 @@
 #profileGames333 .gdbutton{background-position:-324px -203px;color:#5e311b}
 /* Hunger: siempre el sinsajo negro con el texto amarillo. */
 #profileGames333 .ghbutton{background-position:-442px -203px;color:#f1d749}
-/* V358: Race usa su propia tarjeta de inscripción en vez del sprite, para no compartir color con Casting. */
-#profileGames333 .gracebtn{background:linear-gradient(rgba(8,36,66,.42),rgba(8,36,66,.42)),url('/assets/formats/race.png') center 58%/cover no-repeat;padding-left:0;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.75)}
+/* V359: la burbuja de Race es una esfera brillante como las demás (no la tarjeta rectangular de inscripción),
+   en dorado/ámbar para no compartir color con la esfera celeste pálida de Casting. */
+#profileGames333 .gracebtn{background:url('/assets/bubbles/race-sphere.png') center/58px 58px no-repeat;padding-left:0;color:#6b3d05;text-shadow:0 1px 1px rgba(255,255,255,.55)}
 #profileGames333 .num{font-size:25px;letter-spacing:-2px}
 #profileGames333 .num .ordinal{letter-spacing:-5px}
 /* Al pasar el ratón o pulsar: la segunda burbuja del sprite (Hunger se pone dorado solo entonces). */
@@ -28,7 +29,7 @@
 #profileGames333 .gbutton:hover,#profileGames333 .gbutton:active,#profileGames333 .gbutton:focus-visible{background-position:-360px 0}
 #profileGames333 .gdbutton:hover,#profileGames333 .gdbutton:active,#profileGames333 .gdbutton:focus-visible{background-position:-384px -203px;color:#fff}
 #profileGames333 .ghbutton:hover,#profileGames333 .ghbutton:active,#profileGames333 .ghbutton:focus-visible{background-position:-502px -203px;color:#fff;text-shadow:0 1px 2px #5a4310}
-#profileGames333 .gracebtn:hover,#profileGames333 .gracebtn:active,#profileGames333 .gracebtn:focus-visible{background-position:center 68%}
+#profileGames333 .gracebtn:hover,#profileGames333 .gracebtn:active,#profileGames333 .gracebtn:focus-visible{background-image:url('/assets/bubbles/race-sphere-hover.png')}
 #profileGames333 .inuser-games .status{display:block;width:65px;height:33px;overflow:hidden;background:#e7f0f9;color:#4682b4;font:9px/11px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center}
 #profileGames333 .fastsign{float:left;height:11px;padding:1px;background:#2a5f84;color:#fff;font:9px/11px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center}
 #profileGames333 .inuser-games-empty{margin:0;color:#5d5d5d;font:12px Verdana,Geneva,Arial,sans-serif}

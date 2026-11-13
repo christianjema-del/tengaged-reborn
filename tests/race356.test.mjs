@@ -117,7 +117,7 @@ assert.equal(LEG_MS,8*60000,'cada etapa dura 8 minutos');
 {
  assert.match(readFileSync(new URL('../profile-games333.js',import.meta.url),'utf8'),/RACE:'gracebtn'/,'Race ya no usa gbutton (el de Casting)');
  const css=readFileSync(new URL('../profile-games333.css',import.meta.url),'utf8');
- assert.match(css,/\.gracebtn\{[^}]*assets\/formats\/race\.png/,'la burbuja de Race usa su propia tarjeta');
+ assert.match(css,/\.gracebtn\{[^}]*assets\/bubbles\/race-sphere\.png/,'la burbuja de Race es su propia esfera, no la tarjeta rectangular');
  assert.match(css,/\.grbutton,#profileGames333 \.gsvbutton,#profileGames333 \.gbutton,#profileGames333 \.gdbutton,#profileGames333 \.ghbutton,#profileGames333 \.gracebtn\{/,'conserva el tamaño y la posición del resto de burbujas');
 }
 console.log('PASS V356/V357/V358: Race completo: parejas, presupuesto, transporte (con su coste visible y el estilo de la web), privacidad, etapas de 8 minutos fijos, minijuegos, eliminación por etapas, final, premios únicos, una partida a la vez y burbuja propia en el perfil');
