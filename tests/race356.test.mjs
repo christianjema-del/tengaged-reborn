@@ -29,6 +29,39 @@ const T=Date.UTC(2026,10,13,12,0),admin={id:1,username:'admin1',is_admin:1},ana=
  assert.ok(s.players.filter(p=>p.placement===1).length===2,'la pareja ganadora: los dos con el 1.º');assert.ok(s.winner.includes(' y '));
  assert.equal(s.players.find(p=>p.id===20).placement,1,'la pareja con usuarios reales que juegan gana a las de bots');
 }
+// V357: el dinero y el transporte de las demás parejas son privados; solo se ven los tuyos y los de tu pareja.
+{
+ const s=freshRace(7,T);s.phase='leg';s.leg=2;s.stage=2;s.deadline=T+LEG_MS;s.challenge='GUITAR';
+ s.players=[{id:20,username:'Ana',status:'active',placement:null,money:380,pair:1},{id:-701,username:'Bot · R7 · 1',bot:true,status:'active',placement:null,money:500,pair:1},
+  {id:-702,username:'Bot · R7 · 2',bot:true,status:'active',placement:null,money:440,pair:2},{id:-703,username:'Bot · R7 · 3',bot:true,status:'active',placement:null,money:320,pair:2}];
+ s.pairs=[{id:1,members:[20,-701],status:'active',placement:null},{id:2,members:[-702,-703],status:'active',placement:null}];
+ s.choices={20:'train',[-701]:'walk',[-702]:'car',[-703]:'bus'};
+ s.history=[{leg:1,stage:1,from:'Madrid',to:'Lisboa',challenge:'GUITAR',results:[{pair:1,points:900,members:[{id:20,username:'Ana',score:400,points:480,transport:'train'},{id:-701,username:'Bot · R7 · 1',score:420,points:420,transport:'walk'}]},{pair:2,points:700,members:[{id:-702,username:'Bot · R7 · 2',score:300,points:390,transport:'car'},{id:-703,username:'Bot · R7 · 3',score:310,points:310,transport:'bus'}]}]}];
+ const mine=raceView(s,{id:20,username:'Ana'},T);
+ const me357=mine.players.find(p=>p.id===20),partner357=mine.players.find(p=>p.id===-701),rival1=mine.players.find(p=>p.id===-702),rival2=mine.players.find(p=>p.id===-703);
+ assert.equal(me357.money,380,'tu dinero se ve');assert.equal(me357.transport,'train');
+ assert.equal(partner357.money,500,'el dinero de tu pareja se ve');assert.equal(partner357.transport,'walk');
+ assert.equal(rival1.money,null,'el dinero de otra pareja es privado');assert.equal(rival1.transport,null,'su transporte también');
+ assert.equal(rival2.money,null);assert.equal(rival2.transport,null);
+ const h=mine.history[0],myResult=h.results.find(r=>r.pair===1),otherResult=h.results.find(r=>r.pair===2);
+ assert.equal(myResult.members.find(m=>m.id===20).transport,'train','tu etapa anterior: tu transporte se ve');
+ assert.equal(myResult.members.find(m=>m.id===-701).transport,'walk','y el de tu pareja');
+ assert.ok(otherResult.members.every(m=>m.transport===null),'el transporte de otra pareja en etapas pasadas sigue siendo privado');
+ assert.ok(otherResult.members.every(m=>Number.isFinite(m.points)),'los puntos de la etapa ya cerrada sí son públicos');
+ const rival=raceView(s,{id:-702,username:'Bot · R7 · 2'},T);assert.equal(rival.players.find(p=>p.id===20).money,null,'y al revés');
+}
+// Panel de la etapa, insignias de equipo e icono de transporte: diseño de la web (V357).
+{
+ const page=readFileSync(new URL('../race-page356.js',import.meta.url),'utf8');
+ assert.doesNotMatch(page,/race-transport-badge/,'ya no se dibuja el transporte sobre los avatares de arriba');
+ assert.match(page,/Equipo\s*'\+p\.pair/,'las plazas muestran «Equipo N»');
+ assert.match(page,/race-team-badge race-team-/,'con una clase de color por equipo');
+ const css=readFileSync(new URL('../race356.css',import.meta.url),'utf8');
+ for(const n of [1,2,3,4,5,6])assert.match(css,new RegExp('\\.race-team-'+n+'\\{background:'));
+ assert.match(css,/assets\/formats\/race\.png/,'la cabecera lleva la tarjeta de inscripción de fondo');
+ const games=readFileSync(new URL('../games-list258.css',import.meta.url),'utf8');
+ assert.match(games,/type-cell\.race,[\s\S]{0,200}background:#bfe0f2/,'la lista de juegos pinta Race del color de su tarjeta');
+}
 // Inicio automático a los 10 minutos (como Frookies, Casting, Rookies y El Duelo).
 {const s=freshRace(6,T);actRace(s,ana,{action:'join'},T);advanceRace(s,T+600001);assert.equal(s.phase,'leg');assert.equal(s.players.length,12);assert.equal(s.pairs.length,6);}
 // API con base de datos: inscribirse, completar, iniciar, elegir transporte y premios al terminar.
@@ -52,7 +85,7 @@ await call('/api/race?id='+lobby,20);await call('/api/race?id='+lobby,21);
 const paid=sql.prepare('SELECT user_id,placement,karma,money,pending FROM race_results ORDER BY user_id').all();assert.ok(paid.every(p=>p.pending===0));
 for(const p of paid){const u=sql.prepare('SELECT karma,t_money FROM users WHERE id=?').get(p.user_id);assert.equal(u.karma,p.karma);assert.equal(u.t_money,p.money,'pagado una vez');}
 // Página, inscripción y lista de juegos.
-const page=readFileSync(new URL('../race.html',import.meta.url),'utf8');for(const t of ['race-page356.js?v=356','game-chat.js?v=356','race356.css?v=356','Cómo funciona Race'])assert.ok(page.includes(t),t);
+const page=readFileSync(new URL('../race.html',import.meta.url),'utf8');for(const t of ['race-page356.js?v=357','game-chat.js?v=356','race356.css?v=357','Cómo funciona Race'])assert.ok(page.includes(t),t);
 assert.match(readFileSync(new URL('../enrollment-formats.js',import.meta.url),'utf8'),/race:\{name:'Race',image:'race\.png',implemented:true/);
 assert.match(readFileSync(new URL('../functions/microgames.js',import.meta.url),'utf8'),/header\.subcontext==='race'/);
 assert.match(readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),/options\.race\?'race'/);

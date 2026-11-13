@@ -1,0 +1,8 @@
+V357 - Puesta a punto de Race
+- Insignias de equipo: en vez de «P1», «P2»… ahora pone «Equipo 1», «Equipo 2»… más pequeñas, y cada equipo tiene un color distinto (verde, azul, rojo, morado, naranja, turquesa).
+- Los avatares de arriba ya no muestran el icono del transporte de cada uno: era privado de cada pareja.
+- Apartado «Tu pareja»: solo se ve tu avatar y el de tu compañero, con vuestros nombres. El dinero y el transporte de las demás parejas ya no llegan ni al navegador (se ocultan en el servidor, no solo en la pantalla).
+- Etapa actual rediseñada con el estilo de la web: ruta con pines (📍 Madrid → 📍 Lisboa), presupuesto en una pastilla azul, aviso con el borde rosa de los avisos del sitio, y los botones de transporte y «Jugar prueba» con el mismo amarillo que el resto de botones del juego.
+- Cabecera (Race #N / ETAPA N / cronómetro): ya no es un recuadro en blanco, lleva de fondo (muy suave, para que se siga leyendo) la misma tarjeta de inscripción de Race.
+- Lista de juegos: la fila de Race ya tiene color (azul cielo, el de su tarjeta), antes salía sin colorear.
+- Test: tests/race356.test.mjs ampliado (privacidad del dinero/transporte, insignias de equipo, fondo de la cabecera, color en la lista de juegos).

@@ -139,9 +139,9 @@ export function raceView(s,user,now=Date.now()){
  return {canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===RACE_CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<RACE_CAPACITY,manualStartRequired:true,
   id:s.id,phase:s.phase,leg:s.leg,stage:s.stage,route:s.leg?legRoute(s.leg):null,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline??autoDeadline351(s),autoStartAt:autoDeadline351(s),now,capacity:RACE_CAPACITY,fee:0,startMoney:RACE_START_MONEY,challenge:s.challenge,winner:s.winner||null,transports:TRANSPORTS,
   pairs:(s.pairs||[]).map(pr=>({id:pr.id,members:pr.members,status:pr.status,placement:pr.placement})),
-  // El transporte elegido y el dinero de los demás se ven; las puntuaciones solo al terminar la etapa.
-  players:s.players.map(p=>({id:p.id,username:p.username,status:p.status,placement:p.placement,bot:!!p.bot,pair:p.pair||null,money:playing||s.phase==='finished'?p.money:null,transport:playing&&p.status==='active'?(s.choices[p.id]||null):null,challengePending:playing&&p.status==='active'&&!s.runs[p.id]?.saved})),
-  events:s.events.slice(-30),history:s.history,
+  // V357: el dinero y el transporte son privados de cada pareja: solo se ven los tuyos y los de tu pareja.
+  players:s.players.map(p=>{const own=!!me&&(p.id===me.id||p.id===partner);return {id:p.id,username:p.username,status:p.status,placement:p.placement,bot:!!p.bot,pair:p.pair||null,money:own?p.money:null,transport:own&&playing&&p.status==='active'?(s.choices[p.id]||null):null,challengePending:playing&&p.status==='active'&&!s.runs[p.id]?.saved};}),
+  events:s.events.slice(-30),history:(s.history||[]).map(h=>({...h,results:h.results.map(r=>{const mine=!!me&&r.members.some(m=>m.id===me.id);return {pair:r.pair,points:r.points,members:r.members.map(m=>({id:m.id,username:m.username,score:m.score,points:m.points,transport:mine?m.transport:null}))};})})),
   me:me?{id:me.id,username:me.username,status:me.status,placement:me.placement,pair:me.pair||null,partner,money:me.money,canPlay:playing&&me.status==='active',hasAttempt:!!run,saved:!!run?.saved,score:run?.saved?run.score:null,points:run?.saved?travellerPoints(s,me):null,transport:s.choices[me.id]||null}:null,
   whispers:me?s.whispers.filter(w=>w.from===me.id||w.to===me.id):[]};
 }

@@ -12,9 +12,9 @@ function person(p){
  photo.alt=p.username;if(p.bot)photo.src='/assets/hunger/tributes/0.svg';else setAvatar(photo,p.username);
  a.href='/profile.html?username='+encodeURIComponent(p.username);const portrait=el('a');portrait.href=a.href;portrait.append(photo);
  if(!p.bot)seen.dataset.playerLastSeen=p.username;else{seen.textContent='Bot';a.removeAttribute('href');portrait.removeAttribute('href');}
- const badge=el('b',p.placement?p.placement+'º':p.pair?'P'+p.pair:'',p.placement?'duel-place':p.pair?'race-pair-badge':'');
+ // V357: el transporte de cada pareja es privado y no se muestra en los avatares de arriba.
+ const badge=p.placement?el('b',p.placement+'º','duel-place'):p.pair?el('b','Equipo '+p.pair,'race-team-badge race-team-'+(((p.pair-1)%6)+1)):el('b');
  card.append(portrait,a,seen,badge);
- if(p.transport&&s.transports[p.transport]){const t=el('span',s.transports[p.transport].icon,'race-transport-badge');t.title=s.transports[p.transport].name;portrait.append(t);}
  if(p.challengePending){const clock=el('img','','duel-wait220');clock.src='/assets/ui/wait-clock.gif';clock.alt='Prueba pendiente';portrait.append(clock);}
  return card;
 }
@@ -35,9 +35,10 @@ function render(){
 }
 function trip(){
  const playing=['leg','final'].includes(s.phase),me=s.me;
- $('race-trip-title').textContent=s.phase==='waiting'?'Inscripciones abiertas':s.phase==='final'?'Etapa final':'Etapa '+s.leg;
- $('race-route').textContent=playing&&s.route?s.route[0]+' → '+s.route[1]:'';
- $('race-wallet').textContent=me&&playing?'Te quedan '+euros(me.money)+' de presupuesto.':'';
+ $('race-trip-title').textContent=s.phase==='waiting'?'Inscripciones abiertas':s.phase==='final'?'🏁 Etapa final':'🚩 Etapa '+s.leg;
+ $('race-route').replaceChildren();
+ if(playing&&s.route){$('race-route').append(document.createTextNode('📍 '+s.route[0]),el('span',' → ','race-arrow'),document.createTextNode('📍 '+s.route[1]));}
+ $('race-wallet').textContent=me&&playing?'Te quedan '+euros(me.money)+' de presupuesto':'';
  $('race-partner').textContent=me?.partner?'Tu pareja: '+name(me.partner):'';
  let note='';
  if(s.phase==='waiting')note=s.players.length+' de 12 plazas. Cada viajero empieza con '+euros(s.startMoney)+'.';
@@ -56,17 +57,24 @@ function trip(){
  $('race-play').hidden=!(playing&&me?.canPlay&&!me.saved);$('race-play').textContent=me?.hasAttempt?'Reanudar prueba':'Jugar prueba';
 }
 function pairs(){
- if(!s.pairs.length)return;const sig=JSON.stringify([s.pairs,s.players.map(p=>[p.id,p.money,p.status])]);if(sig===pairsSig)return;pairsSig=sig;
- const order=[...s.pairs].sort((a,b)=>(a.status==='active'?0:1)-(b.status==='active'?0:1)||(a.placement||0)-(b.placement||0)||a.id-b.id);
- $('race-pairs').replaceChildren(...order.map(pr=>{const row=el('div','','race-pair'+(pr.status==='eliminated'?' out':'')+(s.me?.pair===pr.id?' mine':''));
-  row.append(el('b','Pareja '+pr.id,'race-pair-name'),el('span',pr.members.map(name).join(' y '),'race-pair-members'));
-  const money=pr.members.reduce((a,id)=>a+(s.players.find(p=>p.id===id)?.money||0),0);
-  row.append(el('small',pr.placement?pr.placement+'º puesto':euros(money)+' entre los dos','race-pair-state'));return row;}));
+ // V357: el dinero de las demás parejas es privado; aquí solo se ve tu pareja.
+ const root=$('race-pairs'),me=s.me,pr=me?.pair?s.pairs.find(x=>x.id===me.pair):null;
+ const sig=JSON.stringify([pr,me?.money,s.players.find(p=>p.id===me?.partner)]);if(sig===pairsSig)return;pairsSig=sig;
+ if(!me||!pr){root.replaceChildren(el('p','Tu pareja se forma al azar cuando empieza el juego.'));return;}
+ const partner=s.players.find(p=>p.id===me.partner);
+ const box=el('div','','race-mypair'+(pr.status==='eliminated'?' out':''));
+ const team=el('b','Equipo '+pr.id,'race-team-badge race-team-'+(((pr.id-1)%6)+1));box.append(team);
+ const grid=el('div','','race-mypair-people');grid.append(person({id:me.id,username:me.username,status:me.status,placement:me.placement,bot:false}));
+ if(partner)grid.append(person(partner));
+ box.append(grid);
+ const money=(Number(me.money)||0)+(Number(partner?.money)||0);
+ box.append(el('p',pr.placement?pr.placement+'º puesto':'Entre los dos: '+euros(money),'race-pair-state'));
+ root.replaceChildren(box);
 }
 function legs(){
  const sig=JSON.stringify(s.history.length);if(sig===legsSig)return;legsSig=sig;if(!s.history.length)return;
  $('race-legs').replaceChildren(...[...s.history].reverse().map(h=>{const box=el('details','','race-leg');const sum=el('summary',(h.leg?'Etapa '+h.leg+': ':'')+h.from+' → '+h.to);box.append(sum);
-  const ol=el('ol');for(const r of h.results){const li=el('li');li.append(el('b','Pareja '+r.pair+' · '+r.points+' pts'),el('span',' '+r.members.map(m=>m.username+' ('+(s.transports[m.transport]?.icon||'')+' '+m.points+')').join(', ')));ol.append(li);}
+  const ol=el('ol');for(const r of h.results){const li=el('li');li.append(el('b','Equipo '+r.pair+' · '+r.points+' pts'),el('span',' '+r.members.map(m=>{const icon=s.transports[m.transport]?.icon;return m.username+' ('+(icon?icon+' ':'')+m.points+')';}).join(', ')));ol.append(li);}
   box.append(ol);return box;}));
  $('race-legs').firstChild.open=true;
 }
