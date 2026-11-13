@@ -1,0 +1,11 @@
+V355 - Vídeos y enlaces en la biografía
+- rich-profile.js: en la biografía del perfil,
+  · los enlaces de YouTube (watch, youtu.be, shorts, móvil, YouTube Music) se ven como el vídeo, con el reproductor de YouTube sin cookies; respeta el minuto de inicio (t=…);
+  · los de Vimeo, también como vídeo;
+  · los archivos .mp4/.webm/.mov se ven con su reproductor;
+  · las imágenes y GIF siguen viéndose como imagen;
+  · el resto de enlaces, https o http, se pueden pulsar (se abren en otra pestaña). Los signos de puntuación del final no entran en el enlace.
+  Solo se aceptan direcciones de YouTube/Vimeo reales; nada de javascript: ni HTML.
+- profile-bio355.css (nuevo): vídeo 16:9 del ancho del recuadro (máx. 480 px), con el borde amarillo de la biografía.
+- profile.html: rich-profile.js ?v=355.
+- Test: tests/bio-media355.test.mjs.
