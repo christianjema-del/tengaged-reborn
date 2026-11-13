@@ -1,0 +1,6 @@
+V354 - GIF para RelsB
+- RelsB es la cuenta id 11 (antes Bowsy).
+- full-avatar115.js: huella del GIF de Tenor (tenor.com/bezN5.gif -> media1.tenor.com/.../feliz-sonriendo.gif), recortado a 140x161.
+- avatar-editor.js ?v=354 y avatar.html.
+- Base de datos (tras publicar): gratis en su armario como «Avatar completo · GIF animado 4», retirado de la venta y listo para equiparse. Al equiparlo solo se ve el GIF.
+- Test: tests/photo-gifts354.test.mjs.
