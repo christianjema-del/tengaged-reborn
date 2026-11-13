@@ -1,0 +1,7 @@
+V358 - Race: transporte, pareja y etapas de 8 minutos
+- Botones de transporte rediseñados con el estilo de la web: tarjeta blanca redondeada con el icono en un círculo, igual que el resto del sitio, en vez del botón amarillo plano. El elegido se marca en rosa.
+- Entre paréntesis, lo que suma cada transporte a tu resultado: la cifra exacta una vez que conoces tu puntuación de la etapa, y un «?» mientras no la conoces (el transporte se elige antes de jugar).
+- Debajo del presupuesto, ahora pone el nombre de tu pareja y el transporte que ha elegido (o que todavía no ha elegido).
+- Las etapas duran siempre 8 minutos exactos. Antes, si todos habían hecho ya la prueba, la etapa se cerraba al momento; ahora se espera siempre el tiempo completo, porque el transporte se puede cambiar hasta el último segundo.
+- La burbuja de Race en «Mis Juegos» del perfil ya no comparte color ni dibujo con Casting: usa su propia tarjeta de inscripción de fondo, oscurecida para que el texto (Entrar/Fin/puesto) se siga leyendo. No cambia ni el tamaño ni la posición del texto ni el número de las demás burbujas.
+- Test: tests/race356.test.mjs ampliado (duración de 8 minutos sin cierre anticipado, paréntesis con la cifra o el «?», transporte de la pareja, estilo nuevo de los botones y burbuja propia del perfil); tests/profile-emblems79.test.mjs corregido para admitir cualquier versión de profile-games333.css.

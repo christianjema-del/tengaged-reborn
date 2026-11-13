@@ -19,10 +19,14 @@ const T=Date.UTC(2026,10,13,12,0),admin={id:1,username:'admin1',is_admin:1},ana=
  assert.throws(()=>actRace(s,ana,{action:'transport',kind:'bus',stage:s.stage},T+5000),/decidido/);
  actRace(s,ana,{action:'flash_finish',stage:s.stage,kind:s.challenge,token:tok,points:1000},T+10000,true);assert.equal(travellerPoints(s,s.players.find(p=>p.id===20)),1200,'tren +20 %');
  actRace(s,leo,{action:'flash_start',stage:s.stage,kind:s.challenge},T+4000,true);actRace(s,leo,{action:'flash_finish',stage:s.stage,kind:s.challenge,token:s.runs[21].token,points:500},T+10000,true);
- // Todos han jugado: la etapa se cierra y sale la pareja con menos puntos (una de bots, con 0).
- advanceRace(s,T+11000);assert.equal(s.leg,2);assert.equal(pairsAlive(s).length,5);assert.equal(s.history[0].results.length,6);
+ // V358: aunque todos ya hayan jugado, la etapa dura siempre 8 minutos enteros (el transporte se puede cambiar hasta el final).
+ const leg1Deadline=s.deadline;assert.equal(leg1Deadline-T,LEG_MS+1000,'8 minutos desde que empezó la etapa');
+ assert.equal(advanceRace(s,T+11000),false,'con todos listos pero sin agotar los 8 minutos, sigue abierta');assert.equal(s.leg,1);
+ assert.equal(advanceRace(s,leg1Deadline-1000),false,'un segundo antes, tampoco');assert.equal(s.leg,1);
+ // A los 8 minutos se cierra y sale la pareja con menos puntos (una de bots, con 0).
+ advanceRace(s,leg1Deadline);assert.equal(s.leg,2);assert.equal(pairsAlive(s).length,5);assert.equal(s.history[0].results.length,6);
  const out=s.pairs.find(pr=>pr.status==='eliminated');assert.equal(out.placement,6);assert.ok(out.members.every(id=>s.players.find(p=>p.id===id).placement===6));
- const v=raceView(s,ana,T+11000);assert.equal(v.me.money,RACE_START_MONEY-120);assert.ok(v.route&&v.route.length===2);assert.ok(v.players.every(p=>!('score' in p)),'las puntuaciones no se ven antes de llegar');
+ const v=raceView(s,ana,leg1Deadline);assert.equal(v.me.money,RACE_START_MONEY-120);assert.ok(v.route&&v.route.length===2);assert.ok(v.players.every(p=>!('score' in p)),'las puntuaciones no se ven antes de llegar');
  // Las etapas siguientes se cierran por tiempo hasta la final entre dos parejas.
  let now=T+11000;for(let i=0;i<10&&s.phase!=='finished';i++){now+=LEG_MS+1000;for(const u of [ana,leo]){const me=s.players.find(p=>p.id===u.id);if(me.status==='active'&&!s.runs[u.id]){actRace(s,u,{action:'flash_start',stage:s.stage,kind:s.challenge},now-LEG_MS+5000,true);actRace(s,u,{action:'flash_finish',stage:s.stage,kind:s.challenge,token:s.runs[u.id].token,points:800},now-LEG_MS+9000,true);}}advanceRace(s,now);}
  assert.equal(s.phase,'finished');const places=s.pairs.map(pr=>pr.placement).sort((a,b)=>a-b);assert.deepEqual(places,[1,2,3,4,5,6],'una posición por pareja');
@@ -85,9 +89,35 @@ await call('/api/race?id='+lobby,20);await call('/api/race?id='+lobby,21);
 const paid=sql.prepare('SELECT user_id,placement,karma,money,pending FROM race_results ORDER BY user_id').all();assert.ok(paid.every(p=>p.pending===0));
 for(const p of paid){const u=sql.prepare('SELECT karma,t_money FROM users WHERE id=?').get(p.user_id);assert.equal(u.karma,p.karma);assert.equal(u.t_money,p.money,'pagado una vez');}
 // Página, inscripción y lista de juegos.
-const page=readFileSync(new URL('../race.html',import.meta.url),'utf8');for(const t of ['race-page356.js?v=357','game-chat.js?v=356','race356.css?v=357','Cómo funciona Race'])assert.ok(page.includes(t),t);
+const page=readFileSync(new URL('../race.html',import.meta.url),'utf8');for(const t of ['race-page356.js?v=358','game-chat.js?v=356','race356.css?v=358','Cómo funciona Race'])assert.ok(page.includes(t),t);
 assert.match(readFileSync(new URL('../enrollment-formats.js',import.meta.url),'utf8'),/race:\{name:'Race',image:'race\.png',implemented:true/);
 assert.match(readFileSync(new URL('../functions/microgames.js',import.meta.url),'utf8'),/header\.subcontext==='race'/);
 assert.match(readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),/options\.race\?'race'/);
 assert.ok(Object.keys(TRANSPORTS).includes('walk')&&TRANSPORTS.walk.cost===0,'andar es gratis');
-console.log('PASS V356: Race completo: parejas, presupuesto, transporte, minijuegos, eliminación por etapas, final, premios únicos y una partida a la vez');
+
+// V358: etapas de 8 minutos exactos, siempre completos.
+assert.equal(LEG_MS,8*60000,'cada etapa dura 8 minutos');
+
+// V358: lo que suma cada transporte (con «?» si aún no se conoce tu puntuación) y el transporte de tu pareja.
+{
+ const pageJs=readFileSync(new URL('../race-page356.js',import.meta.url),'utf8');
+ assert.match(pageJs,/\(\+'\+\(me\.saved\?Math\.round\(me\.score\*t\.bonus\):'\?'\)\+'\)'/,'entre paréntesis lo que suma, o «?» si no se sabe aún');
+ assert.match(pageJs,/ptransport\.icon\+' '\+ptransport\.name:' · todavía no ha elegido transporte'/,'bajo el presupuesto, el transporte de tu pareja');
+ assert.doesNotMatch(pageJs,/race-transport-badge/,'ya no se dibuja el transporte sobre los avatares de arriba');
+}
+
+// V358: tarjetas de transporte con el estilo de la web (icono en círculo, tarjeta blanca), no el botón amarillo plano.
+{
+ const css=readFileSync(new URL('../race356.css',import.meta.url),'utf8');
+ assert.match(css,/button\.race-transport\{[^}]*border-radius:8px[^}]*background:#fff/,'tarjeta blanca redondeada');
+ assert.match(css,/race-transport-icon\{[^}]*border-radius:50%/,'icono en círculo');
+}
+
+// V358: la burbuja de Race en el perfil ya no comparte color con Casting; usa su propia tarjeta de inscripción.
+{
+ assert.match(readFileSync(new URL('../profile-games333.js',import.meta.url),'utf8'),/RACE:'gracebtn'/,'Race ya no usa gbutton (el de Casting)');
+ const css=readFileSync(new URL('../profile-games333.css',import.meta.url),'utf8');
+ assert.match(css,/\.gracebtn\{[^}]*assets\/formats\/race\.png/,'la burbuja de Race usa su propia tarjeta');
+ assert.match(css,/\.grbutton,#profileGames333 \.gsvbutton,#profileGames333 \.gbutton,#profileGames333 \.gdbutton,#profileGames333 \.ghbutton,#profileGames333 \.gracebtn\{/,'conserva el tamaño y la posición del resto de burbujas');
+}
+console.log('PASS V356/V357/V358: Race completo: parejas, presupuesto, transporte (con su coste visible y el estilo de la web), privacidad, etapas de 8 minutos fijos, minijuegos, eliminación por etapas, final, premios únicos, una partida a la vez y burbuja propia en el perfil');

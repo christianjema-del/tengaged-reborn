@@ -39,7 +39,12 @@ function trip(){
  $('race-route').replaceChildren();
  if(playing&&s.route){$('race-route').append(document.createTextNode('📍 '+s.route[0]),el('span',' → ','race-arrow'),document.createTextNode('📍 '+s.route[1]));}
  $('race-wallet').textContent=me&&playing?'Te quedan '+euros(me.money)+' de presupuesto':'';
- $('race-partner').textContent=me?.partner?'Tu pareja: '+name(me.partner):'';
+ // V358: debajo del presupuesto, el nombre de tu pareja y el transporte que ha elegido (si ya lo ha hecho).
+ if(me?.partner){
+  const partner=s.players.find(p=>p.id===me.partner),pname=partner?.username||name(me.partner);
+  const ptransport=playing&&partner?.transport&&s.transports[partner.transport];
+  $('race-partner').textContent='Tu pareja: '+pname+(playing?(ptransport?' · '+ptransport.icon+' '+ptransport.name:' · todavía no ha elegido transporte'):'');
+ }else $('race-partner').textContent='';
  let note='';
  if(s.phase==='waiting')note=s.players.length+' de 12 plazas. Cada viajero empieza con '+euros(s.startMoney)+'.';
  else if(!me)note='Sigue la carrera: cada etapa, la pareja que llega la última queda eliminada.';
@@ -51,7 +56,9 @@ function trip(){
  if(!box.hidden)box.replaceChildren(...Object.entries(s.transports).map(([kind,t])=>{
   const chosen=(me.transport||'walk')===kind,afford=me.money+(me.transport?s.transports[me.transport].cost:0)>=t.cost;
   const b=el('button','','race-transport'+(chosen?' chosen':''));b.type='button';b.disabled=!choose||!afford||chosen;b.setAttribute('aria-pressed',String(chosen));
-  b.append(el('span',t.icon,'race-transport-icon'),el('strong',t.name),el('small',(t.cost?euros(t.cost):'Gratis')+(t.bonus?' · +'+Math.round(t.bonus*100)+' %':'')));
+  // V358: entre paréntesis, lo que suma ese transporte a tu resultado: la cifra exacta si ya conoces tu puntuación de esta etapa, si no un «?».
+  const added=t.bonus?' (+'+(me.saved?Math.round(me.score*t.bonus):'?')+')':'';
+  b.append(el('span',t.icon,'race-transport-icon'),el('strong',t.name),el('small',(t.cost?euros(t.cost):'Gratis')+(t.bonus?' · +'+Math.round(t.bonus*100)+' %'+added:'')));
   b.title=!afford?'No te llega el presupuesto':chosen?'Transporte elegido':'Viajar en '+t.name.toLowerCase();
   b.onclick=()=>load({action:'transport',kind,stage:s.stage});return b;}));
  $('race-play').hidden=!(playing&&me?.canPlay&&!me.saved);$('race-play').textContent=me?.hasAttempt?'Reanudar prueba':'Jugar prueba';

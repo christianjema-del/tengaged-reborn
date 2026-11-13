@@ -10,7 +10,7 @@
 #profileGames333 .pGames .gpage:hover{background:#d3dfea}
 #profileGames333 .inuser-games{display:flow-root;margin:0 0 10px 10px;color:#5d5d5d;font:14px Verdana,Geneva,Arial,Helvetica,sans-serif}
 #profileGames333 .inuser-games .game{float:left;box-sizing:content-box;width:66px;height:98px;margin:0 3px 0 6px;padding:0;text-align:center}
-#profileGames333 .grbutton,#profileGames333 .gsvbutton,#profileGames333 .gbutton,#profileGames333 .gdbutton,#profileGames333 .ghbutton{display:block;width:58px;height:58px;margin:3px;padding:0 0 0 2px;box-sizing:content-box;background:url('/assets/regaged/avatars/ui/master.gif') no-repeat;border:0;border-radius:0;box-shadow:none;font:normal 16px/56px 'Trebuchet MS',trebuchet,Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center;text-decoration:none;text-shadow:none}
+#profileGames333 .grbutton,#profileGames333 .gsvbutton,#profileGames333 .gbutton,#profileGames333 .gdbutton,#profileGames333 .ghbutton,#profileGames333 .gracebtn{display:block;width:58px;height:58px;margin:3px;padding:0 0 0 2px;box-sizing:content-box;background:url('/assets/regaged/avatars/ui/master.gif') no-repeat;border:0;border-radius:0;box-shadow:none;font:normal 16px/56px 'Trebuchet MS',trebuchet,Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center;text-decoration:none;text-shadow:none}
 #profileGames333 .grbutton{background-position:-262px -378px;color:#b20000}
 #profileGames333 .gsvbutton{background-position:-166px -263px;color:#ffea6f}
 #profileGames333 .gbutton{background-position:-300px 0;color:#476b8d}
@@ -18,6 +18,8 @@
 #profileGames333 .gdbutton{background-position:-324px -203px;color:#5e311b}
 /* Hunger: siempre el sinsajo negro con el texto amarillo. */
 #profileGames333 .ghbutton{background-position:-442px -203px;color:#f1d749}
+/* V358: Race usa su propia tarjeta de inscripción en vez del sprite, para no compartir color con Casting. */
+#profileGames333 .gracebtn{background:linear-gradient(rgba(8,36,66,.42),rgba(8,36,66,.42)),url('/assets/formats/race.png') center 58%/cover no-repeat;padding-left:0;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.75)}
 #profileGames333 .num{font-size:25px;letter-spacing:-2px}
 #profileGames333 .num .ordinal{letter-spacing:-5px}
 /* Al pasar el ratón o pulsar: la segunda burbuja del sprite (Hunger se pone dorado solo entonces). */
@@ -26,6 +28,7 @@
 #profileGames333 .gbutton:hover,#profileGames333 .gbutton:active,#profileGames333 .gbutton:focus-visible{background-position:-360px 0}
 #profileGames333 .gdbutton:hover,#profileGames333 .gdbutton:active,#profileGames333 .gdbutton:focus-visible{background-position:-384px -203px;color:#fff}
 #profileGames333 .ghbutton:hover,#profileGames333 .ghbutton:active,#profileGames333 .ghbutton:focus-visible{background-position:-502px -203px;color:#fff;text-shadow:0 1px 2px #5a4310}
+#profileGames333 .gracebtn:hover,#profileGames333 .gracebtn:active,#profileGames333 .gracebtn:focus-visible{background-position:center 68%}
 #profileGames333 .inuser-games .status{display:block;width:65px;height:33px;overflow:hidden;background:#e7f0f9;color:#4682b4;font:9px/11px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center}
 #profileGames333 .fastsign{float:left;height:11px;padding:1px;background:#2a5f84;color:#fff;font:9px/11px Verdana,Geneva,Arial,Helvetica,sans-serif;text-align:center}
 #profileGames333 .inuser-games-empty{margin:0;color:#5d5d5d;font:12px Verdana,Geneva,Arial,sans-serif}

@@ -4,7 +4,7 @@
 const PER_PAGE=7;
 const MONTHS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 // Burbuja de partida en curso según el juego (posiciones del sprite master.gif).
-const ACTIVE={ROOKIES:'grbutton',FROOKIES:'grbutton',SURVIVOR:'gsvbutton',CASTING:'gbutton',FASTING:'gbutton',DUEL:'gdbutton',HUNGER:'ghbutton',RACE:'gbutton'};
+const ACTIVE={ROOKIES:'grbutton',FROOKIES:'grbutton',SURVIVOR:'gsvbutton',CASTING:'gbutton',FASTING:'gbutton',DUEL:'gdbutton',HUNGER:'ghbutton',RACE:'gracebtn'};
 const NAMES={CASTING:'Casting',FASTING:'Fasting',ROOKIES:'Rookies',FROOKIES:'Frookies',SURVIVOR:'Survivor',DUEL:'El Duelo',HUNGER:'Hunger Games',RACE:'Race'};
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;};
 export function gameHref333(g){

@@ -6,8 +6,10 @@ import {armAutoStart351,autoStartDue351,fireAutoStart351,autoDeadline351} from '
 import {canFillBots} from './game-bots.js';
 import {CASTING_MINIGAMES} from '../../minigame-catalog.js';
 import {BASE_CHALLENGE_SECONDS} from './challenge-time.js';
-export const RACE_CAPACITY=12,RACE_START_MONEY=500,LEG_MS=4*3600000;
-const GRACE=600000;
+// V358: juego rápido. Cada etapa dura siempre 8 minutos enteros, aunque todos hayan hecho ya la prueba,
+// porque el transporte se puede cambiar hasta el último segundo.
+export const RACE_CAPACITY=12,RACE_START_MONEY=500,LEG_MS=8*60000;
+const GRACE=120000;
 // Coste en € de viaje y mejora sobre el resultado del minijuego.
 export const TRANSPORTS={
  walk:{name:'Andando',cost:0,bonus:0,icon:'🚶'},
@@ -71,8 +73,9 @@ export function advanceRace(s,now=Date.now()){
  if(s.phase==='waiting')armAutoStart351(s,now);
  if(s.phase==='waiting'&&autoStartDue351(s,now)){fireAutoStart351(s,now);fillBots(s,now);s.manualStart356={by:0,username:'sistema',at:now};s.autoStarted351=now;begin(s,now);return true;}
  if(['waiting','finished'].includes(s.phase))return false;
- const live=raceAlive(s),complete=live.length>0&&live.every(p=>s.runs[p.id]?.saved);
- if(!complete&&now<s.deadline)return false;
+ // V358: la etapa siempre dura los 8 minutos enteros, aunque todos hayan jugado ya: el transporte se puede
+ // cambiar hasta el último segundo y hay que dejar tiempo para eso.
+ if(now<s.deadline)return false;
  const ranking=rankPairs(s),[from,to]=legRoute(s.leg);
  const results=ranking.map(r=>({pair:r.pair.id,members:r.pair.members.map(id=>{const p=s.players.find(q=>q.id===id);return {id,username:p?.username||'—',transport:transportOf(s,p||{id}),score:s.runs[id]?.saved?s.runs[id].score:0,points:p?travellerPoints(s,p):0};}),points:r.points,money:r.money}));
  s.history.push({leg:s.leg,stage:s.stage,from,to,challenge:s.challenge,results});
@@ -126,7 +129,7 @@ export function actRace(s,user,input,now=Date.now(),bridge=false){
  if(input.stage!==s.stage||input.kind!==s.challenge)throw Error('No te corresponde esta prueba.');
  let run=s.runs[p.id];
  if(input.action==='flash_start'){
-  if(!run){run=s.runs[p.id]={token:crypto.randomUUID(),startedAt:now,duration:BASE_CHALLENGE_SECONDS,saved:false,score:0};if(raceAlive(s).every(q=>s.runs[q.id]))s.deadline=Math.min(s.deadline,now+GRACE);}
+  if(!run)run=s.runs[p.id]={token:crypto.randomUUID(),startedAt:now,duration:BASE_CHALLENGE_SECONDS,saved:false,score:0};
  }else{
   if(!run||input.token!==run.token)throw Error('Intento no válido.');if(run.saved)return;
   if(now>run.startedAt+Math.max(run.duration*1000+120000,GRACE)||now<run.startedAt+1000)throw Error('Intento vencido o inválido.');
