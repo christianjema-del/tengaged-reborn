@@ -93,7 +93,7 @@ await call('/api/race?id='+lobby,20);await call('/api/race?id='+lobby,21);
 const paid=sql.prepare('SELECT user_id,placement,karma,money,pending FROM race_results ORDER BY user_id').all();assert.ok(paid.every(p=>p.pending===0));
 for(const p of paid){const u=sql.prepare('SELECT karma,t_money FROM users WHERE id=?').get(p.user_id);assert.equal(u.karma,p.karma);assert.equal(u.t_money,p.money,'pagado una vez');}
 // Página, inscripción y lista de juegos.
-const page=readFileSync(new URL('../race.html',import.meta.url),'utf8');for(const t of ['race-page356.js?v=358','game-chat.js?v=356','race356.css?v=358','Cómo funciona Race'])assert.ok(page.includes(t),t);
+const page=readFileSync(new URL('../race.html',import.meta.url),'utf8');for(const t of ['race-page356.js?v=362','game-chat.js?v=356','race356.css?v=358','Cómo funciona Race'])assert.ok(page.includes(t),t);
 assert.match(readFileSync(new URL('../enrollment-formats.js',import.meta.url),'utf8'),/race:\{name:'Race',image:'race\.png',implemented:true/);
 assert.match(readFileSync(new URL('../functions/microgames.js',import.meta.url),'utf8'),/header\.subcontext==='race'/);
 assert.match(readFileSync(new URL('../original-flash.js',import.meta.url),'utf8'),/options\.race\?'race'/);

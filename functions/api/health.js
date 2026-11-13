@@ -1,4 +1,4 @@
 import {withStorageGuard} from '../_shared/storage-guard141.js';
-async function handle141_onRequest(){return Response.json({ok:true,version:361,build:"V361-RACE-TRANSPORTE-LIBRE",timestamp:new Date().toISOString()},{headers:{"Cache-Control":"no-store"}});}
+async function handle141_onRequest(){return Response.json({ok:true,version:362,build:"V362-RACE-CACHE-SURVIVOR-MERGE",timestamp:new Date().toISOString()},{headers:{"Cache-Control":"no-store"}});}
 
 export async function onRequest(context){return withStorageGuard(context,handle141_onRequest);}

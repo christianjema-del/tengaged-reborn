@@ -151,7 +151,9 @@ function closeDay(s,at){
  const entry={day,required,kind:s.challenge?.kind||null,totals:{A:totals.A.total,B:totals.B.total},rows:{A:resultRows(s,day,'A',totals.A.dropped,rosters.A),B:resultRows(s,day,'B',totals.B.dropped,rosters.B)},winner:loser==='A'?'B':'A',loser,tieBreak,council};
  s.history.push(entry);
  const remaining=alive(s);
- if(remaining.length<=MERGE_AT||TRIBES.some(t=>!tribeOf(s,t).length)){merge(s,at);return;}
+ // V362: una tribu nunca empieza con 1 o 0; si llega ahí (perdiendo uno a uno) ya no hay nadie a quien
+ // salvar ni con quien competir en esa tribu, así que se unifica aunque el total siga por encima de 10.
+ if(remaining.length<=MERGE_AT||TRIBES.some(t=>tribeOf(s,t).length<=1)){merge(s,at);return;}
  s.nominated=loser;
  log(s,'La tribu '+entry.winner+' gana la prueba del día '+day+(tieBreak?' en el desempate aleatorio':'')+'. La tribu '+loser+' juega la inmunidad individual y vota durante el día siguiente.',at,'challenge',{day,winner:entry.winner,loser});
  startDay(s,at);

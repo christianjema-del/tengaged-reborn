@@ -234,3 +234,16 @@ test('V313: las tribus salen por orden de inscripción, sin sorteo; los 10 prime
  }
  assert.ok(!fs.readFileSync(new URL('../functions/_shared/survivor-engine.js',import.meta.url),'utf8').includes('shuffle('));
 });
+test('V362: si una tribu se queda con un solo miembro, se unifica aunque el total siga por encima de 10',()=>{
+ const s=started(10);const humanTribe=me(s,0).tribe,botTribe=humanTribe==='A'?'B':'A';
+ assert.equal(E.tribeOf(s,humanTribe).length,10);assert.ok(E.tribeOf(s,botTribe).every(p=>p.bot),'la tribu de bots, toda de bots');
+ // Se eliminan 9 de los 10 bots a mano (como en producción, día a día); queda 1 bot vivo en su tribu.
+ const bots=s.players.filter(p=>p.tribe===botTribe);
+ for(const p of bots.slice(1)){p.status='eliminated';p.placement=E.alive(s).length;}
+ assert.equal(E.alive(s).length,11,'siguen siendo 11 en total, por encima del límite de unificación de siempre (10)');
+ assert.equal(E.tribeOf(s,botTribe).length,1,'a esa tribu le queda un bot');
+ E.advanceSurvivor(s,s.deadline);
+ assert.equal(s.phase,'finished','se unifica aunque el total (11) no haya bajado a 10, porque esa tribu ya no se puede salvar');
+ assert.equal(s.players.filter(p=>p.status==='merged').length,11);
+ assert.equal(s.carry.players.length,10,'pasan los 10 humanos de la tribu que sí seguía completa');
+});
