@@ -1,0 +1,4 @@
+V367 - Race #53 como evento, inicio manual
+- games-directory.js: Race #53 aparece con la etiqueta EVENTO en «Últimos juegos en Tengaged» (games.html ?v=367).
+- race356.js: Race #53 no se autocompleta con bots ni arranca sola a los 10 minutos (como el resto de Race); solo admin1 o RelsB (ver manual-start172.js) pueden rellenar plazas o pulsar iniciar.
+- Test: tests/race-event367.test.mjs (comprueba que #53 no arranca sola y que el resto de Race sigue haciéndolo) y ampliación de tests/games-event320.test.mjs.

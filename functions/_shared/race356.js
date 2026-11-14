@@ -30,6 +30,9 @@ function botPlayer(s,i,now){return {id:-(s.id*100+i),username:'Bot · R'+s.id+' 
 function fillBots(s,now){let i=1;while(s.players.length<RACE_CAPACITY){if(!s.players.some(p=>p.id===-(s.id*100+i)))s.players.push(botPlayer(s,i,now));i++;}}
 // V366: a petición expresa de administración, RelsB y Cristi van siempre en la misma pareja cuando coinciden en una Race.
 const FORCED_TEAMMATES=['RelsB','Cristi'];
+// V367: Race marcada como EVENTO (ver games-directory.js): no se autocompleta con bots ni empieza sola;
+// solo arranca cuando admin1 o RelsB pulsan iniciar.
+const EVENT_RACES=[53];
 function makePairs(s){
  const order=[...s.players];for(let i=order.length-1;i>0;i--){const j=rand(i+1);[order[i],order[j]]=[order[j],order[i]];}
  const ia=order.findIndex(p=>p.username===FORCED_TEAMMATES[0]),ib=order.findIndex(p=>p.username===FORCED_TEAMMATES[1]);
@@ -74,8 +77,8 @@ function eliminatePair(s,pr,placement,now,finished=false){
  for(const id of pr.members){const p=s.players.find(q=>q.id===id);if(!p||p.status!=='active')continue;p.status=finished?'finished':'eliminated';p.placement=placement;p.eliminatedAt=now;}
 }
 export function advanceRace(s,now=Date.now()){
- if(s.phase==='waiting')armAutoStart351(s,now);
- if(s.phase==='waiting'&&autoStartDue351(s,now)){fireAutoStart351(s,now);fillBots(s,now);s.manualStart356={by:0,username:'sistema',at:now};s.autoStarted351=now;begin(s,now);return true;}
+ if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id))armAutoStart351(s,now);
+ if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id)&&autoStartDue351(s,now)){fireAutoStart351(s,now);fillBots(s,now);s.manualStart356={by:0,username:'sistema',at:now};s.autoStarted351=now;begin(s,now);return true;}
  if(['waiting','finished'].includes(s.phase))return false;
  // V358: la etapa siempre dura los 8 minutos enteros, aunque todos hayan jugado ya: el transporte se puede
  // cambiar hasta el último segundo y hay que dejar tiempo para eso.
@@ -115,7 +118,7 @@ export function actRace(s,user,input,now=Date.now(),bridge=false){
  if(input.action==='join'){
   if(p)return;if(s.phase!=='waiting'||s.players.length>=RACE_CAPACITY)throw Error('Las inscripciones están cerradas.');
   if(user.is_banned||user.is_system||user.is_test_bot)throw Error('Esta partida se reserva a usuarios reales.');
-  s.players.push({id:user.id,username:user.username,status:'active',placement:null,joinedAt:now,money:RACE_START_MONEY,notifyOnStart:input.notifyOnStart===true});armAutoStart351(s,now);
+  s.players.push({id:user.id,username:user.username,status:'active',placement:null,joinedAt:now,money:RACE_START_MONEY,notifyOnStart:input.notifyOnStart===true});if(!EVENT_RACES.includes(s.id))armAutoStart351(s,now);
   const welcome=String(input.welcome||'').trim();if(welcome.length>500)throw Error('Presentación demasiado larga.');if(welcome)s.welcomes.push({username:user.username,body:welcome,at:now});
   return;
  }
