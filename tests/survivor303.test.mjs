@@ -143,6 +143,15 @@ test('V363: si la partida de inscripción ya existía (lo normal, se crea en cua
  assert.ok(ns.players.some(p=>p.username==='Oscar'),'quien ya se había inscrito sigue en la partida');
  assert.equal(JSON.parse(sql.prepare('SELECT state FROM survivor_matches WHERE id=?').get(id).state).nextId,waitingBefore.id,'se enlaza con la partida ya existente, no con una nueva');
 });
+test('V364: en inscripción, los unificados de la partida anterior se ven como tribu aparte de quien se está inscribiendo de nuevo',()=>{
+ const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
+ const page=read('survivor-page303.js');
+ assert.match(page,/s\.players\.some\(p=>p\.carried\)/,'detecta si hay unificados en la partida en inscripción');
+ assert.match(page,/carriedList=s\.players\.filter\(p=>p\.carried\),freshList=s\.players\.filter\(p=>!p\.carried\)/);
+ assert.match(page,/Tribu A · unificada de Survivor #'\+s\.carriedFrom/);
+ assert.match(page,/Tribu B · en inscripción/);
+ assert.match(read('survivor303.css'),/\.survivorGroupLabel\{/);
+});
 test('página: réplica de Regaged en castellano, refresco de 30 s y piezas integradas',()=>{
  const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
  const page=read('survivor-page303.js'),html=read('survivor.html'),css=read('survivor303.css');

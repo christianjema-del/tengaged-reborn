@@ -1,0 +1,4 @@
+V364 - Survivor: la tribu unificada se ve aparte de quien se está inscribiendo de nuevo
+- En inscripción, cuando los supervivientes unificados de la partida anterior ya están en la siguiente (desde la V363), se veían todos mezclados en una sola fila, como si fueran un único grupo llenándose junto a los nuevos usuarios. Ahora se muestran como dos tribus distintas: «Tribu A · unificada de Survivor #N» (los que vienen de la partida anterior, ya completa) y «Tribu B · en inscripción» (los nuevos usuarios, como Oscar y Aaron, que siguen llenando huecos).
+- Es solo un cambio de cómo se ve en inscripción: las tribus reales (quién juega contra quién) ya se formaban así por debajo desde la V363; esto hace que también se vea así antes de que empiece la partida.
+- Test: tests/survivor303.test.mjs comprueba que la página separa a los dos grupos con sus etiquetas.

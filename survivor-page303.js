@@ -31,9 +31,17 @@ function seat(p,me){
 }
 function renderHeader(){
  const s=state,me=s.me,roster=$('svRoster');roster.replaceChildren();
- const list=s.phase==='waiting'?s.players:s.players.filter(p=>p.tribe===s.viewTribe);
- for(const p of list)roster.append(seat(p,me));
- if(s.phase==='waiting')for(let i=list.length;i<10*Math.ceil(Math.max(list.length,1)/10);i++)roster.append(el('div',null,'survivorSeat survivorEmpty'));
+ if(s.phase==='waiting'&&s.players.some(p=>p.carried)){
+  // V364: los unificados de la partida anterior ya forman su propia tribu completa; se muestran
+  // aparte de quien se está inscribiendo de nuevo, en vez de verse todos como un único grupo.
+  const carriedList=s.players.filter(p=>p.carried),freshList=s.players.filter(p=>!p.carried);
+  const group=(label,items)=>{roster.append(el('div',label,'survivorGroupLabel'));for(const p of items)roster.append(seat(p,me));for(let i=items.length;i<10*Math.ceil(Math.max(items.length,1)/10);i++)roster.append(el('div',null,'survivorSeat survivorEmpty'));};
+  group('Tribu A · unificada de Survivor #'+s.carriedFrom,carriedList);group('Tribu B · en inscripción',freshList);
+ }else{
+  const list=s.phase==='waiting'?s.players:s.players.filter(p=>p.tribe===s.viewTribe);
+  for(const p of list)roster.append(seat(p,me));
+  if(s.phase==='waiting')for(let i=list.length;i<10*Math.ceil(Math.max(list.length,1)/10);i++)roster.append(el('div',null,'survivorSeat survivorEmpty'));
+ }
  // En inscripción no hay texto encima de los avatares.
  $('svPhaseLabel').hidden=true;
  $('svTitle').textContent='Un juego Survivor online #'+s.id;$('svDay').textContent=String(s.day||0);

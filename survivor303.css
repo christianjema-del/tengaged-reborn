@@ -43,6 +43,8 @@
 .survivorOut .survivorAvatar{opacity:.5;filter:grayscale(1)}
 .survivorOut .survivorAvatar:hover{opacity:1;filter:none}
 .survivorEmpty{height:105px}
+.survivorGroupLabel{grid-column:1/-1;font:700 11px "Trebuchet MS",Trebuchet,Verdana,sans-serif;color:#4682b4;text-transform:uppercase;letter-spacing:.03em;padding:6px 2px 3px;border-top:1px solid #dce9f2}
+.survivorGroupLabel:first-child{border-top:0;padding-top:0}
 .survivorSectionTitle{font:700 18px Arial,"Trebuchet MS",sans-serif!important;color:#ff536d!important;border:0!important;border-bottom:1px solid #ffc3c3!important;padding:2px 0 0 5px!important;margin:0 0 8px!important;letter-spacing:0;background:none!important;text-transform:none!important}
 .survivorCamp,.survivorPanel{min-width:0;font-size:12px;color:#4d4d4d}
 .survivorCamp{margin-bottom:16px}
