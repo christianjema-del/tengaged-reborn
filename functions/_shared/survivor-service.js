@@ -2,7 +2,7 @@ import {gamePrize} from '../../prize-catalog.js';
 import {schemaReady170,markSchema170} from './schema-ready170.js';
 import {ensureProfileSchema} from './auth.js';
 import {ensureGameHistorySchema} from './games.js';
-import {freshSurvivor,advanceSurvivor,actSurvivor,survivorView,CAPACITY} from './survivor-engine.js';
+import {freshSurvivor,advanceSurvivor,actSurvivor,survivorView,joinCarriedSurvivors,CAPACITY} from './survivor-engine.js';
 
 export async function ensureSurvivor(db){
  await ensureProfileSchema(db);await ensureGameHistorySchema(db);
@@ -22,9 +22,21 @@ export async function ensureSurvivor(db){
 // empieza con ellos sentados como tribu A.
 export async function waitingSurvivor(db){
  await ensureSurvivor(db);
- if(await db.prepare("SELECT 1 AS x FROM survivor_matches WHERE json_extract(state,'$.phase')='waiting'").first())return;
  const last=await db.prepare("SELECT id,state FROM survivor_matches WHERE json_extract(state,'$.phase')='finished' AND json_extract(state,'$.carry') IS NOT NULL AND json_extract(state,'$.nextId') IS NULL ORDER BY id DESC LIMIT 1").first();
  const carry=last?JSON.parse(last.state).carry:null;
+ const waiting=await db.prepare("SELECT id,revision,state FROM survivor_matches WHERE json_extract(state,'$.phase')='waiting'").first();
+ if(waiting){
+  // V363: la partida de inscripción ya existe (se crea en cuanto empieza la anterior), así que los
+  // supervivientes de una partida recién terminada se suman a ella en vez de perderse.
+  if(carry){
+   const s=JSON.parse(waiting.state);
+   if(joinCarriedSurvivors(s,carry,Date.now())){
+    const done=await db.prepare('UPDATE survivor_matches SET state=?,revision=revision+1 WHERE id=? AND revision=?').bind(JSON.stringify(s),waiting.id,waiting.revision).run();
+    if(done.meta.changes)await db.prepare("UPDATE survivor_matches SET state=json_set(state,'$.nextId',?),revision=revision+1 WHERE id=? AND json_extract(state,'$.nextId') IS NULL").bind(waiting.id,last.id).run();
+   }
+  }
+  return;
+ }
  const created=await db.prepare("INSERT OR IGNORE INTO survivor_matches(state) SELECT ? WHERE NOT EXISTS(SELECT 1 FROM survivor_matches WHERE json_extract(state,'$.phase')='waiting') RETURNING id").bind(JSON.stringify(freshSurvivor(0,Date.now(),carry))).first();
  if(created?.id){
   await db.prepare("UPDATE survivor_matches SET state=json_set(state,'$.id',?) WHERE id=?").bind(created.id,created.id).run();

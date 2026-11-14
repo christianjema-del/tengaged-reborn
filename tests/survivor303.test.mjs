@@ -123,6 +123,26 @@ test('servicio: inscripción, historial, salud heredada, premios y siguiente par
  assert.deepEqual(ns.players.map(p=>p.username).sort(),(st.carry?.players||[]).map(p=>p.username).sort(),'pasan los humanos unificados');
  assert.equal(JSON.parse(sql.prepare('SELECT state FROM survivor_matches WHERE id=?').get(id).state).nextId,st.carry?next.id:null,'solo se enlaza si pasan supervivientes humanos');
 });
+test('V363: si la partida de inscripción ya existía (lo normal, se crea en cuanto empieza la anterior), los supervivientes se añaden a ella en vez de perderse',async()=>{
+ const Svc=await import('../functions/_shared/survivor-service.js');
+ sql.exec("INSERT INTO users(id,username,is_admin) VALUES(200,'G0',0),(201,'G1',0),(202,'G2',0),(210,'Oscar',0)");
+ await Svc.waitingSurvivor(db);const id=(await Svc.survivorListing(db,null)).find(g=>g.phase==='waiting').id;
+ for(const u of [200,201,202])await Svc.survivorMatch(db,id,{id:u,username:'G'+(u-200)},{action:'join'});
+ await Svc.survivorMatch(db,id,admin,{action:'fill_bots'});await Svc.survivorMatch(db,id,admin,{action:'start'});
+ // Mientras la partida está en marcha, alguien ya consulta el listado: se crea de inmediato la siguiente
+ // partida de inscripción, vacía (sin supervivientes todavía, porque esta no ha terminado).
+ await Svc.survivorListing(db,null);
+ const waitingBefore=(await Svc.survivorListing(db,null)).find(g=>g.phase==='waiting');assert.ok(waitingBefore&&waitingBefore.id!==id,'ya existe otra partida esperando antes de que esta termine');
+ await Svc.survivorMatch(db,waitingBefore.id,{id:210,username:'Oscar'},{action:'join'});
+ let t=Date.now();for(let i=0;i<30;i++){const st=JSON.parse(sql.prepare('SELECT state FROM survivor_matches WHERE id=?').get(id).state);if(st.phase!=='day')break;t=Math.max(t,st.deadline+1);await Svc.survivorMatch(db,id,null,null,false,null,t);}
+ const st=JSON.parse(sql.prepare('SELECT state FROM survivor_matches WHERE id=?').get(id).state);assert.equal(st.phase,'finished');
+ const winners=st.players.filter(p=>p.status==='merged'&&!p.bot);assert.ok(winners.length>0);
+ const ns=JSON.parse(sql.prepare('SELECT state FROM survivor_matches WHERE id=?').get(waitingBefore.id).state);
+ assert.equal(ns.id,waitingBefore.id,'no se crea una partida nueva: se reutiliza la que ya existía');
+ assert.deepEqual(ns.players.filter(p=>p.carried).map(p=>p.username).sort(),winners.map(p=>p.username).sort(),'los ganadores se suman a la partida ya existente');
+ assert.ok(ns.players.some(p=>p.username==='Oscar'),'quien ya se había inscrito sigue en la partida');
+ assert.equal(JSON.parse(sql.prepare('SELECT state FROM survivor_matches WHERE id=?').get(id).state).nextId,waitingBefore.id,'se enlaza con la partida ya existente, no con una nueva');
+});
 test('página: réplica de Regaged en castellano, refresco de 30 s y piezas integradas',()=>{
  const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8');
  const page=read('survivor-page303.js'),html=read('survivor.html'),css=read('survivor303.css');

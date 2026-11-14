@@ -36,15 +36,18 @@ export function daySeconds(p){return Number.isFinite(p?.daySeconds)?p.daySeconds
 // Salud al unificar: 30 o menos sube a 40; 96 o más sube a 100.
 export function mergeSupply(value){const v=clamp(value);return v<=30?40:v>=96?100:v;}
 
+function applyCarry(s,carry,now){
+ if(!carry?.players?.length)return 0;
+ s.carriedFrom=carry.from;
+ for(const p of carry.players)s.players.push({id:p.id,username:p.username,bot:false,tribe:'A',status:'active',placement:null,food:clamp(p.food),water:clamp(p.water),joinedAt:now,tie:random(0x7fffffff),carried:true});
+ return carry.players.length;
+}
 export function freshSurvivor(id=0,now=Date.now(),carry=null){
  const s={id,version:303,phase:'waiting',day:0,createdAt:now,startedAt:null,finishedAt:null,deadline:null,
   players:[],camps:{},challenge:null,required:null,scores:{},immunity:{},attempts:{},sitouts:{},ballots:{},
   nominated:null,history:[],events:[],welcomes:[],carry:null,carriedFrom:null,nextId:null};
- if(carry?.players?.length){
-  s.carriedFrom=carry.from;
-  for(const p of carry.players)s.players.push({id:p.id,username:p.username,bot:false,tribe:'A',status:'active',placement:null,food:clamp(p.food),water:clamp(p.water),joinedAt:now,tie:random(0x7fffffff),carried:true});
-  log(s,carry.players.length+(carry.players.length===1?' superviviente avanza':' supervivientes avanzan')+' desde Survivor #'+carry.from+'. Esperando a '+(CAPACITY-carry.players.length)+' náufragos nuevos para formar la tribu rival.',now,'story');
- }
+ const n=applyCarry(s,carry,now);
+ if(n)log(s,n+(n===1?' superviviente avanza':' supervivientes avanzan')+' desde Survivor #'+carry.from+'. Esperando a '+(CAPACITY-n)+' náufragos nuevos para formar la tribu rival.',now,'story');
  return s;
 }
 
@@ -157,6 +160,19 @@ function closeDay(s,at){
  s.nominated=loser;
  log(s,'La tribu '+entry.winner+' gana la prueba del día '+day+(tieBreak?' en el desempate aleatorio':'')+'. La tribu '+loser+' juega la inmunidad individual y vota durante el día siguiente.',at,'challenge',{day,winner:entry.winner,loser});
  startDay(s,at);
+}
+// V363: si al terminar una partida ya hay otra en inscripción (lo normal, porque se crea en cuanto empieza
+// la anterior), los supervivientes se añaden a esa misma en vez de perderse por no haber una partida nueva
+// que crear para ellos.
+export function joinCarriedSurvivors(s,carry,now=Date.now()){
+ if(s.phase!=='waiting'||s.players.some(p=>p.carried))return false;
+ const room=CAPACITY-s.players.length;
+ if(room<=0||!carry?.players?.length)return false;
+ const trimmed=carry.players.length<=room?carry:{...carry,players:carry.players.slice(0,room)};
+ const n=applyCarry(s,trimmed,now);
+ if(!n)return false;
+ log(s,n+(n===1?' superviviente avanza':' supervivientes avanzan')+' desde Survivor #'+carry.from+'. Esperando a '+(CAPACITY-s.players.length)+' náufragos nuevos para formar la tribu rival.',now,'story');
+ return true;
 }
 function merge(s,at){
  const remaining=alive(s);
