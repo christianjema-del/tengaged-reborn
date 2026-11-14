@@ -1,0 +1,6 @@
+V365 - GIF para CamilaC
+- CamilaC es la cuenta id 30.
+- full-avatar115.js: huella del GIF (vídeo convertido a GIF animado, 18 fotogramas en bucle), recortado a 140x161 como los demás avatares de foto.
+- avatar-editor.js ?v=365 y avatar.html.
+- Base de datos (tras publicar): gratis en su armario como «Avatar completo · GIF animado», retirado de la venta y listo para equiparse. Al equiparlo solo se ve el GIF.
+- Test: tests/photo-gifts365.test.mjs.
