@@ -1,0 +1,4 @@
+V366 - Race: RelsB y Cristi siempre pareja
+- race356.js: al formar las parejas al empezar una Race, si RelsB (id 11) y Cristi (id 13) están ambos en la partida, se colocan siempre en la misma pareja (el resto del sorteo sigue siendo aleatorio).
+- Race #49 ya se corrigió a mano; esta regla aplica a partir de ahora en cualquier Race futura donde coincidan los dos.
+- Test: tests/race-forced-teammates366.test.mjs.

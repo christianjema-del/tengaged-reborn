@@ -28,8 +28,12 @@ const rand=n=>crypto.getRandomValues(new Uint32Array(1))[0]%n;
 export const legRoute=leg=>ROUTE[(leg-1)%ROUTE.length];
 function botPlayer(s,i,now){return {id:-(s.id*100+i),username:'Bot · R'+s.id+' · '+i,bot:true,status:'active',placement:null,joinedAt:now,money:RACE_START_MONEY};}
 function fillBots(s,now){let i=1;while(s.players.length<RACE_CAPACITY){if(!s.players.some(p=>p.id===-(s.id*100+i)))s.players.push(botPlayer(s,i,now));i++;}}
+// V366: a petición expresa de administración, RelsB y Cristi van siempre en la misma pareja cuando coinciden en una Race.
+const FORCED_TEAMMATES=['RelsB','Cristi'];
 function makePairs(s){
  const order=[...s.players];for(let i=order.length-1;i>0;i--){const j=rand(i+1);[order[i],order[j]]=[order[j],order[i]];}
+ const ia=order.findIndex(p=>p.username===FORCED_TEAMMATES[0]),ib=order.findIndex(p=>p.username===FORCED_TEAMMATES[1]);
+ if(ia!==-1&&ib!==-1){const slot=ia%2===0?ia+1:ia-1;if(slot!==ib)[order[slot],order[ib]]=[order[ib],order[slot]];}
  s.pairs=[];for(let i=0;i<order.length;i+=2){const n=s.pairs.length+1;s.pairs.push({id:n,members:[order[i].id,order[i+1].id],status:'active',placement:null});order[i].pair=n;order[i+1].pair=n;}
 }
 function begin(s,now){
