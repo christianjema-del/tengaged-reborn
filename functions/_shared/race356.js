@@ -77,6 +77,7 @@ function eliminatePair(s,pr,placement,now,finished=false){
  for(const id of pr.members){const p=s.players.find(q=>q.id===id);if(!p||p.status!=='active')continue;p.status=finished?'finished':'eliminated';p.placement=placement;p.eliminatedAt=now;}
 }
 export function advanceRace(s,now=Date.now()){
+ if(s.phase==='waiting'&&EVENT_RACES.includes(s.id))delete s.autoStart351;
  if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id))armAutoStart351(s,now);
  if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id)&&autoStartDue351(s,now)){fireAutoStart351(s,now);fillBots(s,now);s.manualStart356={by:0,username:'sistema',at:now};s.autoStarted351=now;begin(s,now);return true;}
  if(['waiting','finished'].includes(s.phase))return false;
@@ -148,7 +149,7 @@ export function raceView(s,user,now=Date.now()){
  const me=user&&s.players.find(p=>p.id===user.id),run=me&&s.runs[me.id],playing=!['waiting','finished'].includes(s.phase);
  const partner=me&&me.pair?s.pairs.find(pr=>pr.id===me.pair)?.members.find(id=>id!==me.id):null;
  return {canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===RACE_CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<RACE_CAPACITY,manualStartRequired:true,
-  id:s.id,phase:s.phase,leg:s.leg,stage:s.stage,route:s.leg?legRoute(s.leg):null,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline??autoDeadline351(s),autoStartAt:autoDeadline351(s),now,capacity:RACE_CAPACITY,fee:0,startMoney:RACE_START_MONEY,challenge:s.challenge,winner:s.winner||null,transports:TRANSPORTS,
+  id:s.id,phase:s.phase,leg:s.leg,stage:s.stage,route:s.leg?legRoute(s.leg):null,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline??(EVENT_RACES.includes(s.id)?null:autoDeadline351(s)),autoStartAt:EVENT_RACES.includes(s.id)?null:autoDeadline351(s),now,capacity:RACE_CAPACITY,fee:0,startMoney:RACE_START_MONEY,challenge:s.challenge,winner:s.winner||null,transports:TRANSPORTS,
   pairs:(s.pairs||[]).map(pr=>({id:pr.id,members:pr.members,status:pr.status,placement:pr.placement})),
   // V357: el dinero y el transporte son privados de cada pareja: solo se ven los tuyos y los de tu pareja.
   players:s.players.map(p=>{const own=!!me&&(p.id===me.id||p.id===partner);return {id:p.id,username:p.username,status:p.status,placement:p.placement,bot:!!p.bot,pair:p.pair||null,money:own?p.money:null,transport:own&&playing&&p.status==='active'?(s.choices[p.id]||null):null,challengePending:playing&&p.status==='active'&&!s.runs[p.id]?.saved};}),

@@ -1,0 +1,4 @@
+V368 - Race #53: ya no se ve la cuenta atrás de autoinicio
+- V367 impedía que Race #53 se autocompletara/arrancara sola, pero la cuenta atrás que ya estaba armada de antes seguía mostrándose en el reloj («Empieza en…»), porque la vista caía al autoinicio guardado cuando no había deadline de etapa.
+- race356.js: para las Race marcadas como EVENTO (EVENT_RACES) la vista nunca devuelve el autoinicio como deadline, y se limpia cualquier cuenta atrás ya armada en la propia partida.
+- Test: tests/race-event367.test.mjs ampliado para comprobar que no hay deadline ni antes ni después de la hora de autoinicio.
