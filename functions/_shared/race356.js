@@ -33,6 +33,9 @@ const FORCED_TEAMMATES=['RelsB','Cristi'];
 // V367: Race marcada como EVENTO (ver games-directory.js): no se autocompleta con bots ni empieza sola;
 // solo arranca cuando admin1 o RelsB pulsan iniciar.
 const EVENT_RACES=[53];
+// V370: la Race #53, al ser un evento, dura 4 horas por etapa en vez de los 8 minutos normales.
+const EVENT_LEG_MS=4*60*60000;
+const legDuration=s=>EVENT_RACES.includes(s.id)?EVENT_LEG_MS:LEG_MS;
 function makePairs(s){
  const order=[...s.players];for(let i=order.length-1;i>0;i--){const j=rand(i+1);[order[i],order[j]]=[order[j],order[i]];}
  const ia=order.findIndex(p=>p.username===FORCED_TEAMMATES[0]),ib=order.findIndex(p=>p.username===FORCED_TEAMMATES[1]);
@@ -47,7 +50,7 @@ function begin(s,now){
 }
 export function name(s,id){return s.players.find(p=>p.id===id)?.username||'—';}
 function stage(s,now){
- s.phase=pairsAlive(s).length<=2?'final':'leg';s.stage++;s.runs={};s.choices={};s.flashData=null;s.deadline=now+LEG_MS;s.challenge=raceChallenge(s.id,s.stage);
+ s.phase=pairsAlive(s).length<=2?'final':'leg';s.stage++;s.runs={};s.choices={};s.flashData=null;s.deadline=now+legDuration(s);s.challenge=raceChallenge(s.id,s.stage);
  for(const p of raceAlive(s).filter(p=>p.bot)){
   const options=Object.entries(TRANSPORTS).filter(([,t])=>t.cost<=p.money);const [kind]=options[rand(options.length)];chooseTransport(s,p,kind);
   s.runs[p.id]={saved:true,score:0,startedAt:now,savedAt:now,duration:BASE_CHALLENGE_SECONDS};

@@ -12,8 +12,8 @@ async function handle({request,env}){try{
  if(!user)return jsonError('Inicia sesión.',401);
  if(request.headers.get('Origin')!==url.origin)return jsonError('Origen no permitido.',403);
  if(!Number.isSafeInteger(id)||id<1)return jsonError('Partida no válida.',400);
- const body=await request.json();if(!['join','transport','whisper','start','fill_bots','admin_kick'].includes(body?.action))return jsonError('Acción no permitida.',400);
- if(['start','fill_bots','admin_kick'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
+ const body=await request.json();if(!['join','transport','whisper','start','fill_bots','admin_kick','pause','resume'].includes(body?.action))return jsonError('Acción no permitida.',400);
+ if(['start','fill_bots','admin_kick','pause','resume'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
  if(body.action==='join')await assertOneGame348(env.DB,'race',user.id,id);
  if(body.action==='join'&&body.notifyOnStart){await ensureRace(env.DB);await ensureEnrollmentNotifications(env.DB,'race');}
  const result=await raceMatch(env.DB,id,user,body);await waitingRace(env.DB);return Response.json({ok:true,...result},{headers:{'Cache-Control':'no-store'}});

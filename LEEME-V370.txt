@@ -1,0 +1,5 @@
+V370 - Race #53: etapas de 4 horas, y arreglado el botón de Reanudar
+- race356.js: Race #53 (EVENTO) dura 4 horas por etapa en lugar de los 8 minutos normales; el resto de Race no cambia.
+- functions/api/race.js: el API rechazaba las acciones «pause» y «resume» con «Acción no permitida» porque no estaban en la lista de acciones permitidas (se añadieron en V369 solo en race356.js, pero no aquí). Por eso no funcionaba Reanudar pese a verse el botón.
+- Test: tests/race-event370.test.mjs.
+- Tras publicar: se ajustó a mano el plazo de la etapa en curso de Race #53 para que, al reanudarla, queden las 4 horas completas.
