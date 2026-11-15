@@ -35,6 +35,8 @@ const FORCED_TEAMMATES=['RelsB','Cristi'];
 const EVENT_RACES=[53];
 // V370: la Race #53, al ser un evento, dura 4 horas por etapa en vez de los 8 minutos normales.
 const EVENT_LEG_MS=4*60*60000;
+// V372: si todos ya han jugado en la Race #53, se espera solo un minuto en vez de las 4 horas.
+const EARLY_ADVANCE_MS=60000;
 const legDuration=s=>EVENT_RACES.includes(s.id)?EVENT_LEG_MS:LEG_MS;
 function makePairs(s){
  const order=[...s.players];for(let i=order.length-1;i>0;i--){const j=rand(i+1);[order[i],order[j]]=[order[j],order[i]];}
@@ -87,7 +89,14 @@ export function advanceRace(s,now=Date.now()){
  if(['waiting','finished'].includes(s.phase))return false;
  // V358: la etapa siempre dura los 8 minutos enteros, aunque todos hayan jugado ya: el transporte se puede
  // cambiar hasta el último segundo y hay que dejar tiempo para eso.
- if(now<s.deadline)return false;
+ // V372: en la Race #53 (evento), si todos los viajeros vivos ya han jugado la prueba, la etapa cambia
+ // un minuto después de que el último termine, sin esperar a las 4 horas.
+ if(EVENT_RACES.includes(s.id)){
+  if(raceAlive(s).every(p=>s.runs[p.id]?.saved)){if(!s.allDoneAt360)s.allDoneAt360=now;}else delete s.allDoneAt360;
+ }
+ const early=EVENT_RACES.includes(s.id)&&s.allDoneAt360&&now>=s.allDoneAt360+EARLY_ADVANCE_MS;
+ if(now<s.deadline&&!early)return false;
+ delete s.allDoneAt360;
  const ranking=rankPairs(s),[from,to]=legRoute(s.leg);
  const results=ranking.map(r=>({pair:r.pair.id,members:r.pair.members.map(id=>{const p=s.players.find(q=>q.id===id);return {id,username:p?.username||'—',transport:transportOf(s,p||{id}),score:s.runs[id]?.saved?s.runs[id].score:0,points:p?travellerPoints(s,p):0};}),points:r.points,money:r.money}));
  s.history.push({leg:s.leg,stage:s.stage,from,to,challenge:s.challenge,results});
