@@ -1,0 +1,3 @@
+V374 - Stars: admin1 ya puede inscribirse en la partida de pruebas
+- enrollment-review.js buscaba automáticamente una Stars abierta excluyendo las partidas de pruebas (testOnly) para todo el mundo, incluido admin1, así que nunca encontraba la única partida que existía. Ahora la búsqueda encuentra la partida, y el aviso «solo admin1» se muestra únicamente a quien no sea admin1.
+- Test: tests/enrollment-review-ui.test.mjs ampliado.
