@@ -1,0 +1,8 @@
+V373 - Stars (nuevo juego, original)
+- functions/_shared/stars-engine.js / stars-service.js: 16 concursantes. Cada día todos nominan en privado a dos compañeros; los dos más nominados forman la pareja de nominados y el resto vota a quién expulsar. Se repite hasta quedar tres: una última ronda decide el tercer puesto, y entre los dos últimos gana quien haya sido menos nominado en toda la partida. Solo admin1 puede iniciar, completar plazas con bots, pausar/reanudar o expulsar.
+- Juego 100% original (mecánica propia, diseño propio con site.css/shell.css/duel212.css, igual que Race o El Duelo). No reutiliza ningún recurso de ninguna web externa.
+- functions/api/stars.js: API. Mientras exista una partida de Stars sin terminar no se crea ninguna otra (índice único stars_one_open373): nadie puede unirse a otro Stars hasta que la actual termine.
+- La primera partida se crea automáticamente como partida de pruebas (testOnly373): solo admin1 puede inscribirse. Cuando termine, la siguiente Stars que se cree será pública para cualquier usuario.
+- stars.html / stars-page.js: página con nuestro diseño y botones (misma maqueta que Race/El Duelo).
+- Integrado en games-directory.js, game-feed.js, community-page.js, enrollment-formats.js (ya implementado), enrollment-layout.js, enrollment-review.js, functions/api/game-chat.js, functions/_shared/enrollment.js, functions/_shared/one-game348.js y _routes.json.
+- Test: tests/stars373.test.mjs.
