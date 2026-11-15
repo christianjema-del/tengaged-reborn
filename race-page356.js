@@ -28,7 +28,7 @@ function render(){
  $('duel-state').textContent={waiting:'ESPERANDO',leg:'ETAPA '+s.leg,final:'ETAPA FINAL',finished:'TERMINADO'}[s.phase]||'';
  const sig=JSON.stringify(s.players);if(sig!==roster){roster=sig;$('duel-players').replaceChildren(...s.players.map(person));for(let i=s.players.length;i<12;i++)$('duel-players').append(el('div','RACE'[(i-s.players.length)%4],'duel-empty'));refreshPlayerActivity($('duel-players'));}
  $('duel-start').hidden=!s.canStart;$('duel-fill-bots').hidden=!s.canFillBots;
- $('race-admin-controls').hidden=!(s.canPause||s.canResume);$('race-pause').textContent=s.paused?'Reanudar partida':'Pausar partida';$('race-pause').onclick=()=>load({action:s.paused?'resume':'pause'});$('race-pause-status').hidden=!s.paused;
+ $('race-host-box').hidden=!(s.canPause||s.canResume);$('race-host-pause').textContent=s.paused?'Reanudar partida':'Pausar partida';$('race-host-pause').onclick=()=>load({action:s.paused?'resume':'pause'});$('race-host-status').hidden=!s.paused;
  $('duel-entry').hidden=s.phase!=='waiting'||!!s.me;$('duel-enroll').href='/enroll-game.html?type=race&id='+id;
  $('duel-winners').hidden=s.phase!=='finished';$('race-trip').hidden=s.phase==='finished';
  if(s.phase==='finished')$('duel-podium').replaceChildren(...s.players.filter(p=>p.placement===1).map(person));

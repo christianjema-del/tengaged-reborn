@@ -1,0 +1,5 @@
+V371 - Race: renombrados los ids del botón de pausa
+- Verificado a fondo que el botón de pausar/reanudar funcionaba correctamente (servidor con canPause/canResume correctos, HTML y JS desplegados sin errores, estilos correctos al forzar su visibilidad). Pese a eso, no se veía en el navegador de admin1 tras recargar varias veces.
+- Sospecha: algún bloqueador de anuncios/extensión de privacidad oculta por norma elementos cuyo id contiene «admin» (patrón habitual para ocultar barras de administración de otros sitios).
+- race.html / race-page356.js: los ids pasan de race-admin-controls/race-pause/race-pause-status a race-host-box/race-host-pause/race-host-status, sin tocar la lógica.
+- race-page356.js?v=371 en race.html.
