@@ -1,0 +1,5 @@
+V369 - Race: pausar y reanudar
+- race356.js: admin1 o RelsB pueden pausar una Race en marcha (acción «pause») y reanudarla luego («resume»), igual que ya existe en Frookies (mismo campo pause180, para que el panel de admin lo detecte sin más cambios). Mientras está pausada no se elimina a nadie ni avanza la etapa, y nadie puede jugar ni cambiar transporte; al reanudar se suma el tiempo pausado al plazo, sin perder tiempo de etapa.
+- race.html / race-page356.js: botón «Pausar partida» / «Reanudar partida» junto a los controles de admin, visible solo para admin1/RelsB, con aviso de partida pausada para el resto.
+- Test: tests/race-pause369.test.mjs.
+- Race #53 se pausó a petición de administración tras publicar esta versión.
