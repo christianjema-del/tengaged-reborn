@@ -1,0 +1,4 @@
+V379 - El reloj automático (tick-worker, cada minuto) ya incluye Stars
+- El sitio ya tenía desde la V299 un Worker programado (tick-worker/) que visita cada minuto las partidas en curso de Casting, Frookies, El Duelo, Rookies, Survivor y Race para que avancen sus etapas/días aunque nadie tenga la página abierta.
+- functions/api/tick.js: se añade Stars a la lista de juegos que visita ese reloj.
+- Race #110 iba con retraso porque el despliegue en producción de /api/tick se había quedado atrás (sin Survivor ni Race en su lista), no por un fallo del cálculo de las etapas.
