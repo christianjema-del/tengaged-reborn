@@ -1,0 +1,3 @@
+V377 - Stars aparece en el listado de juegos
+- functions/api/stars.js: la consulta (GET, listado y vista de la partida) ya no exige admin1; cualquiera puede ver que existe Stars #1 en «Últimos juegos en Tengaged», aunque siga sin poder unirse (el motor sigue rechazando a cualquiera que no sea admin1 al intentar inscribirse).
+- Esto además corrige el aviso «No se han podido consultar todas las partidas»: lo causaba justamente que /api/stars rechazara la consulta anónima del listado.
