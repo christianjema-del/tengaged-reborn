@@ -28,8 +28,6 @@ const rand=n=>crypto.getRandomValues(new Uint32Array(1))[0]%n;
 export const legRoute=leg=>ROUTE[(leg-1)%ROUTE.length];
 function botPlayer(s,i,now){return {id:-(s.id*100+i),username:'Bot · R'+s.id+' · '+i,bot:true,status:'active',placement:null,joinedAt:now,money:RACE_START_MONEY};}
 function fillBots(s,now){let i=1;while(s.players.length<RACE_CAPACITY){if(!s.players.some(p=>p.id===-(s.id*100+i)))s.players.push(botPlayer(s,i,now));i++;}}
-// V366: a petición expresa de administración, RelsB y Cristi van siempre en la misma pareja cuando coinciden en una Race.
-const FORCED_TEAMMATES=['RelsB','Cristi'];
 // V367: Race marcada como EVENTO (ver games-directory.js): no se autocompleta con bots ni empieza sola;
 // solo arranca cuando admin1 o RelsB pulsan iniciar.
 const EVENT_RACES=[53];
@@ -38,13 +36,16 @@ const EVENT_LEG_MS=4*60*60000;
 // V372: si todos ya han jugado en la Race #53, se espera solo un minuto en vez de las 4 horas.
 const EARLY_ADVANCE_MS=60000;
 const legDuration=s=>EVENT_RACES.includes(s.id)?EVENT_LEG_MS:LEG_MS;
+export function racePairingReady(s){const humans=s.players.filter(p=>!p.bot).length;return humans>=2&&humans%2===0;}
 function makePairs(s){
- const order=[...s.players];for(let i=order.length-1;i>0;i--){const j=rand(i+1);[order[i],order[j]]=[order[j],order[i]];}
- const ia=order.findIndex(p=>p.username===FORCED_TEAMMATES[0]),ib=order.findIndex(p=>p.username===FORCED_TEAMMATES[1]);
- if(ia!==-1&&ib!==-1){const slot=ia%2===0?ia+1:ia-1;if(slot!==ib)[order[slot],order[ib]]=[order[ib],order[slot]];}
- s.pairs=[];for(let i=0;i<order.length;i+=2){const n=s.pairs.length+1;s.pairs.push({id:n,members:[order[i].id,order[i+1].id],status:'active',placement:null});order[i].pair=n;order[i+1].pair=n;}
+ if(!racePairingReady(s))throw Error('Race necesita un número par de usuarios reales (al menos dos). Espera a otro usuario; nadie se empareja con bots.');
+ const shuffle=list=>{const a=[...list];for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+ const humans=s.players.filter(p=>!p.bot);const humanOrder=shuffle(humans);
+ const order=[...humanOrder,...shuffle(s.players.filter(p=>p.bot))];
+ s.pairs=[];for(let i=0;i<order.length;i+=2){const n=s.pairs.length+1;if(!order[i+1])throw Error('Falta un viajero para completar la pareja.');s.pairs.push({id:n,members:[order[i].id,order[i+1].id],status:'active',placement:null});order[i].pair=n;order[i+1].pair=n;}
 }
 function begin(s,now){
+ if(!racePairingReady(s))throw Error('Race espera un número par de usuarios reales para formar parejas sin bots.');
  for(const p of s.players){p.money=RACE_START_MONEY;p.spent=0;}
  makePairs(s);s.startedAt=now;s.leg=1;
  log(s,'¡Empieza Race #'+s.id+'! Parejas: '+s.pairs.map(pr=>pr.members.map(id=>name(s,id)).join(' y ')).join(' · ')+'.',now,'race-pairs');
@@ -85,7 +86,7 @@ export function advanceRace(s,now=Date.now()){
  if(s.pause180)return false;
  if(s.phase==='waiting'&&EVENT_RACES.includes(s.id))delete s.autoStart351;
  if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id))armAutoStart351(s,now);
- if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id)&&autoStartDue351(s,now)){fireAutoStart351(s,now);fillBots(s,now);s.manualStart356={by:0,username:'sistema',at:now};s.autoStarted351=now;begin(s,now);return true;}
+ if(s.phase==='waiting'&&!EVENT_RACES.includes(s.id)&&autoStartDue351(s,now)&&racePairingReady(s)){fireAutoStart351(s,now);fillBots(s,now);s.manualStart356={by:0,username:'sistema',at:now};s.autoStarted351=now;begin(s,now);return true;}
  if(['waiting','finished'].includes(s.phase))return false;
  // V358: la etapa siempre dura los 8 minutos enteros, aunque todos hayan jugado ya: el transporte se puede
  // cambiar hasta el último segundo y hay que dejar tiempo para eso.
@@ -139,7 +140,7 @@ export function actRace(s,user,input,now=Date.now(),bridge=false){
   return;
  }
  if(input.action==='join'){
-  if(p)return;if(s.phase!=='waiting'||s.players.length>=RACE_CAPACITY)throw Error('Las inscripciones están cerradas.');
+  if(p)return;if(s.phase!=='waiting')throw Error('Las inscripciones están cerradas.');if(s.players.length>=RACE_CAPACITY){const bot=s.players.findIndex(q=>q.bot);if(bot<0)throw Error('Las inscripciones están cerradas.');s.players.splice(bot,1);}
   if(user.is_banned||user.is_system||user.is_test_bot)throw Error('Esta partida se reserva a usuarios reales.');
   s.players.push({id:user.id,username:user.username,status:'active',placement:null,joinedAt:now,money:RACE_START_MONEY,notifyOnStart:input.notifyOnStart===true});if(!EVENT_RACES.includes(s.id))armAutoStart351(s,now);
   const welcome=String(input.welcome||'').trim();if(welcome.length>500)throw Error('Presentación demasiado larga.');if(welcome)s.welcomes.push({username:user.username,body:welcome,at:now});
@@ -170,8 +171,8 @@ export function actRace(s,user,input,now=Date.now(),bridge=false){
 export function raceView(s,user,now=Date.now()){
  const me=user&&s.players.find(p=>p.id===user.id),run=me&&s.runs[me.id],playing=!['waiting','finished'].includes(s.phase);
  const partner=me&&me.pair?s.pairs.find(pr=>pr.id===me.pair)?.members.find(id=>id!==me.id):null;
- return {canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===RACE_CAPACITY,canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<RACE_CAPACITY,manualStartRequired:true,
-  id:s.id,phase:s.phase,leg:s.leg,stage:s.stage,route:s.leg?legRoute(s.leg):null,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline??(EVENT_RACES.includes(s.id)?null:autoDeadline351(s)),autoStartAt:EVENT_RACES.includes(s.id)?null:autoDeadline351(s),paused:!!s.pause180,pausedAt:s.pause180?.at||null,canPause:canFillBots(user)&&!['waiting','finished'].includes(s.phase)&&!s.pause180,canResume:canFillBots(user)&&!!s.pause180,now,capacity:RACE_CAPACITY,fee:0,startMoney:RACE_START_MONEY,challenge:s.challenge,winner:s.winner||null,transports:TRANSPORTS,
+ return {canStart:canFillBots(user)&&s.phase==='waiting'&&s.players.length===RACE_CAPACITY&&racePairingReady(s),pairingWaiting:s.phase==='waiting'&&!racePairingReady(s),canFillBots:canFillBots(user)&&s.phase==='waiting'&&s.players.length<RACE_CAPACITY,manualStartRequired:true,
+  id:s.id,phase:s.phase,leg:s.leg,stage:s.stage,route:s.leg?legRoute(s.leg):null,createdAt:s.createdAt,startedAt:s.startedAt,finishedAt:s.finishedAt,deadline:s.deadline??(EVENT_RACES.includes(s.id)||!racePairingReady(s)?null:autoDeadline351(s)),autoStartAt:EVENT_RACES.includes(s.id)||!racePairingReady(s)?null:autoDeadline351(s),paused:!!s.pause180,pausedAt:s.pause180?.at||null,canPause:canFillBots(user)&&!['waiting','finished'].includes(s.phase)&&!s.pause180,canResume:canFillBots(user)&&!!s.pause180,now,capacity:RACE_CAPACITY,fee:0,startMoney:RACE_START_MONEY,challenge:s.challenge,winner:s.winner||null,transports:TRANSPORTS,
   pairs:(s.pairs||[]).map(pr=>({id:pr.id,members:pr.members,status:pr.status,placement:pr.placement})),
   // V357: el dinero y el transporte son privados de cada pareja: solo se ven los tuyos y los de tu pareja.
   players:s.players.map(p=>{const own=!!me&&(p.id===me.id||p.id===partner);return {id:p.id,username:p.username,status:p.status,placement:p.placement,bot:!!p.bot,pair:p.pair||null,money:own?p.money:null,transport:own&&playing&&p.status==='active'?(s.choices[p.id]||null):null,challengePending:playing&&p.status==='active'&&!s.runs[p.id]?.saved};}),

@@ -1,0 +1,4 @@
+V380 - Race: parejas aleatorias, sin pareja fija entre Vort y Cristi
+- race356.js: se elimina la regla que desde Race #141 reservaba siempre a Vort y Cristi como pareja. El sorteo vuelve a ser aleatorio entre usuarios reales (sin bots), tanto en esta como en futuras partidas.
+- Race #150 (en curso, etapa 1): se guardó copia del estado y se volvió a sortear al azar solo entre los 6 usuarios reales (AntonioJ, Seraphena, Vort, Cristi, David, Mario23), sin tocar a los bots ni el dinero/progreso de nadie. Nuevas parejas: Seraphena-Vort, Mario23-AntonioJ, Cristi-David. Se comprobó que nadie queda duplicado ni sin pareja.
+- Test: tests/race-random-pairs380.test.mjs (sustituye a tests/race-forced-teammates366.test.mjs, que probaba la regla ya eliminada).
