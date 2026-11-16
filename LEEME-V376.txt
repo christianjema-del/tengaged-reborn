@@ -1,0 +1,3 @@
+V376 - Race #53: premios x3
+- race-service356.js: Race #53 (evento) triplica el premio del 1.º al 3.º puesto: 1.º 180 karma y 360 T$, 2.º 105 karma y 240 T$, 3.º 60 karma y 180 T$. Del 4.º al 6.º sigue sin premio, igual que en el resto de Race.
+- Test: tests/race-triple-prize376.test.mjs.

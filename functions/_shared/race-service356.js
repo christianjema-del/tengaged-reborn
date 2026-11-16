@@ -7,12 +7,14 @@ import {ensureGameHistorySchema} from './games.js';
 import {freshRace,advanceRace,actRace,raceView,raceChallenge,RACE_CAPACITY} from './race356.js';
 import {ensureSharedScores} from './minigame-scores.js';
 import {gameData} from './flash-data.js';
+// V376: la Race #53 (evento) triplica los premios del 1.º al 3.º; del 4.º al 6.º sigue sin premio.
+const TRIPLE_PRIZE_RACES=[53];
 function racePrizeWrites(db,s,id,payload){
  if(s.phase!=='finished')return [];
- const writes=[],same='EXISTS(SELECT 1 FROM race_matches WHERE id=? AND state=?)',pending='EXISTS(SELECT 1 FROM race_results WHERE match_id=? AND user_id=? AND pending=1) AND '+same;
+ const writes=[],same='EXISTS(SELECT 1 FROM race_matches WHERE id=? AND state=?)',pending='EXISTS(SELECT 1 FROM race_results WHERE match_id=? AND user_id=? AND pending=1) AND '+same,multiplier=TRIPLE_PRIZE_RACES.includes(id)?3:1;
  for(const p of s.players){
   if(p.bot||!(p.id>0)||!Number.isInteger(p.placement))continue;
-  const prize=gamePrize('race',p.placement);if(!prize.karma&&!prize.money)continue;
+  const base=gamePrize('race',p.placement),prize={karma:base.karma*multiplier,money:base.money*multiplier};if(!prize.karma&&!prize.money)continue;
   writes.push(db.prepare('INSERT OR IGNORE INTO race_results(match_id,user_id,username,placement,karma,money) SELECT ?,?,?,?,?,? WHERE '+same).bind(id,p.id,p.username,p.placement,prize.karma,prize.money,id,payload));
   writes.push(db.prepare('UPDATE users SET karma=COALESCE(karma,0)+?,t_money=COALESCE(t_money,0)+? WHERE id=? AND '+pending).bind(prize.karma,prize.money,p.id,id,p.id,id,payload));
   writes.push(db.prepare('INSERT INTO user_stats(username,games_played,wins,points,created_at) SELECT ?,0,?,?,CURRENT_TIMESTAMP WHERE '+pending+' ON CONFLICT(username) DO UPDATE SET wins=COALESCE(wins,0)+excluded.wins,points=COALESCE(points,0)+excluded.points').bind(p.username,p.placement===1?1:0,prize.karma,id,p.id,id,payload));

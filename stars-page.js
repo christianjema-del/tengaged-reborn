@@ -20,6 +20,8 @@ async function load(input){if(loading||busy)return;loading=true;busy=!!input;try
 function render(){
  $('duel-title').textContent='Stars #'+s.id;document.title='Stars #'+s.id+' · Tengaged Reborn';
  $('duel-state').textContent={waiting:'ESPERANDO',nominate:'DÍA '+s.round+' · NOMINACIONES',vote:'DÍA '+s.round+' · VOTACIÓN',final3:'FINAL · TRES',finished:'TERMINADO'}[s.phase]||'';
+ $('stars-day').textContent=s.phase==='waiting'?'—':s.round;
+ $('stars-next-phase').textContent={waiting:'Inicio',nominate:'Votación',vote:'Expulsión',final3:'Resultado final',finished:'—'}[s.phase]||'';
  $('stars-test-note').hidden=!(s.testOnly&&s.phase==='waiting');
  const sig=JSON.stringify(s.players);if(sig!==roster){roster=sig;$('duel-players').replaceChildren(...s.players.map(person));for(let i=s.players.length;i<16;i++)$('duel-players').append(el('div','STARS'[(i-s.players.length)%5],'duel-empty'));refreshPlayerActivity($('duel-players'));}
  $('duel-start').hidden=!s.canStart;$('duel-fill-bots').hidden=!s.canFillBots;
