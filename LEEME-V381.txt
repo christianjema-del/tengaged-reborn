@@ -1,0 +1,20 @@
+V381 - Arreglo: "The string did not match the expected pattern." al inscribirse en Frookies, Rookies, El Duelo, Survivor y Race
+
+Causa real: ya existía en el repositorio (sin publicar) una función que exige tener equipada una tarjeta de color mínima
+para inscribirse en esos 5 juegos (amarilla o superior en Frookies/Rookies/Race, naranja o superior en Survivor/El Duelo),
+con su endpoint /api/enrollment-level y su comprobación en el frontend (enrollment-review.js) y en cada API de juego
+(duel.js, frookies.js, race.js, rookies.js, survivor.js). El frontend ya se había sincronizado a Vercel en algún momento
+(publicar-estaticos.sh copia cualquier archivo .js/.css del directorio, esté o no publicado en Cloudflare), pero el
+backend (functions/api/enrollment-level.js y functions/_shared/enrollment-colors.js) nunca se había publicado. Por eso,
+al pasar por el proxy de Vercel (acceso.vercel.app) la llamada a /api/enrollment-level caía en la página de inicio en
+vez de dar JSON, y el navegador (Safari con su mensaje "The string did not match the expected pattern.", Chrome con
+"Unexpected token '<'...") lo mostraba como el fallo reportado. Afectaba a cualquier usuario que entrase por el dominio
+de Vercel al intentar inscribirse en esos 5 formatos (confirmado con la cuenta de MDMA/Juandb en Race).
+
+Qué se publica ahora (todo ya estaba escrito, solo faltaba publicarlo):
+- functions/_shared/enrollment-colors.js, functions/api/enrollment-level.js (nuevos).
+- enrollment-formats.js, enrollment-review.js: muestran el requisito de color y comprueban /api/enrollment-level antes de inscribir.
+- functions/api/duel.js, frookies.js, race.js, rookies.js, survivor.js: exigen la tarjeta también en el servidor al inscribirse (join).
+- Test: tests/enrollment-colors-pulido.test.mjs (ya existía sin publicar).
+
+Tras publicar, se vuelve a sincronizar Vercel para que coincida exactamente con lo publicado en Cloudflare.

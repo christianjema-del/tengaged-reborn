@@ -1,5 +1,5 @@
 import {request as fetch} from '/http.js?v=170';
-import {ENROLLMENT_FORMATS} from '/enrollment-formats.js?v=356';
+import {ENROLLMENT_FORMATS} from '/enrollment-formats-pulido20261116.js?v=356';
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),type=params.get('type'),format=Object.hasOwn(ENROLLMENT_FORMATS,type)?ENROLLMENT_FORMATS[type]:null;let user=null,game=null,busy=false,nonce=null,available=false;
 const gameURL=()=>['casting','frookies','duel','rookies','survivor','race','stars'].includes(type)?'/'+(type==='casting'?'casting-game':type==='duel'?'duel':type==='rookies'?'rookies':type==='survivor'?'survivor':type==='race'?'race':type==='stars'?'stars':'frookies')+'.html?id='+game.id:'/hunger.html';
 function ready(){const text=$('enrollmentWelcome').value.trim();$('enrollmentCounter').textContent=$('enrollmentWelcome').value.length+'/500';$('confirmEnrollment').disabled=busy||!available||!text;}
@@ -7,7 +7,7 @@ async function read(url){const response=await fetch(url,{credentials:'include',c
 async function load(){if(!format){$('enrollmentNotice').textContent='Formato desconocido.';$('enrollmentForm').hidden=true;return;}
  $('enrollmentImage').src='/assets/formats/'+format.image;$('enrollmentImage').alt=format.name;$('enrollmentTitle').textContent=format.name;$('enrollmentDescription').textContent=format.description||'Este formato está en preparación.';
  if(!format.implemented){$('enrollmentNotice').textContent='Próximamente: este formato todavía no permite inscribirse.';$('enrollmentForm').hidden=true;$('enrollmentFee').textContent='No disponible';return;}
- try{user=await window.TengagedSession;$('enrollmentFee').textContent=format.fee?format.fee+' T$':'Gratis';$('enrollmentBalance').textContent=user?Number(user.t_money||0).toLocaleString('es-ES')+' T$':'Inicia sesión';$('colorEligibility').textContent='Sin requisito de color';
+ try{user=await window.TengagedSession;$('enrollmentFee').textContent=format.fee?format.fee+' T$':'Gratis';$('enrollmentBalance').textContent=user?Number(user.t_money||0).toLocaleString('es-ES')+' T$':'Inicia sesión';$('colorEligibility').textContent=format.minimumColor?'Tarjeta '+(format.minimumColor==='orange'?'naranja':'amarilla')+' o superior equipada':'Sin requisito de color';
  if(['casting','frookies','duel','rookies','survivor','race','stars'].includes(type)){const data=await read('/api/'+(type==='casting'?'castings':type==='duel'?'duel':type==='rookies'?'rookies':type==='survivor'?'survivor':type==='race'?'race':type==='stars'?'stars':'frookies')),requested=Number(params.get('id'));game=requested?data.matches.find(g=>g.id===requested):data.matches.find(g=>g.phase==='waiting'&&g.mine)||data.matches.find(g=>g.phase==='waiting'&&g.players<g.capacity);}
  else game=await read('/api/hunger');
  if(!game){$('enrollmentNotice').textContent='No hay una sala abierta para este formato.';return;}
@@ -15,6 +15,7 @@ async function load(){if(!format){$('enrollmentNotice').textContent='Formato des
  const count=['casting','frookies','duel','rookies','survivor','race','stars'].includes(type)?game.players:game.players.length,mine=['casting','frookies','duel','rookies','survivor','race','stars'].includes(type)?game.mine:game.players.some(p=>p.username.toLowerCase()===user?.username?.toLowerCase());$('enrollmentSeats').textContent=count+' / '+(game.capacity||format.capacity);
  if(mine){$('enrollmentNotice').textContent='Ya estás inscrito/a en esta partida.';$('existingGame').href=gameURL();$('existingGame').hidden=false;$('enrollmentForm').hidden=true;return;}
  if(!user){$('enrollmentLogin').hidden=false;$('enrollmentNotice').textContent='Puedes consultar los requisitos. Inicia sesión para inscribirte.';return;}
+ if(format.minimumColor){const check=await read('/api/enrollment-level');if(!check.eligible?.[type]){$('enrollmentNotice').textContent='Necesitas tarjeta '+(format.minimumColor==='orange'?'naranja':'amarilla')+' o superior equipada.';available=false;ready();return;}}
  available=game.phase==='waiting'&&count<(game.capacity||format.capacity)&&Number(user.t_money||0)>=format.fee;
  $('enrollmentNotice').textContent=available?'':Number(user.t_money||0)<format.fee?'Saldo insuficiente.':'La inscripción está cerrada.';$('enrollmentAvailability').textContent=available?'Los requisitos se comprobarán de nuevo al confirmar.':'';ready();
  }catch(e){$('enrollmentNotice').textContent=e.message;}}

@@ -1,0 +1,5 @@
+import {COLOR_LEVELS} from '../../color-level-catalog.js';
+export const REQUIRED_COLOR={frookies:'yellow',rookies:'yellow',race:'yellow',survivor:'orange',duel:'orange'};
+export function meetsColorLevel(code,kind){const required=REQUIRED_COLOR[kind];if(!required)return true;const rank=COLOR_LEVELS.findIndex(l=>l.code===code),minimum=COLOR_LEVELS.findIndex(l=>l.code===required);return rank>=minimum;}
+export async function enrollmentColor(db,userId){try{const r=await db.prepare("SELECT si.theme_code AS code FROM user_inventory inv JOIN shop_items si ON si.code=inv.item_code WHERE inv.user_id=? AND inv.is_equipped=1 AND si.category='Tarjetas de color' LIMIT 1").bind(userId).first();return r?.code||'white';}catch(e){if(/no such table/i.test(e.message||''))return 'white';throw e;}}
+export async function assertEnrollmentColor(db,user,kind){if(!meetsColorLevel(await enrollmentColor(db,user.id),kind))throw Error('Necesitas tarjeta '+(REQUIRED_COLOR[kind]==='orange'?'naranja':'amarilla')+' o superior equipada para inscribirte en '+({frookies:'Frookies',rookies:'Rookies',race:'Race',survivor:'Survivor',duel:'El Duelo'}[kind]||kind)+'.');}

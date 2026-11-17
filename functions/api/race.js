@@ -1,3 +1,4 @@
+import {assertEnrollmentColor} from '../_shared/enrollment-colors.js';
 // V356: API de Race.
 import {assertOneGame348} from '../_shared/one-game348.js';
 import {canFillBots} from '../_shared/game-bots.js';
@@ -14,7 +15,7 @@ async function handle({request,env}){try{
  if(!Number.isSafeInteger(id)||id<1)return jsonError('Partida no válida.',400);
  const body=await request.json();if(!['join','transport','whisper','start','fill_bots','admin_kick','pause','resume'].includes(body?.action))return jsonError('Acción no permitida.',400);
  if(['start','fill_bots','admin_kick','pause','resume'].includes(body.action)&&!canFillBots(user))return jsonError('Solo admin1 puede iniciar o completar con bots.',403);
- if(body.action==='join')await assertOneGame348(env.DB,'race',user.id,id);
+ if(body.action==='join')await assertEnrollmentColor(env.DB,user,'race');if(body.action==='join')await assertOneGame348(env.DB,'race',user.id,id);
  if(body.action==='join'&&body.notifyOnStart){await ensureRace(env.DB);await ensureEnrollmentNotifications(env.DB,'race');}
  const result=await raceMatch(env.DB,id,user,body);await waitingRace(env.DB);return Response.json({ok:true,...result},{headers:{'Cache-Control':'no-store'}});
 }catch(e){return jsonError(e.message||'No se pudo cargar Race.',400);}}
