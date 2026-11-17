@@ -1,0 +1,6 @@
+V381 - Arreglo: no dejaba inscribirse en los juegos («The string did not match the expected pattern.»)
+- Causa: la página de inscripción (versión con tarjeta de color mínima) llama a /api/enrollment-level, pero ese endpoint no existía en Cloudflare Pages. Pages devolvía la portada (HTML) y Safari, al leerla como JSON, mostraba ese error. Afectaba a Frookies, Rookies, Race (amarilla), El Duelo y Survivor (naranja) a cualquier usuario con sesión iniciada.
+- Nuevo: functions/api/enrollment-level.js -> {ok, power, eligible:{race:true,...}} según la tarjeta de color equipada.
+- http.js: si una ruta /api/ responde HTML, se convierte en un error JSON legible en vez del mensaje críptico de Safari.
+- Test: tests/enrollment-level381.test.mjs.
+- Publicar: copiar ambos archivos al proyecto local y ejecutar PUBLICAR.command (npx wrangler pages deploy).

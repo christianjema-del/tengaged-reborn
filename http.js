@@ -2,7 +2,11 @@
 export async function request(url,options={}){
  const {timeoutMs=60000,signal,...init}=options,controller=new AbortController();
  const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)controller.abort();const timer=setTimeout(abort,timeoutMs);
- try{const response=await fetch(url,{credentials:'same-origin',...init,signal:controller.signal});const body=await response.arrayBuffer();return new Response([204,205,304].includes(response.status)?null:body,{status:response.status,statusText:response.statusText,headers:response.headers});}
+ try{const response=await fetch(url,{credentials:'same-origin',...init,signal:controller.signal});const body=await response.arrayBuffer();
+  // V381: si /api/ devuelve HTML (ruta inexistente o error de plataforma), convertirlo en JSON legible:
+  // así response.json() no falla con el mensaje críptico de Safari "The string did not match the expected pattern."
+  if(/text\/html/i.test(response.headers.get('content-type')||'')&&new URL(String(url?.url||url),location.href).pathname.startsWith('/api/'))return Response.json({ok:false,code:'NOT_JSON',message:'El servidor no ha respondido correctamente ('+response.status+'). Vuelve a intentarlo en unos minutos.'},{status:response.ok?502:response.status});
+  return new Response([204,205,304].includes(response.status)?null:body,{status:response.status,statusText:response.statusText,headers:response.headers});}
  catch(error){if(controller.signal.aborted)throw Error(init.method&&init.method!=='GET'?'La conexión ha tardado demasiado. Comprueba si la acción se guardó antes de repetirla.':'La conexión ha tardado demasiado. Puedes volver a intentarlo.');throw error;}
  finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
 }
